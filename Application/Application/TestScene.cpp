@@ -178,7 +178,7 @@ void TestScene::Draw() {
 
 	RTVManager::SetRTtoBB();
 	// ポストエフェクト用のPSOを設定
-	dxBase->GetCommandList()->SetPipelineState(dxBase->GetPipelineStateVignette());
+	dxBase->GetCommandList()->SetPipelineState(dxBase->GetPipelineStateBoxFilter());
 	// VBVを設定
 	dxBase->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
 	// IBVを設定
