@@ -42,7 +42,7 @@ private:
 
 	// レンダーテクスチャ
 	uint32_t renderTextureGH_;
-	uint32_t outlineGH_;
+	uint32_t postEffectGH_;
 
 	// スプライト用のリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceSprite;

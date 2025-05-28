@@ -5,6 +5,9 @@
 #include "SRVManager.h"
 #include "SpriteCommon.h"
 
+// C++
+#include <numbers>
+
 void TestScene::Initialize() {
 	DirectXBase* dxBase = DirectXBase::GetInstance();
 
@@ -35,16 +38,17 @@ void TestScene::Initialize() {
 	///
 
 	// Texture読み込み
-	uint32_t uvCheckerGH = TextureManager::Load("resources/Images/white.png", dxBase->GetDevice());
+	uint32_t uvCheckerGH = TextureManager::Load("resources/Images/grass.png", dxBase->GetDevice());
 
 	// モデルの読み込みとテクスチャの設定
-	model_ = ModelManager::LoadModelFile("resources/Models", "cube.obj", dxBase->GetDevice());
+	model_ = ModelManager::LoadModelFile("resources/Models", "terrain.obj", dxBase->GetDevice());
 	model_.material.textureHandle = uvCheckerGH;
 
 	// オブジェクトの生成とモデル設定
 	object_ = std::make_unique<Object3D>();
 	object_->model_ = &model_;
-	object_->transform_.rotate = {0.0f, 3.14f, 0.0f};
+	object_->transform_.rotate = {0.0f, std::numbers::pi_v<float> * 1.5f, 0.0f};
+	object_->materialCB_.data_->color = {1.0f, 1.0f, 1.0, 1.0f};
 
 	///
 	///	レンダーテクスチャ関連
@@ -52,7 +56,7 @@ void TestScene::Initialize() {
 
 	// レンダーテクスチャ生成
 	renderTextureGH_ = RTVManager::CreateRenderTargetTexture(Window::GetWidth(), Window::GetHeight());
-	outlineGH_ = RTVManager::CreateRenderTargetTexture(Window::GetWidth(), Window::GetHeight(), {0.0f, 0.0f, 0.0f, 0.0f});
+	postEffectGH_ = RTVManager::CreateRenderTargetTexture(Window::GetWidth(), Window::GetHeight(), {0.0f, 0.0f, 0.0f, 0.0f});
 
 
 	// Sprite用のリソースを作る
@@ -158,7 +162,7 @@ void TestScene::Draw() {
 
 	#ifdef _DEBUG
 	ImGuiUtil::ImageWindow("rendertexture", renderTextureGH_);
-	ImGuiUtil::ImageWindow("outline", outlineGH_);
+	ImGuiUtil::ImageWindow("postEffect", postEffectGH_);
 	#endif
 
 	///
@@ -172,32 +176,9 @@ void TestScene::Draw() {
 	// オブジェクトの描画
 	object_->Draw();
 
-	#pragma region 深度値を元にアウトライン生成
-	// レンダーターゲットの設定
-	RTVManager::SetRenderTarget(outlineGH_);
-	RTVManager::ClearRTV(outlineGH_, {0.0f, 0.0f, 0.0f, 0.0f});
-	// ポストエフェクト用のPSOを設定
-	dxBase->GetCommandList()->SetPipelineState(dxBase->GetPipelineStateSobelFilter());
-	// VBVを設定
-	dxBase->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
-	// IBVを設定
-	dxBase->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite);
-	// マテリアルCBufferの場所を設定
-	dxBase->GetCommandList()->SetGraphicsRootConstantBufferView(0, outlineMaterial.resource_->GetGPUVirtualAddress());
-	// TransformationMatrixCBufferの場所を設定
-	dxBase->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
-	// SRVのDescriptorTableの先頭を設定
-	TextureManager::SetDescriptorTable(2, dxBase->GetCommandList(), RTVManager::GetDepthSRVHandle(renderTextureGH_));
-	// 描画。6個のインデックスを使用し1つのインスタンスを描画
-	dxBase->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
-	#pragma endregion
-
-
-	#pragma region renderTextureGHをバックバッファにそのまま描画
-	// レンダーターゲットの設定
 	RTVManager::SetRTtoBB();
-	// 通常のパイプラインを設定
-	dxBase->GetCommandList()->SetPipelineState(dxBase->GetPipelineState());
+	// ポストエフェクト用のPSOを設定
+	dxBase->GetCommandList()->SetPipelineState(dxBase->GetPipelineStateGrayscale());
 	// VBVを設定
 	dxBase->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
 	// IBVを設定
@@ -208,27 +189,66 @@ void TestScene::Draw() {
 	dxBase->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
 	// SRVのDescriptorTableの先頭を設定
 	TextureManager::SetDescriptorTable(2, dxBase->GetCommandList(), renderTextureGH_);
-	// 描画。6個のインデックスを使用し1つのインスタンスを描画
+	// 描画
 	dxBase->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
-	#pragma endregion
+
+	//#pragma region ポストエフェクト適用
+	//// レンダーターゲットの設定
+	//RTVManager::SetRenderTarget(postEffectGH_);
+	//RTVManager::ClearRTV(postEffectGH_, {0.0f, 0.0f, 0.0f, 0.0f});
+	//// ポストエフェクト用のPSOを設定
+	//dxBase->GetCommandList()->SetPipelineState(dxBase->GetPipelineStateGrayscale());
+	//// VBVを設定
+	//dxBase->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
+	//// IBVを設定
+	//dxBase->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite);
+	//// マテリアルCBufferの場所を設定
+	//dxBase->GetCommandList()->SetGraphicsRootConstantBufferView(0, outlineMaterial.resource_->GetGPUVirtualAddress());
+	//// TransformationMatrixCBufferの場所を設定
+	//dxBase->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
+	//// SRVのDescriptorTableの先頭を設定
+	//TextureManager::SetDescriptorTable(2, dxBase->GetCommandList(), RTVManager::GetDepthSRVHandle(renderTextureGH_));
+	//// 描画。6個のインデックスを使用し1つのインスタンスを描画
+	//dxBase->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
+	//#pragma endregion
 
 
-	#pragma region outlineをバックバッファにそのまま描画
-	// 通常のパイプラインを設定
-	dxBase->GetCommandList()->SetPipelineState(dxBase->GetPipelineState());
-	// VBVを設定
-	dxBase->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
-	// IBVを設定
-	dxBase->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite);
-	// マテリアルCBufferの場所を設定
-	dxBase->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite->GetGPUVirtualAddress());
-	// TransformationMatrixCBufferの場所を設定
-	dxBase->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
-	// SRVのDescriptorTableの先頭を設定
-	TextureManager::SetDescriptorTable(2, dxBase->GetCommandList(), outlineGH_);
-	// 描画。6個のインデックスを使用し1つのインスタンスを描画
-	dxBase->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
-	#pragma endregion
+	//#pragma region renderTextureGHをバックバッファにそのまま描画
+	//// レンダーターゲットの設定
+	//RTVManager::SetRTtoBB();
+	//// 通常のパイプラインを設定
+	//dxBase->GetCommandList()->SetPipelineState(dxBase->GetPipelineState());
+	//// VBVを設定
+	//dxBase->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
+	//// IBVを設定
+	//dxBase->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite);
+	//// マテリアルCBufferの場所を設定
+	//dxBase->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite->GetGPUVirtualAddress());
+	//// TransformationMatrixCBufferの場所を設定
+	//dxBase->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
+	//// SRVのDescriptorTableの先頭を設定
+	//TextureManager::SetDescriptorTable(2, dxBase->GetCommandList(), renderTextureGH_);
+	//// 描画。6個のインデックスを使用し1つのインスタンスを描画
+	//dxBase->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
+	//#pragma endregion
+
+
+	//#pragma region outlineをバックバッファにそのまま描画
+	//// 通常のパイプラインを設定
+	//dxBase->GetCommandList()->SetPipelineState(dxBase->GetPipelineState());
+	//// VBVを設定
+	//dxBase->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
+	//// IBVを設定
+	//dxBase->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite);
+	//// マテリアルCBufferの場所を設定
+	//dxBase->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite->GetGPUVirtualAddress());
+	//// TransformationMatrixCBufferの場所を設定
+	//dxBase->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
+	//// SRVのDescriptorTableの先頭を設定
+	//TextureManager::SetDescriptorTable(2, dxBase->GetCommandList(), postEffectGH_);
+	//// 描画。6個のインデックスを使用し1つのインスタンスを描画
+	//dxBase->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
+	//#pragma endregion
 
 	///
 	///	↑ ここまで3Dオブジェクトの描画コマンド
