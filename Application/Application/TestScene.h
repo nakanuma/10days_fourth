@@ -10,6 +10,8 @@
 #include "Input.h"
 #include "LightManager.h"
 
+#include <PostEffectManager.h>
+
 class TestScene : public BaseScene {
 public:
 	void Initialize() override;
@@ -36,34 +38,6 @@ private:
 	// 3Dオブジェクト
 	std::unique_ptr<Object3D> object_;
 
-	///
-	/// レンダーテクスチャ関連
-	/// 
-
-	// レンダーテクスチャ
-	uint32_t renderTextureGH_;
-	uint32_t postEffectGH_;
-
-	// スプライト用のリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceSprite;
-	// 頂点データ
-	Sprite::VertexData* vertexDataSprite;
-	// 頂点バッファビュー
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite{};
-	// インデックスデータ
-	uint32_t* indexDataSprite = nullptr;
-	// 頂点インデックス
-	Microsoft::WRL::ComPtr<ID3D12Resource> indexResourceSprite;
-	// インデックスバッファビュー
-	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
-	// アウトライン用のマテリアルリソース
-	ConstBuffer<Sprite::Material> outlineMaterial;
-	// Sprite用のTransformationMatrix用のリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixResourceSprite;
-	// Sprite用のマテリアルのリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceSprite;
-	// トランスフォーム用データ
-	Object3D::TransformationMatrix* transformationMatrixDataSprite;
-	// マテリアル用データ
-	Object3D::Material* materialDataSprite;
+	// ポストエフェクト
+	std::unique_ptr<PostEffectManager> postEffectManager_;
 };

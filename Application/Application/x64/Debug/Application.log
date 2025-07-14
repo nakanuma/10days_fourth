@@ -32,6 +32,12 @@ D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\Engine\Dire
 D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\Engine\Window\MyWindow.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
   (ソース ファイル 'TestScene.cpp' をコンパイルしています)
   
+D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\Engine\DirectX\ShaderManager.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  (ソース ファイル 'TestScene.cpp' をコンパイルしています)
+  
+D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\Engine\Util\FPSController.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  (ソース ファイル 'TestScene.cpp' をコンパイルしています)
+  
 D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\engine\2D\SpriteCommon.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
   (ソース ファイル 'TestScene.cpp' をコンパイルしています)
   
@@ -53,14 +59,26 @@ D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\engine\3D\O
 D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\Engine\Util\StructuredBuffer.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
   (ソース ファイル 'TestScene.cpp' をコンパイルしています)
   
+D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\Engine\Model\Animation\SkinCluster.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  (ソース ファイル 'TestScene.cpp' をコンパイルしています)
+  
+D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\Engine\Model\Animation\Skeleton.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  (ソース ファイル 'TestScene.cpp' をコンパイルしています)
+  
+D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\Engine\Model\Animation\AnimationLoader.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  (ソース ファイル 'TestScene.cpp' をコンパイルしています)
+  
 D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\engine\Sound\SoundManager.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
   (ソース ファイル 'TestScene.cpp' をコンパイルしています)
   
 D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\engine\Input\Input.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
   (ソース ファイル 'TestScene.cpp' をコンパイルしています)
   
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
 D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\engine\3D\LightManager.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
   (ソース ファイル 'TestScene.cpp' をコンパイルしています)
   
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\Engine\Texture\PostEffectManager.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  (ソース ファイル 'TestScene.cpp' をコンパイルしています)
+  
   Application.vcxproj -> D:\k023g0121\SetUpRepository\ApplicationSetUp\Engine-Develop\project\x64\Debug\Application.lib
