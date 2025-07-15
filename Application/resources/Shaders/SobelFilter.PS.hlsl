@@ -199,7 +199,7 @@ PixelShaderOutput main(VertexShaderOutput input)
     
     output.color = saturate(max(abs(outputX), abs(outputY)));
     
-    if (output.color.r <= 0.2)
+    if (output.color.r <= 0.02)
     {
         discard;
     }

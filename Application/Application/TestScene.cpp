@@ -5,6 +5,9 @@
 #include "SRVManager.h"
 #include "SpriteCommon.h"
 
+// C++
+#include <numbers>
+
 void TestScene::Initialize() {
 	DirectXBase* dxBase = DirectXBase::GetInstance();
 
@@ -30,24 +33,29 @@ void TestScene::Initialize() {
 	lightManager = LightManager::GetInstance();
 	lightManager->Initialize();
 
-	// レンダーテクスチャ生成
-	renderTexture_ = RTVManager::CreateRenderTargetTexture(Window::GetWidth(), Window::GetHeight());
-
 	///
 	///	↓ ゲームシーン用
 	///
 
 	// Texture読み込み
-	uint32_t uvCheckerGH = TextureManager::Load("resources/Images/uvChecker.png", dxBase->GetDevice());
+	uint32_t uvCheckerGH = TextureManager::Load("resources/Images/grass.png", dxBase->GetDevice());
 
 	// モデルの読み込みとテクスチャの設定
-	model_ = ModelManager::LoadModelFile("resources/Models", "plane.obj", dxBase->GetDevice());
+	model_ = ModelManager::LoadModelFile("resources/Models", "terrain.obj", dxBase->GetDevice());
 	model_.material.textureHandle = uvCheckerGH;
 
 	// オブジェクトの生成とモデル設定
 	object_ = std::make_unique<Object3D>();
 	object_->model_ = &model_;
-	object_->transform_.rotate = {0.0f, 3.14f, 0.0f};
+	object_->transform_.rotate = {0.0f, std::numbers::pi_v<float> * 1.5f, 0.0f};
+	object_->materialCB_.data_->color = {1.0f, 1.0f, 1.0, 1.0f};
+
+	///
+	///	ポストエフェクト
+	/// 
+	
+	postEffectManager_ = std::make_unique<PostEffectManager>();
+	postEffectManager_->Initialize();
 }
 
 void TestScene::Finalize() {}
@@ -72,16 +80,22 @@ void TestScene::Draw() {
 	// ライトの定数バッファを設定
 	lightManager->TransferContantBuffer();
 
-	// レンダーターゲットをレンダーテクスチャにセット
-	RTVManager::SetRenderTarget(renderTexture_);
-	RTVManager::ClearRTV(renderTexture_);
+	#ifdef _DEBUG
+	ImGuiUtil::ImageWindow("rendertexture", postEffectManager_->GetRenderTextureHandle());
+	#endif
 
 	///
 	///	↓ ここから3Dオブジェクトの描画コマンド
 	///
 
+	// レンダーターゲットをレンダーテクスチャにセット
+	postEffectManager_->BeginRenderToTexture();
+
 	// オブジェクトの描画
 	object_->Draw();
+
+	// ポストエフェクト適用
+	postEffectManager_->ApplyEffect();
 
 	///
 	///	↑ ここまで3Dオブジェクトの描画コマンド
@@ -99,20 +113,28 @@ void TestScene::Draw() {
 	///
 
 #ifdef _DEBUG
-
-#endif // _DEBUG
-
 	ImGui::Begin("window");
 
-	ImGui::DragFloat3("translation", &object_->transform_.translate.x, 0.01f);
-	ImGui::DragFloat3("rotation", &object_->transform_.rotate.x, 0.01f);
+	ImGui::Text("fps : %.2f", ImGui::GetIO().Framerate);
+
+	if (ImGui::Button("RadialBlur")) {
+		postEffectManager_->SetEffectType(PostEffectType::RadialBlur);
+	}
+	if (ImGui::Button("GrayScale")) {
+		postEffectManager_->SetEffectType(PostEffectType::GrayScale);
+	}
+	if (ImGui::Button("Vignette")) {
+		postEffectManager_->SetEffectType(PostEffectType::Vignette);
+	}
+	if (ImGui::Button("BoxFilter")) {
+		postEffectManager_->SetEffectType(PostEffectType::BoxFilter);
+	}
+	if (ImGui::Button("GaussianFilter")) {
+		postEffectManager_->SetEffectType(PostEffectType::GaussianFilter);
+	}
 
 	ImGui::End();
-
-	// レンダーテクスチャをImGuiWindowに描画
-	ImGuiUtil::ImageWindow("Scene", renderTexture_);
-	// レンダーテクスチャをバックバッファに描画
-	RTVManager::SetRTtoBB();
+#endif // _DEBUG
 
 	// ImGuiの内部コマンドを生成する
 	ImguiWrapper::Render(dxBase->GetCommandList());

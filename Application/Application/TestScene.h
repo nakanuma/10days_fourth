@@ -10,6 +10,8 @@
 #include "Input.h"
 #include "LightManager.h"
 
+#include <PostEffectManager.h>
+
 class TestScene : public BaseScene {
 public:
 	void Initialize() override;
@@ -36,6 +38,6 @@ private:
 	// 3Dオブジェクト
 	std::unique_ptr<Object3D> object_;
 
-	// レンダーテクスチャ
-	uint32_t renderTexture_;
+	// ポストエフェクト
+	std::unique_ptr<PostEffectManager> postEffectManager_;
 };
