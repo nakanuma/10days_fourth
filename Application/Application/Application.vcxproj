@@ -19,14 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Scene\GamePlayScene.cpp" />
-    <ClCompile Include="Scene\TitleScene.cpp" />
-    <ClCompile Include="Scene\TestScene.cpp" />
+    <ClCompile Include="src\Game\GameResourceLoader\GameResourceLoader.cpp" />
+    <ClCompile Include="src\Game\Scene\GamePlayScene.cpp" />
+    <ClCompile Include="src\Game\Scene\SceneFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Scene\GamePlayScene.h" />
-    <ClInclude Include="Scene\TitleScene.h" />
-    <ClInclude Include="Scene\TestScene.h" />
+    <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h" />
+    <ClInclude Include="src\Game\Scene\GamePlayScene.h" />
+    <ClInclude Include="src\Game\Scene\SceneFactory.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -124,7 +124,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;USE_IMGUI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
