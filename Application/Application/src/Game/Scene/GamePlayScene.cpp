@@ -19,6 +19,7 @@
 
 // Application
 #include <src/Game/Path/PathManager.h>
+#include <src/Game/Ore/OreManager.h>
 
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
@@ -69,15 +70,21 @@ void GamePlayScene::Initialize() {
 	// 経路に沿って移動するオブジェクト生成 + 初期化
 	carrier_ = std::make_unique<Carrier>();
 	carrier_->Initialize();
+
+	// 鉱石オブジェクト管理クラス初期化
+	OreManager::GetInstance()->Initialize();
 }
 
 void GamePlayScene::Finalize() { }
 
 void GamePlayScene::Update() {
+	///
+	///	共通更新処理
+	/// 
 	Cygnus::LightManager::GetInstance()->ClearEmissiveLights(); // エミッシブライトをクリア
 	Cygnus::LightManager::GetInstance()->ClearAreaLights();     // エリアライトをクリア
 	Cygnus::SkyBoxManager::GetInstance()->Update(); // SkyBox更新
-	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();	// デルタタイム取得
 
 	///
 	///	オブジェクト更新処理
@@ -89,6 +96,14 @@ void GamePlayScene::Update() {
 	player_->Update(dt);
 	// 経路に沿って移動するオブジェクト更新
 	carrier_->Update(dt);
+	// 鉱石オブジェクト管理クラス更新
+	OreManager::GetInstance()->Update();
+
+	///
+	///	
+	/// 
+	
+	Cygnus::CollisionManager::GetInstance()->Update();	// コライダー管理クラス更新
 }
 
 void GamePlayScene::Draw() {
@@ -164,6 +179,8 @@ void GamePlayScene::Draw() {
 	PathManager::GetInstance()->Draw();
 	// 経路に沿って移動するオブジェクト描画
 	carrier_->Draw();
+	// 鉱石オブジェクト管理クラス描画
+	OreManager::GetInstance()->Draw();
 
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
@@ -200,6 +217,9 @@ void GamePlayScene::Draw() {
 	/// =========================================================
 
 #ifdef _DEBUG // デバッグ表示
+	// コライダー描画
+	Cygnus::CollisionManager::GetInstance()->Draw();
+
 	// ゲームシーン
 	Debug();
 	// プレイヤー

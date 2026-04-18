@@ -2,11 +2,12 @@
 
 // Engine
 #include <Object3D.h>
+#include <Collider/CollisionManager.h>
 
 // =========================================================
-// 経路に沿って動くオブジェクトクラス（Todo : 設定が決まったら名前変更）
+// 経路に沿って動くオブジェクトクラス
 // =========================================================
-class Carrier
+class Carrier : public Cygnus::ICollisionCallback
 {
 public:
 	// =========================================================
@@ -33,6 +34,12 @@ public:
 	/// </summary>
 	void Debug();
 
+	/// <summary>
+	/// 衝突時コールバック
+	/// </summary>
+	/// <param name="collider"></param>
+	void OnCollision(Cygnus::Collider* collider) override;
+
 private:
 	// =========================================================
 	// Internal Methods
@@ -49,13 +56,15 @@ private:
 	// Constants
 	// =========================================================
 
-	const float kMoveSpeed = 4.0f;	// 移動速度
+	const float kMoveSpeed = 2.0f;	// 移動速度
+	const Cygnus::Float3 kColliderSize = {1.0f, 1.0f, 1.0f};	// コライダーサイズ
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
 	std::unique_ptr<Cygnus::Object3D> object_;	// オブジェクト
+	std::unique_ptr<Cygnus::Collider> collider_;	// コライダー
 
 	bool isGoal_ = false;	// ゴール到達フラグ
 

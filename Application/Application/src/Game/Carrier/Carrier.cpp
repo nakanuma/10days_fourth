@@ -7,15 +7,28 @@
 #include <src/Game/Path/PathManager.h>
 
 void Carrier::Initialize() {
+	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Carrier");
 	object_->transform_.translate_ = PathManager::GetInstance()->GetPoint(0);	// 経路の始点座標をセット
+
+	// コライダー生成 + 登録
+	auto aabb = std::make_unique<Cygnus::AABBCollider>();
+	aabb->SetTag("Carrier");
+	aabb->SetFollowTarget(&object_->transform_.translate_);
+	aabb->SetSize(kColliderSize);
+	aabb->SetOwner(this);
+
+	collider_ = std::move(aabb);
+	Cygnus::CollisionManager::GetInstance()->Register(collider_.get());
 }
 
 void Carrier::Update(float deltaTime) {
 	// 経路に沿った移動処理
 	MoveAlongPath(deltaTime);
 
+	// コライダー更新
+	collider_->Update();
 	// オブジェクト更新
 	object_->UpdateMatrix();
 }
@@ -36,6 +49,11 @@ void Carrier::Debug() {
 
 	ImGui::End();
 #endif
+}
+
+void Carrier::OnCollision(Cygnus::Collider* collider)
+{
+
 }
 
 void Carrier::MoveAlongPath(float deltaTime)

@@ -74,6 +74,13 @@ void GameResourceLoader::LoadAllModelData() {
 		"Object/Carrier/carrier.obj",
 		"Object/Carrier/carrier.png"
 	);
+
+	// 鉱石オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"Ore",
+		"Object/Ore/ore.obj",
+		"Object/Ore/ore.png"
+	);
 }
 
 void GameResourceLoader::RegisterAllParticleEffect() {

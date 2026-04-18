@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Ore\OreManager.cpp" />
+    <ClCompile Include="src\Game\Ore\Ore.cpp" />
     <ClCompile Include="src\Game\Carrier\Carrier.cpp" />
     <ClCompile Include="src\Game\Path\PathManager.cpp" />
     <ClCompile Include="src\Game\Player\Player.cpp" />
@@ -27,6 +29,8 @@
     <ClCompile Include="src\Game\Scene\SceneFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Ore\OreManager.h" />
+    <ClInclude Include="src\Game\Ore\Ore.h" />
     <ClInclude Include="src\Game\Carrier\Carrier.h" />
     <ClInclude Include="src\Game\Path\PathManager.h" />
     <ClInclude Include="src\Game\Player\Player.h" />
