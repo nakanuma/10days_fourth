@@ -20,7 +20,8 @@
 // ---------------------------------------------------------
 // Application Includes
 // ---------------------------------------------------------
-
+#include <src/Game/Player/Player.h>
+#include <src/Game/Carrier/Carrier.h>
 
 // =========================================================
 // ゲームプレイシーンクラス
@@ -81,7 +82,9 @@ private:
 	Cygnus::LightManager* lightManager_ = nullptr;                 /* 各ライト管理クラス */
 
 	// ----- Objects -----
-	std::unique_ptr<Cygnus::Object3D> testObject_;	/* テスト用オブジェクト */
+	std::unique_ptr<Cygnus::Object3D> objectGround_;	/* 地面オブジェクト（仮） */
+	std::unique_ptr<Player> player_;	/* プレイヤー */
+	std::unique_ptr<Carrier> carrier_;	/* 経路に沿って移動するオブジェクト */
 
 	// ----- Others -----
 	uint32_t shadowMapHandle_;                                     /* シャドウマップテクスチャ */

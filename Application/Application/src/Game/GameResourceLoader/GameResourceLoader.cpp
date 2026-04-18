@@ -26,29 +26,53 @@ void GameResourceLoader::Initialize() {
 }
 
 void GameResourceLoader::LoadAllModelData() {
+	auto modelManager = Cygnus::ModelManager::GetInstance();
+
 	// ---------------------------------------------------------
 	// プリミティブ
 	// ---------------------------------------------------------
 
 	// 板
-	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+	modelManager->LoadAndRegisterModel(
 		"Plane",
 		"Primitive/Plane/plane.obj",
 		"white.png"
 	);
 
 	// スフィア
-	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+	modelManager->LoadAndRegisterModel(
 		"Sphere",
 		"Primitive/Sphere/sphere.obj",
 		"white.png"
 	);
 
 	// キューブ
-	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+	modelManager->LoadAndRegisterModel(
 		"Cube",
 		"Primitive/Cube/cube.obj",
 		"white.png"
+	);
+
+	// ---------------------------------------------------------
+	// キャラクター
+	// ---------------------------------------------------------
+
+	// プレイヤー
+	modelManager->LoadAndRegisterModel(
+		"Player",
+		"Character/Player/player.obj",
+		"Character/Player/player.png"
+	);
+
+	// ---------------------------------------------------------
+	// オブジェクト
+	// ---------------------------------------------------------
+
+	// 経路に沿って動くオブジェクト
+	modelManager->LoadAndRegisterModel(
+		"Carrier",
+		"Object/Carrier/carrier.obj",
+		"Object/Carrier/carrier.png"
 	);
 }
 

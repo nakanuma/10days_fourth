@@ -18,12 +18,13 @@
 #include <CommandManager.h>
 
 // Application
+#include <src/Game/Path/PathManager.h>
 
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
 	// カメラのインスタンスを生成
-	camera_ = std::make_unique<Cygnus::Camera>(Cygnus::Float3{ 0.0f, 15.0f, -40.0f }, Cygnus::Float3{ 0.3f, 0.0f, 0.0f }, 0.45f);
+	camera_ = std::make_unique<Cygnus::Camera>(Cygnus::Float3{ 0.0f, 80.0f, -60.0f }, Cygnus::Float3{ 1.0f, 0.0f, 0.0f }, 0.45f);
 	Cygnus::Camera::Set(camera_.get()); // 現在のカメラをセット
 
 	// SpriteCommonの生成と初期化
@@ -51,9 +52,23 @@ void GamePlayScene::Initialize() {
 	///	↓ ゲームシーン用
 	///
 	
-	// テスト用オブジェクト生成
-	testObject_ = std::make_unique<Cygnus::Object3D>();
-	testObject_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Cube"); // モデル設定
+	// 地面オブジェクト生成
+	objectGround_ = std::make_unique<Cygnus::Object3D>();
+	objectGround_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Plane"); // モデル設定
+	objectGround_->transform_.rotate_ = {-Cygnus::PIf / 2.0f, 0.0f, 0.0f}; // 上向き
+	objectGround_->transform_.scale_ = {500.0f, 500.0f, 1.0f}; // スケール変更
+	objectGround_->materialCB_.data_->color = {0.5f, 0.5f, 0.5f, 1.0f}; // 色変更
+
+	// プレイヤー生成 + 初期化
+	player_ = std::make_unique<Player>();
+	player_->Initialize();
+
+	// 経路管理クラス初期化
+	PathManager::GetInstance()->Initialize();
+
+	// 経路に沿って移動するオブジェクト生成 + 初期化
+	carrier_ = std::make_unique<Carrier>();
+	carrier_->Initialize();
 }
 
 void GamePlayScene::Finalize() { }
@@ -62,13 +77,18 @@ void GamePlayScene::Update() {
 	Cygnus::LightManager::GetInstance()->ClearEmissiveLights(); // エミッシブライトをクリア
 	Cygnus::LightManager::GetInstance()->ClearAreaLights();     // エリアライトをクリア
 	Cygnus::SkyBoxManager::GetInstance()->Update(); // SkyBox更新
+	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 
 	///
 	///	オブジェクト更新処理
 	/// 
 	
-	// テスト用オブジェクト更新
-	testObject_->UpdateMatrix();
+	// 地面オブジェクト更新
+	objectGround_->UpdateMatrix();
+	// プレイヤー更新
+	player_->Update(dt);
+	// 経路に沿って移動するオブジェクト更新
+	carrier_->Update(dt);
 }
 
 void GamePlayScene::Draw() {
@@ -136,8 +156,14 @@ void GamePlayScene::Draw() {
 	Cygnus::SkyBoxManager::GetInstance()->Draw();
 	// -----------------------------------------------
 
-	// テスト用オブジェクト描画
-	testObject_->Draw();
+	// 地面オブジェクト描画
+	objectGround_->Draw();
+	// プレイヤー描画
+	player_->Draw();
+	// 経路管理クラス描画
+	PathManager::GetInstance()->Draw();
+	// 経路に沿って移動するオブジェクト描画
+	carrier_->Draw();
 
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
@@ -173,9 +199,13 @@ void GamePlayScene::Draw() {
 	/// ↑ ここまでスプライト描画
 	/// =========================================================
 
-#ifdef _DEBUG
-	// デバッグ表示
+#ifdef _DEBUG // デバッグ表示
+	// ゲームシーン
 	Debug();
+	// プレイヤー
+	player_->Debug();
+	// 経路に沿って動くオブジェクト
+	carrier_->Debug();
 #endif
 
 	// ImGuiの内部コマンドを生成する
@@ -192,7 +222,14 @@ void GamePlayScene::Debug() {
 
 	ImGui::Text("fps:%.2f", ImGui::GetIO().Framerate);
 
-	ImGui::DragFloat3("testObject.translate", &testObject_->transform_.translate_.x, 0.1f);
+	ImGui::End();
+#endif
+
+#ifdef USE_IMGUI
+	ImGui::Begin("Camera");
+
+	ImGui::DragFloat3("Translate", &camera_->transform_.translate_.x, 0.01f);
+	ImGui::DragFloat3("Rotate", &camera_->transform_.rotate_.x, 0.01f);
 
 	ImGui::End();
 #endif
