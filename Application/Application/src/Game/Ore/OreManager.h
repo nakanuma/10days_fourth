@@ -2,6 +2,7 @@
 
 // Application
 #include <src/Game/Ore/Ore.h>
+#include <src/Game/Ore/DroppedOre.h>
 
 // =========================================================
 // 鉱石オブジェクト管理クラス
@@ -34,11 +35,20 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 指定座標の一定範囲内にある鉱石を削除（プレイヤー側で採掘時に呼び出し）
+	/// </summary>
+	/// <param name="targetPos"></param>
+	/// <param name="range"></param>
+	/// <returns></returns>
+	bool TryBreakAt(const Cygnus::Float3& targetPos, float range);
+
 private:
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
 	std::vector<std::unique_ptr<Ore>> ores_;	// 全ての鉱石オブジェクトを管理
+	std::vector<std::unique_ptr<DroppedOre>> droppedOres_;	// 全ての落ちている（ドロップアイテム）鉱石オブジェクトを管理
 };
 
