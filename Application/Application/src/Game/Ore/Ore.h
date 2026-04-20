@@ -37,6 +37,21 @@ public:
 	/// <param name="other"></param>
 	void OnCollision(Cygnus::Collider* other) override;
 
+	/// <summary>
+	/// コライダーの登録解除
+	/// </summary>
+	void UnregisterCollider() { Cygnus::CollisionManager::GetInstance()->Unregister(collider_.get()); }
+
+	// =========================================================
+	// Accessor
+	// =========================================================
+
+	/// <summary>
+	/// 位置を取得します。
+	/// </summary>
+	/// <returns></returns>
+	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; }
+
 private:
 	// =========================================================
 	// Constants
