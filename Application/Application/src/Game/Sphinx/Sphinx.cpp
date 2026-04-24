@@ -161,6 +161,7 @@ void Sphinx::Debug()
 	ImGui::DragFloat3("Translate", &object_->transform_.translate_.x, 0.01f);
 
 
+	ImGui::Text("key Q : Attack");
 	ImGui::Text("Status : ");
 	ImGui::SameLine();
 	if (faintTimer_ > 0.0f)
