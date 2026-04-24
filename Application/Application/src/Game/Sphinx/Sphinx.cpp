@@ -6,6 +6,9 @@
 #include <TimeManager.h>
 #include <RandomGenerator.h>
 
+// Application
+#include <src/Game/Ore/OreManager.h>
+
 void Sphinx::Initialize()
 {
 	// オブジェクト生成
@@ -16,7 +19,7 @@ void Sphinx::Initialize()
 
 	// コライダー生成 + 登録
 	auto obb = std::make_unique<Cygnus::OBBCollider>();
-	obb->SetTag("Player");
+	obb->SetTag("Sphinx");
 	obb->SetFollowTarget(&object_->transform_.translate_);
 	obb->SetFollowRotation(&object_->transform_.rotate_);
 	obb->SetSize(kColliderSize);
@@ -31,43 +34,27 @@ void Sphinx::Initialize()
 
 void Sphinx::Update(float deltaTime)
 {
-#pragma region 入力による移動処理
+#pragma region 移動処理
 	auto input = Cygnus::Input::GetInstance();
 	if (input->PushKey(DIK_Q)&& !isAttack_)
 	{
-		isAttack_ = true;
-		attackTimer_ = kAttackTime_;
-		attackDir_ = randomWalk_->GetRandomWalkDir();
-		object_->transform_.rotate_.y = std::atan2(attackDir_.x, attackDir_.z);
+		StartAttack(randomWalk_->GetRandomWalkDir());
 	}
 
-	if(!isAttack_)
+	// 気絶中は攻撃・移動処理を行わない
+	if(!Faint(deltaTime))
 	{
-		randomWalk_->Update(deltaTime, 1.0f);
-		Move(deltaTime);
+		if (!isAttack_)
+		{
+			randomWalk_->Update(deltaTime, kMoveChangeTime_);
+			Move(deltaTime);
+		}
+		else
+		{
+			Attack(deltaTime);
+		}
 	}
-	else
-	{
-		Attack(deltaTime);
-	}
-	// 入力がある場合のみ回転と移動を行う
-	//if (Cygnus::Float3::Length(moveDir) > 0.01f)
-	//{
-	//	// 回転処理
-	//	float angle = std::atan2f(moveDir.x, moveDir.z);	// 入力ベクトルから角度を計算
-	//	const float kStep = Cygnus::PIf / 4.0f;	// 8方向に限定するため45度
-	//	object_->transform_.rotate_.y = std::round(angle / kStep) * kStep;	// オブジェクト回転に反映
-
-	//	// 移動処理
-	//	if (Cygnus::Float3::Length(moveDir) > 1.0f)
-	//	{
-	//		// 正規化して一定の速度を保つように
-	//		moveDir = Cygnus::Float3::Normalize(moveDir);
-	//	}
-	//}
-
-	// オブジェクト位置に反映
-	//object_->transform_.translate_ += moveDir * kMoveSpeed * deltaTime;
+	MoveClamp();
 #pragma endregion
 	// コライダー更新
 	collider_->Update();
@@ -84,20 +71,71 @@ void Sphinx::Move(float deltaTime)
 	object_->transform_.translate_ += moveDir_ * kMoveSpeed * deltaTime;
 }
 
+void Sphinx::StartAttack(const Cygnus::Float3& targetDir)
+{
+	isAttack_ = true;
+	attackTimer_ = kAttackTime_;
+	attackDir_ = targetDir;
+	object_->transform_.rotate_.y = std::atan2(attackDir_.x, attackDir_.z);
+}
+
 void Sphinx::Attack(float deltaTime)
 {
 	attackTimer_ -= deltaTime;
 	if(attackTimer_ > 0.0f)
 	{
 		object_->transform_.translate_ += attackDir_ * kAttackMoveSpeed_ * deltaTime;
+		OreMining();
 	}
 	else
 	{
-		Stop();
+		StopAttack();
 	}
 }
 
-void Sphinx::Stop()
+bool Sphinx::Faint(float deltaTime)
+{
+	if (faintTimer_ > 0.0f)
+	{
+		faintTimer_ -= deltaTime;
+		return true;
+	}
+	return false;
+}
+
+void Sphinx::StartFaint()
+{
+	faintTimer_ = kFaintTime_;
+}
+
+void Sphinx::OreMining()
+{
+	// 向きから前方のベクトルを作成する
+	float angleY = object_->transform_.rotate_.y;
+	Cygnus::Float3 frontVec = { std::sinf(angleY), 0.0f, std::cosf(angleY) };
+
+	// スフィンクスの少し前方を判定の中心にする
+	Cygnus::Float3 targetPos = {
+		object_->transform_.translate_.x + frontVec.x * kMiningOffset,
+		object_->transform_.translate_.y,
+		object_->transform_.translate_.z + frontVec.z * kMiningOffset
+	};
+
+	// 鉱石採掘判定
+	if (OreManager::GetInstance()->TryBreakAt(targetPos, kMiningRange))
+	{
+		// 鉱石採掘時の処理
+
+	}
+}
+
+void Sphinx::MoveClamp()
+{
+	object_->transform_.translate_.x = std::clamp(object_->transform_.translate_.x, kMoveMin.x, kMoveMax.x);
+	object_->transform_.translate_.z = std::clamp(object_->transform_.translate_.z, kMoveMin.z, kMoveMax.z);
+}
+
+void Sphinx::StopAttack()
 {
 	isAttack_ = false;
 	attackTimer_ = 0.0f;
@@ -116,6 +154,25 @@ void Sphinx::Debug()
 
 	ImGui::DragFloat3("Translate", &object_->transform_.translate_.x, 0.01f);
 
+
+	ImGui::Text("Status : ");
+	ImGui::SameLine();
+	if (faintTimer_ > 0.0f)
+	{
+		ImGui::Text("Faint");
+		ImGui::Text("Timer : %.02f", faintTimer_);
+	}
+	else if (isAttack_)
+	{
+		ImGui::Text("Attack");
+		ImGui::Text("Timer : %.02f", attackTimer_);
+	}
+	else
+	{
+		ImGui::Text("Move");
+	}
+
+
 	ImGui::End();
 #endif
 }
@@ -125,72 +182,40 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 	// 線路に沿って動くオブジェクトとの衝突
 	if (other->GetTag() == "Carrier")
 	{
-		Cygnus::AABBCollider* myAABB = dynamic_cast<Cygnus::AABBCollider*>(collider_.get());
+		Cygnus::OBBCollider* myOBB = dynamic_cast<Cygnus::OBBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
 		// 押し戻し処理
-		if (myAABB && otherAABB)
+		if (isAttack_ && faintTimer_ <= 0.0f)
 		{
-			// 押し戻しベクトル取得
-			Cygnus::Float3 pushVec = myAABB->GetPushBackVector(*otherAABB);
-			// プレイヤー位置を補正
-			object_->transform_.translate_ += pushVec;
-			object_->UpdateMatrix();
-
-			// コライダーも更新
-			Cygnus::Float3 currentMin = myAABB->GetMin();
-			Cygnus::Float3 currentMax = myAABB->GetMax();
-			myAABB->SetMin(currentMin + pushVec);
-			myAABB->SetMax(currentMax + pushVec);
+			StopAttack();
 		}
-		Stop();
 	}
 
 	// 鉱石オブジェクトとの衝突
 	if (other->GetTag() == "Ore")
 	{
-		Cygnus::AABBCollider* myAABB = dynamic_cast<Cygnus::AABBCollider*>(collider_.get());
+		Cygnus::OBBCollider* myOBB = dynamic_cast<Cygnus::OBBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
 		// 押し戻し処理
-		if (myAABB && otherAABB)
+		if (isAttack_ && faintTimer_ <= 0.0f)
 		{
-			// 押し戻しベクトル取得
-			Cygnus::Float3 pushVec = myAABB->GetPushBackVector(*otherAABB);
-			// プレイヤー位置を補正
-			object_->transform_.translate_ += pushVec;
-			object_->UpdateMatrix();
-
-			// コライダーも更新
-			Cygnus::Float3 currentMin = myAABB->GetMin();
-			Cygnus::Float3 currentMax = myAABB->GetMax();
-			myAABB->SetMin(currentMin + pushVec);
-			myAABB->SetMax(currentMax + pushVec);
+			StopAttack();
+			StartFaint();
 		}
-		Stop();
 	}
 
 	// プレイヤーオブジェクトとの衝突
 	if (other->GetTag() == "Player")
 	{
-		Cygnus::AABBCollider* myAABB = dynamic_cast<Cygnus::AABBCollider*>(collider_.get());
+		Cygnus::OBBCollider* myOBB = dynamic_cast<Cygnus::OBBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
 		// 押し戻し処理
-		if (myAABB && otherAABB)
+		if (isAttack_ && faintTimer_ <= 0.0f)
 		{
-			// 押し戻しベクトル取得
-			Cygnus::Float3 pushVec = myAABB->GetPushBackVector(*otherAABB);
-			// プレイヤー位置を補正
-			object_->transform_.translate_ += pushVec;
-			object_->UpdateMatrix();
-
-			// コライダーも更新
-			Cygnus::Float3 currentMin = myAABB->GetMin();
-			Cygnus::Float3 currentMax = myAABB->GetMax();
-			myAABB->SetMin(currentMin + pushVec);
-			myAABB->SetMax(currentMax + pushVec);
+			StopAttack();
 		}
-		Stop();
 	}
 }

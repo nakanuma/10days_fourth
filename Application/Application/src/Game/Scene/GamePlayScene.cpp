@@ -71,6 +71,9 @@ void GamePlayScene::Initialize() {
 	carrier_ = std::make_unique<Carrier>();
 	carrier_->Initialize();
 
+	sphinx_ = std::make_unique<Sphinx>();
+	sphinx_->Initialize();
+
 	// 鉱石オブジェクト管理クラス初期化
 	OreManager::GetInstance()->Initialize();
 }
@@ -96,6 +99,7 @@ void GamePlayScene::Update() {
 	player_->Update(dt);
 	// 経路に沿って移動するオブジェクト更新
 	carrier_->Update(dt);
+	sphinx_->Update(dt);
 	// 鉱石オブジェクト管理クラス更新
 	OreManager::GetInstance()->Update();
 
@@ -179,6 +183,7 @@ void GamePlayScene::Draw() {
 	PathManager::GetInstance()->Draw();
 	// 経路に沿って移動するオブジェクト描画
 	carrier_->Draw();
+	sphinx_->Draw();
 	// 鉱石オブジェクト管理クラス描画
 	OreManager::GetInstance()->Draw();
 
@@ -226,6 +231,7 @@ void GamePlayScene::Draw() {
 	player_->Debug();
 	// 経路に沿って動くオブジェクト
 	carrier_->Debug();
+	sphinx_->Debug();
 #endif
 
 	// ImGuiの内部コマンドを生成する
