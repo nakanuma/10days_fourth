@@ -29,7 +29,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(float deltaTime);
+	void Update(float deltaTime, const Cygnus::Float3& targetPos);
 
 	/// <summary>
 	/// 描画処理
@@ -123,6 +123,7 @@ private:
 
 	float faintTimer_ = 0.0f;
 
+	bool isMining_ = false;
 
 	const float kMiningOffset = 3.5f;	// 採掘時の前方オフセット
 	const float kMiningRange = 2.5f;	// 採掘時のブレ許容値

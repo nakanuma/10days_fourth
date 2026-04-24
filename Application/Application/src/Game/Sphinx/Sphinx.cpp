@@ -5,6 +5,7 @@
 #include <ImguiWrapper.h>
 #include <TimeManager.h>
 #include <RandomGenerator.h>
+#include <Collider/CollisionMath.h>
 
 // Application
 #include <src/Game/Ore/OreManager.h>
@@ -32,18 +33,21 @@ void Sphinx::Initialize()
 	randomWalk_ = std::make_unique<RandomWalk>();
 }
 
-void Sphinx::Update(float deltaTime)
+void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
 {
 #pragma region 移動処理
-	auto input = Cygnus::Input::GetInstance();
-	if (input->PushKey(DIK_Q)&& !isAttack_)
-	{
-		StartAttack(randomWalk_->GetRandomWalkDir());
-	}
 
 	// 気絶中は攻撃・移動処理を行わない
 	if(!Faint(deltaTime))
 	{
+		// キー入力による攻撃発動(デバッグ・プロト用)
+		auto input = Cygnus::Input::GetInstance();
+		if (input->TriggerKey(DIK_Q) && !isAttack_)
+		{
+			Cygnus::Float3 dir = Cygnus::Float3::Normalize(targetPos - object_->transform_.translate_);
+			StartAttack(dir);
+		}
+
 		if (!isAttack_)
 		{
 			randomWalk_->Update(deltaTime, kMoveChangeTime_);
@@ -74,9 +78,11 @@ void Sphinx::Move(float deltaTime)
 void Sphinx::StartAttack(const Cygnus::Float3& targetDir)
 {
 	isAttack_ = true;
+	isMining_ = false;
 	attackTimer_ = kAttackTime_;
 	attackDir_ = targetDir;
 	object_->transform_.rotate_.y = std::atan2(attackDir_.x, attackDir_.z);
+	randomWalk_->Reset();
 }
 
 void Sphinx::Attack(float deltaTime)
@@ -125,7 +131,7 @@ void Sphinx::OreMining()
 	if (OreManager::GetInstance()->TryBreakAt(targetPos, kMiningRange))
 	{
 		// 鉱石採掘時の処理
-
+		isMining_ = true;
 	}
 }
 
@@ -179,13 +185,34 @@ void Sphinx::Debug()
 
 void Sphinx::OnCollision(Cygnus::Collider* other)
 {
-	// 線路に沿って動くオブジェクトとの衝突
-	if (other->GetTag() == "Carrier")
+	// 線路に沿って動くオブジェクトとプレイヤーオブジェクトとの衝突
+	if (other->GetTag() == "Carrier" || other->GetTag() == "Player")
 	{
 		Cygnus::OBBCollider* myOBB = dynamic_cast<Cygnus::OBBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
 		// 押し戻し処理
+		if (myOBB && other)
+		{
+			// 相手のAABBを一時的にOBBとして扱う
+			Cygnus::OBBCollider otherAsOBB;
+			otherAsOBB.SetCenter((otherAABB->GetMin() + otherAABB->GetMax()) * 0.5f);
+			otherAsOBB.SetSize((otherAABB->GetMax() - otherAABB->GetMin()) * 0.5f);
+			otherAsOBB.SetXAxis({ 1.0f, 0.0f, 0.0f });
+			otherAsOBB.SetYAxis({ 0.0f, 1.0f, 0.0f });
+			otherAsOBB.SetZAxis({ 0.0f, 0.0f, 1.0f });
+
+			// 押し戻しベクトルを計算
+			Cygnus::Float3 pushVec = Cygnus::CollisionMath::CalculatePushBackOBBvsOBB(myOBB, &otherAsOBB);
+
+			// 位置を補正
+			object_->transform_.translate_ += pushVec;
+			object_->UpdateMatrix();
+
+			// コライダーも更新
+			myOBB->Update();
+		}
+
 		if (isAttack_ && faintTimer_ <= 0.0f)
 		{
 			StopAttack();
@@ -199,6 +226,27 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
 		// 押し戻し処理
+		if (myOBB && other)
+		{
+			// 相手のAABBを一時的にOBBとして扱う
+			Cygnus::OBBCollider otherAsOBB;
+			otherAsOBB.SetCenter((otherAABB->GetMin() + otherAABB->GetMax()) * 0.5f);
+			otherAsOBB.SetSize((otherAABB->GetMax() - otherAABB->GetMin()) * 0.5f);
+			otherAsOBB.SetXAxis({ 1.0f, 0.0f, 0.0f });
+			otherAsOBB.SetYAxis({ 0.0f, 1.0f, 0.0f });
+			otherAsOBB.SetZAxis({ 0.0f, 0.0f, 1.0f });
+
+			// 押し戻しベクトルを計算
+			Cygnus::Float3 pushVec = Cygnus::CollisionMath::CalculatePushBackOBBvsOBB(myOBB, &otherAsOBB);
+
+			// プレイヤーの位置を補正
+			object_->transform_.translate_ += pushVec;
+			object_->UpdateMatrix();
+
+			// コライダーも更新
+			myOBB->Update();
+		}
+
 		if (isAttack_ && faintTimer_ <= 0.0f)
 		{
 			StopAttack();
@@ -206,16 +254,13 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 		}
 	}
 
-	// プレイヤーオブジェクトとの衝突
-	if (other->GetTag() == "Player")
+	// 落ちている鉱石（ドロップアイテム）と衝突した時も気絶判定
+	if (other->GetTag() == "DroppedOre" && isMining_)
 	{
-		Cygnus::OBBCollider* myOBB = dynamic_cast<Cygnus::OBBCollider*>(collider_.get());
-		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
-
-		// 押し戻し処理
 		if (isAttack_ && faintTimer_ <= 0.0f)
 		{
 			StopAttack();
+			StartFaint();
 		}
 	}
 }

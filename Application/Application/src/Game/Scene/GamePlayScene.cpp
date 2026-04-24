@@ -99,7 +99,7 @@ void GamePlayScene::Update() {
 	player_->Update(dt);
 	// 経路に沿って移動するオブジェクト更新
 	carrier_->Update(dt);
-	sphinx_->Update(dt);
+	sphinx_->Update(dt, player_->GetPosition());
 	// 鉱石オブジェクト管理クラス更新
 	OreManager::GetInstance()->Update();
 

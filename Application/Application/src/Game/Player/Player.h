@@ -42,6 +42,17 @@ public:
 	/// <param name="other"></param>
 	void OnCollision(Cygnus::Collider* other) override;
 
+	// =========================================================
+	// Accessor
+	// =========================================================
+
+	/// <summary>
+	/// プレイヤー座標を取得
+	/// </summary>
+	/// <returns></returns>
+	Cygnus::Float3 GetPosition() const { return object_->transform_.translate_; }
+
+
 private:
 	// =========================================================
 	// Internal Methods
