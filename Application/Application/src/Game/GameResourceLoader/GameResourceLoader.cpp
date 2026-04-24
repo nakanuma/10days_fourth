@@ -84,7 +84,7 @@ void GameResourceLoader::LoadAllModelData() {
 }
 
 void GameResourceLoader::RegisterAllParticleEffect() {
-
+	RegisterParticle
 }
 
 void GameResourceLoader::LoadAllSoundData() {

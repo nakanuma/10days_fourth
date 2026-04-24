@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Particles\Template\TemplateParticle.cpp" />
+    <ClCompile Include="src\Game\Scene\ParticleEditorScene.cpp" />
     <ClCompile Include="src\Game\Ore\DroppedOre.cpp" />
     <ClCompile Include="src\Game\Ore\OreManager.cpp" />
     <ClCompile Include="src\Game\Ore\Ore.cpp" />
@@ -30,6 +32,8 @@
     <ClCompile Include="src\Game\Scene\SceneFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Particles\Template\TemplateParticle.h" />
+    <ClInclude Include="src\Game\Scene\ParticleEditorScene.h" />
     <ClInclude Include="src\Game\Ore\DroppedOre.h" />
     <ClInclude Include="src\Game\Ore\OreManager.h" />
     <ClInclude Include="src\Game\Ore\Ore.h" />
