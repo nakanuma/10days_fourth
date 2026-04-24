@@ -42,6 +42,21 @@ public:
 	/// <param name="other"></param>
 	void OnCollision(Cygnus::Collider* other) override;
 
+	// =========================================================
+	// Accessor
+	// =========================================================
+
+	/// <summary>
+	/// 鉱石を拾えるか（所持最大数に達していないか）取得
+	/// </summary>
+	/// <returns></returns>
+	bool CanPickUpOre() const { return oreCount_ < kMaxOreCount; }
+
+	/// <summary>
+	/// プレイヤーの所持鉱石を1増やす（外部から呼ぶ用）
+	/// </summary>
+	void AddOreCount() { oreCount_++; }
+
 private:
 	// =========================================================
 	// Internal Methods
@@ -69,6 +84,8 @@ private:
 
 	const float kMiningOffset = 1.5f;	// 採掘時の前方オフセット
 	const float kMiningRange = 1.2f;	// 採掘時のブレ許容値
+
+	const uint32_t kMaxOreCount = 3;	// 持てる鉱石の最大数
 
 	// =========================================================
 	// Member Variables

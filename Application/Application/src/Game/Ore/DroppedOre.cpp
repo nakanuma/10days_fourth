@@ -3,6 +3,9 @@
 // Engine
 #include <TimeManager.h>
 
+// Application
+#include <src/Game/Player/Player.h>
+
 void DroppedOre::Initialize(const Cygnus::Float3 translate) {
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
@@ -40,8 +43,13 @@ void DroppedOre::Draw() {
 void DroppedOre::OnCollision(Cygnus::Collider* other) { 
 	// プレイヤーとの衝突
 	if (other->GetTag() == "Player") {
-		// 拾われたことにする
-		isPickedUp_ = true;
+		Player* player = static_cast<Player*>(other->GetOwner());
+
+		// プレイヤーが鉱石を拾える場合
+		if (player->CanPickUpOre()) {
+			isPickedUp_ = true;	// 自身の取得フラグを立てる（消す準備）
+			player->AddOreCount();	// プレイヤーの鉱石所持数を1増やす
+		}
 	}
 }
 

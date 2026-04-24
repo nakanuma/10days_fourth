@@ -99,7 +99,7 @@ void Player::OnCollision(Cygnus::Collider* other)
 {
 	// 押し戻しを行うオブジェクトとの衝突
 	// : 線路に沿って動くオブジェクト, 鉱石オブジェクト
-	if (other->GetTag() == "Carrier" || "Ore") {
+	if (other->GetTag() == "Carrier" || other->GetTag() == "Ore") {
 		Cygnus::AABBCollider* myAABB = dynamic_cast<Cygnus::AABBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
@@ -117,11 +117,6 @@ void Player::OnCollision(Cygnus::Collider* other)
 			myAABB->SetMin(currentMin + pushVec);
 			myAABB->SetMax(currentMax + pushVec);
 		}
-	}
-
-	// 落ちている鉱石（ドロップアイテム）との衝突
-	if(other->GetTag() == "DroppedOre") {
-		oreCount_++;
 	}
 }
 
