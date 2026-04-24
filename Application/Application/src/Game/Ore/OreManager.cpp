@@ -7,6 +7,7 @@ OreManager* OreManager::GetInstance() {
 
 void OreManager::Initialize() {
 	ores_.clear();
+	droppedOres_.clear();
 	// デバッグ用にベタ打ちで鉱石を追加（Todo : エディタで追加できるように変更する）
 	for(size_t i = 0; i < 3; ++i) {
 		for(size_t j = 0; j < 3; ++j) {

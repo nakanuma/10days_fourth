@@ -60,6 +60,6 @@ private:
 	// Member Variables
 	// =========================================================
 
-	std::vector<Cygnus::Float3> points_;	// 経路の頂点リスト
+	std::vector<Cygnus::Float3> points_;	// 経路の頂点
 };
 

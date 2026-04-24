@@ -20,6 +20,7 @@
 // Application
 #include <src/Game/Path/PathManager.h>
 #include <src/Game/Ore/OreManager.h>
+#include <src/Game/WorkBench/WorkBenchManager.h>
 
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
@@ -73,6 +74,9 @@ void GamePlayScene::Initialize() {
 
 	// 鉱石オブジェクト管理クラス初期化
 	OreManager::GetInstance()->Initialize();
+
+	// 工作台オブジェクト管理クラス初期化
+	WorkBenchManager::GetInstance()->Initialize();
 }
 
 void GamePlayScene::Finalize() { }
@@ -98,6 +102,8 @@ void GamePlayScene::Update() {
 	carrier_->Update(dt);
 	// 鉱石オブジェクト管理クラス更新
 	OreManager::GetInstance()->Update();
+	// 工作台オブジェクト管理クラス更新
+	WorkBenchManager::GetInstance()->GetInstance()->Update();
 
 	///
 	///	
@@ -181,6 +187,8 @@ void GamePlayScene::Draw() {
 	carrier_->Draw();
 	// 鉱石オブジェクト管理クラス描画
 	OreManager::GetInstance()->Draw();
+	// 工作台オブジェクト管理クラス描画
+	WorkBenchManager::GetInstance()->Draw();
 
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();

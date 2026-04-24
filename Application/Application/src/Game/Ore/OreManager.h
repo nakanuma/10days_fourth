@@ -48,7 +48,7 @@ private:
 	// Member Variables
 	// =========================================================
 
-	std::vector<std::unique_ptr<Ore>> ores_;	// 全ての鉱石オブジェクトを管理
-	std::vector<std::unique_ptr<DroppedOre>> droppedOres_;	// 全ての落ちている（ドロップアイテム）鉱石オブジェクトを管理
+	std::vector<std::unique_ptr<Ore>> ores_;	// 全ての鉱石オブジェクト
+	std::vector<std::unique_ptr<DroppedOre>> droppedOres_;	// 全ての落ちている（ドロップアイテム）鉱石オブジェクト
 };
 

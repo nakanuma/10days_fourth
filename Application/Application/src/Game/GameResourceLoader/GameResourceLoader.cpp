@@ -81,6 +81,13 @@ void GameResourceLoader::LoadAllModelData() {
 		"Object/Ore/ore.obj",
 		"Object/Ore/ore.png"
 	);
+
+	// 工作台
+	modelManager->LoadAndRegisterModel(
+		"WorkBench", 
+		"Object/WorkBench/workBench.obj", 
+		"Object/WorkBench/workBench.png"
+	);
 }
 
 void GameResourceLoader::RegisterAllParticleEffect() {
