@@ -3,14 +3,13 @@
 // ---------------------------------------------------------
 // Engine Includes
 // ---------------------------------------------------------
-#include <Object3D.h>
 #include <Collider/CollisionManager.h>
+#include <Object3D.h>
 
 // =========================================================
-// プレイヤークラス
+// 落ちている歯車（ドロップアイテム）オブジェクトクラス
 // =========================================================
-class Player : public Cygnus::ICollisionCallback
-{
+class DroppedGear : public Cygnus::ICollisionCallback {
 public:
 	// =========================================================
 	// Public Methods
@@ -19,12 +18,13 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize();
+	/// <param name="translate"></param>
+	void Initialize(const Cygnus::Float3 translate);
 
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(float deltaTime);
+	void Update();
 
 	/// <summary>
 	/// 描画処理
@@ -32,30 +32,25 @@ public:
 	void Draw();
 
 	/// <summary>
-	/// デバッグ表示
-	/// </summary>
-	void Debug();
-
-	/// <summary>
 	/// 衝突時コールバック
 	/// </summary>
 	/// <param name="other"></param>
 	void OnCollision(Cygnus::Collider* other) override;
+
+	/// <summary>
+	/// コライダーの登録解除
+	/// </summary>
+	void UnregisterCollider() { Cygnus::CollisionManager::GetInstance()->Unregister(collider_.get()); }
 
 	// =========================================================
 	// Accessor
 	// =========================================================
 
 	/// <summary>
-	/// 鉱石を拾えるか（所持最大数に達していないか）取得
+	/// プレイヤーに回収されたかどうかを取得
 	/// </summary>
 	/// <returns></returns>
-	bool CanPickUpOre() const { return oreCount_ < kMaxOreCount; }
-
-	/// <summary>
-	/// プレイヤーの所持鉱石を1増やす（外部から呼ぶ用）
-	/// </summary>
-	void AddOreCount() { oreCount_++; }
+	bool IsPickedUp() const { return isPickedUp_; }
 
 private:
 	// =========================================================
@@ -63,39 +58,30 @@ private:
 	// =========================================================
 
 	/// <summary>
-	/// キーボード用入力取得
+	/// 上下揺れ + 回転を行うアニメーション
 	/// </summary>
-	/// <returns></returns>
-	Cygnus::Float3 GetKeyInput();
-
-	/// <summary>
-	/// ゲームパッド用入力取得
-	/// </summary>
-	/// <returns></returns>
-	Cygnus::Float3 GetPadInput();
+	void BobbingAnimation();
 
 private:
 	// =========================================================
 	// Constants
 	// =========================================================
 
-	const float kMoveSpeed = 20.0f;	// 移動速度
-	const Cygnus::Float3 kColliderSize = {1.0f, 2.0f, 1.0f};	// コライダーサイズ
+	const Cygnus::Float3 kColliderSize = {0.5f, 0.5f, 0.5f}; // コライダーサイズ
 
-	const float kMiningOffset = 1.5f;	// 採掘時の前方オフセット
-	const float kMiningRange = 1.2f;	// 採掘時のブレ許容値
-
-	const uint32_t kMaxOreCount = 4;	// 所持できる鉱石の最大数
+	const float kRotateSpeed = 2.0f;      // 回転速度
+	const float kBobbingSpeed = 3.0f;     // 上下揺れの速さ
+	const float kBobbingAmplitude = 0.2f; // 上下揺れの幅
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	std::unique_ptr<Cygnus::Object3D> object_;	// オブジェクト
-	std::unique_ptr<Cygnus::Collider> collider_;	// コライダー
+	std::unique_ptr<Cygnus::Object3D> object_;   // オブジェクト
+	std::unique_ptr<Cygnus::Collider> collider_; // コライダー
 
-	Cygnus::Float3 velocity_ = {0.0f, 0.0f, 0.0f};	// 速度ベクトル
+	Cygnus::Float3 basePosition_; // 生成時の初期座標
+	float timer_ = 0.0f;          // アニメーション用タイマー
 
-	uint32_t oreCount_ = 0;	// 現在の所持鉱石数
+	bool isPickedUp_ = false; // プレイヤーに拾われたか
 };
-

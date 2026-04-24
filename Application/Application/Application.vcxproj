@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Gear\DroppedGear.cpp" />
+    <ClCompile Include="src\Game\Gear\GearManager.cpp" />
     <ClCompile Include="src\Game\Ore\DroppedOre.cpp" />
     <ClCompile Include="src\Game\Ore\OreManager.cpp" />
     <ClCompile Include="src\Game\Ore\Ore.cpp" />
@@ -32,6 +34,8 @@
     <ClCompile Include="src\Game\WorkBench\WorkBenchManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Gear\DroppedGear.h" />
+    <ClInclude Include="src\Game\Gear\GearManager.h" />
     <ClInclude Include="src\Game\Ore\DroppedOre.h" />
     <ClInclude Include="src\Game\Ore\OreManager.h" />
     <ClInclude Include="src\Game\Ore\Ore.h" />

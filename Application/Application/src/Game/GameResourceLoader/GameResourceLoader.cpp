@@ -82,11 +82,18 @@ void GameResourceLoader::LoadAllModelData() {
 		"Object/Ore/ore.png"
 	);
 
-	// 工作台
+	// 工作台オブジェクト
 	modelManager->LoadAndRegisterModel(
 		"WorkBench", 
 		"Object/WorkBench/workBench.obj", 
 		"Object/WorkBench/workBench.png"
+	);
+
+	// 歯車オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"Gear", 
+		"Object/Gear/gear.obj", 
+		"Object/Gear/gear.png"
 	);
 }
 
