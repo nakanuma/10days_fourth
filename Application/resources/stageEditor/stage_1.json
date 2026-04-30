@@ -1,0 +1,53 @@
+{
+    "name": "StageEditor",
+    "object": [
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "Player"
+            },
+            "objectName": "Player",
+            "position": [
+                0.0,
+                2.0,
+                0.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "Carrier"
+            },
+            "objectName": "Carrier",
+            "position": [
+                6.0,
+                2.0,
+                6.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    4.0,
+                    4.0,
+                    4.0
+                ],
+                "tag": "Carrier"
+            },
+            "objectName": "Carrier",
+            "position": [
+                13.0,
+                2.0,
+                -1.0
+            ]
+        }
+    ]
+}

@@ -73,6 +73,9 @@ void GamePlayScene::Initialize() {
 
 	// 鉱石オブジェクト管理クラス初期化
 	OreManager::GetInstance()->Initialize();
+
+	stageEditor_ = std::make_unique<StageEditor>();
+	stageEditor_->LoadJsonFile("resources/stageEditor/stage_1.json");
 }
 
 void GamePlayScene::Finalize() { }
@@ -226,6 +229,8 @@ void GamePlayScene::Draw() {
 	player_->Debug();
 	// 経路に沿って動くオブジェクト
 	carrier_->Debug();
+	//　ステージエディタの更新(jsonの生成処理)
+	stageEditor_->Update();
 #endif
 
 	// ImGuiの内部コマンドを生成する
