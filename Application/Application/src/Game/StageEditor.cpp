@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include "Path/PathManager.h"
+#include "Ore/OreManager.h"
 
 using namespace Cygnus;
 
@@ -53,9 +55,6 @@ void StageEditor::LoadJsonFile(const std::string& stageName) {
 		gameObjectPos.collider.SetSize({ collider["size"][0] , collider["size"][1] , collider["size"][2]});
 		gameObjectPos.collider.SetTag(collider["tag"]);
 
-		//追加
-		SpitObjects(gameObjectPos);
-
 		gameObjectPositions_.push_back(gameObjectPos);
 	}
 }
@@ -77,18 +76,23 @@ void StageEditor::Update() {
 #endif // _DEBUG
 }
 
-void StageEditor::SpitObjects(const GameObjectPosition& gameObjectPos) {
+void StageEditor::SpitObjects(std::unique_ptr<Player>& player) {
 	//名前から生成物を判断する
 
-	if (gameObjectPos.name == "Player") {
-		std::unique_ptr<Player> object = std::make_unique<Player>();
-		object->Initialize();
-		players_.push_back(std::move(object));
-	}
-	else if (gameObjectPos.name == "Carrier") {
-		std::unique_ptr<Carrier> object = std::make_unique<Carrier>();
-		object->Initialize();
-		Carriers_.push_back(std::move(object));
+	for (auto& gameObjectPos : gameObjectPositions_){
+		//名前がプレイヤー+まだnullの場合
+		if (gameObjectPos.name == "Player" && player == nullptr) {
+			std::unique_ptr<Player> object = std::make_unique<Player>();
+			object->Initialize();
+			object->SetTranslate(gameObjectPos.position);
+			player = std::move(object);
+		}
+		else if (gameObjectPos.name == "Ore") {
+			OreManager::GetInstance()->AddPoint(gameObjectPos.position, gameObjectPos.collider.GetSize());
+		}
+		else if (gameObjectPos.name == "Path") {
+			PathManager::GetInstance()->AddPoint(gameObjectPos.position);
+		}
 	}
 }
 
@@ -133,9 +137,22 @@ void StageEditor::SettingStage() {
 		ImGui::TreePop();
 	}
 
-	//現在のデータをリセットする
-	if (ImGui::Button("Reset Objects")) {
-		gameObjectPositions_.clear();
+	//何もないなら
+	if (gameObjectPositions_.size() <= 0) return;
+
+	//現在のデータを表示
+	if (ImGui::TreeNode("delete ObjectData")) {
+		ImGui::InputInt("objectNum", &objectNum_);//消したい配列番号を入力
+		objectNum_ = std::clamp(objectNum_, 0, int(gameObjectPositions_.size() - 1));
+		if (ImGui::Button("delete")) {
+			gameObjectPositions_.erase(gameObjectPositions_.begin() + objectNum_);
+		}
+		ImGui::Separator();
+		//現在のデータをリセットする
+		if (ImGui::Button("Reset Objects")) {
+			gameObjectPositions_.clear();
+		}
+		ImGui::TreePop();
 	}
 
 #endif // DEBUG

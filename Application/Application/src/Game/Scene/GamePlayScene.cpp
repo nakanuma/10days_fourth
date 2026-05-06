@@ -60,22 +60,20 @@ void GamePlayScene::Initialize() {
 	objectGround_->transform_.scale_ = {500.0f, 500.0f, 1.0f}; // スケール変更
 	objectGround_->materialCB_.data_->color = {0.5f, 0.5f, 0.5f, 1.0f}; // 色変更
 
-	// プレイヤー生成 + 初期化
-	player_ = std::make_unique<Player>();
-	player_->Initialize();
-
 	// 経路管理クラス初期化
 	PathManager::GetInstance()->Initialize();
-
-	// 経路に沿って移動するオブジェクト生成 + 初期化
-	carrier_ = std::make_unique<Carrier>();
-	carrier_->Initialize();
 
 	// 鉱石オブジェクト管理クラス初期化
 	OreManager::GetInstance()->Initialize();
 
 	stageEditor_ = std::make_unique<StageEditor>();
 	stageEditor_->LoadJsonFile("resources/stageEditor/stage_1.json");
+	stageEditor_->SpitObjects(player_);
+
+	// 経路に沿って移動するオブジェクト生成 + 初期化
+	carrier_ = std::make_unique<Carrier>();
+	carrier_->Initialize();
+
 }
 
 void GamePlayScene::Finalize() { }

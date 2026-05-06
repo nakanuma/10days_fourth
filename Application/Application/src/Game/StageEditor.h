@@ -34,13 +34,13 @@ public:
 	/// </summary>
 	void Update();
 
-private:
-
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <param name="gameObjectPos"></param>
-	void SpitObjects(const GameObjectPosition& gameObjectPos);
+	void SpitObjects(std::unique_ptr<Player>& player);
+
+private:
 
 	/// <summary>
 	/// ”z’u‚Ì•Û‘¶
@@ -55,14 +55,12 @@ private:
 
 	std::vector<GameObjectPosition> gameObjectPositions_;
 
-	std::vector<std::unique_ptr<Player>> players_;
-	std::vector<std::unique_ptr<Carrier>> Carriers_;
-
-
 	std::string objectName_ = "";
 
 	std::string imGuiText_ = "";
 	char textureFileName[1024 * 160] = "";
+
+	int objectNum_ = 0;
 
 	GameObjectPosition newObject_;
 	bool isCreateNewObject_ = false;

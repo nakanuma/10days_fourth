@@ -34,11 +34,35 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 鉱石の追加
+	/// </summary>
+	/// <param name="translate">座標位置(中心)</param>
+	/// <param name="size">大きさ</param>
+	void AddPoint(const Cygnus::Float3& translate, const Cygnus::Float3& size);
+
 private:
+	// =========================================================
+	// Internal Methods
+	// =========================================================
+
+	/// <summary>
+	/// 設定位置を鉱石の塊の中心点にする
+	/// </summary>
+	/// <param name="half">サイズの半分</param>
+	/// <param name="slippagePoint">偶数の時のズレ</param>
+	/// <param name="size">サイズ</param>
+	void HalfChecker(float& half, float& slippagePoint, float size);
+
+private:
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
 	std::vector<std::unique_ptr<Ore>> ores_;	// 全ての鉱石オブジェクトを管理
+
+	//半分
+	const float kHalf_ = 0.5f;
 };
 
