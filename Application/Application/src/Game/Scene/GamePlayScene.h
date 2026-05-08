@@ -22,6 +22,7 @@
 // ---------------------------------------------------------
 #include <src/Game/Player/Player.h>
 #include <src/Game/Carrier/Carrier.h>
+#include <src/Game/StageEditor.h>
 #include <src/Game/Sphinx/Sphinx.h>
 
 // =========================================================
@@ -91,4 +92,7 @@ private:
 	// ----- Others -----
 	uint32_t shadowMapHandle_;                                     /* シャドウマップテクスチャ */
 	std::unique_ptr<Cygnus::PostEffectManager> postEffectManager_; /* ポストエフェクト管理クラス */
+
+	// ----- StageSetting -----
+	std::unique_ptr<StageEditor> stageEditor_; /*ステージ配置エディタ*/
 };
