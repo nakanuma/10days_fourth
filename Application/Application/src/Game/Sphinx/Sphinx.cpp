@@ -38,20 +38,54 @@ void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
 #pragma region 移動処理
 
 	// 気絶中は攻撃・移動処理を行わない
-	if(!Faint(deltaTime))
+	if (!Faint(deltaTime))
 	{
-		// キー入力による攻撃発動(デバッグ・プロト用)
-		auto input = Cygnus::Input::GetInstance();
-		if (input->TriggerKey(DIK_Q) && !isAttack_)
+		if (attackCoolTimer_ > 0.0f)
 		{
-			Cygnus::Float3 dir = Cygnus::Float3::Normalize(targetPos - object_->transform_.translate_);
-			StartAttack(dir);
+			attackCoolTimer_ -= deltaTime;
 		}
 
-		if (!isAttack_)
+		// チャージ中の処理
+		if (isCharge_)
 		{
-			randomWalk_->Update(deltaTime, kMoveChangeTime_);
-			Move(deltaTime);
+			chargeTimer_ -= deltaTime;
+
+			// 追従処理：残り時間が制限時間以上の間はプレイヤーを狙い続ける
+			if (chargeTimer_ > kHomingLimitTime_)
+			{
+				// 常に最新のプレイヤー座標から方向を再計算
+				Cygnus::Float3 toTarget = targetPos - object_->transform_.translate_;
+				if (Cygnus::Float3::Length(toTarget) > 0.1f) // 念のためゼロ除算防止
+				{
+					attackDir_ = Cygnus::Float3::Normalize(toTarget);
+					// 向き（回転）も更新
+					object_->transform_.rotate_.y = std::atan2(attackDir_.x, attackDir_.z);
+				}
+			}
+
+			if (chargeTimer_ <= 0.0f)
+			{
+				StartAttack();
+			}
+		}
+		else if (!isAttack_)
+		{
+			// プレイヤーをサーチ
+			Cygnus::Float3 toTarget = targetPos - object_->transform_.translate_;
+			float distance = Cygnus::Float3::Length(toTarget);
+
+			if (distance <= kSearchRange_ && attackCoolTimer_ <= 0.0f)
+			{
+				Cygnus::Float3 dir = Cygnus::Float3::Normalize(toTarget);
+				// ▼ 変更：攻撃ではなくチャージを開始
+				StartCharge(dir);
+			}
+			else
+			{
+				// 範囲外、またはクールダウン中ならランダムウォーク
+				randomWalk_->Update(deltaTime, kMoveChangeTime_);
+				Move(deltaTime);
+			}
 		}
 		else
 		{
@@ -75,14 +109,21 @@ void Sphinx::Move(float deltaTime)
 	object_->transform_.translate_ += moveDir_ * kMoveSpeed * deltaTime;
 }
 
-void Sphinx::StartAttack(const Cygnus::Float3& targetDir)
+void Sphinx::StartCharge(const Cygnus::Float3& targetDir)
 {
+	isCharge_ = true;
+	chargeTimer_ = kChargeTime_;
+	attackDir_ = targetDir;
+
+	randomWalk_->Reset();
+}
+
+void Sphinx::StartAttack()
+{
+	isCharge_ = false;
 	isAttack_ = true;
 	isMining_ = false;
 	attackTimer_ = kAttackTime_;
-	attackDir_ = targetDir;
-	object_->transform_.rotate_.y = std::atan2(attackDir_.x, attackDir_.z);
-	randomWalk_->Reset();
 }
 
 void Sphinx::Attack(float deltaTime)
@@ -143,8 +184,11 @@ void Sphinx::MoveClamp()
 
 void Sphinx::StopAttack()
 {
+	isCharge_ = false;
 	isAttack_ = false;
 	attackTimer_ = 0.0f;
+	chargeTimer_ = 0.0f;
+	attackCoolTimer_ = kAttackCoolTime_;
 }
 
 void Sphinx::Draw()
@@ -160,8 +204,6 @@ void Sphinx::Debug()
 
 	ImGui::DragFloat3("Translate", &object_->transform_.translate_.x, 0.01f);
 
-
-	ImGui::Text("key Q : Attack");
 	ImGui::Text("Status : ");
 	ImGui::SameLine();
 	if (faintTimer_ > 0.0f)
@@ -169,16 +211,25 @@ void Sphinx::Debug()
 		ImGui::Text("Faint");
 		ImGui::Text("Timer : %.02f", faintTimer_);
 	}
+	else if (isCharge_) // ▼ 追加
+	{
+		ImGui::Text("Charging");
+		ImGui::Text("Timer : %.02f", chargeTimer_);
+	}
 	else if (isAttack_)
 	{
 		ImGui::Text("Attack");
 		ImGui::Text("Timer : %.02f", attackTimer_);
 	}
+	else if (attackCoolTimer_ > 0.0f)
+	{
+		ImGui::Text("Cooling Down");
+		ImGui::Text("Timer : %.02f", attackCoolTimer_);
+	}
 	else
 	{
-		ImGui::Text("Move");
+		ImGui::Text("Move (Searching)");
 	}
-
 
 	ImGui::End();
 #endif
