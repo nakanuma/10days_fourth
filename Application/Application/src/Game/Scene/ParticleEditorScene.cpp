@@ -19,6 +19,7 @@
 
 // Application
 
+
 void ParticleEditorScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
