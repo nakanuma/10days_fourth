@@ -7,7 +7,7 @@
 #include <Collider/CollisionManager.h>
 
 // =========================================================
-// ƒvƒŒƒCƒ„[ƒNƒ‰ƒX
+// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¯ãƒ©ã‚¹
 // =========================================================
 class Player : public Cygnus::ICollisionCallback
 {
@@ -17,36 +17,47 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update(float deltaTime);
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// ƒfƒoƒbƒO•\¦
+	/// ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
 	/// </summary>
 	void Debug();
 
 	/// <summary>
-	/// Õ“ËƒR[ƒ‹ƒoƒbƒN
+	/// è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 	/// </summary>
 	/// <param name="other"></param>
 	void OnCollision(Cygnus::Collider* other) override;
 
+	// =========================================================
+	// Accessor
+	// =========================================================
+
 	/// <summary>
-	/// setter_À•WˆÊ’u
+	/// setter_åº§æ¨™ä½ç½®
 	/// </summary>
-	/// <param name="translate">À•W‚ğİ’è</param>
+	/// <param name="translate">åº§æ¨™ã‚’è¨­å®š</param>
 	void SetTranslate(const Cygnus::Float3& translate) { object_->transform_.translate_ = translate; }
+  
+	/// <summary>
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åº§æ¨™ã‚’å–å¾—
+	/// </summary>
+	/// <returns></returns>
+	Cygnus::Float3 GetPosition() const { return object_->transform_.translate_; }
+
 
 private:
 	// =========================================================
@@ -54,13 +65,13 @@ private:
 	// =========================================================
 
 	/// <summary>
-	/// ƒL[ƒ{[ƒh—p“ü—Íæ“¾
+	/// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ç”¨å…¥åŠ›å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	Cygnus::Float3 GetKeyInput();
 
 	/// <summary>
-	/// ƒQ[ƒ€ƒpƒbƒh—p“ü—Íæ“¾
+	/// ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰ç”¨å…¥åŠ›å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	Cygnus::Float3 GetPadInput();
@@ -70,16 +81,21 @@ private:
 	// Constants
 	// =========================================================
 
-	const float kMoveSpeed = 20.0f;	// ˆÚ“®‘¬“x
-	const Cygnus::Float3 kColliderSize = {1.0f, 2.0f, 1.0f};	// ƒRƒ‰ƒCƒ_[ƒTƒCƒY
+	const float kMoveSpeed = 20.0f;	// ç§»å‹•é€Ÿåº¦
+	const Cygnus::Float3 kColliderSize = {1.0f, 2.0f, 1.0f};	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚µã‚¤ã‚º
+
+	const float kMiningOffset = 1.5f;	// æ¡æ˜æ™‚ã®å‰æ–¹ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+	const float kMiningRange = 1.2f;	// æ¡æ˜æ™‚ã®ãƒ–ãƒ¬è¨±å®¹å€¤
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	std::unique_ptr<Cygnus::Object3D> object_;	// ƒIƒuƒWƒFƒNƒg
-	std::unique_ptr<Cygnus::Collider> collider_;	// ƒRƒ‰ƒCƒ_[
+	std::unique_ptr<Cygnus::Object3D> object_;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	std::unique_ptr<Cygnus::Collider> collider_;	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 
-	Cygnus::Float3 velocity_ = {0.0f, 0.0f, 0.0f};	// ‘¬“xƒxƒNƒgƒ‹
+	Cygnus::Float3 velocity_ = {0.0f, 0.0f, 0.0f};	// é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«
+
+	uint32_t oreCount_ = 0;	// ç¾åœ¨ã®æ‰€æŒé‰±çŸ³æ•°
 };
 

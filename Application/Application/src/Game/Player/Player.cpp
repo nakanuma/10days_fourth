@@ -5,6 +5,9 @@
 #include <ImguiWrapper.h>
 #include <TimeManager.h>
 
+// Application
+#include <src/Game/Ore/OreManager.h>
+
 void Player::Initialize() {
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
@@ -23,6 +26,8 @@ void Player::Initialize() {
 }
 
 void Player::Update(float deltaTime) {
+	auto input = Cygnus::Input::GetInstance();
+
 #pragma region 入力による移動処理
 	// キーボードとゲームパッド両方の入力を加算
 	Cygnus::Float3 moveDir = {0.0f, 0.0f, 0.0f};
@@ -46,6 +51,28 @@ void Player::Update(float deltaTime) {
 	// オブジェクト位置に反映
 	object_->transform_.translate_ += moveDir * kMoveSpeed * deltaTime;
 #pragma endregion
+
+#pragma region 入力による鉱石採掘
+	if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
+		// 向きから前方のベクトルを作成する
+		float angleY = object_->transform_.rotate_.y;
+		Cygnus::Float3 frontVec = {std::sinf(angleY), 0.0f, std::cosf(angleY)};
+
+		// プレイヤーの少し前方を判定の中心にする
+		Cygnus::Float3 targetPos = {
+			object_->transform_.translate_.x + frontVec.x * kMiningOffset, 
+			object_->transform_.translate_.y, 
+			object_->transform_.translate_.z + frontVec.z * kMiningOffset
+		};
+
+		// 鉱石採掘判定
+		if (OreManager::GetInstance()->TryBreakAt(targetPos, kMiningRange)) {
+			// 鉱石採掘時の処理
+			
+		}
+	}
+#pragma endregion
+
 	// コライダー更新
 	collider_->Update();
 	// オブジェクト更新
@@ -62,6 +89,7 @@ void Player::Debug() {
 	ImGui::Begin("Player");
 
 	ImGui::DragFloat3("Translate", &object_->transform_.translate_.x, 0.01f);
+	ImGui::Text("OreCount : %d", oreCount_);
 
 	ImGui::End();
 #endif
@@ -69,8 +97,9 @@ void Player::Debug() {
 
 void Player::OnCollision(Cygnus::Collider* other)
 {
-	// 線路に沿って動くオブジェクトとの衝突
-	if(other->GetTag() == "Carrier") {
+	// 押し戻しを行うオブジェクトとの衝突
+	// : 線路に沿って動くオブジェクト, 鉱石オブジェクト
+	if (other->GetTag() == "Carrier" || "Ore") {
 		Cygnus::AABBCollider* myAABB = dynamic_cast<Cygnus::AABBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
@@ -90,25 +119,9 @@ void Player::OnCollision(Cygnus::Collider* other)
 		}
 	}
 
-	// 鉱石オブジェクトとの衝突
-	if(other->GetTag() == "Ore") {
-		Cygnus::AABBCollider* myAABB = dynamic_cast<Cygnus::AABBCollider*>(collider_.get());
-		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
-
-		// 押し戻し処理
-		if (myAABB && otherAABB) {
-			// 押し戻しベクトル取得
-			Cygnus::Float3 pushVec = myAABB->GetPushBackVector(*otherAABB);
-			// プレイヤー位置を補正
-			object_->transform_.translate_ += pushVec;
-			object_->UpdateMatrix();
-
-			// コライダーも更新
-			Cygnus::Float3 currentMin = myAABB->GetMin();
-			Cygnus::Float3 currentMax = myAABB->GetMax();
-			myAABB->SetMin(currentMin + pushVec);
-			myAABB->SetMax(currentMax + pushVec);
-		}
+	// 落ちている鉱石（ドロップアイテム）との衝突
+	if(other->GetTag() == "DroppedOre") {
+		oreCount_++;
 	}
 }
 

@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Ore\DroppedOre.cpp" />
+    <ClCompile Include="src\Game\Sphinx\RandomWalk.cpp" />
+    <ClCompile Include="src\Game\Sphinx\Sphinx.cpp" />
     <ClCompile Include="src\Game\Ore\OreManager.cpp" />
     <ClCompile Include="src\Game\Ore\Ore.cpp" />
     <ClCompile Include="src\Game\Carrier\Carrier.cpp" />
@@ -30,6 +33,9 @@
     <ClCompile Include="src\Game\StageEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Ore\DroppedOre.h" />
+    <ClInclude Include="src\Game\Sphinx\RandomWalk.h" />
+    <ClInclude Include="src\Game\Sphinx\Sphinx.h" />
     <ClInclude Include="src\Game\Ore\OreManager.h" />
     <ClInclude Include="src\Game\Ore\Ore.h" />
     <ClInclude Include="src\Game\Carrier\Carrier.h" />

@@ -3,14 +3,13 @@
 // ---------------------------------------------------------
 // Engine Includes
 // ---------------------------------------------------------
-#include <Object3D.h>
 #include <Collider/CollisionManager.h>
+#include <Object3D.h>
 
 // =========================================================
-// 鉱石オブジェクトクラス
+// 落ちている鉱石（ドロップアイテム）オブジェクトクラス
 // =========================================================
-class Ore : public Cygnus::ICollisionCallback
-{
+class DroppedOre : public Cygnus::ICollisionCallback {
 public:
 	// =========================================================
 	// Public Methods
@@ -47,23 +46,41 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// 位置を取得します。
+	/// プレイヤーに回収されたかどうかを取得
 	/// </summary>
 	/// <returns></returns>
-	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; }
+	bool IsPickedUp() const { return isPickedUp_; }
+
+private:
+	// =========================================================
+	// Internal Methods
+	// =========================================================
+
+	/// <summary>
+	/// 上下揺れ + 回転を行うアニメーション
+	/// </summary>
+	void BobbingAnimation();
 
 private:
 	// =========================================================
 	// Constants
 	// =========================================================
 
-	const Cygnus::Float3 kColliderSize = {1.0f, 1.0f, 1.0f};	// コライダーサイズ
+	const Cygnus::Float3 kColliderSize = {0.5f, 0.5f, 0.5f}; // コライダーサイズ
+
+	const float kRotateSpeed = 2.0f;	// 回転速度
+	const float kBobbingSpeed = 3.0f;	// 上下揺れの速さ
+	const float kBobbingAmplitude = 0.2f;	// 上下揺れの幅
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
-	
-	std::unique_ptr<Cygnus::Object3D> object_;	// オブジェクト
-	std::unique_ptr<Cygnus::Collider> collider_;	// コライダー
-};
 
+	std::unique_ptr<Cygnus::Object3D> object_;   // オブジェクト
+	std::unique_ptr<Cygnus::Collider> collider_; // コライダー
+
+	Cygnus::Float3 basePosition_;	// 生成時の初期座標
+	float timer_ = 0.0f;	// アニメーション用タイマー
+
+	bool isPickedUp_ = false;	// プレイヤーに拾われたか
+};
