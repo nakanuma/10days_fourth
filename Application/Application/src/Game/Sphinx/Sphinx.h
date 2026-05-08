@@ -58,10 +58,14 @@ private:
 	void Move(float deltaTime);
 
 	/// <summary>
+	/// 攻撃の予備動作開始
+	/// </summary>
+	void StartCharge(const Cygnus::Float3& targetDir);
+	/// <summary>
 	/// 攻撃開始処理
 	/// </summary>
 	/// <param name="targetDir">ターゲットへの正規化向きベクトル</param>
-	void StartAttack(const Cygnus::Float3& targetDir);
+	void StartAttack();
 	/// <summary>
 	/// 攻撃処理
 	/// </summary>
@@ -96,13 +100,18 @@ private:
 	const float kMoveChangeTime_ = 2.0f;
 	const Cygnus::Float3 kColliderSize = { 2.0f, 2.0f, 3.0f };	// コライダーサイズ
 
-	const float kAttackMoveSpeed_ = 30.0f;	// 突進時速度
+	const float kAttackMoveSpeed_ = 40.0f;	// 突進時速度
 	const float kAttackTime_ = 0.5f;		// 突進時全体時間
 
 	const float kFaintTime_ = 2.0f;
 
 	const Cygnus::Float3 kMoveMin = { -30.0f, 0.0f, -30.0f };
 	const Cygnus::Float3 kMoveMax = { 30.0f, 0.0f, 15.0f };
+
+	const float kSearchRange_ = 20.0f;		// プレイヤーをサーチ(検知)する範囲
+	const float kAttackCoolTime_ = 3.0f;	// 攻撃後のクールダウン(待機)時間
+
+	const float kChargeTime_ = 1.5f;		// 突進前の予備動作（チャージ）時間
 
 	// =========================================================
 	// Member Variables
@@ -122,6 +131,12 @@ private:
 	float attackTimer_ = 0.0f;							// 突進用タイマー
 
 	float faintTimer_ = 0.0f;
+
+	float attackCoolTimer_ = 0.0f;			// クールダウン用タイマー
+
+	bool isCharge_ = false;					// チャージ状態判定
+	float chargeTimer_ = 0.0f;				// チャージ用タイマー
+	const float kHomingLimitTime_ = 0.5f;	// チャージ終了の残り何秒で追従を止めるか
 
 	bool isMining_ = false;
 
