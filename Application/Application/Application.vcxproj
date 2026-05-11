@@ -52,7 +52,7 @@
     <ClInclude Include="src\Game\Scene\SceneFactory.h" />
     <ClInclude Include="src\Game\WorkBench\WorkBench.h" />
     <ClInclude Include="src\Game\WorkBench\WorkBenchManager.h" />
-    <ClInclude Include="src\Game\StageEditor.h" /
+    <ClInclude Include="src\Game\StageEditor.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
