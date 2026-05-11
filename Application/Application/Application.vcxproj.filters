@@ -48,6 +48,16 @@
     <ClCompile Include="src\Game\Ore\DroppedOre.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\WorkBench\WorkBench.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\WorkBench\WorkBenchManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Gear\DroppedGear.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Gear\GearManager.cpp">
     <ClCompile Include="src\Game\Sphinx\Sphinx.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -86,6 +96,16 @@
     <ClInclude Include="src\Game\Ore\DroppedOre.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\WorkBench\WorkBench.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\WorkBench\WorkBenchManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Gear\DroppedGear.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Gear\GearManager.h">
     <ClInclude Include="src\Game\Sphinx\Sphinx.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>

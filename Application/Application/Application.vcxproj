@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Gear\DroppedGear.cpp" />
+    <ClCompile Include="src\Game\Gear\GearManager.cpp" />
     <ClCompile Include="src\Game\Ore\DroppedOre.cpp" />
     <ClCompile Include="src\Game\Sphinx\RandomWalk.cpp" />
     <ClCompile Include="src\Game\Sphinx\Sphinx.cpp" />
@@ -30,9 +32,13 @@
     <ClCompile Include="src\Game\GameResourceLoader\GameResourceLoader.cpp" />
     <ClCompile Include="src\Game\Scene\GamePlayScene.cpp" />
     <ClCompile Include="src\Game\Scene\SceneFactory.cpp" />
+    <ClCompile Include="src\Game\WorkBench\WorkBench.cpp" />
+    <ClCompile Include="src\Game\WorkBench\WorkBenchManager.cpp" />
     <ClCompile Include="src\Game\StageEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Gear\DroppedGear.h" />
+    <ClInclude Include="src\Game\Gear\GearManager.h" />
     <ClInclude Include="src\Game\Ore\DroppedOre.h" />
     <ClInclude Include="src\Game\Sphinx\RandomWalk.h" />
     <ClInclude Include="src\Game\Sphinx\Sphinx.h" />
@@ -44,7 +50,9 @@
     <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h" />
     <ClInclude Include="src\Game\Scene\GamePlayScene.h" />
     <ClInclude Include="src\Game\Scene\SceneFactory.h" />
-    <ClInclude Include="src\Game\StageEditor.h" />
+    <ClInclude Include="src\Game\WorkBench\WorkBench.h" />
+    <ClInclude Include="src\Game\WorkBench\WorkBenchManager.h" />
+    <ClInclude Include="src\Game\StageEditor.h" /
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

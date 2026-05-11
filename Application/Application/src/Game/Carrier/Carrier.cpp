@@ -7,12 +7,12 @@
 #include <src/Game/Path/PathManager.h>
 
 void Carrier::Initialize() {
-	// ƒIƒuƒWƒFƒNƒg¶¬
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Carrier");
-	object_->transform_.translate_ = PathManager::GetInstance()->GetPoint(0);	// Œo˜H‚Ìn“_À•W‚ğƒZƒbƒg
+	object_->transform_.translate_ = PathManager::GetInstance()->GetPoint(0);	// çµŒè·¯ã®å§‹ç‚¹åº§æ¨™ã‚’ã‚»ãƒƒãƒˆ
 
-	// ƒRƒ‰ƒCƒ_[¶¬ + “o˜^
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç”Ÿæˆ + ç™»éŒ²
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
 	aabb->SetTag("Carrier");
 	aabb->SetFollowTarget(&object_->transform_.translate_);
@@ -24,17 +24,17 @@ void Carrier::Initialize() {
 }
 
 void Carrier::Update(float deltaTime) {
-	// Œo˜H‚É‰ˆ‚Á‚½ˆÚ“®ˆ—
+	// çµŒè·¯ã«æ²¿ã£ãŸç§»å‹•å‡¦ç†
 	MoveAlongPath(deltaTime);
 
-	// ƒRƒ‰ƒCƒ_[XV
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æ›´æ–°
 	collider_->Update();
-	// ƒIƒuƒWƒFƒNƒgXV
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–°
 	object_->UpdateMatrix();
 }
 
 void Carrier::Draw() {
-	// ƒIƒuƒWƒFƒNƒg•`‰æ
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	object_->Draw();
 }
 
@@ -58,31 +58,31 @@ void Carrier::OnCollision(Cygnus::Collider* collider)
 
 void Carrier::MoveAlongPath(float deltaTime)
 {
-	// –³Œø‰»ó‘Ô‚È‚çI—¹
+	// ç„¡åŠ¹åŒ–çŠ¶æ…‹ãªã‚‰çµ‚äº†
 	if(!isActive_) return;
 
-	// ƒS[ƒ‹Ï‚İ‚È‚çI—¹
+	// ã‚´ãƒ¼ãƒ«æ¸ˆã¿ãªã‚‰çµ‚äº†
 	if(isGoal_) return;
 
 	auto pathManager = PathManager::GetInstance();
 
-	// ‘S‚Ä‚Ìƒ|ƒCƒ“ƒg‚ğ’Ê‰ß‚µ‚½‚çƒS[ƒ‹Ï‚İ‚Ö
+	// å…¨ã¦ã®ãƒã‚¤ãƒ³ãƒˆã‚’é€šéã—ãŸã‚‰ã‚´ãƒ¼ãƒ«æ¸ˆã¿ã¸
 	if(targetIndex_ >= pathManager->GetPointCount()) {
 		isGoal_ = true;
 		return;
 	}
 
-	// Œ»İ’n->–Ú•W’n“_‚Ö‚Ì‹——£‚ğŒvZ
+	// ç¾åœ¨åœ°->ç›®æ¨™åœ°ç‚¹ã¸ã®è·é›¢ã‚’è¨ˆç®—
 	Cygnus::Float3& currentPos = object_->transform_.translate_;
 	Cygnus::Float3 targetPos = pathManager->GetPoint(targetIndex_);
 
 	Cygnus::Float3 diff = targetPos - currentPos;
 	float distance = Cygnus::Float3::Length(diff);
 
-	// ƒ|ƒCƒ“ƒg“’…”»’è + ƒIƒuƒWƒFƒNƒgˆÚ“®ˆ—
+	// ãƒã‚¤ãƒ³ãƒˆåˆ°ç€åˆ¤å®š + ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç§»å‹•å‡¦ç†
 	if(distance < kMoveSpeed * deltaTime) {
 		currentPos = targetPos;
-		targetIndex_++;	// Ÿ‚Ìƒ|ƒCƒ“ƒg‚Ö
+		targetIndex_++;	// æ¬¡ã®ãƒã‚¤ãƒ³ãƒˆã¸
 	} else {
 		currentPos += (diff / distance) * kMoveSpeed * deltaTime;
 	}

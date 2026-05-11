@@ -7,7 +7,7 @@
 #include <Object3D.h>
 
 // =========================================================
-// —‚¿‚Ä‚¢‚ézÎiƒhƒƒbƒvƒAƒCƒeƒ€jƒIƒuƒWƒFƒNƒgƒNƒ‰ƒX
+// è½ã¡ã¦ã„ã‚‹é‰±çŸ³ï¼ˆãƒ‰ãƒ­ãƒƒãƒ—ã‚¢ã‚¤ãƒ†ãƒ ï¼‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹
 // =========================================================
 class DroppedOre : public Cygnus::ICollisionCallback {
 public:
@@ -16,28 +16,28 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†
 	/// </summary>
 	void Initialize(const Cygnus::Float3 translate);
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// Õ“ËƒR[ƒ‹ƒoƒbƒN
+	/// è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 	/// </summary>
 	/// <param name="other"></param>
 	void OnCollision(Cygnus::Collider* other) override;
 
 	/// <summary>
-	/// ƒRƒ‰ƒCƒ_[‚Ì“o˜^‰ğœ
+	/// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ç™»éŒ²è§£é™¤
 	/// </summary>
 	void UnregisterCollider() { Cygnus::CollisionManager::GetInstance()->Unregister(collider_.get()); }
 
@@ -46,7 +46,7 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚É‰ñû‚³‚ê‚½‚©‚Ç‚¤‚©‚ğæ“¾
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å›åã•ã‚ŒãŸã‹ã©ã†ã‹ã‚’å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	bool IsPickedUp() const { return isPickedUp_; }
@@ -57,7 +57,7 @@ private:
 	// =========================================================
 
 	/// <summary>
-	/// ã‰º—h‚ê + ‰ñ“]‚ğs‚¤ƒAƒjƒ[ƒVƒ‡ƒ“
+	/// ä¸Šä¸‹æºã‚Œ + å›è»¢ã‚’è¡Œã†ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 	/// </summary>
 	void BobbingAnimation();
 
@@ -66,21 +66,21 @@ private:
 	// Constants
 	// =========================================================
 
-	const Cygnus::Float3 kColliderSize = {0.5f, 0.5f, 0.5f}; // ƒRƒ‰ƒCƒ_[ƒTƒCƒY
+	const Cygnus::Float3 kColliderSize = {0.5f, 0.5f, 0.5f}; // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚µã‚¤ã‚º
 
-	const float kRotateSpeed = 2.0f;	// ‰ñ“]‘¬“x
-	const float kBobbingSpeed = 3.0f;	// ã‰º—h‚ê‚Ì‘¬‚³
-	const float kBobbingAmplitude = 0.2f;	// ã‰º—h‚ê‚Ì•
+	const float kRotateSpeed = 2.0f;	// å›è»¢é€Ÿåº¦
+	const float kBobbingSpeed = 3.0f;	// ä¸Šä¸‹æºã‚Œã®é€Ÿã•
+	const float kBobbingAmplitude = 0.2f;	// ä¸Šä¸‹æºã‚Œã®å¹…
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	std::unique_ptr<Cygnus::Object3D> object_;   // ƒIƒuƒWƒFƒNƒg
-	std::unique_ptr<Cygnus::Collider> collider_; // ƒRƒ‰ƒCƒ_[
+	std::unique_ptr<Cygnus::Object3D> object_;   // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	std::unique_ptr<Cygnus::Collider> collider_; // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 
-	Cygnus::Float3 basePosition_;	// ¶¬‚Ì‰ŠúÀ•W
-	float timer_ = 0.0f;	// ƒAƒjƒ[ƒVƒ‡ƒ“—pƒ^ƒCƒ}[
+	Cygnus::Float3 basePosition_;	// ç”Ÿæˆæ™‚ã®åˆæœŸåº§æ¨™
+	float timer_ = 0.0f;	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç”¨ã‚¿ã‚¤ãƒãƒ¼
 
-	bool isPickedUp_ = false;	// ƒvƒŒƒCƒ„[‚ÉE‚í‚ê‚½‚©
+	bool isPickedUp_ = false;	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«æ‹¾ã‚ã‚ŒãŸã‹
 };

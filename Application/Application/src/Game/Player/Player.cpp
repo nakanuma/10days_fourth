@@ -9,12 +9,12 @@
 #include <src/Game/Ore/OreManager.h>
 
 void Player::Initialize() {
-	// ƒIƒuƒWƒFƒNƒg¶¬
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Player");
 	object_->transform_.translate_ = {-10.0f, 2.0f, -10.0f};
 
-	// ƒRƒ‰ƒCƒ_[¶¬ + “o˜^
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç”Ÿæˆ + ç™»éŒ²
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
 	aabb->SetTag("Player");
 	aabb->SetFollowTarget(&object_->transform_.translate_);
@@ -28,59 +28,59 @@ void Player::Initialize() {
 void Player::Update(float deltaTime) {
 	auto input = Cygnus::Input::GetInstance();
 
-#pragma region “ü—Í‚É‚æ‚éˆÚ“®ˆ—
-	// ƒL[ƒ{[ƒh‚ÆƒQ[ƒ€ƒpƒbƒh—¼•û‚Ì“ü—Í‚ğ‰ÁZ
+#pragma region å…¥åŠ›ã«ã‚ˆã‚‹ç§»å‹•å‡¦ç†
+	// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã¨ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰ä¸¡æ–¹ã®å…¥åŠ›ã‚’åŠ ç®—
 	Cygnus::Float3 moveDir = {0.0f, 0.0f, 0.0f};
 	moveDir += GetKeyInput();
 	moveDir += GetPadInput();
 
-	// “ü—Í‚ª‚ ‚éê‡‚Ì‚İ‰ñ“]‚ÆˆÚ“®‚ğs‚¤
+	// å…¥åŠ›ãŒã‚ã‚‹å ´åˆã®ã¿å›è»¢ã¨ç§»å‹•ã‚’è¡Œã†
 	if(Cygnus::Float3::Length(moveDir) > 0.01f) {
-		// ‰ñ“]ˆ—
-		float angle = std::atan2f(moveDir.x, moveDir.z);	// “ü—ÍƒxƒNƒgƒ‹‚©‚çŠp“x‚ğŒvZ
-		const float kStep = Cygnus::PIf / 4.0f;	// 8•ûŒü‚ÉŒÀ’è‚·‚é‚½‚ß45“x
-		object_->transform_.rotate_.y = std::round(angle / kStep) * kStep;	// ƒIƒuƒWƒFƒNƒg‰ñ“]‚É”½‰f
+		// å›è»¢å‡¦ç†
+		float angle = std::atan2f(moveDir.x, moveDir.z);	// å…¥åŠ›ãƒ™ã‚¯ãƒˆãƒ«ã‹ã‚‰è§’åº¦ã‚’è¨ˆç®—
+		const float kStep = Cygnus::PIf / 4.0f;	// 8æ–¹å‘ã«é™å®šã™ã‚‹ãŸã‚45åº¦
+		object_->transform_.rotate_.y = std::round(angle / kStep) * kStep;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå›è»¢ã«åæ˜ 
 
-		// ˆÚ“®ˆ—
+		// ç§»å‹•å‡¦ç†
 		if (Cygnus::Float3::Length(moveDir) > 1.0f) {
-			// ³‹K‰»‚µ‚Äˆê’è‚Ì‘¬“x‚ğ•Û‚Â‚æ‚¤‚É
+			// æ­£è¦åŒ–ã—ã¦ä¸€å®šã®é€Ÿåº¦ã‚’ä¿ã¤ã‚ˆã†ã«
 			moveDir = Cygnus::Float3::Normalize(moveDir);
 		}
 	}
 
-	// ƒIƒuƒWƒFƒNƒgˆÊ’u‚É”½‰f
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½ç½®ã«åæ˜ 
 	object_->transform_.translate_ += moveDir * kMoveSpeed * deltaTime;
 #pragma endregion
 
-#pragma region “ü—Í‚É‚æ‚ézÎÌŒ@
+#pragma region å…¥åŠ›ã«ã‚ˆã‚‹é‰±çŸ³æ¡æ˜
 	if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
-		// Œü‚«‚©‚ç‘O•û‚ÌƒxƒNƒgƒ‹‚ğì¬‚·‚é
+		// å‘ãã‹ã‚‰å‰æ–¹ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ä½œæˆã™ã‚‹
 		float angleY = object_->transform_.rotate_.y;
 		Cygnus::Float3 frontVec = {std::sinf(angleY), 0.0f, std::cosf(angleY)};
 
-		// ƒvƒŒƒCƒ„[‚Ì­‚µ‘O•û‚ğ”»’è‚Ì’†S‚É‚·‚é
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å°‘ã—å‰æ–¹ã‚’åˆ¤å®šã®ä¸­å¿ƒã«ã™ã‚‹
 		Cygnus::Float3 targetPos = {
 			object_->transform_.translate_.x + frontVec.x * kMiningOffset, 
 			object_->transform_.translate_.y, 
 			object_->transform_.translate_.z + frontVec.z * kMiningOffset
 		};
 
-		// zÎÌŒ@”»’è
+		// é‰±çŸ³æ¡æ˜åˆ¤å®š
 		if (OreManager::GetInstance()->TryBreakAt(targetPos, kMiningRange)) {
-			// zÎÌŒ@‚Ìˆ—
+			// é‰±çŸ³æ¡æ˜æ™‚ã®å‡¦ç†
 			
 		}
 	}
 #pragma endregion
 
-	// ƒRƒ‰ƒCƒ_[XV
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æ›´æ–°
 	collider_->Update();
-	// ƒIƒuƒWƒFƒNƒgXV
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–°
 	object_->UpdateMatrix();
 }
 
 void Player::Draw() {
-	// ƒIƒuƒWƒFƒNƒg•`‰æ
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	object_->Draw();
 }
 
@@ -90,6 +90,7 @@ void Player::Debug() {
 
 	ImGui::DragFloat3("Translate", &object_->transform_.translate_.x, 0.01f);
 	ImGui::Text("OreCount : %d", oreCount_);
+	ImGui::Text("GearCount : %d", gearCount_);
 
 	ImGui::End();
 #endif
@@ -97,31 +98,26 @@ void Player::Debug() {
 
 void Player::OnCollision(Cygnus::Collider* other)
 {
-	// ‰Ÿ‚µ–ß‚µ‚ğs‚¤ƒIƒuƒWƒFƒNƒg‚Æ‚ÌÕ“Ë
-	// : ü˜H‚É‰ˆ‚Á‚Ä“®‚­ƒIƒuƒWƒFƒNƒg, zÎƒIƒuƒWƒFƒNƒg
-	if (other->GetTag() == "Carrier" || "Ore") {
+	// æŠ¼ã—æˆ»ã—ã‚’è¡Œã†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã®è¡çª
+	// : ç·šè·¯ã«æ²¿ã£ã¦å‹•ãã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ, é‰±çŸ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ, å·¥ä½œå°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	if (other->GetTag() == "Carrier" || other->GetTag() == "Ore" || other->GetTag() == "WorkBench") {
 		Cygnus::AABBCollider* myAABB = dynamic_cast<Cygnus::AABBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
-		// ‰Ÿ‚µ–ß‚µˆ—
+		// æŠ¼ã—æˆ»ã—å‡¦ç†
 		if(myAABB && otherAABB) {
-			// ‰Ÿ‚µ–ß‚µƒxƒNƒgƒ‹æ“¾
+			// æŠ¼ã—æˆ»ã—ãƒ™ã‚¯ãƒˆãƒ«å–å¾—
 			Cygnus::Float3 pushVec = myAABB->GetPushBackVector(*otherAABB);
-			// ƒvƒŒƒCƒ„[ˆÊ’u‚ğ•â³
+			// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä½ç½®ã‚’è£œæ­£
 			object_->transform_.translate_ += pushVec;
 			object_->UpdateMatrix();
 
-			// ƒRƒ‰ƒCƒ_[‚àXV
+			// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚‚æ›´æ–°
 			Cygnus::Float3 currentMin = myAABB->GetMin();
 			Cygnus::Float3 currentMax = myAABB->GetMax();
 			myAABB->SetMin(currentMin + pushVec);
 			myAABB->SetMax(currentMax + pushVec);
 		}
-	}
-
-	// —‚¿‚Ä‚¢‚ézÎiƒhƒƒbƒvƒAƒCƒeƒ€j‚Æ‚ÌÕ“Ë
-	if(other->GetTag() == "DroppedOre") {
-		oreCount_++;
 	}
 }
 
@@ -129,12 +125,12 @@ Cygnus::Float3 Player::GetKeyInput()
 {
 	auto input = Cygnus::Input::GetInstance();
 	Cygnus::Float3 dir = {0.0f, 0.0f, 0.0f};
-	// ˆÚ“®ƒL[“ü—Í
+	// ç§»å‹•ã‚­ãƒ¼å…¥åŠ›
 	if(input->PushKey(DIK_W)) dir.z += 1.0f;
 	if(input->PushKey(DIK_S)) dir.z -= 1.0f;
 	if(input->PushKey(DIK_A)) dir.x -= 1.0f;
 	if(input->PushKey(DIK_D)) dir.x += 1.0f;
-	// ƒL[“ü—ÍŒ‹‰Ê‚ğ•Ô‚·
+	// ã‚­ãƒ¼å…¥åŠ›çµæœã‚’è¿”ã™
 	return dir;
 }
 
@@ -143,9 +139,9 @@ Cygnus::Float3 Player::GetPadInput()
 	auto input = Cygnus::Input::GetInstance();
 	XINPUT_STATE state;
 
-	// ƒRƒ“ƒgƒ[ƒ‰[æ“¾
+	// ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼å–å¾—
 	if(input->GetJoystickState(0, state)) {
-		// ¶ƒXƒeƒBƒbƒN“ü—ÍŒ‹‰Ê‚ğ•Ô‚·
+		// å·¦ã‚¹ãƒ†ã‚£ãƒƒã‚¯å…¥åŠ›çµæœã‚’è¿”ã™
 		return {
 			state.Gamepad.sThumbLX / 32767.0f,
 			0.0f, 

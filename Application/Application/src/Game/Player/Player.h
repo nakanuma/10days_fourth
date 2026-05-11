@@ -47,6 +47,43 @@ public:
 	// =========================================================
 
 	/// <summary>
+	/// 鉱石を拾えるか（所持最大数に達していないか）
+	/// </summary>
+	/// <returns></returns>
+	bool CanPickUpOre() const { return oreCount_ < kMaxOreCount; }
+
+	/// <summary>
+	/// プレイヤーの所持鉱石を1増やす（落ちている鉱石取得時）
+	/// </summary>
+	void AddOreCount() { oreCount_++; }
+
+	/// <summary>
+	/// 鉱石所持数を取得
+	/// </summary>
+	uint32_t GetOreCount() { return oreCount_; }
+
+	/// <summary>
+	/// 歯車を拾えるか（所持最大数に達していないか）
+	/// </summary>
+	/// <returns></returns>
+	bool CanPickUpGear() const { return gearCount_ < kMaxGearCount; }
+
+	/// <summary>
+	/// プレイヤーの所持歯車を1増やす（落ちている歯車取得時）
+	/// </summary>
+	void AddGearCount() { gearCount_++; }
+
+	/// <summary>
+	/// 歯車所持数を取得
+	/// </summary>
+	uint32_t GetGearCount() { return gearCount_; }
+
+	/// <summary>
+	/// 指定した個数分だけ所持鉱石を減らす（歯車作成時）
+	/// </summary>
+	/// <param name="amount">鉱石の消費数</param>
+	void ConsumeOre(uint32_t amount) { if (oreCount_ >= amount) { oreCount_ -= amount; } }
+
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="translate">座標を設定</param>
@@ -57,7 +94,6 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	Cygnus::Float3 GetPosition() const { return object_->transform_.translate_; }
-
 
 private:
 	// =========================================================
@@ -87,6 +123,10 @@ private:
 	const float kMiningOffset = 1.5f;	// 採掘時の前方オフセット
 	const float kMiningRange = 1.2f;	// 採掘時のブレ許容値
 
+	const uint32_t kMaxOreCount = 4;	// 所持できる鉱石の最大数
+	const uint32_t kMaxGearCount = 2;	// 所持できる歯車の最大数
+
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
@@ -97,5 +137,7 @@ private:
 	Cygnus::Float3 velocity_ = {0.0f, 0.0f, 0.0f};	// 速度ベクトル
 
 	uint32_t oreCount_ = 0;	// 現在の所持鉱石数
+	uint32_t gearCount_ = 0; // 現在の所持歯車数
+
 };
 

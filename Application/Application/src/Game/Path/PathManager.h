@@ -7,7 +7,7 @@
 #include <Math/MyMath.h>
 
 // =========================================================
-// ˆÚ“®ƒIƒuƒWƒFƒNƒg—p‚ÌŒo˜HŠÇ—ƒNƒ‰ƒX
+// ç§»å‹•ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”¨ã®çµŒè·¯ç®¡ç†ã‚¯ãƒ©ã‚¹
 // =========================================================
 class PathManager
 {
@@ -17,18 +17,18 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ƒCƒ“ƒXƒ^ƒ“ƒXæ“¾
+	/// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	static PathManager* GetInstance();
 
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
@@ -37,14 +37,14 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// w’è‚µ‚½ƒ|ƒCƒ“ƒg‚ÌÀ•W‚ğæ“¾
+	/// æŒ‡å®šã—ãŸãƒã‚¤ãƒ³ãƒˆã®åº§æ¨™ã‚’å–å¾—
 	/// </summary>
-	/// <param name="index">ƒ|ƒCƒ“ƒg‚Ì”Ô†</param>
+	/// <param name="index">ãƒã‚¤ãƒ³ãƒˆã®ç•ªå·</param>
 	/// <returns></returns>
 	const Cygnus::Float3& GetPoint(size_t index) const { return points_[index]; }
 
 	/// <summary>
-	/// “o˜^‚³‚ê‚½ƒ|ƒCƒ“ƒg‚Ì‘”‚ğæ“¾
+	/// ç™»éŒ²ã•ã‚ŒãŸãƒã‚¤ãƒ³ãƒˆã®ç·æ•°ã‚’å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	size_t GetPointCount() const { return points_.size(); }
@@ -60,12 +60,12 @@ private:
 	// Constants
 	// =========================================================
 
-	const Cygnus::Float4 kPathColor = {1.0f, 0.0f, 0.0f, 1.0f};	// ü‚ÌF
+	const Cygnus::Float4 kPathColor = {1.0f, 0.0f, 0.0f, 1.0f};	// ç·šã®è‰²
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	std::vector<Cygnus::Float3> points_;	// Œo˜H‚Ì’¸“_ƒŠƒXƒg
+	std::vector<Cygnus::Float3> points_;	// çµŒè·¯ã®é ‚ç‚¹
 };
 

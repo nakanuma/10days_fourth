@@ -7,7 +7,6 @@ OreManager* OreManager::GetInstance() {
 
 void OreManager::Initialize() {
 	ores_.clear();
-
 	return;
 
 	// デバッグ用にベタ打ちで鉱石を追加（Todo : エディタで追加できるように変更する）
@@ -46,7 +45,8 @@ void OreManager::Draw() {
 	// 全ての鉱石を描画
 	for(auto& ore : ores_) {
 		ore->Draw();
-	}	
+	}
+
   // 全ての落ちている鉱石（ドロップアイテム）を更新
 	for (auto& droppedOre : droppedOres_) {
 		droppedOre->Draw();
