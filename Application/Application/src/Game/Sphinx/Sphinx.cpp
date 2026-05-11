@@ -14,9 +14,9 @@ void Sphinx::Initialize()
 {
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
-	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Player");
-	object_->transform_.translate_ = { -10.0f, 2.0f, 0.0f };
-	object_->transform_.scale_ = { kColliderSize.x, 1.0f, kColliderSize.z };
+	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Sphinx");
+	object_->transform_.translate_ = { -10.0f, 0.0f, 0.0f };
+	object_->transform_.scale_ = { 1.0f, 1.0f,  1.0f };
 
 	// コライダー生成 + 登録
 	auto obb = std::make_unique<Cygnus::OBBCollider>();
