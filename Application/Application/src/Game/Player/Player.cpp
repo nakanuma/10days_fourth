@@ -28,7 +28,7 @@ void Player::Initialize() {
 void Player::Update(float deltaTime) {
 	auto input = Cygnus::Input::GetInstance();
 
-#pragma region 入力による移動処理
+#pragma region
 	// キーボードとゲームパッド両方の入力を加算
 	Cygnus::Float3 moveDir = {0.0f, 0.0f, 0.0f};
 	moveDir += GetKeyInput();
@@ -52,7 +52,7 @@ void Player::Update(float deltaTime) {
 	object_->transform_.translate_ += moveDir * kMoveSpeed * deltaTime;
 #pragma endregion
 
-#pragma region 入力による鉱石採掘
+#pragma region
 	if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
 		// 向きから前方のベクトルを作成する
 		float angleY = object_->transform_.rotate_.y;
