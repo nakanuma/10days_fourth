@@ -4,7 +4,7 @@
 #include <src/Game/Gear/DroppedGear.h>
 
 // =========================================================
-// •ÔƒIƒuƒWƒFƒNƒgŠÇ—ƒNƒ‰ƒX
+// æ­¯è»Šã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç®¡ç†ã‚¯ãƒ©ã‚¹
 // =========================================================
 class GearManager {
 public:
@@ -13,28 +13,28 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ƒCƒ“ƒXƒ^ƒ“ƒXæ“¾
+	/// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	static GearManager* GetInstance();
 
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// •Ô‚ğ¶¬‚µ‚ÄŠÇ—ƒŠƒXƒg‚É’Ç‰ÁiHì‘ä‚Å‚Ì¶¬‚Ég—pj
+	/// æ­¯è»Šã‚’ç”Ÿæˆã—ã¦ç®¡ç†ãƒªã‚¹ãƒˆã«è¿½åŠ ï¼ˆå·¥ä½œå°ã§ã®ç”Ÿæˆæ™‚ã«ä½¿ç”¨ï¼‰
 	/// </summary>
 	/// <param name="position"></param>
 	void Spawn(const Cygnus::Float3& position);
@@ -44,5 +44,5 @@ private:
 	// Member Variables
 	// =========================================================
 
-	std::vector<std::unique_ptr<DroppedGear>> droppedGears_; // ‘S‚Ä‚Ì—‚¿‚Ä‚¢‚éiƒhƒƒbƒvƒAƒCƒeƒ€j•ÔƒIƒuƒWƒFƒNƒg‚ğŠÇ—
+	std::vector<std::unique_ptr<DroppedGear>> droppedGears_; // å…¨ã¦ã®è½ã¡ã¦ã„ã‚‹ï¼ˆãƒ‰ãƒ­ãƒƒãƒ—ã‚¢ã‚¤ãƒ†ãƒ ï¼‰æ­¯è»Šã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç®¡ç†
 };

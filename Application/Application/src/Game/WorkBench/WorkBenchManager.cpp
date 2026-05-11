@@ -7,7 +7,7 @@ WorkBenchManager* WorkBenchManager::GetInstance() {
 
 void WorkBenchManager::Initialize() { 
 	workBenches_.clear(); 
-	// ƒfƒoƒbƒO—p‚Éƒxƒ^‘Å‚¿‚ÅÀ•W‚ğ’Ç‰ÁiTodo : ƒGƒfƒBƒ^‚Å’Ç‰Á‚Å‚«‚é‚æ‚¤‚É•ÏX‚·‚éj
+	// ãƒ‡ãƒãƒƒã‚°ç”¨ã«ãƒ™ã‚¿æ‰“ã¡ã§åº§æ¨™ã‚’è¿½åŠ ï¼ˆTodo : ã‚¨ãƒ‡ã‚£ã‚¿ã§è¿½åŠ ã§ãã‚‹ã‚ˆã†ã«å¤‰æ›´ã™ã‚‹ï¼‰
 	auto workBench1 = std::make_unique<WorkBench>();
 	workBench1->Initialize({15.0f, 1.0f, 0.0f});
 	workBenches_.push_back(std::move(workBench1));

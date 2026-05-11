@@ -7,7 +7,7 @@
 #include <Collider/CollisionManager.h>
 
 // =========================================================
-// Hì‘äƒIƒuƒWƒFƒNƒgƒNƒ‰ƒX
+// å·¥ä½œå°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹
 // =========================================================
 class WorkBench : public Cygnus::ICollisionCallback {
 public:
@@ -16,23 +16,23 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†
 	/// </summary>
 	/// <param name="translate"></param>
 	void Initialize(const Cygnus::Float3 translate);
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// Õ“ËƒR[ƒ‹ƒoƒbƒN
+	/// è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 	/// </summary>
 	/// <param name="other"></param>
 	void OnCollision(Cygnus::Collider* other) override;
@@ -46,18 +46,18 @@ private:
 	// Constants
 	// =========================================================
 
-	const Cygnus::Float3 kColliderSize = {1.0f, 1.0f, 1.0f};	// ƒRƒ‰ƒCƒ_[ƒTƒCƒY
-	const Cygnus::Float3 kSensorSize = {2.5f, 1.0f, 2.5f};	// ƒNƒ‰ƒtƒg”ÍˆÍ”»’è—pƒRƒ‰ƒCƒ_[ƒTƒCƒYi–{‘Ì‚æ‚è‚â‚â‘å‚«‚ßj
+	const Cygnus::Float3 kColliderSize = {1.0f, 1.0f, 1.0f};	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚µã‚¤ã‚º
+	const Cygnus::Float3 kSensorSize = {2.5f, 1.0f, 2.5f};	// ã‚¯ãƒ©ãƒ•ãƒˆç¯„å›²åˆ¤å®šç”¨ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚µã‚¤ã‚ºï¼ˆæœ¬ä½“ã‚ˆã‚Šã‚„ã‚„å¤§ãã‚ï¼‰
 
-	const uint32_t kRequiredOreCount = 2;	// •Ô‚Ìì¬‚Ég—p‚·‚ézÎ”
+	const uint32_t kRequiredOreCount = 2;	// æ­¯è»Šã®ä½œæˆã«ä½¿ç”¨ã™ã‚‹é‰±çŸ³æ•°
 
-	const float kDropOffset = -2.0f;	// ƒhƒƒbƒv‚Ì‘O•ûƒIƒtƒZƒbƒg
+	const float kDropOffset = -2.0f;	// ãƒ‰ãƒ­ãƒƒãƒ—ã®å‰æ–¹ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	std::unique_ptr<Cygnus::Object3D> object_;	// ƒIƒuƒWƒFƒNƒg
-	std::unique_ptr<Cygnus::Collider> collider_;	// ƒRƒ‰ƒCƒ_[iì‹Æ‘ä–{‘Ìj
-	std::unique_ptr<Cygnus::Collider> colliderSensor_;	// ƒRƒ‰ƒCƒ_[iƒNƒ‰ƒtƒg”ÍˆÍ”»’è—pj
+	std::unique_ptr<Cygnus::Object3D> object_;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	std::unique_ptr<Cygnus::Collider> collider_;	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ï¼ˆä½œæ¥­å°æœ¬ä½“ï¼‰
+	std::unique_ptr<Cygnus::Collider> colliderSensor_;	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ï¼ˆã‚¯ãƒ©ãƒ•ãƒˆç¯„å›²åˆ¤å®šç”¨ï¼‰
 };

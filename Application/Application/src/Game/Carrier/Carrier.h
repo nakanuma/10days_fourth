@@ -5,7 +5,7 @@
 #include <Collider/CollisionManager.h>
 
 // =========================================================
-// Œo˜H‚É‰ˆ‚Á‚Ä“®‚­ƒIƒuƒWƒFƒNƒgƒNƒ‰ƒX
+// çµŒè·¯ã«æ²¿ã£ã¦å‹•ãã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹
 // =========================================================
 class Carrier : public Cygnus::ICollisionCallback
 {
@@ -15,27 +15,27 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update(float deltaTime);
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// ƒfƒoƒbƒO•\¦
+	/// ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
 	/// </summary>
 	void Debug();
 
 	/// <summary>
-	/// Õ“ËƒR[ƒ‹ƒoƒbƒN
+	/// è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 	/// </summary>
 	/// <param name="collider"></param>
 	void OnCollision(Cygnus::Collider* collider) override;
@@ -46,7 +46,7 @@ private:
 	// =========================================================
 
 	/// <summary>
-	/// Œo˜H‚É‰ˆ‚Á‚½ˆÚ“®ˆ—
+	/// çµŒè·¯ã«æ²¿ã£ãŸç§»å‹•å‡¦ç†
 	/// </summary>
 	/// <param name="deltaTime"></param>
 	void MoveAlongPath(float deltaTime);
@@ -56,19 +56,19 @@ private:
 	// Constants
 	// =========================================================
 
-	const float kMoveSpeed = 2.0f;	// ˆÚ“®‘¬“x
-	const Cygnus::Float3 kColliderSize = {1.0f, 1.0f, 1.0f};	// ƒRƒ‰ƒCƒ_[ƒTƒCƒY
+	const float kMoveSpeed = 2.0f;	// ç§»å‹•é€Ÿåº¦
+	const Cygnus::Float3 kColliderSize = {1.0f, 1.0f, 1.0f};	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚µã‚¤ã‚º
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	std::unique_ptr<Cygnus::Object3D> object_;	// ƒIƒuƒWƒFƒNƒg
-	std::unique_ptr<Cygnus::Collider> collider_;	// ƒRƒ‰ƒCƒ_[
+	std::unique_ptr<Cygnus::Object3D> object_;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	std::unique_ptr<Cygnus::Collider> collider_;	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 
-	bool isGoal_ = false;	// ƒS[ƒ‹“’Bƒtƒ‰ƒO
+	bool isGoal_ = false;	// ã‚´ãƒ¼ãƒ«åˆ°é”ãƒ•ãƒ©ã‚°
 
-	size_t targetIndex_ = 1;	// Ÿ‚ÉŒü‚©‚¤ƒ|ƒCƒ“ƒg‚Ì”Ô†
+	size_t targetIndex_ = 1;	// æ¬¡ã«å‘ã‹ã†ãƒã‚¤ãƒ³ãƒˆã®ç•ªå·
 
-	bool isActive_ = false;	// —LŒø‰»ƒtƒ‰ƒO
+	bool isActive_ = false;	// æœ‰åŠ¹åŒ–ãƒ•ãƒ©ã‚°
 };

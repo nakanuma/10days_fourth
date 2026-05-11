@@ -4,7 +4,7 @@
 #include <src/Game/WorkBench/WorkBench.h>
 
 // =========================================================
-// Hì‘äƒIƒuƒWƒFƒNƒgŠÇ—ƒNƒ‰ƒX
+// å·¥ä½œå°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç®¡ç†ã‚¯ãƒ©ã‚¹
 // =========================================================
 class WorkBenchManager {
 public:
@@ -13,7 +13,7 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ƒCƒ“ƒXƒ^ƒ“ƒXæ“¾
+	/// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	static WorkBenchManager* GetInstance();
@@ -29,5 +29,5 @@ private:
 	// Member Variables
 	// =========================================================
 
-	std::vector<std::unique_ptr<WorkBench>> workBenches_;	// ‘S‚Ä‚ÌHì‘äƒIƒuƒWƒFƒNƒg
+	std::vector<std::unique_ptr<WorkBench>> workBenches_;	// å…¨ã¦ã®å·¥ä½œå°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 };

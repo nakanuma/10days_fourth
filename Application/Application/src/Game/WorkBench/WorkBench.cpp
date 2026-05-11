@@ -8,12 +8,12 @@
 #include <src/Game/Gear/GearManager.h>
 
 void WorkBench::Initialize(const Cygnus::Float3 translate) {
-	// ƒIƒuƒWƒFƒNƒg¶¬
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("WorkBench");
 	object_->transform_.translate_ = translate;
 
-	// ƒRƒ‰ƒCƒ_[¶¬ + “o˜^
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç”Ÿæˆ + ç™»éŒ²
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
 	aabb->SetTag("WorkBench");
 	aabb->SetFollowTarget(&object_->transform_.translate_);
@@ -34,15 +34,15 @@ void WorkBench::Initialize(const Cygnus::Float3 translate) {
 }
 
 void WorkBench::Update() {
-	// ƒRƒ‰ƒCƒ_[XV
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æ›´æ–°
 	collider_->Update();
 	colliderSensor_->Update();
-	// ƒIƒuƒWƒFƒNƒgXV
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–°
 	object_->UpdateMatrix();
 }
 
 void WorkBench::Draw() {
-	// ƒIƒuƒWƒFƒNƒg•`‰æ
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	object_->Draw();
 }
 
@@ -52,13 +52,13 @@ void WorkBench::OnCollision(Cygnus::Collider* other) {
 	if (other->GetTag() == "Player") {
 		Player* player = static_cast<Player*>(other->GetOwner());
 
-		// ƒvƒŒƒCƒ„[‚ª•Ô‚Ì¶¬‚É•K—p‚ÈzÎ‚ğŠ‚µ‚Ä‚¢‚é‚©Šm”F
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ­¯è»Šã®ç”Ÿæˆã«å¿…ç”¨ãªé‰±çŸ³ã‚’æ‰€æŒã—ã¦ã„ã‚‹ã‹ç¢ºèª
 		if (player->GetOreCount() >= kRequiredOreCount) {
-			// ƒL[ or ƒ{ƒ^ƒ““ü—Í‘€ì
+			// ã‚­ãƒ¼ or ãƒœã‚¿ãƒ³å…¥åŠ›æ“ä½œ
 			if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
-				// ƒvƒŒƒCƒ„[‚ÌzÎ‚ğÁ”ï‚³‚¹‚éi¶¬‚Ég—p‚µ‚½•ª‚Ì‚İj
+				// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é‰±çŸ³ã‚’æ¶ˆè²»ã•ã›ã‚‹ï¼ˆç”Ÿæˆã«ä½¿ç”¨ã—ãŸåˆ†ã®ã¿ï¼‰
 				player->ConsumeOre(kRequiredOreCount);
-				// •Ô‚ğ‘O•û‚É¶¬
+				// æ­¯è»Šã‚’å‰æ–¹ã«ç”Ÿæˆ
 				GearManager::GetInstance()->Spawn(object_->transform_.translate_ + Cygnus::Float3{0.0f, 0.0f, kDropOffset});
 			}
 		}

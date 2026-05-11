@@ -7,7 +7,7 @@
 #include <Collider/CollisionManager.h>
 
 // =========================================================
-// ƒvƒŒƒCƒ„[ƒNƒ‰ƒX
+// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¯ãƒ©ã‚¹
 // =========================================================
 class Player : public Cygnus::ICollisionCallback
 {
@@ -17,27 +17,27 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update(float deltaTime);
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// ƒfƒoƒbƒO•\¦
+	/// ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
 	/// </summary>
 	void Debug();
 
 	/// <summary>
-	/// Õ“ËƒR[ƒ‹ƒoƒbƒN
+	/// è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 	/// </summary>
 	/// <param name="other"></param>
 	void OnCollision(Cygnus::Collider* other) override;
@@ -47,41 +47,41 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// zÎ‚ğE‚¦‚é‚©iŠÅ‘å”‚É’B‚µ‚Ä‚¢‚È‚¢‚©j
+	/// é‰±çŸ³ã‚’æ‹¾ãˆã‚‹ã‹ï¼ˆæ‰€æŒæœ€å¤§æ•°ã«é”ã—ã¦ã„ãªã„ã‹ï¼‰
 	/// </summary>
 	/// <returns></returns>
 	bool CanPickUpOre() const { return oreCount_ < kMaxOreCount; }
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ÌŠzÎ‚ğ1‘‚â‚·i—‚¿‚Ä‚¢‚ézÎæ“¾j
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ‰€æŒé‰±çŸ³ã‚’1å¢—ã‚„ã™ï¼ˆè½ã¡ã¦ã„ã‚‹é‰±çŸ³å–å¾—æ™‚ï¼‰
 	/// </summary>
 	void AddOreCount() { oreCount_++; }
 
 	/// <summary>
-	/// zÎŠ”‚ğæ“¾
+	/// é‰±çŸ³æ‰€æŒæ•°ã‚’å–å¾—
 	/// </summary>
 	uint32_t GetOreCount() { return oreCount_; }
 
 	/// <summary>
-	/// •Ô‚ğE‚¦‚é‚©iŠÅ‘å”‚É’B‚µ‚Ä‚¢‚È‚¢‚©j
+	/// æ­¯è»Šã‚’æ‹¾ãˆã‚‹ã‹ï¼ˆæ‰€æŒæœ€å¤§æ•°ã«é”ã—ã¦ã„ãªã„ã‹ï¼‰
 	/// </summary>
 	/// <returns></returns>
 	bool CanPickUpGear() const { return gearCount_ < kMaxGearCount; }
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ÌŠ•Ô‚ğ1‘‚â‚·i—‚¿‚Ä‚¢‚é•Ôæ“¾j
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ‰€æŒæ­¯è»Šã‚’1å¢—ã‚„ã™ï¼ˆè½ã¡ã¦ã„ã‚‹æ­¯è»Šå–å¾—æ™‚ï¼‰
 	/// </summary>
 	void AddGearCount() { gearCount_++; }
 
 	/// <summary>
-	/// •ÔŠ”‚ğæ“¾
+	/// æ­¯è»Šæ‰€æŒæ•°ã‚’å–å¾—
 	/// </summary>
 	uint32_t GetGearCount() { return gearCount_; }
 
 	/// <summary>
-	/// w’è‚µ‚½ŒÂ”•ª‚¾‚¯ŠzÎ‚ğŒ¸‚ç‚·i•Ôì¬j
+	/// æŒ‡å®šã—ãŸå€‹æ•°åˆ†ã ã‘æ‰€æŒé‰±çŸ³ã‚’æ¸›ã‚‰ã™ï¼ˆæ­¯è»Šä½œæˆæ™‚ï¼‰
 	/// </summary>
-	/// <param name="amount">zÎ‚ÌÁ”ï”</param>
+	/// <param name="amount">é‰±çŸ³ã®æ¶ˆè²»æ•°</param>
 	void ConsumeOre(uint32_t amount) { if (oreCount_ >= amount) { oreCount_ -= amount; } }
 
 private:
@@ -90,13 +90,13 @@ private:
 	// =========================================================
 
 	/// <summary>
-	/// ƒL[ƒ{[ƒh—p“ü—Íæ“¾
+	/// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ç”¨å…¥åŠ›å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	Cygnus::Float3 GetKeyInput();
 
 	/// <summary>
-	/// ƒQ[ƒ€ƒpƒbƒh—p“ü—Íæ“¾
+	/// ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰ç”¨å…¥åŠ›å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	Cygnus::Float3 GetPadInput();
@@ -106,25 +106,25 @@ private:
 	// Constants
 	// =========================================================
 
-	const float kMoveSpeed = 20.0f;	// ˆÚ“®‘¬“x
-	const Cygnus::Float3 kColliderSize = {1.0f, 2.0f, 1.0f};	// ƒRƒ‰ƒCƒ_[ƒTƒCƒY
+	const float kMoveSpeed = 20.0f;	// ç§»å‹•é€Ÿåº¦
+	const Cygnus::Float3 kColliderSize = {1.0f, 2.0f, 1.0f};	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚µã‚¤ã‚º
 
-	const float kMiningOffset = 1.5f;	// ÌŒ@‚Ì‘O•ûƒIƒtƒZƒbƒg
-	const float kMiningRange = 1.2f;	// ÌŒ@‚ÌƒuƒŒ‹–—e’l
+	const float kMiningOffset = 1.5f;	// æ¡æ˜æ™‚ã®å‰æ–¹ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+	const float kMiningRange = 1.2f;	// æ¡æ˜æ™‚ã®ãƒ–ãƒ¬è¨±å®¹å€¤
 
-	const uint32_t kMaxOreCount = 4;	// Š‚Å‚«‚ézÎ‚ÌÅ‘å”
-	const uint32_t kMaxGearCount = 2;	// Š‚Å‚«‚é•Ô‚ÌÅ‘å”
+	const uint32_t kMaxOreCount = 4;	// æ‰€æŒã§ãã‚‹é‰±çŸ³ã®æœ€å¤§æ•°
+	const uint32_t kMaxGearCount = 2;	// æ‰€æŒã§ãã‚‹æ­¯è»Šã®æœ€å¤§æ•°
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	std::unique_ptr<Cygnus::Object3D> object_;	// ƒIƒuƒWƒFƒNƒg
-	std::unique_ptr<Cygnus::Collider> collider_;	// ƒRƒ‰ƒCƒ_[
+	std::unique_ptr<Cygnus::Object3D> object_;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	std::unique_ptr<Cygnus::Collider> collider_;	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 
-	Cygnus::Float3 velocity_ = {0.0f, 0.0f, 0.0f};	// ‘¬“xƒxƒNƒgƒ‹
+	Cygnus::Float3 velocity_ = {0.0f, 0.0f, 0.0f};	// é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«
 
-	uint32_t oreCount_ = 0;	// Œ»İ‚ÌŠzÎ”
-	uint32_t gearCount_ = 0; // Œ»İ‚ÌŠ•Ô”
+	uint32_t oreCount_ = 0;	// ç¾åœ¨ã®æ‰€æŒé‰±çŸ³æ•°
+	uint32_t gearCount_ = 0; // ç¾åœ¨ã®æ‰€æŒæ­¯è»Šæ•°
 };
 

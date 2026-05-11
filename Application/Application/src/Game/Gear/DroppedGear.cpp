@@ -7,14 +7,14 @@
 #include <src/Game/Player/Player.h>
 
 void DroppedGear::Initialize(const Cygnus::Float3 translate) {
-	// ƒIƒuƒWƒFƒNƒg¶¬
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Gear");
 	object_->transform_.translate_ = translate;
 	object_->transform_.scale_ = kColliderSize;
-	basePosition_ = translate; // ‰ŠúˆÊ’u‚Ì•Û‘¶iã‰º—h‚êƒAƒjƒ[ƒVƒ‡ƒ“—pj
+	basePosition_ = translate; // åˆæœŸä½ç½®ã®ä¿å­˜ï¼ˆä¸Šä¸‹æºã‚Œã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç”¨ï¼‰
 
-	// ƒRƒ‰ƒCƒ_[¶¬ + “o˜^
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç”Ÿæˆ + ç™»éŒ²
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
 	aabb->SetTag("DroppedGear");
 	aabb->SetFollowTarget(&object_->transform_.translate_);
@@ -26,42 +26,42 @@ void DroppedGear::Initialize(const Cygnus::Float3 translate) {
 }
 
 void DroppedGear::Update() {
-	// ã‰º—h‚ê + ‰ñ“]‚ğs‚¤ƒAƒjƒ[ƒVƒ‡ƒ“
+	// ä¸Šä¸‹æºã‚Œ + å›è»¢ã‚’è¡Œã†ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 	BobbingAnimation();
 
-	// ƒRƒ‰ƒCƒ_[XV
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æ›´æ–°
 	collider_->Update();
-	// ƒIƒuƒWƒFƒNƒgXV
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–°
 	object_->UpdateMatrix();
 }
 
 void DroppedGear::Draw() {
-	// ƒIƒuƒWƒFƒNƒg•`‰æ
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	object_->Draw();
 }
 
 void DroppedGear::OnCollision(Cygnus::Collider* other) {
-	// ƒvƒŒƒCƒ„[‚Æ‚ÌÕ“Ë
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®è¡çª
 	if (other->GetTag() == "Player") {
 		Player* player = static_cast<Player*>(other->GetOwner());
 
-		// ƒvƒŒƒCƒ„[‚ª•Ô‚ğE‚¦‚éê‡
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ­¯è»Šã‚’æ‹¾ãˆã‚‹å ´åˆ
 		if (player->CanPickUpGear()) {
-			isPickedUp_ = true;    // ©g‚Ìæ“¾ƒtƒ‰ƒO‚ğ—§‚Ä‚éiÁ‚·€”õj
-			player->AddGearCount(); // ƒvƒŒƒCƒ„[‚Ì•ÔŠ”‚ğ1‘‚â‚·
+			isPickedUp_ = true;    // è‡ªèº«ã®å–å¾—ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹ï¼ˆæ¶ˆã™æº–å‚™ï¼‰
+			player->AddGearCount(); // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ­¯è»Šæ‰€æŒæ•°ã‚’1å¢—ã‚„ã™
 		}
 	}
 }
 
 void DroppedGear::BobbingAnimation() {
-	// ƒ^ƒCƒ}[‰ÁZ
+	// ã‚¿ã‚¤ãƒãƒ¼åŠ ç®—
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 	timer_ += dt;
 
-	// Y²‰ñ“]
+	// Yè»¸å›è»¢
 	object_->transform_.rotate_.y += kRotateSpeed * dt;
 
-	// ã‰º—h‚êisin”gj
+	// ä¸Šä¸‹æºã‚Œï¼ˆsinæ³¢ï¼‰
 	float offsettTop = std::sinf(timer_ * kBobbingSpeed) * kBobbingAmplitude;
 	object_->transform_.translate_.y = basePosition_.y + offsettTop;
 }

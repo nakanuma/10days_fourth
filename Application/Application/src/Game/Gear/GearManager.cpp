@@ -7,31 +7,31 @@ GearManager* GearManager::GetInstance() {
 
 void GearManager::Initialize() { 
 	droppedGears_.clear(); 
-	// ƒfƒoƒbƒO—p‚Éƒxƒ^‘Å‚¿‚Å•Ô‚ğ’Ç‰Á
+	// ãƒ‡ãƒãƒƒã‚°ç”¨ã«ãƒ™ã‚¿æ‰“ã¡ã§æ­¯è»Šã‚’è¿½åŠ 
 	auto gear1 = std::make_unique<DroppedGear>();
 	gear1->Initialize({-15.0f, 1.0f, 0.0f});
 	droppedGears_.push_back(std::move(gear1));
 }
 
 void GearManager::Update() {
-	// ‘S‚Ä‚Ì—‚¿‚Ä‚¢‚é•ÔiƒhƒƒbƒvƒAƒCƒeƒ€j‚ğXV + íœ”»’è
+	// å…¨ã¦ã®è½ã¡ã¦ã„ã‚‹æ­¯è»Šï¼ˆãƒ‰ãƒ­ãƒƒãƒ—ã‚¢ã‚¤ãƒ†ãƒ ï¼‰ã‚’æ›´æ–° + å‰Šé™¤åˆ¤å®š
 	auto it = std::remove_if(droppedGears_.begin(), droppedGears_.end(), [](const std::unique_ptr<DroppedGear>& droppedGear) {
 		droppedGear->Update();
 
-		// ƒvƒŒƒCƒ„[‚ÉE‚í‚ê‚½Û‚Ìˆ—
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«æ‹¾ã‚ã‚ŒãŸéš›ã®å‡¦ç†
 		if (droppedGear->IsPickedUp()) {
-			droppedGear->UnregisterCollider(); // ƒRƒ‰ƒCƒ_[“o˜^‰ğœ
+			droppedGear->UnregisterCollider(); // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç™»éŒ²è§£é™¤
 			return true;
 		}
 		return false;
 	});
 	if (it != droppedGears_.end()) {
-		droppedGears_.erase(it, droppedGears_.end()); // ”z—ñ‚©‚çíœ
+		droppedGears_.erase(it, droppedGears_.end()); // é…åˆ—ã‹ã‚‰å‰Šé™¤
 	}
 }
 
 void GearManager::Draw() {
-	// ‘S‚Ä‚Ì—‚¿‚Ä‚¢‚é•ÔiƒhƒƒbƒvƒAƒCƒeƒ€j‚ğXV
+	// å…¨ã¦ã®è½ã¡ã¦ã„ã‚‹æ­¯è»Šï¼ˆãƒ‰ãƒ­ãƒƒãƒ—ã‚¢ã‚¤ãƒ†ãƒ ï¼‰ã‚’æ›´æ–°
 	for (auto& droppedGear : droppedGears_) {
 		droppedGear->Draw();
 	}

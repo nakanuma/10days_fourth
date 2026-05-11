@@ -1,12 +1,12 @@
 #include "Ore.h"
 
 void Ore::Initialize(const Cygnus::Float3 translate) {
-	// ƒIƒuƒWƒFƒNƒg¶¬
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Ore");
 	object_->transform_.translate_ = translate;
 
-	// ƒRƒ‰ƒCƒ_[¶¬ + “o˜^
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç”Ÿæˆ + ç™»éŒ²
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
 	aabb->SetTag("Ore");
 	aabb->SetFollowTarget(&object_->transform_.translate_);
@@ -18,14 +18,14 @@ void Ore::Initialize(const Cygnus::Float3 translate) {
 }
 
 void Ore::Update() {
-	// ƒRƒ‰ƒCƒ_[XV
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æ›´æ–°
 	collider_->Update();
-	// ƒIƒuƒWƒFƒNƒgXV
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–°
 	object_->UpdateMatrix();
 }
 
 void Ore::Draw() {
-	// ƒIƒuƒWƒFƒNƒg•`‰æ
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	object_->Draw();
 }
 

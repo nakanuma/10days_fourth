@@ -7,7 +7,7 @@
 #include <Collider/CollisionManager.h>
 
 // =========================================================
-// zÎƒIƒuƒWƒFƒNƒgƒNƒ‰ƒX
+// é‰±çŸ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹
 // =========================================================
 class Ore : public Cygnus::ICollisionCallback
 {
@@ -17,28 +17,28 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†
 	/// </summary>
 	void Initialize(const Cygnus::Float3 translate);
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// Õ“ËƒR[ƒ‹ƒoƒbƒN
+	/// è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 	/// </summary>
 	/// <param name="other"></param>
 	void OnCollision(Cygnus::Collider* other) override;
 
 	/// <summary>
-	/// ƒRƒ‰ƒCƒ_[‚Ì“o˜^‰ğœ
+	/// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ç™»éŒ²è§£é™¤
 	/// </summary>
 	void UnregisterCollider() { Cygnus::CollisionManager::GetInstance()->Unregister(collider_.get()); }
 
@@ -47,7 +47,7 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ˆÊ’u‚ğæ“¾‚µ‚Ü‚·B
+	/// ä½ç½®ã‚’å–å¾—ã—ã¾ã™ã€‚
 	/// </summary>
 	/// <returns></returns>
 	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; }
@@ -57,13 +57,13 @@ private:
 	// Constants
 	// =========================================================
 
-	const Cygnus::Float3 kColliderSize = {1.0f, 1.0f, 1.0f};	// ƒRƒ‰ƒCƒ_[ƒTƒCƒY
+	const Cygnus::Float3 kColliderSize = {1.0f, 1.0f, 1.0f};	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚µã‚¤ã‚º
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 	
-	std::unique_ptr<Cygnus::Object3D> object_;	// ƒIƒuƒWƒFƒNƒg
-	std::unique_ptr<Cygnus::Collider> collider_;	// ƒRƒ‰ƒCƒ_[
+	std::unique_ptr<Cygnus::Object3D> object_;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	std::unique_ptr<Cygnus::Collider> collider_;	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 };
 
