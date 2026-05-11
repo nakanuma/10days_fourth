@@ -47,6 +47,11 @@ public:
 	/// <param name="other"></param>
 	void OnCollision(Cygnus::Collider* other) override;
 
+	/// <summary>
+	/// 動かすかどうか
+	/// </summary>
+	void IsMoving(bool is) { isMoving_ = is; }
+
 private:
 	// =========================================================
 	// Internal Methods
@@ -150,5 +155,7 @@ private:
 
 	const float kMiningOffset = 3.5f;	// 採掘時の前方オフセット
 	const float kMiningRange = 2.5f;	// 採掘時のブレ許容値
+
+	bool isMoving_ = true;
 };
 

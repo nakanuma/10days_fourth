@@ -38,7 +38,7 @@ void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
 #pragma region ˆÚ“®ˆ—
 
 	// ‹Câ’†‚ÍUŒ‚EˆÚ“®ˆ—‚ðs‚í‚È‚¢
-	if (!Faint(deltaTime))
+	if (!Faint(deltaTime) && isMoving_)
 	{
 		if (attackCoolTimer_ > 0.0f)
 		{
@@ -233,6 +233,27 @@ void Sphinx::Debug()
 	ImGui::Begin("Sphinx");
 
 	ImGui::DragFloat3("Translate", &object_->transform_.translate_.x, 0.01f);
+
+	if (ImGui::Button("Pause/Resume"))
+	{
+		if (isMoving_)
+		{
+			IsMoving(false);
+		}
+		else
+		{
+			IsMoving(true);
+		}
+	}
+
+	if (isMoving_)
+	{
+		ImGui::Text("Current : Move");
+	}
+	else
+	{
+		ImGui::Text("Current : Pause");
+	}
 
 	ImGui::Text("Status : ");
 	ImGui::SameLine();
