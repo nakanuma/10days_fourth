@@ -113,6 +113,14 @@ private:
 
 	const float kChargeTime_ = 1.5f;		// 突進前の予備動作（チャージ）時間
 
+	// 旋回スピードの定数を追加
+	const float kWanderTurnSpeed_ = 6.0f;	// 徘徊時の旋回スピード
+	const float kChargeTurnSpeed_ = 10.0f;	// 予兆時の旋回スピード
+
+	const float kBounceHeight_ = 2.0f;		// 飛び跳ねる高さ
+	const float kBounceSpeed_ = (kMoveChangeTime_ - kChargeTime_) * 25.0f;		// 飛び跳ねるスピード
+	const float kBaseY_ = 2.0f;				// 地面の基本Y座標（Initializeで設定している2.0f）
+
 	// =========================================================
 	// Member Variables
 	// =========================================================

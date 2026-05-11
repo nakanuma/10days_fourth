@@ -1,4 +1,5 @@
 #include "RandomWalk.h"
+#include <numbers>
 
 // Engine
 #include <RandomGenerator.h>
@@ -18,4 +19,16 @@ void RandomWalk::Update(float deltaTime, float changeTime)
 			walkTimer_ = changeTime;
 		}
 	}
+}
+
+float RandomWalk::SmoothTurn(float currentAngle, float targetAngle, float turnSpeed, float deltaTime)
+{
+	float diff = targetAngle - currentAngle;
+	const float PI = std::numbers::pi_v<float>;
+
+	// -PI ? PI ‚Ì”ÍˆÍ‚É³‹K‰»iÅ’Z‹——£‚Å‰ñ‚é‚æ‚¤‚É‚·‚éj
+	while (diff > PI)  diff -= 2.0f * PI;
+	while (diff < -PI) diff += 2.0f * PI;
+
+	return currentAngle + diff * turnSpeed * deltaTime;
 }
