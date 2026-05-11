@@ -38,7 +38,7 @@ void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
 #pragma region 移動処理
 
 	// 気絶中は攻撃・移動処理を行わない
-	if (!Faint(deltaTime))
+	if (!Faint(deltaTime) && isMoving_)
 	{
 		if (attackCoolTimer_ > 0.0f)
 		{
@@ -57,10 +57,30 @@ void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
 				Cygnus::Float3 toTarget = targetPos - object_->transform_.translate_;
 				if (Cygnus::Float3::Length(toTarget) > 0.1f) // 念のためゼロ除算防止
 				{
-					attackDir_ = Cygnus::Float3::Normalize(toTarget);
-					// 向き（回転）も更新
-					object_->transform_.rotate_.y = std::atan2(attackDir_.x, attackDir_.z);
+					// 目標の角度を算出
+					Cygnus::Float3 targetDir = Cygnus::Float3::Normalize(toTarget);
+					float targetAngle = std::atan2(targetDir.x, targetDir.z);
+
+					// ▼ 変更：SmoothTurnで滑らかに振り向かせる（徘徊時より速い旋回スピード）
+					object_->transform_.rotate_.y = randomWalk_->SmoothTurn(object_->transform_.rotate_.y, targetAngle, kChargeTurnSpeed_, deltaTime);
+
+					// 突進方向（attackDir_）は「現在向いている方向」に随時更新しておく
+					float currentAngle = object_->transform_.rotate_.y;
+					attackDir_ = { std::sin(currentAngle), 0.0f, std::cos(currentAngle) };
 				}
+
+				// 地面につけておく
+				object_->transform_.translate_.y = kBaseY_;
+			}
+			else
+			{
+				// 角度確定後（残り時間）のぴょんぴょんジャンプ処理
+				// どれくらいジャンプの時間が経過したかを計算
+				float bounceTime = kHomingLimitTime_ - chargeTimer_;
+
+				// サイン波の絶対値を使って、下から上に跳ねる動きを作る
+				float jumpY = std::abs(std::sin(bounceTime * kBounceSpeed_)) * kBounceHeight_;
+				object_->transform_.translate_.y = kBaseY_ + jumpY;
 			}
 
 			if (chargeTimer_ <= 0.0f)
@@ -104,9 +124,17 @@ void Sphinx::Move(float deltaTime)
 {
 	moveDir_ = randomWalk_->GetRandomWalkDir();
 
-	object_->transform_.rotate_.y = std::atan2(moveDir_.x, moveDir_.z);
+	// 目標とする角度
+	float targetAngle = std::atan2(moveDir_.x, moveDir_.z);
 
-	object_->transform_.translate_ += moveDir_ * kMoveSpeed * deltaTime;
+	// SmoothTurnを使って滑らかに旋回させる
+	object_->transform_.rotate_.y = randomWalk_->SmoothTurn(object_->transform_.rotate_.y, targetAngle, kWanderTurnSpeed_, deltaTime);
+
+	// 「現在向いている方向（正面）」のベクトルを計算して進む
+	float currentAngle = object_->transform_.rotate_.y;
+	Cygnus::Float3 forwardVec = { std::sin(currentAngle), 0.0f, std::cos(currentAngle) };
+
+	object_->transform_.translate_ += forwardVec * kMoveSpeed * deltaTime;
 }
 
 void Sphinx::StartCharge(const Cygnus::Float3& targetDir)
@@ -124,6 +152,7 @@ void Sphinx::StartAttack()
 	isAttack_ = true;
 	isMining_ = false;
 	attackTimer_ = kAttackTime_;
+	object_->transform_.translate_.y = kBaseY_;
 }
 
 void Sphinx::Attack(float deltaTime)
@@ -162,7 +191,8 @@ void Sphinx::OreMining()
 	Cygnus::Float3 frontVec = { std::sinf(angleY), 0.0f, std::cosf(angleY) };
 
 	// スフィンクスの少し前方を判定の中心にする
-	Cygnus::Float3 targetPos = {
+	Cygnus::Float3 targetPos =
+	{
 		object_->transform_.translate_.x + frontVec.x * kMiningOffset,
 		object_->transform_.translate_.y,
 		object_->transform_.translate_.z + frontVec.z * kMiningOffset
@@ -203,6 +233,27 @@ void Sphinx::Debug()
 	ImGui::Begin("Sphinx");
 
 	ImGui::DragFloat3("Translate", &object_->transform_.translate_.x, 0.01f);
+
+	if (ImGui::Button("Pause/Resume"))
+	{
+		if (isMoving_)
+		{
+			IsMoving(false);
+		}
+		else
+		{
+			IsMoving(true);
+		}
+	}
+
+	if (isMoving_)
+	{
+		ImGui::Text("Current : Move");
+	}
+	else
+	{
+		ImGui::Text("Current : Pause");
+	}
 
 	ImGui::Text("Status : ");
 	ImGui::SameLine();

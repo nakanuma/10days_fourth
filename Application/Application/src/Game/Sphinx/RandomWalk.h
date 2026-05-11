@@ -20,6 +20,11 @@ public:
 	void Update(float deltaTime, float changeTime);
 
 	/// <summary>
+	/// 角度を滑らかに補間する（最短回り）
+	/// </summary>
+	float SmoothTurn(float currentAngle, float targetAngle, float turnSpeed, float deltaTime);
+
+	/// <summary>
 	/// 歩く向きを取得
 	/// </summary>
 	/// <param name="deltaTime">デルタタイム</param>
