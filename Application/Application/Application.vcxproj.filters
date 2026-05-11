@@ -13,7 +13,7 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Scene">
+    <Filter Include="ソース ファイル\Scene">
       <UniqueIdentifier>{3af91203-2765-4be9-b18f-18c3cf0e6a43}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -42,6 +42,9 @@
     <ClCompile Include="src\Game\Ore\OreManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\StageEditor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="src\Game\Ore\DroppedOre.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -55,6 +58,10 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\Gear\GearManager.cpp">
+    <ClCompile Include="src\Game\Sphinx\Sphinx.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Sphinx\RandomWalk.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,6 +90,9 @@
     <ClInclude Include="src\Game\Ore\OreManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\StageEditor.h">
+    <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
     <ClInclude Include="src\Game\Ore\DroppedOre.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -96,6 +106,10 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\Gear\GearManager.h">
+    <ClInclude Include="src\Game\Sphinx\Sphinx.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Sphinx\RandomWalk.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -39,6 +39,12 @@ public:
 	/// </summary>
 	/// <param name="collider"></param>
 	void OnCollision(Cygnus::Collider* collider) override;
+	
+	/// <summary>
+	/// setter_À•WˆÊ’u
+	/// </summary>
+	/// <param name="translate">À•W‚ğİ’è</param>
+	void SetTranslate(const Cygnus::Float3& translate) { object_->transform_.translate_ = translate; }
 
 private:
 	// =========================================================

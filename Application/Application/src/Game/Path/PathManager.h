@@ -49,6 +49,12 @@ public:
 	/// <returns></returns>
 	size_t GetPointCount() const { return points_.size(); }
 
+	/// <summary>
+	/// ポイント座標を追加
+	/// </summary>
+	/// <param name="point">追加する座標</param>
+	void AddPoint(const Cygnus::Float3& point) { points_.push_back(point); }
+
 private:
 	// =========================================================
 	// Constants

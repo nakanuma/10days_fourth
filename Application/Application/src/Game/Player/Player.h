@@ -84,6 +84,17 @@ public:
 	/// <param name="amount">鉱石の消費数</param>
 	void ConsumeOre(uint32_t amount) { if (oreCount_ >= amount) { oreCount_ -= amount; } }
 
+	/// setter_座標位置
+	/// </summary>
+	/// <param name="translate">座標を設定</param>
+	void SetTranslate(const Cygnus::Float3& translate) { object_->transform_.translate_ = translate; }
+  
+	/// <summary>
+	/// プレイヤー座標を取得
+	/// </summary>
+	/// <returns></returns>
+	Cygnus::Float3 GetPosition() const { return object_->transform_.translate_; }
+
 private:
 	// =========================================================
 	// Internal Methods
@@ -115,6 +126,7 @@ private:
 	const uint32_t kMaxOreCount = 4;	// 所持できる鉱石の最大数
 	const uint32_t kMaxGearCount = 2;	// 所持できる歯車の最大数
 
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
@@ -126,5 +138,6 @@ private:
 
 	uint32_t oreCount_ = 0;	// 現在の所持鉱石数
 	uint32_t gearCount_ = 0; // 現在の所持歯車数
+
 };
 
