@@ -64,6 +64,13 @@ void GameResourceLoader::LoadAllModelData() {
 		"Character/Player/player.png"
 	);
 
+	// スフィンクス
+	modelManager->LoadAndRegisterModel(
+		"Sphinx",
+		"Character/Sphinx/sphinx.obj",
+		"Character/Sphinx/sphinx.png"
+	);
+
 	// ---------------------------------------------------------
 	// オブジェクト
 	// ---------------------------------------------------------
