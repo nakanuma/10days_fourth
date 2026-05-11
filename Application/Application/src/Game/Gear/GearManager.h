@@ -33,6 +33,12 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 歯車を生成して管理リストに追加（工作台での生成時に使用）
+	/// </summary>
+	/// <param name="position"></param>
+	void Spawn(const Cygnus::Float3& position);
+
 private:
 	// =========================================================
 	// Member Variables

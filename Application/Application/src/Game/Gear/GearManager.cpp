@@ -15,12 +15,12 @@ void GearManager::Initialize() {
 
 void GearManager::Update() {
 	// 全ての落ちている歯車（ドロップアイテム）を更新 + 削除判定
-	auto it = std::remove_if(droppedGears_.begin(), droppedGears_.end(), [](const std::unique_ptr<DroppedGear>& droppedOre) {
-		droppedOre->Update();
+	auto it = std::remove_if(droppedGears_.begin(), droppedGears_.end(), [](const std::unique_ptr<DroppedGear>& droppedGear) {
+		droppedGear->Update();
 
 		// プレイヤーに拾われた際の処理
-		if (droppedOre->IsPickedUp()) {
-			droppedOre->UnregisterCollider(); // コライダー登録解除
+		if (droppedGear->IsPickedUp()) {
+			droppedGear->UnregisterCollider(); // コライダー登録解除
 			return true;
 		}
 		return false;
@@ -37,5 +37,8 @@ void GearManager::Draw() {
 	}
 }
 
-
-
+void GearManager::Spawn(const Cygnus::Float3& position) { 
+	auto newGear = std::make_unique<DroppedGear>(); 
+	newGear->Initialize(position);
+	droppedGears_.push_back(std::move(newGear));
+}

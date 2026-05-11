@@ -90,6 +90,7 @@ void Player::Debug() {
 
 	ImGui::DragFloat3("Translate", &object_->transform_.translate_.x, 0.01f);
 	ImGui::Text("OreCount : %d", oreCount_);
+	ImGui::Text("GearCount : %d", gearCount_);
 
 	ImGui::End();
 #endif

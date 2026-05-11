@@ -43,7 +43,13 @@ void DroppedGear::Draw() {
 void DroppedGear::OnCollision(Cygnus::Collider* other) {
 	// プレイヤーとの衝突
 	if (other->GetTag() == "Player") {
-		
+		Player* player = static_cast<Player*>(other->GetOwner());
+
+		// プレイヤーが歯車を拾える場合
+		if (player->CanPickUpGear()) {
+			isPickedUp_ = true;    // 自身の取得フラグを立てる（消す準備）
+			player->AddGearCount(); // プレイヤーの歯車所持数を1増やす
+		}
 	}
 }
 
