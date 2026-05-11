@@ -124,7 +124,7 @@ private:
 
 	const float kBounceHeight_ = 2.0f;		// 飛び跳ねる高さ
 	const float kBounceSpeed_ = (kMoveChangeTime_ - kChargeTime_) * 25.0f;		// 飛び跳ねるスピード
-	const float kBaseY_ = 2.0f;				// 地面の基本Y座標
+	const float kBaseY_ = 2.0f;				// 地面の基本Y座標（Initializeで設定している2.0f）
 
 	// =========================================================
 	// Member Variables
