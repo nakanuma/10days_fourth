@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\UI\InterctionUI.cpp" />
+    <ClCompile Include="src\Game\UI\HUD.cpp" />
     <ClCompile Include="src\Game\Gear\DroppedGear.cpp" />
     <ClCompile Include="src\Game\Gear\GearManager.cpp" />
     <ClCompile Include="src\Game\Ore\DroppedOre.cpp" />
@@ -35,8 +37,11 @@
     <ClCompile Include="src\Game\WorkBench\WorkBench.cpp" />
     <ClCompile Include="src\Game\WorkBench\WorkBenchManager.cpp" />
     <ClCompile Include="src\Game\StageEditor.cpp" />
+    <ClCompile Include="src\Game\UI\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\UI\InterctionUI.h" />
+    <ClInclude Include="src\Game\UI\HUD.h" />
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
     <ClInclude Include="src\Game\Gear\GearManager.h" />
     <ClInclude Include="src\Game\Ore\DroppedOre.h" />
@@ -53,6 +58,7 @@
     <ClInclude Include="src\Game\WorkBench\WorkBench.h" />
     <ClInclude Include="src\Game\WorkBench\WorkBenchManager.h" />
     <ClInclude Include="src\Game\StageEditor.h" />
+    <ClInclude Include="src\Game\UI\UIManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

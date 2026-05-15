@@ -71,6 +71,7 @@ void Carrier::Debug() {
 	ImGui::Begin("Carrier");
 
 	ImGui::Checkbox("IsActive", &isActive_);
+	ImGui::Text("EnergyTimer : %.f", energyTimer_);
 	ImGui::Separator();
 	ImGui::DragFloat3("Translate", &object_->transform_.translate_.x, 0.01f);
 	ImGui::Checkbox("IsGoal", &isGoal_);

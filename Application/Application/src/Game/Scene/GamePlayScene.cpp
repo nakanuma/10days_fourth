@@ -60,7 +60,7 @@ void GamePlayScene::Initialize() {
 	objectGround_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Plane"); // モデル設定
 	objectGround_->transform_.rotate_ = {-Cygnus::PIf / 2.0f, 0.0f, 0.0f}; // 上向き
 	objectGround_->transform_.scale_ = {500.0f, 500.0f, 1.0f}; // スケール変更
-	objectGround_->materialCB_.data_->color = {0.5f, 0.5f, 0.5f, 1.0f}; // 色変更
+	objectGround_->materialCB_.data_->color = {0.82f, 0.70f, 0.55f, 1.0f}; // 色変更
 
 	// プレイヤー生成 + 初期化
 	player_ = std::make_unique<Player>();
