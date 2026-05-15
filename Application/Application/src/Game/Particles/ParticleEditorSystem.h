@@ -1,5 +1,10 @@
 #pragma once
 
+//c++
+#include <string>
+#include <cstdint>
+#include <vector>
+
 /// <summary>
 /// パーティクルエディターシステムクラス
 /// </summary>
@@ -24,10 +29,16 @@ public:
 	void Debug();
 
 private:
+	//制御対象
+	std::string targetEffectName_ = "template";
+	//保存対象
+	std::string saveFileName_ = "template";
 
-	//パーティクルインスタンス
+	//エミットカウント
+	uint32_t count_ = 10;
 
-
+	//ファイルリスト
+	std::vector<std::string> files;
 
 };
 

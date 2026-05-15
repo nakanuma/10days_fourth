@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Particles\ParticleStrage.cpp" />
     <ClCompile Include="src\Util\JsonUtil.cpp" />
     <ClCompile Include="src\Game\Particles\Particle.cpp" />
     <ClCompile Include="src\Game\Particles\ParticleEditorSystem.cpp" />
@@ -34,6 +35,7 @@
     <ClCompile Include="src\Game\Scene\SceneFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Particles\ParticleStrage.h" />
     <ClInclude Include="src\Util\JsonUtil.h" />
     <ClInclude Include="src\Game\Particles\Particle.h" />
     <ClInclude Include="src\Game\Particles\ParticleEditorSystem.h" />

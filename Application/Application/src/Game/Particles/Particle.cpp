@@ -10,33 +10,33 @@
 #include <Engine/Util/RandomGenerator.h>
 
 Particle::Particle(Cygnus::ModelManager::ModelData& model) {
-	// ƒIƒuƒWƒFƒNƒgİ’è
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè¨­å®š
 	object_.model_ = &model;
 	object_.gTransformationMatrices_.numMaxInstance_ = kMaxParticles;
 	object_.gTransformationMatrices_.Create();
 
-	// ƒrƒ‹ƒ{[ƒh“K—pİ’è
+	// ãƒ“ãƒ«ãƒœãƒ¼ãƒ‰é©ç”¨è¨­å®š
 	isBillboard_ = { false, false, false };
-	// ƒuƒŒƒ“ƒhƒ‚[ƒhİ’è
+	// ãƒ–ãƒ¬ãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰è¨­å®š
 	blendMode_ = Cygnus::BlendMode::Normal;
 }
 
 void Particle::LoadJsonData(const std::string& fileName) {
 	// =========================================================
-	// JSONƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
+	// JSONãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
 	// =========================================================
 
-	std::string fullPath = "../resources/Particles/" + fileName;
+	std::string fullPath = "resources/Particles/" + fileName;
 
 	std::optional<json> jsonData =
 		JsonUtil::GetJsonData(fullPath);
 
-	assert(jsonData && "Jsonƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñ");
+	assert(jsonData && "don't exist json file");
 
 	const json& j = jsonData.value();
 
 	// =========================================================
-	// “Ç‚İ‚ñ‚¾ƒf[ƒ^‚ğŠi”[
+	// èª­ã¿è¾¼ã‚“ã ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´
 	// =========================================================
 
 	constantsData_.minScale = {
@@ -101,31 +101,53 @@ ParticleData Particle::CreateParticle(const Cygnus::Float3& pos, const Cygnus::F
 	ParticleData p;
 	auto rand = Cygnus::RandomGenerator::GetInstance();
 
-	// ˆÊ’u
+	// åˆæœŸä½ç½®
 	p.transform.translate_ = pos;
-	// ƒXƒP[ƒ‹
-	p.transform.scale_ = kScale;
-	// ‘¬“xƒxƒNƒgƒ‹
-	Cygnus::Float3 baseDir = Cygnus::Float3::Normalize(velocity) * -1.0f;				// ˆø”‚Åó‚¯æ‚Á‚½•ûŒü‚Æ‹tŒü‚«‚É‚·‚é
-	Cygnus::Float3 randDir = rand->RandomValue({ -kDirectionSpread, 0.0f, -kDirectionSpread }, { kDirectionSpread, 0.0f, kDirectionSpread }); // •ûŒü‚ğƒoƒ‰‚Â‚©‚¹‚é‚½‚ß‚ÌƒIƒtƒZƒbƒg
-	p.velocity = Cygnus::Float3::Normalize(baseDir + randDir) * rand->RandomValue(kMinSpeed, kMaxSpeed);
-	// ‰ñ“]iis•ûŒü‚ğŒü‚­‚æ‚¤‚Éj
-	Cygnus::Float3 dir = Cygnus::Float3::Normalize(p.velocity);
-	float yaw = std::atan2(dir.x, dir.z);
-	float pitch = -std::asin(dir.y);
-	p.transform.rotate_ = { -pitch, -yaw, 0.0f };
-	// F
-	p.color = kInitialColor;
-	// ¶‘¶ŠÔ
-	p.lifeTime = rand->RandomValue(kMinLifeTime, kMaxLifeTime);
-	// Œo‰ßŠÔ
+	// åˆæœŸã‚¹ã‚±ãƒ¼ãƒ«
+	p.transform.scale_ = rand->RandomValue(constantsData_.minScale, constantsData_.maxScale);
+	// åˆæœŸå›è»¢
+	angle;
+	p.transform.rotate_ = { 0.0f, 0.0f, 0.0f};
+	
+	// æ›´æ–°é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«
+	velocity;
+	p.updateTransform.translate_ = rand->RandomValue(constantsData_.minVelocity, constantsData_.maxVelocity);
+	//æ›´æ–°ã‚¹ã‚±ãƒ¼ãƒ«
+	p.updateTransform.scale_ = rand->RandomValue(constantsData_.minScaleSpeed, constantsData_.maxScaleSpeed);
+	// æ›´æ–°å›è»¢
+	p.updateTransform.rotate_ = rand->RandomValue(constantsData_.minRotationSpeed, constantsData_.maxRotationSpeed);
+
+	// æ›´æ–°åŠ é€Ÿåº¦
+	p.accerelation = rand->RandomValue(constantsData_.minAccerelation, constantsData_.maxAccerelation);
+	
+	// è‰²
+	p.color = constantsData_.startColor;
+	// ç”Ÿå­˜æ™‚é–“
+	p.lifeTime = rand->RandomValue(constantsData_.minLifeTime, constantsData_.maxLifeTime);
+	// çµŒéæ™‚é–“
 	p.currentTime = 0.0f;
-	// ‰ŠúƒXƒP[ƒ‹
-	p.initScale = p.transform.scale_;
+
+	// ãƒ“ãƒ«ãƒœãƒ¼ãƒ‰è¨­å®š
+	isBillboard_ = { constantsData_.isBillboard, constantsData_.isBillboard, constantsData_.isBillboard };
+	// ãƒ–ãƒ¬ãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰è¨­å®š
+	blendMode_ = constantsData_.blendMode;
 
 	return p;
 }
 
 void Particle::UpdateParticle(ParticleData& p, float dt) {
+
+	// è‰²ã®ç·šå½¢è£œé–“
+	p.color = Cygnus::Float4::Lerp(constantsData_.startColor, constantsData_.endColor, p.currentTime / p.lifeTime);
+
+	// ã‚¹ã‚±ãƒ¼ãƒ«ã®æ›´æ–°
+	p.transform.scale_ += p.updateTransform.scale_ * dt;
+	// å›è»¢ã®æ›´æ–°
+	p.transform.rotate_ += p.updateTransform.rotate_ * dt;
+	// é€Ÿåº¦ã«åŠ é€Ÿåº¦ã‚’åŠ ç®—
+	p.updateTransform.translate_ += p.accerelation * dt;
+	// ä½ç½®ã®æ›´æ–°
+	p.transform.translate_ += p.updateTransform.translate_ * dt;
+
 
 }

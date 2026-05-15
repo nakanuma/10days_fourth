@@ -24,7 +24,7 @@ void ParticleEditorScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
 	// カメラのインスタンスを生成
-	camera_ = std::make_unique<Cygnus::Camera>(Cygnus::Float3{ 0.0f, 80.0f, -60.0f }, Cygnus::Float3{ 1.0f, 0.0f, 0.0f }, 0.45f);
+	camera_ = std::make_unique<Cygnus::Camera>(Cygnus::Float3{ 0.0f, 0.0f, -20.0f }, Cygnus::Float3{ 0.0f, 0.0f, 0.0f },0.45f);
 	Cygnus::Camera::Set(camera_.get()); // 現在のカメラをセット
 
 	// SpriteCommonの生成と初期化
@@ -49,15 +49,12 @@ void ParticleEditorScene::Initialize() {
 	postEffectManager_->Initialize();
 
 	///
-	///	↓ ゲームシーン用
+	///	↓ エディターシーン用
 	///
 
-	// 地面オブジェクト生成
-	objectGround_ = std::make_unique<Cygnus::Object3D>();
-	objectGround_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Plane"); // モデル設定
-	objectGround_->transform_.rotate_ = { -Cygnus::PIf / 2.0f, 0.0f, 0.0f }; // 上向き
-	objectGround_->transform_.scale_ = { 500.0f, 500.0f, 1.0f }; // スケール変更
-	objectGround_->materialCB_.data_->color = { 0.5f, 0.5f, 0.5f, 1.0f }; // 色変更
+	particleEditorSystem_ = std::make_unique<ParticleEditorSystem>();
+	particleEditorSystem_->Initialize();
+
 
 }
 
@@ -76,9 +73,8 @@ void ParticleEditorScene::Update() {
 	///	オブジェクト更新処理
 	/// 
 
-	// 地面オブジェクト更新
-	objectGround_->UpdateMatrix();
-	
+	particleEditorSystem_->Update();
+	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);
 
 	///
 	///	
@@ -152,9 +148,7 @@ void ParticleEditorScene::Draw() {
 	Cygnus::SkyBoxManager::GetInstance()->Draw();
 	// -----------------------------------------------
 
-	// 地面オブジェクト描画
-	objectGround_->Draw();
-	
+
 
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
@@ -223,4 +217,9 @@ void ParticleEditorScene::Debug() {
 
 	ImGui::End();
 #endif
+
+#ifdef USE_IMGUI
+	particleEditorSystem_->Debug();
+#endif
+
 }

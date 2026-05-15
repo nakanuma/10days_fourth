@@ -8,34 +8,37 @@
 #include <Engine/ParticleEffect/BaseParticleEffect.h>
 
 /// <summary>
-/// ƒp[ƒeƒBƒNƒ‹ƒf[ƒ^
+/// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 struct ParticleData {
-	Cygnus::Transform initTransform;	/* ‰Šúó‘Ô */
-	Cygnus::Transform updateTransform;	/* XVó‘Ô */
-	Cygnus::Float4 color;				/* F */
-	float lifeTime;						/* ¶‘¶ŠÔ */
-	float currentTime;					/* Œo‰ßŠÔ */
+	Cygnus::Transform transform;		/* ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ  */
+	Cygnus::Transform updateTransform;	/* æ›´æ–°ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ  */
+	Cygnus::Float3 accerelation;		/* åŠ é€Ÿåº¦ */
+	Cygnus::Float4 color;				/* è‰² */
+	float lifeTime;						/* ç”Ÿå­˜æ™‚é–“ */
+	float currentTime;					/* çµŒéæ™‚é–“ */
 };
 
 /// <summary>
-/// ’è”ƒf[ƒ^
+/// å®šæ•°ãƒ‡ãƒ¼ã‚¿
 /// </summary>
 struct ConstantsData {
-	Cygnus::Float3 minScale;				/* Å¬ƒXƒP[ƒ‹ */
-	Cygnus::Float3 maxScale;				/* Å‘åƒXƒP[ƒ‹ */
-	Cygnus::Float3 minVelocity;				/* Å¬‘¬“x */
-	Cygnus::Float3 maxVelocity;				/* Å‘å‘¬“x */
-	Cygnus::Float4 startColor;				/* ŠJnF */
-	Cygnus::Float4 endColor;				/* I—¹F */
-	float minLifeTime;						/* Å¬¶‘¶ŠÔ */
-	float maxLifeTime;						/* Å‘å¶‘¶ŠÔ */
-	Cygnus::Float3 minRotationSpeed;		/* Å¬‰ñ“]‘¬“x */
-	Cygnus::Float3 maxRotationSpeed;		/* Å‘å‰ñ“]‘¬“x */
-	Cygnus::Float3 minAccerelation;			/* Å¬‰Á‘¬“x */
-	Cygnus::Float3 maxAccerelation;			/* Å‘å‰Á‘¬“x */
-	bool isBillboard;						/* ƒrƒ‹ƒ{[ƒh‚Ì—L–³ */
-	Cygnus::BlendMode blendMode;			/* ƒuƒŒƒ“ƒhƒ‚[ƒh */
+	Cygnus::Float3 minScale;				/* æœ€å°ã‚¹ã‚±ãƒ¼ãƒ« */
+	Cygnus::Float3 maxScale;				/* æœ€å¤§ã‚¹ã‚±ãƒ¼ãƒ« */
+	Cygnus::Float4 startColor;				/* é–‹å§‹è‰² */
+	Cygnus::Float4 endColor;				/* çµ‚äº†è‰² */
+	float minLifeTime;						/* æœ€å°ç”Ÿå­˜æ™‚é–“ */
+	float maxLifeTime;						/* æœ€å¤§ç”Ÿå­˜æ™‚é–“ */
+	Cygnus::Float3 minVelocity;				/* æœ€å°é€Ÿåº¦ */
+	Cygnus::Float3 maxVelocity;				/* æœ€å¤§é€Ÿåº¦ */
+	Cygnus::Float3 minRotationSpeed;		/* æœ€å°å›è»¢é€Ÿåº¦ */
+	Cygnus::Float3 maxRotationSpeed;		/* æœ€å¤§å›è»¢é€Ÿåº¦ */
+	Cygnus::Float3 minScaleSpeed;			/* æœ€å°ã‚¹ã‚±ãƒ¼ãƒ«é€Ÿåº¦ */
+	Cygnus::Float3 maxScaleSpeed;			/* æœ€å¤§ã‚¹ã‚±ãƒ¼ãƒ«é€Ÿåº¦ */
+	Cygnus::Float3 minAccerelation;			/* æœ€å°åŠ é€Ÿåº¦ */
+	Cygnus::Float3 maxAccerelation;			/* æœ€å¤§åŠ é€Ÿåº¦ */
+	bool isBillboard;						/* ãƒ“ãƒ«ãƒœãƒ¼ãƒ‰ã®æœ‰ç„¡ */
+	Cygnus::BlendMode blendMode;			/* ãƒ–ãƒ¬ãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰ */
 };
 
 class Particle : public Cygnus::BaseParticleEffect<ParticleData> {
@@ -45,16 +48,32 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <param name="model">ƒ‚ƒfƒ‹ƒf[ƒ^</param>
+	/// <param name="model">ãƒ¢ãƒ‡ãƒ«ãƒ‡ãƒ¼ã‚¿</param>
 	Particle(Cygnus::ModelManager::ModelData& model);
 
 	/// <summary>
-	/// JSONƒf[ƒ^‚Ì“Ç‚İ‚İ
+	/// JSONãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿
 	/// </summary>
 	/// <param name="fileName"></param>
 	void LoadJsonData(const std::string& fileName);
+
+	// =========================================================
+	// Accessor
+	// =========================================================
+
+	/// <summary>
+	/// å®šæ•°ãƒ‡ãƒ¼ã‚¿ã®å–å¾—
+	/// </summary>
+	/// <returns></returns>
+	ConstantsData GetConstantsData() const { return constantsData_; }
+	/// <summary>
+	/// å®šæ•°ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
+	/// </summary>
+	/// <param name="data"></param>
+	void SetConstantsData(const ConstantsData& data) { constantsData_ = data; }
+
 
 protected:
 	// =========================================================
@@ -62,19 +81,19 @@ protected:
 	// =========================================================
 
 	/// <summary>
-	/// ƒp[ƒeƒBƒNƒ‹ŒÅ—L‚Ì¶¬ˆ—‚ğs‚¢‚Ü‚·B
+	/// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«å›ºæœ‰ã®ç”Ÿæˆå‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
 	/// </summary>
-	/// <param name="pos">‰ŠúˆÊ’u</param>
-	/// <param name="velocity">‘¬“xƒxƒNƒgƒ‹</param>
-	/// <param name="angle">‰Šú‰ñ“]Šp</param>
-	/// <returns>ƒp[ƒeƒBƒNƒ‹ƒf[ƒ^</returns>
+	/// <param name="pos">åˆæœŸä½ç½®</param>
+	/// <param name="velocity">é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«</param>
+	/// <param name="angle">åˆæœŸå›è»¢è§’</param>
+	/// <returns>ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ãƒ‡ãƒ¼ã‚¿</returns>
 	ParticleData CreateParticle(const Cygnus::Float3& pos, const Cygnus::Float3& velocity, float angle) override;
 
 	/// <summary>
-	/// ƒp[ƒeƒBƒNƒ‹‚Ì–ˆƒtƒŒ[ƒ€‚ÌXVˆ—‚ğs‚¢‚Ü‚·B
+	/// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã®æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ã®æ›´æ–°å‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
 	/// </summary>
-	/// <param name="p">ƒp[ƒeƒBƒNƒ‹ƒf[ƒ^</param>
-	/// <param name="dt">ƒfƒ‹ƒ^ƒ^ƒCƒ€</param>
+	/// <param name="p">ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ãƒ‡ãƒ¼ã‚¿</param>
+	/// <param name="dt">ãƒ‡ãƒ«ã‚¿ã‚¿ã‚¤ãƒ </param>
 	void UpdateParticle(ParticleData& p, float dt) override;
 
 private:
@@ -82,7 +101,7 @@ private:
 	// Constants
 	// =========================================================
 
-	//’è”ƒf[ƒ^
+	//å®šæ•°ãƒ‡ãƒ¼ã‚¿
 	ConstantsData constantsData_;
 
 };

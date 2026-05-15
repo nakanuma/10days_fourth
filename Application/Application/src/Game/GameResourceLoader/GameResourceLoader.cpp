@@ -7,6 +7,7 @@
 #include <SoundManager.h>
 
 // Application
+#include <src/Game/Particles/Particle.h>
 
 GameResourceLoader* GameResourceLoader::GetInstance() {
 	static GameResourceLoader instance;
@@ -84,7 +85,8 @@ void GameResourceLoader::LoadAllModelData() {
 }
 
 void GameResourceLoader::RegisterAllParticleEffect() {
-	RegisterParticle
+	RegisterParticle("template", "Cube");
+	RegisterParticle("add1", "Cube");
 }
 
 void GameResourceLoader::LoadAllSoundData() {

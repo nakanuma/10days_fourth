@@ -21,7 +21,7 @@
 // ---------------------------------------------------------
 // Application Includes
 // ---------------------------------------------------------
-
+#include <src/Game/Particles/ParticleEditorSystem.h>
 
 // =========================================================
 // ゲームプレイシーンクラス
@@ -87,4 +87,7 @@ private:
 	// ----- Others -----
 	uint32_t shadowMapHandle_;                                     /* シャドウマップテクスチャ */
 	std::unique_ptr<Cygnus::PostEffectManager> postEffectManager_; /* ポストエフェクト管理クラス */
+
+	std::unique_ptr<ParticleEditorSystem> particleEditorSystem_; /* パーティクルエディタシステム */
+
 };
