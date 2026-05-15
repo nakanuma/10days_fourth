@@ -81,6 +81,8 @@ public:
 			obj->transform_.translate_.y = owner->GetBaseY() + jumpY;
 		}
 
+		owner->UpdateAttackSign(elapsed / chargeTime);
+
 		if (elapsed >= chargeTime)
 		{
 			GetSM()->ChangeState(SphinxState::Attack);
