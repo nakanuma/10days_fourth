@@ -1,6 +1,6 @@
 #include "InterctionUI.h"
 
-void InterctionUI::Initialize() {
+void InterctionUI::Initialize(Cygnus::SpriteCommon* spriteCommon) {
 
 }
 

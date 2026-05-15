@@ -88,6 +88,9 @@ void GamePlayScene::Initialize() {
 
 	sphinx_ = std::make_unique<Sphinx>();
 	sphinx_->Initialize();
+
+	// UI管理クラス初期化
+	UIManager::GetInstance()->Initialize();
 }
 
 void GamePlayScene::Finalize() { }
@@ -118,6 +121,8 @@ void GamePlayScene::Update() {
 	WorkBenchManager::GetInstance()->Update();
 	// 歯車オブジェクト管理クラス更新
 	GearManager::GetInstance()->Update();
+	// UI管理クラス更新
+	UIManager::GetInstance()->Update();
 
 	///
 	///	
@@ -235,7 +240,8 @@ void GamePlayScene::Draw() {
 	/// ↓ ここからスプライト描画
 	/// =========================================================
 
-
+	// UI管理クラス描画
+	UIManager::GetInstance()->Draw();
 
 	/// =========================================================
 	/// ↑ ここまでスプライト描画
