@@ -10,7 +10,7 @@ PathManager* PathManager::GetInstance() {
 
 void PathManager::Initialize() {
 	points_.clear();
-	// ƒfƒoƒbƒO—p‚Éƒxƒ^‘Å‚¿‚ÅÀ•W‚ğ’Ç‰ÁiTodo : ƒGƒfƒBƒ^‚Å’Ç‰Á‚Å‚«‚é‚æ‚¤‚É•ÏX‚·‚éj
+	// ãƒ‡ãƒãƒƒã‚°ç”¨ã«ãƒ™ã‚¿æ‰“ã¡ã§åº§æ¨™ã‚’è¿½åŠ ï¼ˆTodo : ã‚¨ãƒ‡ã‚£ã‚¿ã§è¿½åŠ ã§ãã‚‹ã‚ˆã†ã«å¤‰æ›´ã™ã‚‹ï¼‰
 	points_.push_back({ 0.0f, 1.0f, 0.0f });
 	points_.push_back({ 10.0f, 1.0f, 0.0f });
 	points_.push_back({ 10.0f, 1.0f, -10.0f });
@@ -22,7 +22,7 @@ void PathManager::Initialize() {
 void PathManager::Draw() {
 	auto lineDrawer = Cygnus::LineDrawer::GetInstance();
 
-	// ‘S‚Ä‚Ìƒ|ƒCƒ“ƒg‚ğü‚ÅŒq‚®
+	// å…¨ã¦ã®ãƒã‚¤ãƒ³ãƒˆã‚’ç·šã§ç¹‹ã
 	for (size_t i = 0; i < points_.size() - 1; ++i) {
 		lineDrawer->RegisterLine(points_[i], points_[i + 1], kPathColor);
 	}

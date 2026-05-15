@@ -1,4 +1,4 @@
-﻿#include "GamePlayScene.h"
+#include "GamePlayScene.h"
 #include "DirectXBase.h"
 #include "ImguiWrapper.h"
 #include "RTVManager.h"
@@ -20,6 +20,8 @@
 // Application
 #include <src/Game/Path/PathManager.h>
 #include <src/Game/Ore/OreManager.h>
+#include <src/Game/WorkBench/WorkBenchManager.h>
+#include <src/Game/Gear/GearManager.h>
 
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
@@ -67,12 +69,25 @@ void GamePlayScene::Initialize() {
 	// 経路管理クラス初期化
 	PathManager::GetInstance()->Initialize();
 
+	/*stageEditor_ = std::make_unique<StageEditor>();
+	stageEditor_->LoadJsonFile("resources/stageEditor/stage_1.json");
+	stageEditor_->SpitObjects(player_);*/
+
 	// 経路に沿って移動するオブジェクト生成 + 初期化
 	carrier_ = std::make_unique<Carrier>();
 	carrier_->Initialize();
 
 	// 鉱石オブジェクト管理クラス初期化
 	OreManager::GetInstance()->Initialize();
+
+	// 工作台オブジェクト管理クラス初期化
+	WorkBenchManager::GetInstance()->Initialize();
+
+	// 歯車オブジェクト管理クラス初期化
+	GearManager::GetInstance()->Initialize();
+
+	sphinx_ = std::make_unique<Sphinx>();
+	sphinx_->Initialize();
 }
 
 void GamePlayScene::Finalize() { }
@@ -96,8 +111,13 @@ void GamePlayScene::Update() {
 	player_->Update(dt);
 	// 経路に沿って移動するオブジェクト更新
 	carrier_->Update(dt);
+	sphinx_->Update(dt, player_->GetPosition());
 	// 鉱石オブジェクト管理クラス更新
 	OreManager::GetInstance()->Update();
+	// 工作台オブジェクト管理クラス更新
+	WorkBenchManager::GetInstance()->Update();
+	// 歯車オブジェクト管理クラス更新
+	GearManager::GetInstance()->Update();
 
 	///
 	///	
@@ -164,7 +184,7 @@ void GamePlayScene::Draw() {
 	/// ↓ ここから3Dオブジェクト描画
 	/// =========================================================
 
-#pragma region メインシーンの3Dオブジェクトのレンダリングを開始
+#pragma region
 	postEffectManager_->BeginMainScene();
 
 	// スカイボックス描画
@@ -179,8 +199,13 @@ void GamePlayScene::Draw() {
 	PathManager::GetInstance()->Draw();
 	// 経路に沿って移動するオブジェクト描画
 	carrier_->Draw();
+	sphinx_->Draw();
 	// 鉱石オブジェクト管理クラス描画
 	OreManager::GetInstance()->Draw();
+	// 工作台オブジェクト管理クラス描画
+	WorkBenchManager::GetInstance()->Draw();
+	// 歯車オブジェクト管理クラス描画
+	GearManager::GetInstance()->Draw();
 
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
@@ -226,6 +251,9 @@ void GamePlayScene::Draw() {
 	player_->Debug();
 	// 経路に沿って動くオブジェクト
 	carrier_->Debug();
+	//　ステージエディタの更新(jsonの生成処理)
+	/*stageEditor_->Update();*/
+	sphinx_->Debug();
 #endif
 
 	// ImGuiの内部コマンドを生成する

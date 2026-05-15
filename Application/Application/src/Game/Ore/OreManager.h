@@ -5,7 +5,7 @@
 #include <src/Game/Ore/DroppedOre.h>
 
 // =========================================================
-// zÎƒIƒuƒWƒFƒNƒgŠÇ—ƒNƒ‰ƒX
+// é‰±çŸ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç®¡ç†ã‚¯ãƒ©ã‚¹
 // =========================================================
 class OreManager
 {
@@ -15,40 +15,70 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ƒCƒ“ƒXƒ^ƒ“ƒXæ“¾
+	/// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	static OreManager* GetInstance();
 
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// w’èÀ•W‚Ìˆê’è”ÍˆÍ“à‚É‚ ‚ézÎ‚ğíœiƒvƒŒƒCƒ„[‘¤‚ÅÌŒ@‚ÉŒÄ‚Ño‚µj
+	/// é‰±çŸ³ã®è¿½åŠ 
+	/// </summary>
+	/// <param name="translate">åº§æ¨™ä½ç½®(ä¸­å¿ƒ)</param>
+	/// <param name="size">å¤§ãã•</param>
+	void AddPoint(const Cygnus::Float3& translate, const Cygnus::Float3& size);
+
+	/// æŒ‡å®šåº§æ¨™ã®ä¸€å®šç¯„å›²å†…ã«ã‚ã‚‹é‰±çŸ³ã‚’å‰Šé™¤ï¼ˆãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å´ã§æ¡æ˜æ™‚ã«å‘¼ã³å‡ºã—ï¼‰
 	/// </summary>
 	/// <param name="targetPos"></param>
 	/// <param name="range"></param>
 	/// <returns></returns>
 	bool TryBreakAt(const Cygnus::Float3& targetPos, float range);
 
+	/// <summary>
+	/// æŒ‡å®šåº§æ¨™ã®ä¸€å®šç¯„å›²å†…ã«ã‚ã‚‹å…¨ã¦ã®é‰±çŸ³ã‚’å‰Šé™¤ï¼ˆçˆ†ç™ºã‚„åºƒç¯„å›²æ”»æ’ƒãªã©ã‚’æƒ³å®šï¼‰
+	/// </summary>
+	/// <param name="targetPos">ä¸­å¿ƒåº§æ¨™</param>
+	/// <param name="range">åŠå¾„</param>
+	/// <returns>1ã¤ã§ã‚‚ç ´å£Šã—ãŸã‚‰true</returns>
+	bool BreakAllAt(const Cygnus::Float3& targetPos, float range);
+  
 private:
+	// =========================================================
+	// Internal Methods
+	// =========================================================
+
+	/// <summary>
+	/// è¨­å®šä½ç½®ã‚’é‰±çŸ³ã®å¡Šã®ä¸­å¿ƒç‚¹ã«ã™ã‚‹
+	/// </summary>
+	/// <param name="half">ã‚µã‚¤ã‚ºã®åŠåˆ†</param>
+	/// <param name="slippagePoint">å¶æ•°ã®æ™‚ã®ã‚ºãƒ¬</param>
+	/// <param name="size">ã‚µã‚¤ã‚º</param>
+	void HalfChecker(float& half, float& slippagePoint, float size);
+  
+private:
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
+	std::vector<std::unique_ptr<Ore>> ores_;	// å…¨ã¦ã®é‰±çŸ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç®¡ç†
 
-	std::vector<std::unique_ptr<Ore>> ores_;	// ‘S‚Ä‚ÌzÎƒIƒuƒWƒFƒNƒg‚ğŠÇ—
-	std::vector<std::unique_ptr<DroppedOre>> droppedOres_;	// ‘S‚Ä‚Ì—‚¿‚Ä‚¢‚éiƒhƒƒbƒvƒAƒCƒeƒ€jzÎƒIƒuƒWƒFƒNƒg‚ğŠÇ—
+	//åŠåˆ†
+	const float kHalf_ = 0.5f;
+	std::vector<std::unique_ptr<DroppedOre>> droppedOres_;	// å…¨ã¦ã®è½ã¡ã¦ã„ã‚‹ï¼ˆãƒ‰ãƒ­ãƒƒãƒ—ã‚¢ã‚¤ãƒ†ãƒ ï¼‰é‰±çŸ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç®¡ç†
 };
 

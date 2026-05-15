@@ -7,10 +7,9 @@
 #include <Collider/CollisionManager.h>
 
 // =========================================================
-// 鉱石オブジェクトクラス
+// 工作台オブジェクトクラス
 // =========================================================
-class Ore : public Cygnus::ICollisionCallback
-{
+class WorkBench : public Cygnus::ICollisionCallback {
 public:
 	// =========================================================
 	// Public Methods
@@ -19,6 +18,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
+	/// <param name="translate"></param>
 	void Initialize(const Cygnus::Float3 translate);
 
 	/// <summary>
@@ -37,20 +37,9 @@ public:
 	/// <param name="other"></param>
 	void OnCollision(Cygnus::Collider* other) override;
 
-	/// <summary>
-	/// コライダーの登録解除
-	/// </summary>
-	void UnregisterCollider() { Cygnus::CollisionManager::GetInstance()->Unregister(collider_.get()); }
-
 	// =========================================================
 	// Accessor
 	// =========================================================
-
-	/// <summary>
-	/// 位置を取得します。
-	/// </summary>
-	/// <returns></returns>
-	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; }
 
 private:
 	// =========================================================
@@ -58,12 +47,17 @@ private:
 	// =========================================================
 
 	const Cygnus::Float3 kColliderSize = {1.0f, 1.0f, 1.0f};	// コライダーサイズ
+	const Cygnus::Float3 kSensorSize = {2.5f, 1.0f, 2.5f};	// クラフト範囲判定用コライダーサイズ（本体よりやや大きめ）
+
+	const uint32_t kRequiredOreCount = 2;	// 歯車の作成に使用する鉱石数
+
+	const float kDropOffset = -2.0f;	// ドロップの前方オフセット
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
-	
-	std::unique_ptr<Cygnus::Object3D> object_;	// オブジェクト
-	std::unique_ptr<Cygnus::Collider> collider_;	// コライダー
-};
 
+	std::unique_ptr<Cygnus::Object3D> object_;	// オブジェクト
+	std::unique_ptr<Cygnus::Collider> collider_;	// コライダー（作業台本体）
+	std::unique_ptr<Cygnus::Collider> colliderSensor_;	// コライダー（クラフト範囲判定用）
+};

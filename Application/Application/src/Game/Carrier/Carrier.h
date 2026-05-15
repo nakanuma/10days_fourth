@@ -5,7 +5,7 @@
 #include <Collider/CollisionManager.h>
 
 // =========================================================
-// Œo˜H‚É‰ˆ‚Á‚Ä“®‚­ƒIƒuƒWƒFƒNƒgƒNƒ‰ƒX
+// çµŒè·¯ã«æ²¿ã£ã¦ç§»å‹•ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹
 // =========================================================
 class Carrier : public Cygnus::ICollisionCallback
 {
@@ -15,30 +15,36 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update(float deltaTime);
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// ƒfƒoƒbƒO•\¦
+	/// ãƒ‡ãƒãƒƒã‚°æç”»
 	/// </summary>
 	void Debug();
 
 	/// <summary>
-	/// Õ“ËƒR[ƒ‹ƒoƒbƒN
+	/// è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 	/// </summary>
 	/// <param name="collider"></param>
-	void OnCollision(Cygnus::Collider* collider) override;
+	void OnCollision(Cygnus::Collider* other) override;
+	
+	/// <summary>
+	/// setter_åº§æ¨™ä½ç½®
+	/// </summary>
+	/// <param name="translate">åº§æ¨™ã‚’è¨­å®š</param>
+	void SetTranslate(const Cygnus::Float3& translate) { object_->transform_.translate_ = translate; }
 
 private:
 	// =========================================================
@@ -46,29 +52,44 @@ private:
 	// =========================================================
 
 	/// <summary>
-	/// Œo˜H‚É‰ˆ‚Á‚½ˆÚ“®ˆ—
+	/// çµŒè·¯ã«æ²¿ã£ã¦ç§»å‹•
 	/// </summary>
 	/// <param name="deltaTime"></param>
 	void MoveAlongPath(float deltaTime);
+
+	/// <summary>
+	/// æ­¯è»Šã‚’ä½¿ç”¨ã•ã‚ŒãŸéš›ã®å‡¦ç†
+	/// </summary>
+	void SupplyGear();
 
 private:
 	// =========================================================
 	// Constants
 	// =========================================================
 
-	const float kMoveSpeed = 2.0f;	// ˆÚ“®‘¬“x
-	const Cygnus::Float3 kColliderSize = {1.0f, 1.0f, 1.0f};	// ƒRƒ‰ƒCƒ_[ƒTƒCƒY
+	const Cygnus::Float3 kColliderSize = {1.0f, 1.0f, 1.0f}; // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚µã‚¤ã‚º
+	const Cygnus::Float3 kSensorSize = {2.5f, 1.0f, 2.5f};	// æ­¯è»Šæ³¨å…¥ç¯„å›²ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚µã‚¤ã‚º
+
+	const uint32_t kRequiredGearCount = 1;	// 1å›ã®æ³¨å…¥ã§æ¶ˆè²»ã™ã‚‹æ­¯è»Šã®æ•°
+
+	const float kMoveSpeed = 2.0f;	// ç§»å‹•é€Ÿåº¦
+	const float kMaxEnergy = 8.0f;	// æ­¯è»Šæ³¨å…¥æ™‚ã®å‹•ä½œæ™‚é–“ï¼ˆç§’ï¼‰
+	const float kAccelerationTime = 1.0f;	// å‹•ãå‡ºã—ã®æ»‘ã‚‰ã‹ã•ï¼ˆç§’ï¼‰
+	const float kDecelerationTime = 1.5f;	// åœæ­¢æ™‚ã®æ»‘ã‚‰ã‹ã•ï¼ˆç§’ï¼‰
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	std::unique_ptr<Cygnus::Object3D> object_;	// ƒIƒuƒWƒFƒNƒg
-	std::unique_ptr<Cygnus::Collider> collider_;	// ƒRƒ‰ƒCƒ_[
+	std::unique_ptr<Cygnus::Object3D> object_;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	std::unique_ptr<Cygnus::Collider> collider_;	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ï¼ˆæœ¬ä½“ï¼‰
+	std::unique_ptr<Cygnus::Collider> colliderSensor_;	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ï¼ˆæ­¯è»Šæ³¨å…¥ç¯„å›²ç”¨ï¼‰
 
-	bool isGoal_ = false;	// ƒS[ƒ‹“’Bƒtƒ‰ƒO
+	size_t targetIndex_ = 1; // ç§»å‹•çµŒè·¯ã«ä½¿ç”¨ã™ã‚‹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 
-	size_t targetIndex_ = 1;	// Ÿ‚ÉŒü‚©‚¤ƒ|ƒCƒ“ƒg‚Ì”Ô†
+	bool isGoal_ = false;	// ã‚´ãƒ¼ãƒ«æ¸ˆãƒ•ãƒ©ã‚°
+	bool isActive_ = false; // æœ‰åŠ¹åŒ–ãƒ•ãƒ©ã‚°
 
-	bool isActive_ = false;	// —LŒø‰»ƒtƒ‰ƒO
+	float energyTimer_ = 0.0f;	// æ®‹ã‚Šå‹•ä½œæ™‚é–“
+	float currentVelocityRate_ = 0.0f;	// ç¾åœ¨ã®é€Ÿåº¦å€ç‡ï¼ˆ0.0f ~ 1.0fï¼‰ï¼ˆå‹•ãå‡ºã—ãƒ»åœæ­¢æ™‚ã®æ»‘ã‚‰ã‹ãªç§»å‹•ã«ä½¿ç”¨ï¼‰
 };

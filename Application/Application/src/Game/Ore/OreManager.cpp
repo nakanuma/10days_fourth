@@ -7,7 +7,8 @@ OreManager* OreManager::GetInstance() {
 
 void OreManager::Initialize() {
 	ores_.clear();
-	// ƒfƒoƒbƒO—p‚Éƒxƒ^‘Å‚¿‚ÅzÎ‚ğ’Ç‰ÁiTodo : ƒGƒfƒBƒ^‚Å’Ç‰Á‚Å‚«‚é‚æ‚¤‚É•ÏX‚·‚éj
+
+	// ãƒ‡ãƒãƒƒã‚°ç”¨ã«ãƒ™ã‚¿æ‰“ã¡ã§é‰±çŸ³ã‚’è¿½åŠ ï¼ˆTodo : ã‚¨ãƒ‡ã‚£ã‚¿ã§è¿½åŠ ã§ãã‚‹ã‚ˆã†ã«å¤‰æ›´ã™ã‚‹ï¼‰
 	for(size_t i = 0; i < 3; ++i) {
 		for(size_t j = 0; j < 3; ++j) {
 			auto newOre = std::make_unique<Ore>();
@@ -18,65 +19,102 @@ void OreManager::Initialize() {
 }
 
 void OreManager::Update() {
-	// ‘S‚Ä‚ÌzÎ‚ğXV
+	// å…¨ã¦ã®é‰±çŸ³ã‚’æ›´æ–°
 	for(auto& ore : ores_) {
 		ore->Update();
 	}
 
-	// ‘S‚Ä‚Ì—‚¿‚Ä‚¢‚ézÎiƒhƒƒbƒvƒAƒCƒeƒ€j‚ğXV + íœ”»’è
+	// å…¨ã¦ã®è½ã¡ã¦ã„ã‚‹é‰±çŸ³ï¼ˆãƒ‰ãƒ­ãƒƒãƒ—ã‚¢ã‚¤ãƒ†ãƒ ï¼‰ã‚’æ›´æ–° + å‰Šé™¤åˆ¤å®š
 	auto it = std::remove_if(droppedOres_.begin(), droppedOres_.end(), [](const std::unique_ptr<DroppedOre>& droppedOre) { 
 		droppedOre->Update();
 
-		// ƒvƒŒƒCƒ„[‚ÉE‚í‚ê‚½Û‚Ìˆ—
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«æ‹¾ã‚ã‚ŒãŸéš›ã®å‡¦ç†
 		if (droppedOre->IsPickedUp()) {
-			droppedOre->UnregisterCollider(); // ƒRƒ‰ƒCƒ_[“o˜^‰ğœ
+			droppedOre->UnregisterCollider(); // ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç™»éŒ²è§£é™¤
 			return true;
 		}
 		return false;
 	});
 	if (it != droppedOres_.end()) {
-		droppedOres_.erase(it, droppedOres_.end()); // ”z—ñ‚©‚çíœ
+		droppedOres_.erase(it, droppedOres_.end()); // é…åˆ—ã‹ã‚‰å‰Šé™¤
 	}
 }
 
 void OreManager::Draw() {
-	// ‘S‚Ä‚ÌzÎ‚ğ•`‰æ
+	// å…¨ã¦ã®é‰±çŸ³ã‚’æç”»
 	for(auto& ore : ores_) {
 		ore->Draw();
 	}
 
-	// ‘S‚Ä‚Ì—‚¿‚Ä‚¢‚ézÎiƒhƒƒbƒvƒAƒCƒeƒ€j‚ğXV
+  // å…¨ã¦ã®è½ã¡ã¦ã„ã‚‹é‰±çŸ³ï¼ˆãƒ‰ãƒ­ãƒƒãƒ—ã‚¢ã‚¤ãƒ†ãƒ ï¼‰ã‚’æ›´æ–°
 	for (auto& droppedOre : droppedOres_) {
 		droppedOre->Draw();
 	}
 }
 
+void OreManager::AddPoint(const Cygnus::Float3& translate, const Cygnus::Float3& size) {
+
+	//è¿½åŠ ã™ã‚‹é‰±çŸ³ã‚’ä½œæˆ
+	
+	/// ---- å¶æ•°ã‹èª¿ã¹ã‚‹ ---
+	//ä¸­å¿ƒç‚¹ã‚’translateã«ã™ã‚‹ã‚ˆã†ã«
+	float halfX{}, halfZ{}, slippageX = 0.0f, slippageZ = 0.0f;
+
+	HalfChecker(halfX, slippageX, size.x);
+	HalfChecker(halfZ, slippageZ, size.z);
+
+	/// ----------------
+	
+	// é‰±çŸ³ã®å¡Šã‚’ä½œã‚‹(ã‚µã‚¤ã‚ºã«ã‚ˆã‚Šå¤‰æ›´å¯èƒ½)
+	for (float i = -halfZ + slippageZ; i <= halfZ - slippageZ; ++i) {
+		for (float j = -halfX + slippageX; j <= halfX - slippageX; ++j) {
+			//é‰±çŸ³ã‚’ä½œæˆ
+			auto newOre = std::make_unique<Ore>();
+			newOre->Initialize(translate + Cygnus::Float3{ 2.0f * j ,0.0f ,2.0f * i });
+			ores_.push_back(std::move(newOre));
+		}
+	}
+}
+
+void OreManager::HalfChecker(float& half, float& slippagePoint, float size) {
+	if (std::fmod(size, 2.0f) == 0) {
+		//å¶æ•°
+		half = size * kHalf_;//åŠåˆ†ã«ã™ã‚‹;
+		slippagePoint = kHalf_;//åº§æ¨™ã‚’ãšã‚‰ã™
+	}
+	else {
+		//å¥‡æ•°
+		half = (size - 1) * kHalf_;//å¶æ•°ã«ã—ãŸå¾Œã€åŠåˆ†ã«ã™ã‚‹;
+	}
+}
+
+
 bool OreManager::TryBreakAt(const Cygnus::Float3& targetPos, float range) { 
 	int closestIndex = -1;
-	float minDistanceSq = range * range;	// Ë’ö”ÍˆÍ‚ğ‰Šú’l‚É‚·‚é
+	float minDistanceSq = range * range;	// å°„ç¨‹ç¯„å›²ã‚’åˆæœŸå€¤ã«ã™ã‚‹
 
-	// ‘S‚Ä‚ÌzÎ‚©‚çAË’ö“à‚ÅÅ‚à‹ß‚¢zÎ‚ğ’Tõ
+	// å…¨ã¦ã®é‰±çŸ³ã‹ã‚‰ã€å°„ç¨‹å†…ã§æœ€ã‚‚è¿‘ã„é‰±çŸ³ã‚’æ¢ç´¢
 	for (size_t i = 0; i < ores_.size(); ++i) {
 		Cygnus::Float3 orePos = ores_[i]->GetTranslate();
-		// zÎ‚Æ‚Ì‹——£‚ğŒvZ
+		// é‰±çŸ³ã¨ã®è·é›¢ã‚’è¨ˆç®—
 		float dx = orePos.x - targetPos.x;
 		float dz = orePos.z - targetPos.z;
 		float distSq = dx * dx + dz * dz;
 
-		// Å’Z‹——£‚©‚ÂAË’ö“à‚È‚çXV
+		// æœ€çŸ­è·é›¢ã‹ã¤ã€å°„ç¨‹å†…ãªã‚‰æ›´æ–°
 		if (distSq < minDistanceSq) {
 			minDistanceSq = distSq;
 			closestIndex = i;
 		}
 	}
 
-	// Œ©‚Â‚©‚Á‚½Û‚Ìˆ—
+	// è¦‹ã¤ã‹ã£ãŸéš›ã®å‡¦ç†
 	if (closestIndex != -1) {
-		Cygnus::Float3 dropPos = ores_[closestIndex]->GetTranslate();	// íœ‚³‚ê‚ézÎ‚ÌˆÊ’u‚ğ•Û‘¶
-		ores_[closestIndex]->UnregisterCollider();	// ƒRƒ‰ƒCƒ_[“o˜^‰ğœ
-		ores_.erase(ores_.begin() + closestIndex);	// ”z—ñ‚©‚çíœ
+		Cygnus::Float3 dropPos = ores_[closestIndex]->GetTranslate();	// å‰Šé™¤ã•ã‚Œã‚‹é‰±çŸ³ã®ä½ç½®ã‚’ä¿å­˜
+		ores_[closestIndex]->UnregisterCollider();	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç™»éŒ²è§£é™¤
+		ores_.erase(ores_.begin() + closestIndex);	// é…åˆ—ã‹ã‚‰å‰Šé™¤
 
-		// —‚¿‚Ä‚¢‚ézÎiƒhƒƒbƒvƒAƒCƒeƒ€j‚Ì¶¬
+		// è½ã¡ã¦ã„ã‚‹é‰±çŸ³ï¼ˆãƒ‰ãƒ­ãƒƒãƒ—ã‚¢ã‚¤ãƒ†ãƒ ï¼‰ã®ç”Ÿæˆ
 		auto newDroppedOre = std::make_unique<DroppedOre>();
 		newDroppedOre->Initialize(dropPos);
 		droppedOres_.push_back(std::move(newDroppedOre));
@@ -85,4 +123,46 @@ bool OreManager::TryBreakAt(const Cygnus::Float3& targetPos, float range) {
 	}
 
 	return false;
+}
+
+bool OreManager::BreakAllAt(const Cygnus::Float3& targetPos, float range)
+{
+	float rangeSq = range * range; // æ¯”è¼ƒç”¨ã«åŠå¾„ã®2ä¹—ã‚’è¨ˆç®—
+	bool hitAny = false;
+
+	// ores_ é…åˆ—ã‹ã‚‰æ¡ä»¶ã«åˆã†ã‚‚ã®ã‚’æŠ½å‡ºãƒ»å‰Šé™¤
+	auto it = std::remove_if(ores_.begin(), ores_.end(), [&](const std::unique_ptr<Ore>& ore)
+		{
+			Cygnus::Float3 orePos = ore->GetTranslate();
+			float dx = orePos.x - targetPos.x;
+			float dz = orePos.z - targetPos.z;
+			float distSq = dx * dx + dz * dz;
+
+			// ç¯„å›²å†…ã«ã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
+			if (distSq <= rangeSq)
+			{
+				// 1. å‰Šé™¤ã•ã‚Œã‚‹é‰±çŸ³ã®ä½ç½®ã‚’ä¿å­˜
+				Cygnus::Float3 dropPos = ore->GetTranslate();
+
+				// 2. ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç™»éŒ²è§£é™¤
+				ore->UnregisterCollider();
+
+				// 3. è½ã¡ã¦ã„ã‚‹é‰±çŸ³ï¼ˆãƒ‰ãƒ­ãƒƒãƒ—ã‚¢ã‚¤ãƒ†ãƒ ï¼‰ã‚’ç”Ÿæˆã—ã¦ãƒªã‚¹ãƒˆã«è¿½åŠ 
+				auto newDroppedOre = std::make_unique<DroppedOre>();
+				newDroppedOre->Initialize(dropPos);
+				droppedOres_.push_back(std::move(newDroppedOre));
+
+				hitAny = true;
+				return true; // å‰Šé™¤å¯¾è±¡
+			}
+			return false; // ä¿æŒ
+		});
+
+	// å®Ÿéš›ã« vector ã‹ã‚‰å‰Šé™¤
+	if (hitAny)
+	{
+		ores_.erase(it, ores_.end());
+	}
+
+	return hitAny;
 }

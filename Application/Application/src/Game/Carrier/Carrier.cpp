@@ -2,17 +2,19 @@
 
 // Engine
 #include <ImguiWrapper.h>
+#include <Input/Input.h>
 
 // Application
 #include <src/Game/Path/PathManager.h>
+#include <src/Game/Player/Player.h>
 
 void Carrier::Initialize() {
-	// ƒIƒuƒWƒFƒNƒg¶¬
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Carrier");
-	object_->transform_.translate_ = PathManager::GetInstance()->GetPoint(0);	// Œo˜H‚Ìn“_À•W‚ğƒZƒbƒg
+	object_->transform_.translate_ = PathManager::GetInstance()->GetPoint(0); // çµŒè·¯ã®å§‹ç‚¹åº§æ¨™ã‚’ã‚»ãƒƒãƒˆ
 
-	// ƒRƒ‰ƒCƒ_[¶¬ + “o˜^
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç”Ÿæˆ + ç™»éŒ²
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
 	aabb->SetTag("Carrier");
 	aabb->SetFollowTarget(&object_->transform_.translate_);
@@ -21,20 +23,46 @@ void Carrier::Initialize() {
 
 	collider_ = std::move(aabb);
 	Cygnus::CollisionManager::GetInstance()->Register(collider_.get());
+
+	auto sensor = std::make_unique<Cygnus::AABBCollider>();
+	sensor->SetTag("carrierSensor");
+	sensor->SetFollowTarget(&object_->transform_.translate_);
+	sensor->SetSize(kSensorSize);
+	sensor->SetOwner(this);
+
+	colliderSensor_ = std::move(sensor);
+	Cygnus::CollisionManager::GetInstance()->Register(colliderSensor_.get());
 }
 
 void Carrier::Update(float deltaTime) {
-	// Œo˜H‚É‰ˆ‚Á‚½ˆÚ“®ˆ—
+	// æ™‚é–“çµŒéã§ã‚¨ãƒãƒ«ã‚®ãƒ¼æ¶ˆè²»
+	if (energyTimer_ > 0.0f) {
+		energyTimer_ -= deltaTime;
+		if (energyTimer_ < 0.0f) energyTimer_ = 0.0f;
+	}
+
+	// é€Ÿåº¦å€ç‡ã®è¨ˆç®—
+	if (energyTimer_ > 0.0f && !isGoal_) {
+		// åŠ é€Ÿï¼ˆé€Ÿåº¦å€ç‡ã‚’å¾ã€…ã«1.0fã¸ï¼‰
+		currentVelocityRate_ += deltaTime / kAccelerationTime;
+	} else {
+		// æ¸›é€Ÿï¼ˆé€Ÿåº¦å€ç‡ã‚’å¾ã€…ã«0.0fã¸ï¼‰
+		currentVelocityRate_ -= deltaTime / kDecelerationTime;
+	}
+	currentVelocityRate_ = std::clamp(currentVelocityRate_, 0.0f, 1.0f);	// 0.0f ~ 1.0fã®ç¯„å›²ã«ã‚¯ãƒ©ãƒ³ãƒ—
+
+	// çµŒè·¯ã«æ²¿ã£ãŸç§»å‹•å‡¦ç†
 	MoveAlongPath(deltaTime);
 
-	// ƒRƒ‰ƒCƒ_[XV
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æ›´æ–°
 	collider_->Update();
-	// ƒIƒuƒWƒFƒNƒgXV
+	colliderSensor_->Update();
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–°
 	object_->UpdateMatrix();
 }
 
 void Carrier::Draw() {
-	// ƒIƒuƒWƒFƒNƒg•`‰æ
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	object_->Draw();
 }
 
@@ -51,39 +79,60 @@ void Carrier::Debug() {
 #endif
 }
 
-void Carrier::OnCollision(Cygnus::Collider* collider)
-{
+void Carrier::OnCollision(Cygnus::Collider* other) {
+	auto input = Cygnus::Input::GetInstance();
 
+	if (other->GetTag() == "Player") {
+		Player* player = static_cast<Player*>(other->GetOwner());
+
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå¿…è¦æ•°æ­¯è»Šã‚’æ‰€æŒã—ã¦ã„ã‚‹ã‹ç¢ºèª
+		if (player->GetGearCount() >= kRequiredGearCount) {
+			// ã‚­ãƒ¼ or ãƒœã‚¿ãƒ³å…¥åŠ›æ“ä½œ
+			if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
+				// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ­¯è»Šã‚’æ¶ˆè²»ã•ã›ã‚‹
+				player->ConsumeGear(kRequiredGearCount);
+				// åˆ—è»Šã«æ­¯è»Šã‚’æ³¨å…¥ã•ã‚ŒãŸéš›ã®å‡¦ç†
+				SupplyGear();
+			}
+		}
+	}
 }
 
 void Carrier::MoveAlongPath(float deltaTime)
 {
-	// –³Œø‰»ó‘Ô‚È‚çI—¹
-	if(!isActive_) return;
+	// ç„¡åŠ¹åŒ–çŠ¶æ…‹ or ã‚´ãƒ¼ãƒ«æ¸ˆã¿ãªã‚‰çµ‚äº†
+	if (!isActive_ || isGoal_) return;
 
-	// ƒS[ƒ‹Ï‚İ‚È‚çI—¹
-	if(isGoal_) return;
+	// é€Ÿåº¦ãŒå®Œå…¨ã«0ãªã‚‰è¨ˆç®—ã—ãªã„
+	if (currentVelocityRate_ <= 0.0f && energyTimer_ <= 0.0f) return;
 
+	// å…¨ã¦ã®ãƒã‚¤ãƒ³ãƒˆã‚’é€šéã—ãŸã‚‰ã‚´ãƒ¼ãƒ«æ¸ˆã¿ã«ã™ã‚‹
 	auto pathManager = PathManager::GetInstance();
-
-	// ‘S‚Ä‚Ìƒ|ƒCƒ“ƒg‚ğ’Ê‰ß‚µ‚½‚çƒS[ƒ‹Ï‚İ‚Ö
 	if(targetIndex_ >= pathManager->GetPointCount()) {
 		isGoal_ = true;
 		return;
 	}
 
-	// Œ»İ’n->–Ú•W’n“_‚Ö‚Ì‹——£‚ğŒvZ
+	// ç¾åœ¨åœ°->ç›®æ¨™åœ°ç‚¹ã¸ã®è·é›¢ã‚’è¨ˆç®—
 	Cygnus::Float3& currentPos = object_->transform_.translate_;
 	Cygnus::Float3 targetPos = pathManager->GetPoint(targetIndex_);
 
 	Cygnus::Float3 diff = targetPos - currentPos;
 	float distance = Cygnus::Float3::Length(diff);
 
-	// ƒ|ƒCƒ“ƒg“’…”»’è + ƒIƒuƒWƒFƒNƒgˆÚ“®ˆ—
+	// ç¾åœ¨ãƒ•ãƒ¬ãƒ¼ãƒ ã®ç§»å‹•é€Ÿåº¦ã‚’è¨ˆç®—
+	float frameSpeed = kMoveSpeed * currentVelocityRate_ * deltaTime;
+
+	// ãƒã‚¤ãƒ³ãƒˆåˆ°ç€åˆ¤å®š + ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç§»å‹•å‡¦ç†
 	if(distance < kMoveSpeed * deltaTime) {
 		currentPos = targetPos;
-		targetIndex_++;	// Ÿ‚Ìƒ|ƒCƒ“ƒg‚Ö
+		targetIndex_++;	// æ¬¡ã®ãƒã‚¤ãƒ³ãƒˆã¸
 	} else {
-		currentPos += (diff / distance) * kMoveSpeed * deltaTime;
+		currentPos += (diff / distance) * frameSpeed;
 	}
+}
+
+void Carrier::SupplyGear() {
+	energyTimer_ = kMaxEnergy;	// å‹•ä½œæ™‚é–“ã‚’è¨­å®š
+	isActive_ = true;	// æœ‰åŠ¹åŒ–
 }

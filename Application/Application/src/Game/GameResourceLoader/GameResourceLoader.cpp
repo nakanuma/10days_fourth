@@ -1,4 +1,4 @@
-﻿#include "GameResourceLoader.h"
+#include "GameResourceLoader.h"
 
 // Engine
 #include <ModelManager.h>
@@ -65,6 +65,13 @@ void GameResourceLoader::LoadAllModelData() {
 		"Character/Player/player.png"
 	);
 
+	// スフィンクス
+	modelManager->LoadAndRegisterModel(
+		"Sphinx",
+		"Character/Sphinx/sphinx.obj",
+		"Character/Sphinx/sphinx.png"
+	);
+
 	// ---------------------------------------------------------
 	// オブジェクト
 	// ---------------------------------------------------------
@@ -81,6 +88,34 @@ void GameResourceLoader::LoadAllModelData() {
 		"Ore",
 		"Object/Ore/ore.obj",
 		"Object/Ore/ore.png"
+	);
+
+	// 工作台オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"WorkBench", 
+		"Object/WorkBench/workBench.obj", 
+		"Object/WorkBench/workBench.png"
+	);
+
+	// 歯車オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"Gear", 
+		"Object/Gear/gear.obj", 
+		"Object/Gear/gear.png"
+	);
+
+	// 攻撃予兆オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"AttackPlane",
+		"Object/AttackPlane/attackPlane.obj",
+		"white.png"
+	);
+
+	// 攻撃予兆オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"AttachFrame",
+		"Object/AttachFrame/attackFrame.obj",
+		"white.png"
 	);
 }
 
