@@ -12,13 +12,13 @@
 
 void Sphinx::Initialize()
 {
-	// ƒIƒuƒWƒFƒNƒg¶¬
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Player");
 	object_->transform_.translate_ = { -10.0f, 2.0f, 0.0f };
 	object_->transform_.scale_ = { kColliderSize.x, 1.0f, kColliderSize.z };
 
-	// ƒRƒ‰ƒCƒ_[¶¬ + “o˜^
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç”Ÿæˆ + ç™»éŒ²
 	auto obb = std::make_unique<Cygnus::OBBCollider>();
 	obb->SetTag("Sphinx");
 	obb->SetFollowTarget(&object_->transform_.translate_);
@@ -29,15 +29,15 @@ void Sphinx::Initialize()
 	collider_ = std::move(obb);
 	Cygnus::CollisionManager::GetInstance()->Register(collider_.get());
 
-	// ƒ‰ƒ“ƒ_ƒ€ƒEƒH[ƒNƒNƒ‰ƒX¶¬
+	// ãƒ©ãƒ³ãƒ€ãƒ ã‚¦ã‚©ãƒ¼ã‚¯ã‚¯ãƒ©ã‚¹ç”Ÿæˆ
 	randomWalk_ = std::make_unique<RandomWalk>();
 }
 
 void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
 {
-#pragma region ˆÚ“®ˆ—
+#pragma region ç§»å‹•å‡¦ç†
 
-	// ‹Câ’†‚ÍUŒ‚EˆÚ“®ˆ—‚ğs‚í‚È‚¢
+	// æ°—çµ¶ä¸­ã¯æ”»æ’ƒãƒ»ç§»å‹•å‡¦ç†ã‚’è¡Œã‚ãªã„
 	if (!Faint(deltaTime) && isMoving_)
 	{
 		if (attackCoolTimer_ > 0.0f)
@@ -45,40 +45,40 @@ void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
 			attackCoolTimer_ -= deltaTime;
 		}
 
-		// ƒ`ƒƒ[ƒW’†‚Ìˆ—
+		// ãƒãƒ£ãƒ¼ã‚¸ä¸­ã®å‡¦ç†
 		if (isCharge_)
 		{
 			chargeTimer_ -= deltaTime;
 
-			// ’Ç]ˆ—Fc‚èŠÔ‚ª§ŒÀŠÔˆÈã‚ÌŠÔ‚ÍƒvƒŒƒCƒ„[‚ğ‘_‚¢‘±‚¯‚é
+			// è¿½å¾“å‡¦ç†ï¼šæ®‹ã‚Šæ™‚é–“ãŒåˆ¶é™æ™‚é–“ä»¥ä¸Šã®é–“ã¯ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç‹™ã„ç¶šã‘ã‚‹
 			if (chargeTimer_ > kHomingLimitTime_)
 			{
-				// í‚ÉÅV‚ÌƒvƒŒƒCƒ„[À•W‚©‚ç•ûŒü‚ğÄŒvZ
+				// å¸¸ã«æœ€æ–°ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åº§æ¨™ã‹ã‚‰æ–¹å‘ã‚’å†è¨ˆç®—
 				Cygnus::Float3 toTarget = targetPos - object_->transform_.translate_;
-				if (Cygnus::Float3::Length(toTarget) > 0.1f) // ”O‚Ì‚½‚ßƒ[ƒœZ–h~
+				if (Cygnus::Float3::Length(toTarget) > 0.1f) // å¿µã®ãŸã‚ã‚¼ãƒ­é™¤ç®—é˜²æ­¢
 				{
-					// –Ú•W‚ÌŠp“x‚ğZo
+					// ç›®æ¨™ã®è§’åº¦ã‚’ç®—å‡º
 					Cygnus::Float3 targetDir = Cygnus::Float3::Normalize(toTarget);
 					float targetAngle = std::atan2(targetDir.x, targetDir.z);
 
-					// ¥ •ÏXFSmoothTurn‚ÅŠŠ‚ç‚©‚ÉU‚èŒü‚©‚¹‚éiœpœj‚æ‚è‘¬‚¢ù‰ñƒXƒs[ƒhj
+					// â–¼ å¤‰æ›´ï¼šSmoothTurnã§æ»‘ã‚‰ã‹ã«æŒ¯ã‚Šå‘ã‹ã›ã‚‹ï¼ˆå¾˜å¾Šæ™‚ã‚ˆã‚Šé€Ÿã„æ—‹å›ã‚¹ãƒ”ãƒ¼ãƒ‰ï¼‰
 					object_->transform_.rotate_.y = randomWalk_->SmoothTurn(object_->transform_.rotate_.y, targetAngle, kChargeTurnSpeed_, deltaTime);
 
-					// “Ëi•ûŒüiattackDir_j‚ÍuŒ»İŒü‚¢‚Ä‚¢‚é•ûŒüv‚ÉXV‚µ‚Ä‚¨‚­
+					// çªé€²æ–¹å‘ï¼ˆattackDir_ï¼‰ã¯ã€Œç¾åœ¨å‘ã„ã¦ã„ã‚‹æ–¹å‘ã€ã«éšæ™‚æ›´æ–°ã—ã¦ãŠã
 					float currentAngle = object_->transform_.rotate_.y;
 					attackDir_ = { std::sin(currentAngle), 0.0f, std::cos(currentAngle) };
 				}
 
-				// ’n–Ê‚É‚Â‚¯‚Ä‚¨‚­
+				// åœ°é¢ã«ã¤ã‘ã¦ãŠã
 				object_->transform_.translate_.y = kBaseY_;
 			}
 			else
 			{
-				// Šp“xŠm’èŒãic‚èŠÔj‚Ì‚Ò‚å‚ñ‚Ò‚å‚ñƒWƒƒƒ“ƒvˆ—
-				// ‚Ç‚ê‚­‚ç‚¢ƒWƒƒƒ“ƒv‚ÌŠÔ‚ªŒo‰ß‚µ‚½‚©‚ğŒvZ
+				// è§’åº¦ç¢ºå®šå¾Œï¼ˆæ®‹ã‚Šæ™‚é–“ï¼‰ã®ã´ã‚‡ã‚“ã´ã‚‡ã‚“ã‚¸ãƒ£ãƒ³ãƒ—å‡¦ç†
+				// ã©ã‚Œãã‚‰ã„ã‚¸ãƒ£ãƒ³ãƒ—ã®æ™‚é–“ãŒçµŒéã—ãŸã‹ã‚’è¨ˆç®—
 				float bounceTime = kHomingLimitTime_ - chargeTimer_;
 
-				// ƒTƒCƒ“”g‚Ìâ‘Î’l‚ğg‚Á‚ÄA‰º‚©‚çã‚É’µ‚Ë‚é“®‚«‚ğì‚é
+				// ã‚µã‚¤ãƒ³æ³¢ã®çµ¶å¯¾å€¤ã‚’ä½¿ã£ã¦ã€ä¸‹ã‹ã‚‰ä¸Šã«è·³ã­ã‚‹å‹•ãã‚’ä½œã‚‹
 				float jumpY = std::abs(std::sin(bounceTime * kBounceSpeed_)) * kBounceHeight_;
 				object_->transform_.translate_.y = kBaseY_ + jumpY;
 			}
@@ -90,19 +90,19 @@ void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
 		}
 		else if (!isAttack_)
 		{
-			// ƒvƒŒƒCƒ„[‚ğƒT[ƒ`
+			// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ã‚µãƒ¼ãƒ
 			Cygnus::Float3 toTarget = targetPos - object_->transform_.translate_;
 			float distance = Cygnus::Float3::Length(toTarget);
 
 			if (distance <= kSearchRange_ && attackCoolTimer_ <= 0.0f)
 			{
 				Cygnus::Float3 dir = Cygnus::Float3::Normalize(toTarget);
-				// ¥ •ÏXFUŒ‚‚Å‚Í‚È‚­ƒ`ƒƒ[ƒW‚ğŠJn
+				// â–¼ å¤‰æ›´ï¼šæ”»æ’ƒã§ã¯ãªããƒãƒ£ãƒ¼ã‚¸ã‚’é–‹å§‹
 				StartCharge(dir);
 			}
 			else
 			{
-				// ”ÍˆÍŠOA‚Ü‚½‚ÍƒN[ƒ‹ƒ_ƒEƒ“’†‚È‚çƒ‰ƒ“ƒ_ƒ€ƒEƒH[ƒN
+				// ç¯„å›²å¤–ã€ã¾ãŸã¯ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³ä¸­ãªã‚‰ãƒ©ãƒ³ãƒ€ãƒ ã‚¦ã‚©ãƒ¼ã‚¯
 				randomWalk_->Update(deltaTime, kMoveChangeTime_);
 				Move(deltaTime);
 			}
@@ -114,9 +114,9 @@ void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
 	}
 	MoveClamp();
 #pragma endregion
-	// ƒRƒ‰ƒCƒ_[XV
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æ›´æ–°
 	collider_->Update();
-	// ƒIƒuƒWƒFƒNƒgXV
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–°
 	object_->UpdateMatrix();
 }
 
@@ -124,13 +124,13 @@ void Sphinx::Move(float deltaTime)
 {
 	moveDir_ = randomWalk_->GetRandomWalkDir();
 
-	// –Ú•W‚Æ‚·‚éŠp“x
+	// ç›®æ¨™ã¨ã™ã‚‹è§’åº¦
 	float targetAngle = std::atan2(moveDir_.x, moveDir_.z);
 
-	// SmoothTurn‚ğg‚Á‚ÄŠŠ‚ç‚©‚Éù‰ñ‚³‚¹‚é
+	// SmoothTurnã‚’ä½¿ã£ã¦æ»‘ã‚‰ã‹ã«æ—‹å›ã•ã›ã‚‹
 	object_->transform_.rotate_.y = randomWalk_->SmoothTurn(object_->transform_.rotate_.y, targetAngle, kWanderTurnSpeed_, deltaTime);
 
-	// uŒ»İŒü‚¢‚Ä‚¢‚é•ûŒüi³–Êjv‚ÌƒxƒNƒgƒ‹‚ğŒvZ‚µ‚Äi‚Ş
+	// ã€Œç¾åœ¨å‘ã„ã¦ã„ã‚‹æ–¹å‘ï¼ˆæ­£é¢ï¼‰ã€ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨ˆç®—ã—ã¦é€²ã‚€
 	float currentAngle = object_->transform_.rotate_.y;
 	Cygnus::Float3 forwardVec = { std::sin(currentAngle), 0.0f, std::cos(currentAngle) };
 
@@ -186,11 +186,11 @@ void Sphinx::StartFaint()
 
 void Sphinx::OreMining()
 {
-	// Œü‚«‚©‚ç‘O•û‚ÌƒxƒNƒgƒ‹‚ğì¬‚·‚é
+	// å‘ãã‹ã‚‰å‰æ–¹ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ä½œæˆã™ã‚‹
 	float angleY = object_->transform_.rotate_.y;
 	Cygnus::Float3 frontVec = { std::sinf(angleY), 0.0f, std::cosf(angleY) };
 
-	// ƒXƒtƒBƒ“ƒNƒX‚Ì­‚µ‘O•û‚ğ”»’è‚Ì’†S‚É‚·‚é
+	// ã‚¹ãƒ•ã‚£ãƒ³ã‚¯ã‚¹ã®å°‘ã—å‰æ–¹ã‚’åˆ¤å®šã®ä¸­å¿ƒã«ã™ã‚‹
 	Cygnus::Float3 targetPos =
 	{
 		object_->transform_.translate_.x + frontVec.x * kMiningOffset,
@@ -198,10 +198,10 @@ void Sphinx::OreMining()
 		object_->transform_.translate_.z + frontVec.z * kMiningOffset
 	};
 
-	// zÎÌŒ@”»’è
+	// é‰±çŸ³æ¡æ˜åˆ¤å®š
 	if (OreManager::GetInstance()->TryBreakAt(targetPos, kMiningRange))
 	{
-		// zÎÌŒ@‚Ìˆ—
+		// é‰±çŸ³æ¡æ˜æ™‚ã®å‡¦ç†
 		isMining_ = true;
 	}
 }
@@ -223,7 +223,7 @@ void Sphinx::StopAttack()
 
 void Sphinx::Draw()
 {
-	// ƒIƒuƒWƒFƒNƒg•`‰æ
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	object_->Draw();
 }
 
@@ -262,7 +262,7 @@ void Sphinx::Debug()
 		ImGui::Text("Faint");
 		ImGui::Text("Timer : %.02f", faintTimer_);
 	}
-	else if (isCharge_) // ¥ ’Ç‰Á
+	else if (isCharge_) // â–¼ è¿½åŠ 
 	{
 		ImGui::Text("Charging");
 		ImGui::Text("Timer : %.02f", chargeTimer_);
@@ -288,16 +288,16 @@ void Sphinx::Debug()
 
 void Sphinx::OnCollision(Cygnus::Collider* other)
 {
-	// ü˜H‚É‰ˆ‚Á‚Ä“®‚­ƒIƒuƒWƒFƒNƒg‚ÆƒvƒŒƒCƒ„[ƒIƒuƒWƒFƒNƒg‚Æ‚ÌÕ“Ë
+	// ç·šè·¯ã«æ²¿ã£ã¦å‹•ãã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã®è¡çª
 	if (other->GetTag() == "Carrier" || other->GetTag() == "Player")
 	{
 		Cygnus::OBBCollider* myOBB = dynamic_cast<Cygnus::OBBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
-		// ‰Ÿ‚µ–ß‚µˆ—
+		// æŠ¼ã—æˆ»ã—å‡¦ç†
 		if (myOBB && other)
 		{
-			// ‘Šè‚ÌAABB‚ğˆê“I‚ÉOBB‚Æ‚µ‚Äˆµ‚¤
+			// ç›¸æ‰‹ã®AABBã‚’ä¸€æ™‚çš„ã«OBBã¨ã—ã¦æ‰±ã†
 			Cygnus::OBBCollider otherAsOBB;
 			otherAsOBB.SetCenter((otherAABB->GetMin() + otherAABB->GetMax()) * 0.5f);
 			otherAsOBB.SetSize((otherAABB->GetMax() - otherAABB->GetMin()) * 0.5f);
@@ -305,14 +305,14 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 			otherAsOBB.SetYAxis({ 0.0f, 1.0f, 0.0f });
 			otherAsOBB.SetZAxis({ 0.0f, 0.0f, 1.0f });
 
-			// ‰Ÿ‚µ–ß‚µƒxƒNƒgƒ‹‚ğŒvZ
-			Cygnus::Float3 pushVec = Cygnus::CollisionMath::CalculatePushBackOBBvsOBB(myOBB, &otherAsOBB);
+			// æŠ¼ã—æˆ»ã—ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨ˆç®—
+			//Cygnus::Float3 pushVec = Cygnus::CollisionMath::CalculatePushBackOBBvsOBB(myOBB, &otherAsOBB);
 
-			// ˆÊ’u‚ğ•â³
-			object_->transform_.translate_ += pushVec;
+			// ä½ç½®ã‚’è£œæ­£
+			//object_->transform_.translate_ += pushVec;
 			object_->UpdateMatrix();
 
-			// ƒRƒ‰ƒCƒ_[‚àXV
+			// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚‚æ›´æ–°
 			myOBB->Update();
 		}
 
@@ -322,16 +322,16 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 		}
 	}
 
-	// zÎƒIƒuƒWƒFƒNƒg‚Æ‚ÌÕ“Ë
+	// é‰±çŸ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã®è¡çª
 	if (other->GetTag() == "Ore")
 	{
 		Cygnus::OBBCollider* myOBB = dynamic_cast<Cygnus::OBBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
-		// ‰Ÿ‚µ–ß‚µˆ—
+		// æŠ¼ã—æˆ»ã—å‡¦ç†
 		if (myOBB && other)
 		{
-			// ‘Šè‚ÌAABB‚ğˆê“I‚ÉOBB‚Æ‚µ‚Äˆµ‚¤
+			// ç›¸æ‰‹ã®AABBã‚’ä¸€æ™‚çš„ã«OBBã¨ã—ã¦æ‰±ã†
 			Cygnus::OBBCollider otherAsOBB;
 			otherAsOBB.SetCenter((otherAABB->GetMin() + otherAABB->GetMax()) * 0.5f);
 			otherAsOBB.SetSize((otherAABB->GetMax() - otherAABB->GetMin()) * 0.5f);
@@ -339,14 +339,14 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 			otherAsOBB.SetYAxis({ 0.0f, 1.0f, 0.0f });
 			otherAsOBB.SetZAxis({ 0.0f, 0.0f, 1.0f });
 
-			// ‰Ÿ‚µ–ß‚µƒxƒNƒgƒ‹‚ğŒvZ
-			Cygnus::Float3 pushVec = Cygnus::CollisionMath::CalculatePushBackOBBvsOBB(myOBB, &otherAsOBB);
+			// æŠ¼ã—æˆ»ã—ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨ˆç®—
+			//Cygnus::Float3 pushVec = Cygnus::CollisionMath::CalculatePushBackOBBvsOBB(myOBB, &otherAsOBB);
 
-			// ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğ•â³
-			object_->transform_.translate_ += pushVec;
+			// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚’è£œæ­£
+			//object_->transform_.translate_ += pushVec;
 			object_->UpdateMatrix();
 
-			// ƒRƒ‰ƒCƒ_[‚àXV
+			// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚‚æ›´æ–°
 			myOBB->Update();
 		}
 
@@ -357,7 +357,7 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 		}
 	}
 
-	// —‚¿‚Ä‚¢‚ézÎiƒhƒƒbƒvƒAƒCƒeƒ€j‚ÆÕ“Ë‚µ‚½‚à‹Câ”»’è
+	// è½ã¡ã¦ã„ã‚‹é‰±çŸ³ï¼ˆãƒ‰ãƒ­ãƒƒãƒ—ã‚¢ã‚¤ãƒ†ãƒ ï¼‰ã¨è¡çªã—ãŸæ™‚ã‚‚æ°—çµ¶åˆ¤å®š
 	if (other->GetTag() == "DroppedOre" && isMining_)
 	{
 		if (isAttack_ && faintTimer_ <= 0.0f)

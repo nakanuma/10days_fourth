@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 // ---------------------------------------------------------
 // Engine Includes
@@ -22,8 +22,9 @@
 // ---------------------------------------------------------
 #include <src/Game/Player/Player.h>
 #include <src/Game/Carrier/Carrier.h>
-#include <src/Game/StageEditor.h>
+#include <src/Game/StageEditor/StageEditor.h>
 #include <src/Game/Sphinx/Sphinx.h>
+#include <src/Game/Field/FieldEventManager.h>
 
 // =========================================================
 // ゲームプレイシーンクラス
@@ -95,4 +96,7 @@ private:
 
 	// ----- StageSetting -----
 	std::unique_ptr<StageEditor> stageEditor_; /*ステージ配置エディタ*/
+
+	// ------ フィールドイベント -----
+	std::unique_ptr<FieldEventManager> fieldManager_;
 };

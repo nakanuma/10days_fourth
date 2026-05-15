@@ -53,7 +53,7 @@ void Player::Update(float deltaTime) {
 #pragma endregion
 
 #pragma region
-	if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
+	if (input->TriggerKey(DIK_SPACE)) {
 		// 向きから前方のベクトルを作成する
 		float angleY = object_->transform_.rotate_.y;
 		Cygnus::Float3 frontVec = {std::sinf(angleY), 0.0f, std::cosf(angleY)};

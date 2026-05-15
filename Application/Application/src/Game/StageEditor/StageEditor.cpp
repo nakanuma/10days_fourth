@@ -5,28 +5,28 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "Path/PathManager.h"
-#include "Ore/OreManager.h"
+#include "src/Game/Path/PathManager.h"
+#include "src/Game/Ore/OreManager.h"
 
 using namespace Cygnus;
 
-#ifndef ‰Šú‰»Œn“
+#ifndef åˆæœŸåŒ–ç³»çµ±
 
 void StageEditor::LoadJsonFile(const std::string& stageName) {
 
 	nlohmann::json json;
 	std::ifstream file;
 
-	//ƒXƒe[ƒW‚Ì–¼‘O
+	//ã‚¹ãƒ†ãƒ¼ã‚¸ã®åå‰
 	file.open(stageName);
 
-	//ƒtƒ@ƒCƒ‹‚ªŠJ‚¯‚È‚¢A‚»‚à‚»‚à‚È‚¢ê‡
+	//ãƒ•ã‚¡ã‚¤ãƒ«ãŒé–‹ã‘ãªã„ã€ãã‚‚ãã‚‚ãªã„å ´åˆ
 	if (file.fail()) {
 		return;
 		assert(0);
 	}
 
-	//‰ğ“€ˆ—
+	//è§£å‡å‡¦ç†
 	file >> json;
 	
 	assert(json.is_object());
@@ -42,15 +42,15 @@ void StageEditor::LoadJsonFile(const std::string& stageName) {
 	for (auto& object : json["object"]) {
 		
 		GameObjectPosition gameObjectPos;
-		//–¼‘O‚Ì“Ç‚İ‚İ
+		//åå‰ã®èª­ã¿è¾¼ã¿
 		gameObjectPos.name = object["objectName"];
-		//À•WˆÊ’u‚Ì“Ç‚İ‚İ
+		//åº§æ¨™ä½ç½®ã®èª­ã¿è¾¼ã¿
 		nlohmann::json position = object["position"];
 		gameObjectPos.position.x = position[0];
 		gameObjectPos.position.y = position[1];
 		gameObjectPos.position.z = position[2];
 
-		//“–‚½‚è”»’è‚Ì“Ç‚İ‚İ
+		//å½“ãŸã‚Šåˆ¤å®šã®èª­ã¿è¾¼ã¿
 		nlohmann::json collider = object["collider"];
 		gameObjectPos.collider.SetSize({ collider["size"][0] , collider["size"][1] , collider["size"][2]});
 		gameObjectPos.collider.SetTag(collider["tag"]);
@@ -59,9 +59,9 @@ void StageEditor::LoadJsonFile(const std::string& stageName) {
 	}
 }
 
-#endif // !‰Šú‰»Œn“
+#endif // !åˆæœŸåŒ–ç³»çµ±
 
-#ifndef XV(ƒfƒoƒbƒO)
+#ifndef æ›´æ–°(ãƒ‡ãƒãƒƒã‚°)
 
 void StageEditor::Update() {
 #ifdef _DEBUG
@@ -77,10 +77,10 @@ void StageEditor::Update() {
 }
 
 void StageEditor::SpitObjects(std::unique_ptr<Player>& player) {
-	//–¼‘O‚©‚ç¶¬•¨‚ğ”»’f‚·‚é
+	//åå‰ã‹ã‚‰ç”Ÿæˆç‰©ã‚’åˆ¤æ–­ã™ã‚‹
 
 	for (auto& gameObjectPos : gameObjectPositions_){
-		//–¼‘O‚ªƒvƒŒƒCƒ„[+‚Ü‚¾null‚Ìê‡
+		//åå‰ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼+ã¾ã nullã®å ´åˆ
 		if (gameObjectPos.name == "Player" && player == nullptr) {
 			std::unique_ptr<Player> object = std::make_unique<Player>();
 			object->Initialize();
@@ -101,54 +101,54 @@ void StageEditor::SettingStage() {
 
 	if (isCreateNewObject_) {
 		ImGui::Text("parameter");
-		ImGui::InputText("name", objectName_.data(), IM_ARRAYSIZE(textureFileName));//ƒIƒuƒWƒFƒNƒg‚Ì–¼‘O
-		ImGui::DragFloat3("position", &newObject_.position.x);//À•WˆÊ’u
-		ImGui::DragFloat3("colliderSize", &colliderSize.x);//“–‚½‚è”»’èƒTƒCƒY
+		ImGui::InputText("name", objectName_.data(), IM_ARRAYSIZE(textureFileName));//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åå‰
+		ImGui::DragFloat3("position", &newObject_.position.x);//åº§æ¨™ä½ç½®
+		ImGui::DragFloat3("colliderSize", &colliderSize.x);//å½“ãŸã‚Šåˆ¤å®šã‚µã‚¤ã‚º
 
-		newObject_.collider.SetSize(colliderSize);//“–‚½‚è”»’èƒTƒCƒY‚ğİ’è
+		newObject_.collider.SetSize(colliderSize);//å½“ãŸã‚Šåˆ¤å®šã‚µã‚¤ã‚ºã‚’è¨­å®š
 
-		//ƒpƒ‰ƒ[ƒ^‚ğİ’è‚Å‚«‚½‚ç
-		//ƒIƒuƒWƒFƒNƒg‚Ì’Ç‰Á
+		//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¨­å®šã§ããŸã‚‰
+		//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¿½åŠ 
 		if (ImGui::Button("Add_Object")) {
-			newObject_.name = objectName_.c_str();//–¼‘O
-			newObject_.collider.SetTag(objectName_);//ƒIƒuƒWƒFƒNƒgƒ^ƒO‚ğİ’è
-			gameObjectPositions_.push_back(newObject_);//“±“ü
-			isCreateNewObject_ = !isCreateNewObject_;//ƒIƒuƒWƒFƒNƒg‚Ì’Ç‰ÁŠ®—¹
+			newObject_.name = objectName_.c_str();//åå‰
+			newObject_.collider.SetTag(objectName_);//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚°ã‚’è¨­å®š
+			gameObjectPositions_.push_back(newObject_);//å°å…¥
+			isCreateNewObject_ = !isCreateNewObject_;//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¿½åŠ å®Œäº†
 		}
 
-		//ƒLƒƒƒ“ƒZƒ‹
+		//ã‚­ãƒ£ãƒ³ã‚»ãƒ«
 		if (ImGui::Button("cancel")) {
-			isCreateNewObject_ = !isCreateNewObject_;//ƒIƒuƒWƒFƒNƒg‚Ì’Ç‰ÁƒLƒƒƒ“ƒZƒ‹
+			isCreateNewObject_ = !isCreateNewObject_;//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¿½åŠ ã‚­ãƒ£ãƒ³ã‚»ãƒ«
 		}
 	}
 	else if (ImGui::Button("Create_Object")) {
-		isCreateNewObject_ = !isCreateNewObject_;//ƒIƒuƒWƒFƒNƒg‚Ì’Ç‰ÁŠJn
+		isCreateNewObject_ = !isCreateNewObject_;//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¿½åŠ é–‹å§‹
 	}
 
-	//Œ»İ‚Ìƒf[ƒ^‚ğ•\¦
+	//ç¾åœ¨ã®ãƒ‡ãƒ¼ã‚¿ã‚’è¡¨ç¤º
 	if (ImGui::TreeNode("now ObjectData")) {
-		ImGui::Separator();//s•ª‚¯
+		ImGui::Separator();//è¡Œåˆ†ã‘
 		for (auto& object : gameObjectPositions_) {
-			ImGui::Text("position : %f,%f,%f", object.position.x, object.position.y, object.position.z);//ˆÊ’u
-			ImGui::Text("colliderTag : %s", object.name.c_str());//ƒ^ƒO(–¼‘O)
-			ImGui::Text("colliderSize : %f,%f,%f", object.collider.GetSize().x, object.collider.GetSize().y, object.collider.GetSize().z);//“–‚½‚è”»’è‚ÌƒTƒCƒY
-			ImGui::Separator();//s•ª‚¯
+			ImGui::Text("position : %f,%f,%f", object.position.x, object.position.y, object.position.z);//ä½ç½®
+			ImGui::Text("colliderTag : %s", object.name.c_str());//ã‚¿ã‚°(åå‰)
+			ImGui::Text("colliderSize : %f,%f,%f", object.collider.GetSize().x, object.collider.GetSize().y, object.collider.GetSize().z);//å½“ãŸã‚Šåˆ¤å®šã®ã‚µã‚¤ã‚º
+			ImGui::Separator();//è¡Œåˆ†ã‘
 		}
 		ImGui::TreePop();
 	}
 
-	//‰½‚à‚È‚¢‚È‚ç
+	//ä½•ã‚‚ãªã„ãªã‚‰
 	if (gameObjectPositions_.size() <= 0) return;
 
-	//Œ»İ‚Ìƒf[ƒ^‚ğ•\¦
+	//ç¾åœ¨ã®ãƒ‡ãƒ¼ã‚¿ã‚’è¡¨ç¤º
 	if (ImGui::TreeNode("delete ObjectData")) {
-		ImGui::InputInt("objectNum", &objectNum_);//Á‚µ‚½‚¢”z—ñ”Ô†‚ğ“ü—Í
+		ImGui::InputInt("objectNum", &objectNum_);//æ¶ˆã—ãŸã„é…åˆ—ç•ªå·ã‚’å…¥åŠ›
 		objectNum_ = std::clamp(objectNum_, 0, int(gameObjectPositions_.size() - 1));
 		if (ImGui::Button("delete")) {
 			gameObjectPositions_.erase(gameObjectPositions_.begin() + objectNum_);
 		}
 		ImGui::Separator();
-		//Œ»İ‚Ìƒf[ƒ^‚ğƒŠƒZƒbƒg‚·‚é
+		//ç¾åœ¨ã®ãƒ‡ãƒ¼ã‚¿ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
 		if (ImGui::Button("Reset Objects")) {
 			gameObjectPositions_.clear();
 		}
@@ -162,37 +162,37 @@ void StageEditor::SettingStage() {
 void StageEditor::Save() {
 #ifdef _DEBUG
 
-	//ƒXƒe[ƒW‚Ì–¼‘O‚ğİ’è
+	//ã‚¹ãƒ†ãƒ¼ã‚¸ã®åå‰ã‚’è¨­å®š
 	ImGui::InputText("Stage Json Name", imGuiText_.data(), IM_ARRAYSIZE(textureFileName));
 	std::string fileName = imGuiText_.c_str();
 
-	//json‚ğì¬
+	//jsonã‚’ä½œæˆ
 	if (ImGui::Button("Create Json")) {
 		nlohmann::json jsonFile;
 		jsonFile["name"] = "StageEditor";
 
 		uint32_t num = 0;
 		for (auto& gameObject : gameObjectPositions_) {
-			//ƒIƒuƒWƒFƒNƒgƒNƒ‰ƒX‚Ì–¼‘O
+			//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹ã®åå‰
 			jsonFile["object"][num]["objectName"] = gameObject.name;
-			//İ’uˆÊ’u
+			//è¨­ç½®ä½ç½®
 			jsonFile["object"][num]["position"][0] = gameObject.position.x;
 			jsonFile["object"][num]["position"][1] = gameObject.position.y;
 			jsonFile["object"][num]["position"][2] = gameObject.position.z;
-			//ƒ^ƒO–¼
+			//ã‚¿ã‚°å
 			jsonFile["object"][num]["collider"]["tag"] = gameObject.name.c_str();
-			//“–‚½‚è”»’è‚ÌƒTƒCƒY
+			//å½“ãŸã‚Šåˆ¤å®šã®ã‚µã‚¤ã‚º
 			jsonFile["object"][num]["collider"]["size"][0] = gameObject.collider.GetSize().x;
 			jsonFile["object"][num]["collider"]["size"][1] = gameObject.collider.GetSize().y;
 			jsonFile["object"][num]["collider"]["size"][2] = gameObject.collider.GetSize().z;
 			num++;
 		}
 
-		//•Û‘¶êŠ‚Ìİ’è
+		//ä¿å­˜å ´æ‰€ã®è¨­å®š
 		std::string outputFileName = "resources/stageEditor/" + fileName + ".json";
 		std::ofstream file(outputFileName);
 
-		//•Û‘¶
+		//ä¿å­˜
 		if (file.is_open()) {
 			file << jsonFile.dump(4);
 			file.close();
@@ -203,4 +203,4 @@ void StageEditor::Save() {
 
 }
 
-#endif // !XV(ƒfƒoƒbƒO)
+#endif // !æ›´æ–°(ãƒ‡ãƒãƒƒã‚°)
