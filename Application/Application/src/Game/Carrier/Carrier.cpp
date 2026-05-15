@@ -2,15 +2,17 @@
 
 // Engine
 #include <ImguiWrapper.h>
+#include <Input/Input.h>
 
 // Application
 #include <src/Game/Path/PathManager.h>
+#include <src/Game/Player/Player.h>
 
 void Carrier::Initialize() {
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Carrier");
-	object_->transform_.translate_ = PathManager::GetInstance()->GetPoint(0);	// 経路の始点座標をセット
+	object_->transform_.translate_ = PathManager::GetInstance()->GetPoint(0); // 経路の始点座標をセット
 
 	// コライダー生成 + 登録
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
@@ -21,14 +23,40 @@ void Carrier::Initialize() {
 
 	collider_ = std::move(aabb);
 	Cygnus::CollisionManager::GetInstance()->Register(collider_.get());
+
+	auto sensor = std::make_unique<Cygnus::AABBCollider>();
+	sensor->SetTag("carrierSensor");
+	sensor->SetFollowTarget(&object_->transform_.translate_);
+	sensor->SetSize(kSensorSize);
+	sensor->SetOwner(this);
+
+	colliderSensor_ = std::move(sensor);
+	Cygnus::CollisionManager::GetInstance()->Register(colliderSensor_.get());
 }
 
 void Carrier::Update(float deltaTime) {
+	// 時間経過でエネルギー消費
+	if (energyTimer_ > 0.0f) {
+		energyTimer_ -= deltaTime;
+		if (energyTimer_ < 0.0f) energyTimer_ = 0.0f;
+	}
+
+	// 速度倍率の計算
+	if (energyTimer_ > 0.0f && !isGoal_) {
+		// 加速（速度倍率を徐々に1.0fへ）
+		currentVelocityRate_ += deltaTime / kAccelerationTime;
+	} else {
+		// 減速（速度倍率を徐々に0.0fへ）
+		currentVelocityRate_ -= deltaTime / kDecelerationTime;
+	}
+	currentVelocityRate_ = std::clamp(currentVelocityRate_, 0.0f, 1.0f);	// 0.0f ~ 1.0fの範囲にクランプ
+
 	// 経路に沿った移動処理
 	MoveAlongPath(deltaTime);
 
 	// コライダー更新
 	collider_->Update();
+	colliderSensor_->Update();
 	// オブジェクト更新
 	object_->UpdateMatrix();
 }
@@ -51,22 +79,35 @@ void Carrier::Debug() {
 #endif
 }
 
-void Carrier::OnCollision(Cygnus::Collider* collider)
-{
+void Carrier::OnCollision(Cygnus::Collider* other) {
+	auto input = Cygnus::Input::GetInstance();
 
+	if (other->GetTag() == "Player") {
+		Player* player = static_cast<Player*>(other->GetOwner());
+
+		// プレイヤーが必要数歯車を所持しているか確認
+		if (player->GetGearCount() >= kRequiredGearCount) {
+			// キー or ボタン入力操作
+			if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
+				// プレイヤーの歯車を消費させる
+				player->ConsumeGear(kRequiredGearCount);
+				// 列車に歯車を注入された際の処理
+				SupplyGear();
+			}
+		}
+	}
 }
 
 void Carrier::MoveAlongPath(float deltaTime)
 {
-	// 無効化状態なら終了
-	if(!isActive_) return;
+	// 無効化状態 or ゴール済みなら終了
+	if (!isActive_ || isGoal_) return;
 
-	// ゴール済みなら終了
-	if(isGoal_) return;
+	// 速度が完全に0なら計算しない
+	if (currentVelocityRate_ <= 0.0f && energyTimer_ <= 0.0f) return;
 
+	// 全てのポイントを通過したらゴール済みにする
 	auto pathManager = PathManager::GetInstance();
-
-	// 全てのポイントを通過したらゴール済みへ
 	if(targetIndex_ >= pathManager->GetPointCount()) {
 		isGoal_ = true;
 		return;
@@ -79,11 +120,19 @@ void Carrier::MoveAlongPath(float deltaTime)
 	Cygnus::Float3 diff = targetPos - currentPos;
 	float distance = Cygnus::Float3::Length(diff);
 
+	// 現在フレームの移動速度を計算
+	float frameSpeed = kMoveSpeed * currentVelocityRate_ * deltaTime;
+
 	// ポイント到着判定 + オブジェクト移動処理
 	if(distance < kMoveSpeed * deltaTime) {
 		currentPos = targetPos;
 		targetIndex_++;	// 次のポイントへ
 	} else {
-		currentPos += (diff / distance) * kMoveSpeed * deltaTime;
+		currentPos += (diff / distance) * frameSpeed;
 	}
+}
+
+void Carrier::SupplyGear() {
+	energyTimer_ = kMaxEnergy;	// 動作時間を設定
+	isActive_ = true;	// 有効化
 }

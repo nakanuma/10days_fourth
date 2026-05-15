@@ -63,6 +63,16 @@ public:
 	uint32_t GetOreCount() { return oreCount_; }
 
 	/// <summary>
+	/// 指定した個数分だけ所持鉱石を減らす（歯車作成時の処理）
+	/// </summary>
+	/// <param name="amount">鉱石の消費数</param>
+	void ConsumeOre(uint32_t amount) {
+		if (oreCount_ >= amount) {
+			oreCount_ -= amount;
+		}
+	}
+
+	/// <summary>
 	/// 歯車を拾えるか（所持最大数に達していないか）
 	/// </summary>
 	/// <returns></returns>
@@ -79,10 +89,14 @@ public:
 	uint32_t GetGearCount() { return gearCount_; }
 
 	/// <summary>
-	/// 指定した個数分だけ所持鉱石を減らす（歯車作成時）
+	/// 指定した個数分だけ歯車所持数を減らす（列車注入時の処理）
 	/// </summary>
-	/// <param name="amount">鉱石の消費数</param>
-	void ConsumeOre(uint32_t amount) { if (oreCount_ >= amount) { oreCount_ -= amount; } }
+	/// <param name="amount"></param>
+	void ConsumeGear(uint32_t amount) {
+		if (gearCount_ >= amount) {
+			gearCount_ -= amount;
+		}
+	}
 
 	/// setter_座標位置
 	/// </summary>
