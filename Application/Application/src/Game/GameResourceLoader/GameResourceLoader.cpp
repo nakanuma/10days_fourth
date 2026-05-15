@@ -102,6 +102,20 @@ void GameResourceLoader::LoadAllModelData() {
 		"Object/Gear/gear.obj", 
 		"Object/Gear/gear.png"
 	);
+
+	// 攻撃予兆オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"AttackPlane",
+		"Object/AttackPlane/attackPlane.obj",
+		"white.png"
+	);
+
+	// 攻撃予兆オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"AttachFrame",
+		"Object/AttachFrame/attackFrame.obj",
+		"white.png"
+	);
 }
 
 void GameResourceLoader::RegisterAllParticleEffect() {

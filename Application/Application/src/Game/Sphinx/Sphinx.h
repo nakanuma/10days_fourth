@@ -36,6 +36,8 @@ public:
 	/// <param name="targetPos">追跡対象の座標</param>
 	void Update(float deltaTime, const Cygnus::Float3& targetPos);
 
+	void UpdateAttackSign(float t);
+
 	/// <summary>
 	/// 描画処理を行います。
 	/// </summary>
@@ -144,10 +146,10 @@ private:
 	const float kMoveSpeed = 1.0f;               // 通常移動速度
 	const float kMoveChangeTime_ = 2.0f;         // 移動方向変化の間隔
 	const Cygnus::Float3 kColliderSize = { 2.0f, 2.0f, 3.0f }; // コライダーのサイズ
-	const float kAttackMoveSpeed_ = 40.0f;       // 突進攻撃の速度
-	const float kAttackTime_ = 0.5f;             // 突進持続時間
+	const float kAttackMoveSpeed_ = 60.0f;       // 突進攻撃の速度
+	const float kAttackTime_ = 0.334f;             // 突進持続時間
 	const float kFaintTime_ = 2.0f;              // 気絶時間
-	const float kSearchRange_ = 20.0f;           // プレイヤー索敵範囲
+	const float kSearchRange_ = kAttackMoveSpeed_ * kAttackTime_;           // プレイヤー索敵範囲
 	const float kAttackCoolTime_ = 3.0f;         // 攻撃後のクールタイム
 	const float kChargeTime_ = 1.5f;             // 溜め時間
 	const float kWanderTurnSpeed_ = 6.0f;        // 徘徊時の旋回スピード
@@ -159,8 +161,11 @@ private:
 	const float kMiningOffset = 3.5f;            // 採掘判定のオフセット
 	const float kMiningRange = 2.5f;             // 採掘判定の範囲
 
-	const Cygnus::Float3 kMoveMin = { -30.0f, 0.0f, -30.0f }; // 移動可能範囲の最小値
-	const Cygnus::Float3 kMoveMax = { 30.0f, 0.0f, 15.0f };  // 移動可能範囲の最大値
+	const Cygnus::Float3 kMoveMin = { -30.0f, 0.0f, -30.0f };	// 移動可能範囲の最小値
+	const Cygnus::Float3 kMoveMax = { 30.0f, 0.0f, 15.0f };		// 移動可能範囲の最大値
+
+	const Cygnus::Float4 kPlaneColor = { 1.0f, 0.3f, 0.3f, 0.75f };	// 移動可能範囲の最小値
+	const Cygnus::Float4 kFrameColor = { 1.0f, 0.6f, 0.6f, 0.9f };	// 移動可能範囲の最大値
 
 	// =========================================================
 	// Member Variables
@@ -176,4 +181,8 @@ private:
 	Cygnus::Float3 attackDir_;   // 共有変数：突進方向
 	bool isMining_ = false;      // 共有変数：採掘フラグ
 	bool isMoving_ = true;       // 移動中フラグ
+
+
+	std::unique_ptr<Cygnus::Object3D> attackPlane_;   // 攻撃予兆オブジェクト
+	std::unique_ptr<Cygnus::Object3D> attackFrame_;   // 攻撃予兆オブジェクト
 };

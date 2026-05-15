@@ -45,6 +45,18 @@ void Sphinx::Initialize()
 	stateMachine_.RegisterState(SphinxState::CoolDown, std::make_unique<CoolDownState>(&stateMachine_), "CoolDown");
 
 	stateMachine_.ChangeState(SphinxState::Wander);
+
+
+	// オブジェクト生成
+	attackPlane_ = std::make_unique<Cygnus::Object3D>();
+	attackPlane_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("AttackPlane");
+	attackPlane_->materialCB_.data_->color = kPlaneColor;
+
+	// オブジェクト生成
+	attackFrame_ = std::make_unique<Cygnus::Object3D>();
+	attackFrame_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("AttachFrame");
+	attackFrame_->transform_.scale_ = { 1.0f, 1.0f, kSearchRange_ / 2.0f };
+	attackFrame_->materialCB_.data_->color = kFrameColor;
 }
 
 void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
@@ -58,6 +70,18 @@ void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
 	MoveClamp();
 	collider_->Update();
 	object_->UpdateMatrix();
+}
+
+void Sphinx::UpdateAttackSign(float t)
+{
+	attackPlane_->transform_.rotate_ = object_->transform_.rotate_;
+	attackPlane_->transform_.translate_ = { object_->transform_.translate_.x, 0.05f, object_->transform_.translate_.z };
+	attackPlane_->transform_.scale_ = { 1.0f, 1.0f, (kSearchRange_ * t) / 2.0f };
+	attackPlane_->UpdateMatrix();
+
+	attackFrame_->transform_.rotate_ = object_->transform_.rotate_;
+	attackFrame_->transform_.translate_ = { object_->transform_.translate_.x, 0.06f, object_->transform_.translate_.z };
+	attackFrame_->UpdateMatrix();
 }
 
 void Sphinx::MoveForward(float speed, float deltaTime)
@@ -101,6 +125,13 @@ void Sphinx::MoveClamp()
 void Sphinx::Draw()
 {
 	// オブジェクト描画
+
+	if (stateMachine_.GetCurrentState() == SphinxState::Charge)
+	{
+		attackPlane_->Draw();
+		attackFrame_->Draw();
+	}
+
 	object_->Draw();
 }
 
