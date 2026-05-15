@@ -9,10 +9,10 @@
     "isBillboard": true,
     "maxAccerelation": [
         0.0,
-        -9.800000190734863,
+        33.79999923706055,
         0.0
     ],
-    "maxLifeTime": 1.2000000476837158,
+    "maxLifeTime": 11.899999618530273,
     "maxRotationSpeed": [
         3.0,
         3.0,

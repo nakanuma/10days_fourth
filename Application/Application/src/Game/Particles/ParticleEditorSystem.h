@@ -40,5 +40,8 @@ private:
 	//ファイルリスト
 	std::vector<std::string> files;
 
+	//無限エミットの有無
+	bool isInfiniteEmit_ = false;
+
 };
 

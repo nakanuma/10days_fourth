@@ -86,7 +86,6 @@ void GameResourceLoader::LoadAllModelData() {
 
 void GameResourceLoader::RegisterAllParticleEffect() {
 	RegisterParticle("template", "Cube");
-	RegisterParticle("add1", "Cube");
 }
 
 void GameResourceLoader::LoadAllSoundData() {

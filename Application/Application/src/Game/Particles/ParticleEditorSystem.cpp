@@ -47,6 +47,12 @@ void ParticleEditorSystem::Debug() {
 		//初期トランスフォーム
 		if (ImGui::CollapsingHeader("Initial Transform")) {
 			ImGui::DragFloat3("Scale Min", &constantsData.minScale.x, 0.1f);
+
+			//区切り
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+
 			ImGui::DragFloat3("Scale Max", &constantsData.maxScale.x, 0.1f);
 
 			constantsData.minScale.x = std::min(constantsData.minScale.x, constantsData.maxScale.x);
@@ -71,6 +77,11 @@ void ParticleEditorSystem::Debug() {
 			constantsData.maxVelocity.y = std::max(constantsData.maxVelocity.y, constantsData.minVelocity.y);
 			constantsData.maxVelocity.z = std::max(constantsData.maxVelocity.z, constantsData.minVelocity.z);
 
+			//区切り
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
+
 			ImGui::DragFloat3("Rotation Speed Min", &constantsData.minRotationSpeed.x, 0.1f);
 			ImGui::DragFloat3("Rotation Speed Max", &constantsData.maxRotationSpeed.x, 0.1f);
 
@@ -81,6 +92,11 @@ void ParticleEditorSystem::Debug() {
 			constantsData.maxRotationSpeed.x = std::max(constantsData.maxRotationSpeed.x, constantsData.minRotationSpeed.x);
 			constantsData.maxRotationSpeed.y = std::max(constantsData.maxRotationSpeed.y, constantsData.minRotationSpeed.y);
 			constantsData.maxRotationSpeed.z = std::max(constantsData.maxRotationSpeed.z, constantsData.minRotationSpeed.z);
+
+			//区切り
+			ImGui::Spacing();
+			ImGui::Separator();
+			ImGui::Spacing();
 
 			ImGui::DragFloat3("Scale Speed Min", &constantsData.minScaleSpeed.x, 0.1f);
 			ImGui::DragFloat3("Scale Speed Max", &constantsData.maxScaleSpeed.x, 0.1f);
@@ -159,6 +175,13 @@ void ParticleEditorSystem::Debug() {
 
 		//発生制御
 		{
+			//無限エミット
+			ImGui::Checkbox("Infinite Emit", &isInfiniteEmit_);
+			if (isInfiniteEmit_) {
+				//無限エミットがONになったらエミット開始
+				Cygnus::ParticleEffectManager::GetInstance()->Emit(targetEffectName_, Cygnus::Float3(0, 0, 0), 1, Cygnus::Float3(0, 0, 0), 0.0f);
+			}
+
 			//発生数
 			ImGui::DragInt("Count", reinterpret_cast<int*>(&count_), 1, 1, 30);
 			//エミット
