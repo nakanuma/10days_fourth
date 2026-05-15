@@ -124,3 +124,45 @@ bool OreManager::TryBreakAt(const Cygnus::Float3& targetPos, float range) {
 
 	return false;
 }
+
+bool OreManager::BreakAllAt(const Cygnus::Float3& targetPos, float range)
+{
+	float rangeSq = range * range; // 比較用に半径の2乗を計算
+	bool hitAny = false;
+
+	// ores_ 配列から条件に合うものを抽出・削除
+	auto it = std::remove_if(ores_.begin(), ores_.end(), [&](const std::unique_ptr<Ore>& ore)
+		{
+			Cygnus::Float3 orePos = ore->GetTranslate();
+			float dx = orePos.x - targetPos.x;
+			float dz = orePos.z - targetPos.z;
+			float distSq = dx * dx + dz * dz;
+
+			// 範囲内にあるかチェック
+			if (distSq <= rangeSq)
+			{
+				// 1. 削除される鉱石の位置を保存
+				Cygnus::Float3 dropPos = ore->GetTranslate();
+
+				// 2. コライダー登録解除
+				ore->UnregisterCollider();
+
+				// 3. 落ちている鉱石（ドロップアイテム）を生成してリストに追加
+				auto newDroppedOre = std::make_unique<DroppedOre>();
+				newDroppedOre->Initialize(dropPos);
+				droppedOres_.push_back(std::move(newDroppedOre));
+
+				hitAny = true;
+				return true; // 削除対象
+			}
+			return false; // 保持
+		});
+
+	// 実際に vector から削除
+	if (hitAny)
+	{
+		ores_.erase(it, ores_.end());
+	}
+
+	return hitAny;
+}
