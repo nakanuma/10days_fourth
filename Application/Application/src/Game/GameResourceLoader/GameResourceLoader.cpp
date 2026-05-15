@@ -1,4 +1,4 @@
-﻿#include "GameResourceLoader.h"
+#include "GameResourceLoader.h"
 
 // Engine
 #include <ModelManager.h>
@@ -62,6 +62,13 @@ void GameResourceLoader::LoadAllModelData() {
 		"Player",
 		"Character/Player/player.obj",
 		"Character/Player/player.png"
+	);
+
+	// スフィンクス
+	modelManager->LoadAndRegisterModel(
+		"Sphinx",
+		"Character/Sphinx/sphinx.obj",
+		"Character/Sphinx/sphinx.png"
 	);
 
 	// ---------------------------------------------------------
