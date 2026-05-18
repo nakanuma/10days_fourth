@@ -18,20 +18,29 @@
 namespace fs = std::filesystem;
 
 void ParticleEditorSystem::Initialize() {
+	//æš—è‰²èƒŒæ™¯ç”¨ãƒ¢ãƒ‡ãƒ«ã®ç”Ÿæˆ
+	object_ = std::make_unique<Cygnus::Object3D>();
+	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("BlackPlane");
+	object_->transform_.scale_ = { 100.0f, 100.0f, 100.0f };
+	object_->transform_.translate_ = { 0.0f, 0.0f, 100.0f };
+	object_->transform_.rotate_ = { 0.0f, 3.14f, 0.0f };
 
 }
 
 void ParticleEditorSystem::Update() {
-
+	object_->UpdateMatrix();
 }
 
 void ParticleEditorSystem::Draw() {
+	if (isDrawObject_) {
+		object_->Draw();
+	}
 
 }
 
 void ParticleEditorSystem::Debug() {
 #ifdef _DEBUG
-	//ƒEƒBƒ“ƒhƒE1(ƒpƒ‰ƒ[ƒ^)
+	//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦1(ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿)
 	{
 		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 		ImGui::SetNextWindowSize(ImVec2(300, 640), ImGuiCond_Always);
@@ -39,16 +48,16 @@ void ParticleEditorSystem::Debug() {
 			ImGuiWindowFlags_NoMove |
 			ImGuiWindowFlags_NoResize);
 
-		//’è”ƒf[ƒ^
+		//å®šæ•°ãƒ‡ãƒ¼ã‚¿
 		ConstantsData constantsData = ParticleStrage::GetInstance()->GetEffects()[targetEffectName_]->GetConstantsData();
 
-		//•ÒW
+		//ç·¨é›†
 
-		//‰Šúƒgƒ‰ƒ“ƒXƒtƒH[ƒ€
+		//åˆæœŸãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ 
 		if (ImGui::CollapsingHeader("Initial Transform")) {
 			ImGui::DragFloat3("Scale Min", &constantsData.minScale.x, 0.1f);
 
-			//‹æØ‚è
+			//åŒºåˆ‡ã‚Š
 			ImGui::Spacing();
 			ImGui::Separator();
 			ImGui::Spacing();
@@ -64,7 +73,7 @@ void ParticleEditorSystem::Debug() {
 			constantsData.maxScale.z = std::max(constantsData.maxScale.z, constantsData.minScale.z);
 		}
 
-		//XVƒgƒ‰ƒ“ƒXƒtƒH[ƒ€
+		//æ›´æ–°ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ 
 		if (ImGui::CollapsingHeader("Update Transform")) {
 			ImGui::DragFloat3("Velocity Min", &constantsData.minVelocity.x, 0.1f);
 			ImGui::DragFloat3("Velocity Max", &constantsData.maxVelocity.x, 0.1f);
@@ -77,7 +86,7 @@ void ParticleEditorSystem::Debug() {
 			constantsData.maxVelocity.y = std::max(constantsData.maxVelocity.y, constantsData.minVelocity.y);
 			constantsData.maxVelocity.z = std::max(constantsData.maxVelocity.z, constantsData.minVelocity.z);
 
-			//‹æØ‚è
+			//åŒºåˆ‡ã‚Š
 			ImGui::Spacing();
 			ImGui::Separator();
 			ImGui::Spacing();
@@ -93,7 +102,7 @@ void ParticleEditorSystem::Debug() {
 			constantsData.maxRotationSpeed.y = std::max(constantsData.maxRotationSpeed.y, constantsData.minRotationSpeed.y);
 			constantsData.maxRotationSpeed.z = std::max(constantsData.maxRotationSpeed.z, constantsData.minRotationSpeed.z);
 
-			//‹æØ‚è
+			//åŒºåˆ‡ã‚Š
 			ImGui::Spacing();
 			ImGui::Separator();
 			ImGui::Spacing();
@@ -110,7 +119,7 @@ void ParticleEditorSystem::Debug() {
 			constantsData.maxScaleSpeed.z = std::max(constantsData.maxScaleSpeed.z, constantsData.minScaleSpeed.z);
 		}
 
-		//‰Á‘¬“x
+		//åŠ é€Ÿåº¦
 		if (ImGui::CollapsingHeader("Acceleration")) {
 			ImGui::DragFloat3("Acceleration Min", &constantsData.minAccerelation.x, 0.1f);
 			ImGui::DragFloat3("Acceleration Max", &constantsData.maxAccerelation.x, 0.1f);
@@ -124,13 +133,13 @@ void ParticleEditorSystem::Debug() {
 			constantsData.maxAccerelation.z = std::max(constantsData.maxAccerelation.z, constantsData.minAccerelation.z);
 		}
 
-		//F
+		//è‰²
 		if (ImGui::CollapsingHeader("Color")) {
 			ImGui::ColorEdit4("Start Color", &constantsData.startColor.x);
 			ImGui::ColorEdit4("End Color", &constantsData.endColor.x);
 		}
 
-		//õ–½
+		//å¯¿å‘½
 		if (ImGui::CollapsingHeader("LifeTime")) {
 			ImGui::DragFloat("LifeTime Min", &constantsData.minLifeTime, 0.1f);
 			ImGui::DragFloat("LifeTime Max", &constantsData.maxLifeTime, 0.1f);
@@ -139,7 +148,7 @@ void ParticleEditorSystem::Debug() {
 			constantsData.maxLifeTime = std::max(constantsData.maxLifeTime, constantsData.minLifeTime);
 		}
 
-		//‚»‚Ì‘¼
+		//ãã®ä»–
 		if (ImGui::CollapsingHeader("Other")) {
 			ImGui::Checkbox("Is Billboard", &constantsData.isBillboard);
 
@@ -160,12 +169,12 @@ void ParticleEditorSystem::Debug() {
 			}
 		}
 
-		//’è”ƒf[ƒ^‚ÌƒZƒbƒg
+		//å®šæ•°ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒƒãƒˆ
 		ParticleStrage::GetInstance()->GetEffects()[targetEffectName_]->SetConstantsData(constantsData);
 
 		ImGui::End();
 	}
-	//ƒEƒBƒ“ƒhƒE2(§Œä)
+	//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦2(åˆ¶å¾¡)
 	{
 		ImGui::SetNextWindowPos(ImVec2(1280 - 300, 0), ImGuiCond_Always);
 		ImGui::SetNextWindowSize(ImVec2(300, 640), ImGuiCond_Always);
@@ -173,27 +182,27 @@ void ParticleEditorSystem::Debug() {
 			ImGuiWindowFlags_NoMove |
 			ImGuiWindowFlags_NoResize);
 
-		//”­¶§Œä
+		//ç™ºç”Ÿåˆ¶å¾¡
 		{
-			//–³ŒÀƒGƒ~ƒbƒg
+			//ç„¡é™ã‚¨ãƒŸãƒƒãƒˆ
 			ImGui::Checkbox("Infinite Emit", &isInfiniteEmit_);
 			if (isInfiniteEmit_) {
-				//–³ŒÀƒGƒ~ƒbƒg‚ªON‚É‚È‚Á‚½‚çƒGƒ~ƒbƒgŠJn
+				//ç„¡é™ã‚¨ãƒŸãƒƒãƒˆãŒONã«ãªã£ãŸã‚‰ã‚¨ãƒŸãƒƒãƒˆé–‹å§‹
 				Cygnus::ParticleEffectManager::GetInstance()->Emit(targetEffectName_, Cygnus::Float3(0, 0, 0), 1, Cygnus::Float3(0, 0, 0), 0.0f);
 			}
 
-			//”­¶”
+			//ç™ºç”Ÿæ•°
 			ImGui::DragInt("Count", reinterpret_cast<int*>(&count_), 1, 1, 30);
-			//ƒGƒ~ƒbƒg
+			//ã‚¨ãƒŸãƒƒãƒˆ
 			if (ImGui::Button("Emit")) {
 				Cygnus::ParticleEffectManager::GetInstance()->Emit(targetEffectName_, Cygnus::Float3(0, 0, 0), count_);
 			}
 		}
 
-		//“Ç‚İ‚İ
+		//èª­ã¿è¾¼ã¿
 		{
 			if (ImGui::Button("Load")) {
-				// ƒtƒHƒ‹ƒ_“Ç‚İ’¼‚µ
+				// ãƒ•ã‚©ãƒ«ãƒ€èª­ã¿ç›´ã—
 				files.clear();
 
 				for (auto& p : fs::directory_iterator("resources/Particles")) {
@@ -208,14 +217,14 @@ void ParticleEditorSystem::Debug() {
 			if (ImGui::BeginPopup("FileBrowser")) {
 				for (auto& file : files) {
 					if (ImGui::Selectable(file.c_str())) {
-						//‘I‘ğ‚µ‚½ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
+						//é¸æŠã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿
 						std::string name = file;
 						name = std::filesystem::path(name).stem().string();
-						//§Œä‘ÎÛ‚ÌØ‚è‘Ö‚¦
+						//åˆ¶å¾¡å¯¾è±¡ã®åˆ‡ã‚Šæ›¿ãˆ
 						targetEffectName_ = name;
-						//•Û‘¶‘ÎÛ‚ÌØ‚è‘Ö‚¦
+						//ä¿å­˜å¯¾è±¡ã®åˆ‡ã‚Šæ›¿ãˆ
 						saveFileName_ = name;
-						//¡‚Ìƒp[ƒeƒBƒNƒ‹‚ÉJSONƒf[ƒ^‚ğ“Ç‚İ‚Ü‚¹‚é
+						//ä»Šã®ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã«JSONãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã¾ã›ã‚‹
 						ParticleStrage::GetInstance()->GetEffects()[targetEffectName_]->LoadJsonData(name);
 
 						ImGui::CloseCurrentPopup();
@@ -226,9 +235,9 @@ void ParticleEditorSystem::Debug() {
 			}
 		}
 
-		//•Û‘¶
+		//ä¿å­˜
 		{
-			//•Û‘¶‘ÎÛ‚Ì“ü—Í
+			//ä¿å­˜å¯¾è±¡ã®å…¥åŠ›
 			char buffer[256];
 			strcpy_s(buffer, saveFileName_.c_str());
 			if (ImGui::InputText("Save File Name", buffer, sizeof(buffer))) {
@@ -236,9 +245,9 @@ void ParticleEditorSystem::Debug() {
 			}
 
 			if (ImGui::Button("Save")) {
-				//’è”ƒf[ƒ^‚Ìæ“¾
+				//å®šæ•°ãƒ‡ãƒ¼ã‚¿ã®å–å¾—
 				ConstantsData constantsData = ParticleStrage::GetInstance()->GetEffects()[targetEffectName_]->GetConstantsData();
-				//jsonƒf[ƒ^‚Ìì¬
+				//jsonãƒ‡ãƒ¼ã‚¿ã®ä½œæˆ
 				json jsonData;
 				jsonData["minScale"] = {
 					constantsData.minScale.x,
@@ -299,25 +308,32 @@ void ParticleEditorSystem::Debug() {
 
 
 				if (JsonUtil::CheckJson(saveFileName_, "resources/Particles")) {
-					//•Û‘¶‘ÎÛ‚ª‘¶İ‚µ‚Ä‚¢‚éê‡‚Íã‘‚«•Û‘¶
+					//ä¿å­˜å¯¾è±¡ãŒå­˜åœ¨ã—ã¦ã„ã‚‹å ´åˆã¯ä¸Šæ›¸ãä¿å­˜
 					JsonUtil::EditJson("resources/Particles/" + saveFileName_, jsonData);
 
 				}
 				else {
-					//•Û‘¶‘ÎÛ‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍV‹Kì¬
+					//ä¿å­˜å¯¾è±¡ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯æ–°è¦ä½œæˆ
 					JsonUtil::CreateJson(saveFileName_, "resources/Particles", jsonData);
 				}
 
 			}
 
-			ImGui::End();
 
 		}
-		//ƒEƒBƒ“ƒhƒE3(ŠÂ‹«)
+
+		//èƒŒæ™¯ã®å¤‰æ›´
 		{
-
+			ImGui::Checkbox("BackColorChange", &isDrawObject_);
 		}
+
+
+		ImGui::End();
+	}
+	//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦3(ç’°å¢ƒ)
+	{
+
+	}
 
 #endif
-	}
 }

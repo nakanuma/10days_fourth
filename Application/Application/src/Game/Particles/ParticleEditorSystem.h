@@ -5,43 +5,50 @@
 #include <cstdint>
 #include <vector>
 
+//Engine
+#include <Object3D.h>
+
 /// <summary>
-/// ƒp[ƒeƒBƒNƒ‹ƒGƒfƒBƒ^[ƒVƒXƒeƒ€ƒNƒ‰ƒX
+/// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã‚¨ãƒ‡ã‚£ã‚¿ãƒ¼ã‚·ã‚¹ãƒ†ãƒ ã‚¯ãƒ©ã‚¹
 /// </summary>
 class ParticleEditorSystem {
 public:
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize();
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 	/// <summary>
-	/// •`‰æ
+	/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	/// </summary>
 	void Draw();
 	/// <summary>
-	/// ƒfƒoƒbƒO
+	/// ãƒ‡ãƒãƒƒã‚°
 	/// </summary>
 	void Debug();
 
 private:
-	//§Œä‘ÎÛ
+	//åˆ¶å¾¡å¯¾è±¡
 	std::string targetEffectName_ = "template";
-	//•Û‘¶‘ÎÛ
+	//ä¿å­˜å¯¾è±¡
 	std::string saveFileName_ = "template";
 
-	//ƒGƒ~ƒbƒgƒJƒEƒ“ƒg
+	//ã‚¨ãƒŸãƒƒãƒˆã‚«ã‚¦ãƒ³ãƒˆ
 	uint32_t count_ = 10;
 
-	//ƒtƒ@ƒCƒ‹ƒŠƒXƒg
+	//ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
 	std::vector<std::string> files;
 
-	//–³ŒÀƒGƒ~ƒbƒg‚Ì—L–³
+	//ç„¡é™ã‚¨ãƒŸãƒƒãƒˆã®æœ‰ç„¡
 	bool isInfiniteEmit_ = false;
+
+	//æš—è‰²èƒŒæ™¯ç”¨ãƒ¢ãƒ‡ãƒ«
+	std::unique_ptr<Cygnus::Object3D> object_;
+	bool isDrawObject_ = false;
 
 };
 

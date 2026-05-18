@@ -4,6 +4,9 @@
 #include "State/StateMachine.h"
 #include "State/State.h"
 
+//Engine
+#include "ParticleEffect/ParticleEffectManager.h"
+
 // =========================================================
 // 各ステートクラスの実装
 // =========================================================
@@ -100,6 +103,10 @@ public:
 	{
 		owner->SetIsMining(false);
 		owner->GetObject()->transform_.translate_.y = owner->GetBaseY();
+
+		//攻撃ので始めにエフェクトを出す
+		Cygnus::ParticleEffectManager::GetInstance()->Emit("pyonpyon", owner->GetObject()->transform_.translate_, 20);
+
 	}
 
 	void Update(Sphinx* owner, float deltaTime) override

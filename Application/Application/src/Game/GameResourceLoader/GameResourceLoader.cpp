@@ -40,6 +40,13 @@ void GameResourceLoader::LoadAllModelData() {
 		"white.png"
 	);
 
+	// 黒い板
+	modelManager->LoadAndRegisterModel(
+		"BlackPlane",
+		"Primitive/Plane/plane.obj",
+		"black.png"
+	);
+
 	// スフィア
 	modelManager->LoadAndRegisterModel(
 		"Sphere",
@@ -122,6 +129,7 @@ void GameResourceLoader::LoadAllModelData() {
 void GameResourceLoader::RegisterAllParticleEffect() {
 	RegisterParticle("template", "Cube");
 	RegisterParticle("move_dust", "Cube");
+	RegisterParticle("pyonpyon", "Cube");
 }
 
 void GameResourceLoader::LoadAllSoundData() {

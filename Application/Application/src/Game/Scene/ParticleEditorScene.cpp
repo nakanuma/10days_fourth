@@ -23,33 +23,33 @@
 void ParticleEditorScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
-	// ƒJƒƒ‰‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬
+	// ã‚«ãƒ¡ãƒ©ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆ
 	camera_ = std::make_unique<Cygnus::Camera>(Cygnus::Float3{ 0.0f, 0.0f, -20.0f }, Cygnus::Float3{ 0.0f, 0.0f, 0.0f },0.45f);
-	Cygnus::Camera::Set(camera_.get()); // Œ»İ‚ÌƒJƒƒ‰‚ğƒZƒbƒg
+	Cygnus::Camera::Set(camera_.get()); // ç¾åœ¨ã®ã‚«ãƒ¡ãƒ©ã‚’ã‚»ãƒƒãƒˆ
 
-	// SpriteCommon‚Ì¶¬‚Æ‰Šú‰»
+	// SpriteCommonã®ç”Ÿæˆã¨åˆæœŸåŒ–
 	spriteCommon_ = std::make_unique<Cygnus::SpriteCommon>();
 	spriteCommon_->Initialize(Cygnus::DirectXBase::GetInstance());
 
-	// TextureManager‚Ì‰Šú‰»
+	// TextureManagerã®åˆæœŸåŒ–
 	Cygnus::TextureManager::Initialize(dxBase->GetDevice(), Cygnus::SRVManager::GetInstance());
 
-	// Input‚Ì‰Šú‰»
+	// Inputã®åˆæœŸåŒ–
 	input_ = Cygnus::Input::GetInstance();
 
-	// LightManager‚Ì‰Šú‰»
+	// LightManagerã®åˆæœŸåŒ–
 	lightManager_ = Cygnus::LightManager::GetInstance();
 	lightManager_->Initialize();
 
-	// ƒVƒƒƒhƒEƒ}ƒbƒv¶¬
+	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ç”Ÿæˆ
 	shadowMapHandle_ = Cygnus::ShadowMapManager::GetInstance()->CreateShadowMap(Cygnus::Window::GetWidth(), Cygnus::Window::GetHeight());
 
-	// ƒ|ƒXƒgƒGƒtƒFƒNƒgŠÇ—
+	// ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆç®¡ç†
 	postEffectManager_ = std::make_unique<Cygnus::PostEffectManager>();
 	postEffectManager_->Initialize();
 
 	///
-	///	« ƒGƒfƒBƒ^[ƒV[ƒ“—p
+	///	â†“ ã‚¨ãƒ‡ã‚£ã‚¿ãƒ¼ã‚·ãƒ¼ãƒ³ç”¨
 	///
 
 	particleEditorSystem_ = std::make_unique<ParticleEditorSystem>();
@@ -62,15 +62,15 @@ void ParticleEditorScene::Finalize() {}
 
 void ParticleEditorScene::Update() {
 	///
-	///	‹¤’ÊXVˆ—
+	///	å…±é€šæ›´æ–°å‡¦ç†
 	/// 
-	Cygnus::LightManager::GetInstance()->ClearEmissiveLights(); // ƒGƒ~ƒbƒVƒuƒ‰ƒCƒg‚ğƒNƒŠƒA
-	Cygnus::LightManager::GetInstance()->ClearAreaLights();     // ƒGƒŠƒAƒ‰ƒCƒg‚ğƒNƒŠƒA
-	Cygnus::SkyBoxManager::GetInstance()->Update(); // SkyBoxXV
-	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();	// ƒfƒ‹ƒ^ƒ^ƒCƒ€æ“¾
+	Cygnus::LightManager::GetInstance()->ClearEmissiveLights(); // ã‚¨ãƒŸãƒƒã‚·ãƒ–ãƒ©ã‚¤ãƒˆã‚’ã‚¯ãƒªã‚¢
+	Cygnus::LightManager::GetInstance()->ClearAreaLights();     // ã‚¨ãƒªã‚¢ãƒ©ã‚¤ãƒˆã‚’ã‚¯ãƒªã‚¢
+	Cygnus::SkyBoxManager::GetInstance()->Update(); // SkyBoxæ›´æ–°
+	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();	// ãƒ‡ãƒ«ã‚¿ã‚¿ã‚¤ãƒ å–å¾—
 
 	///
-	///	ƒIƒuƒWƒFƒNƒgXVˆ—
+	///	ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–°å‡¦ç†
 	/// 
 
 	particleEditorSystem_->Update();
@@ -80,7 +80,7 @@ void ParticleEditorScene::Update() {
 	///	
 	/// 
 
-	Cygnus::CollisionManager::GetInstance()->Update();	// ƒRƒ‰ƒCƒ_[ŠÇ—ƒNƒ‰ƒXXV
+	Cygnus::CollisionManager::GetInstance()->Update();	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç®¡ç†ã‚¯ãƒ©ã‚¹æ›´æ–°
 }
 
 void ParticleEditorScene::Draw() {
@@ -88,79 +88,80 @@ void ParticleEditorScene::Draw() {
 	Cygnus::SRVManager* srvManager = Cygnus::SRVManager::GetInstance();
 	auto* cmd = Cygnus::CommandManager::GetInstance()->GetCommandList();
 
-	// •`‰æ‘Oˆ—
+	// æç”»å‰å‡¦ç†
 	dxBase->PreDraw();
-	// •`‰æ—p‚ÌDescriptorHeap‚Ìİ’è
+	// æç”»ç”¨ã®DescriptorHeapã®è¨­å®š
 	ID3D12DescriptorHeap* descriptorHeaps[] = { srvManager->descriptorHeap_.heap_.Get() };
 	cmd->SetDescriptorHeaps(1, descriptorHeaps);
-	// ImGui‚ÌƒtƒŒ[ƒ€ŠJnˆ—
+	// ImGuiã®ãƒ•ãƒ¬ãƒ¼ãƒ é–‹å§‹å‡¦ç†
 	Cygnus::ImguiWrapper::NewFrame();
-	// ƒJƒƒ‰‚Ì’è”ƒoƒbƒtƒ@‚ğİ’è
+	// ã‚«ãƒ¡ãƒ©ã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã‚’è¨­å®š
 	Cygnus::Camera::TransferConstantBuffer();
-	// ƒ‰ƒCƒg‚Ì’è”ƒoƒbƒtƒ@‚ğİ’è
+	// ãƒ©ã‚¤ãƒˆã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã‚’è¨­å®š
 	lightManager_->TransferContantBuffer();
-	// LightCamera‚Ì’è”ƒoƒbƒtƒ@‚ğ‘—M
+	// LightCameraã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã‚’é€ä¿¡
 	Cygnus::LightCamera::GetInstance()->TransferConstantBuffer();
 
 	// ---------------------------------------------------------
-	// ƒVƒƒƒhƒEƒ}ƒbƒv•`‰æ‘Oˆ—
+	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—æç”»å‰å‡¦ç†
 	// ---------------------------------------------------------
 
-	// ƒ‰ƒCƒgƒJƒƒ‰‚ÌXV
+	// ãƒ©ã‚¤ãƒˆã‚«ãƒ¡ãƒ©ã®æ›´æ–°
 	Cygnus::LightCamera::GetInstance()->SetDirectionalLight(Cygnus::LightManager::GetInstance()->directionalLightCB_.data_->direction);
 
-	// ƒVƒƒƒhƒEƒ}ƒbƒv•`‰æŠJn
+	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—æç”»é–‹å§‹
 	Cygnus::ShadowMapManager::GetInstance()->BeginShadowPass(shadowMapHandle_);
 
 	/// =========================================================
-	/// « ‚±‚±‚©‚ç’Êíƒ‚ƒfƒ‹‚ÌƒVƒƒƒhƒEƒ}ƒbƒv•`‰æ
+	/// â†“ ã“ã“ã‹ã‚‰é€šå¸¸ãƒ¢ãƒ‡ãƒ«ã®ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—æç”»
 	/// =========================================================
 
 
 
 	/// =========================================================
-	/// ª ‚±‚±‚Ü‚Å’Êíƒ‚ƒfƒ‹‚ÌƒVƒƒƒhƒEƒ}ƒbƒv•`‰æ
+	/// â†‘ ã“ã“ã¾ã§é€šå¸¸ãƒ¢ãƒ‡ãƒ«ã®ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—æç”»
 	/// =========================================================
 
-	// ƒXƒLƒjƒ“ƒOƒ‚ƒfƒ‹—pPSO‚ğƒZƒbƒg
+	// ã‚¹ã‚­ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ‡ãƒ«ç”¨PSOã‚’ã‚»ãƒƒãƒˆ
 	cmd->SetPipelineState(Cygnus::ShadowMapManager::GetInstance()->GetShadowSkinnedPSO());
 
 	/// =========================================================
-	/// « ‚±‚±‚©‚çƒXƒLƒjƒ“ƒOƒ‚ƒfƒ‹‚ÌƒVƒƒƒhƒEƒ}ƒbƒv•`‰æ
+	/// â†“ ã“ã“ã‹ã‚‰ã‚¹ã‚­ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ‡ãƒ«ã®ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—æç”»
 	/// =========================================================
 
 
 
 	/// =========================================================
-	/// ª ‚±‚±‚Ü‚ÅƒXƒLƒjƒ“ƒOƒ‚ƒfƒ‹‚ÌƒVƒƒƒhƒEƒ}ƒbƒv•`‰æ
+	/// â†‘ ã“ã“ã¾ã§ã‚¹ã‚­ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ‡ãƒ«ã®ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—æç”»
 	/// =========================================================
 
 	Cygnus::ShadowMapManager::GetInstance()->EndShadowPass(shadowMapHandle_);
 
 	/// =========================================================
-	/// « ‚±‚±‚©‚ç3DƒIƒuƒWƒFƒNƒg•`‰æ
+	/// â†“ ã“ã“ã‹ã‚‰3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	/// =========================================================
 
-#pragma region ƒƒCƒ“ƒV[ƒ“‚Ì3DƒIƒuƒWƒFƒNƒg‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒO‚ğŠJn
+#pragma region
 	postEffectManager_->BeginMainScene();
 
-	// ƒXƒJƒCƒ{ƒbƒNƒX•`‰æ
+	// ã‚¹ã‚«ã‚¤ãƒœãƒƒã‚¯ã‚¹æç”»
 	Cygnus::SkyBoxManager::GetInstance()->Draw();
 	// -----------------------------------------------
 
-
+	// ã‚·ã‚¹ãƒ†ãƒ ã®æç”»
+	particleEditorSystem_->Draw();
 
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
 #pragma endregion
 
-#pragma region ƒoƒbƒNƒoƒbƒtƒ@‚Ö‚Ì’¼Ú•`‰æ
+#pragma region ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã¸ã®ç›´æ¥æç”»
 	postEffectManager_->RestoreBackBuffer(true);
 	// -----------------------------------------------
 
-	// ƒp[ƒeƒBƒNƒ‹ƒGƒtƒFƒNƒg•`‰æ
+	// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã‚¨ãƒ•ã‚§ã‚¯ãƒˆæç”»
 	Cygnus::ParticleEffectManager::GetInstance()->Draw();
-	// ƒ‰ƒCƒ“•`‰æ
+	// ãƒ©ã‚¤ãƒ³æç”»
 	Cygnus::LineDrawer::GetInstance()->Draw();
 
 	// -----------------------------------------------
@@ -168,35 +169,35 @@ void ParticleEditorScene::Draw() {
 #pragma endregion
 
 	/// =========================================================
-	/// ª ‚±‚±‚Ü‚Å3DƒIƒuƒWƒFƒNƒg•`‰æ
+	/// â†‘ ã“ã“ã¾ã§3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	/// =========================================================
 
-	// Sprite‚Ì•`‰æ€”õB‘S‚Ä‚Ì•`‰æ‚É‹¤’Ê‚ÌƒOƒ‰ƒtƒBƒbƒNƒXƒRƒ}ƒ“ƒh‚ğÏ‚Ş
+	// Spriteã®æç”»æº–å‚™ã€‚å…¨ã¦ã®æç”»ã«å…±é€šã®ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ã‚³ãƒãƒ³ãƒ‰ã‚’ç©ã‚€
 	spriteCommon_->PreDraw();
 
 	/// =========================================================
-	/// « ‚±‚±‚©‚çƒXƒvƒ‰ƒCƒg•`‰æ
+	/// â†“ ã“ã“ã‹ã‚‰ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 	/// =========================================================
 
 
 
 	/// =========================================================
-	/// ª ‚±‚±‚Ü‚ÅƒXƒvƒ‰ƒCƒg•`‰æ
+	/// â†‘ ã“ã“ã¾ã§ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 	/// =========================================================
 
-#ifdef _DEBUG // ƒfƒoƒbƒO•\¦
-	// ƒRƒ‰ƒCƒ_[•`‰æ
+#ifdef _DEBUG // ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æç”»
 	Cygnus::CollisionManager::GetInstance()->Draw();
 
-	// ƒQ[ƒ€ƒV[ƒ“
+	// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³
 	Debug();
 #endif
 
-	// ImGui‚Ì“à•”ƒRƒ}ƒ“ƒh‚ğ¶¬‚·‚é
+	// ImGuiã®å†…éƒ¨ã‚³ãƒãƒ³ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
 	Cygnus::ImguiWrapper::Render(cmd);
-	// •`‰æŒãˆ—
+	// æç”»å¾Œå‡¦ç†
 	dxBase->PostDraw();
-	// ƒtƒŒ[ƒ€I—¹ˆ—
+	// ãƒ•ãƒ¬ãƒ¼ãƒ çµ‚äº†å‡¦ç†
 	dxBase->EndFrame();
 }
 
