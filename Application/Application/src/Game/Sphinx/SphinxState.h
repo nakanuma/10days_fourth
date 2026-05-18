@@ -105,7 +105,7 @@ public:
 		owner->GetObject()->transform_.translate_.y = owner->GetBaseY();
 
 		//攻撃ので始めにエフェクトを出す
-		Cygnus::ParticleEffectManager::GetInstance()->Emit("pyonpyon", owner->GetObject()->transform_.translate_, 20);
+		Cygnus::ParticleEffectManager::GetInstance()->Emit("dush", owner->GetObject()->transform_.translate_, 20);
 
 	}
 

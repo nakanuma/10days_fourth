@@ -1,5 +1,8 @@
 #include "OreManager.h"
 
+//Engine
+#include <ParticleEffect/ParticleEffectManager.h>
+
 OreManager* OreManager::GetInstance() {
 	static OreManager instance;
 	return &instance;
@@ -118,6 +121,9 @@ bool OreManager::TryBreakAt(const Cygnus::Float3& targetPos, float range) {
 		auto newDroppedOre = std::make_unique<DroppedOre>();
 		newDroppedOre->Initialize(dropPos);
 		droppedOres_.push_back(std::move(newDroppedOre));
+
+		// 鉱石を破壊した際のパーティクルエフェクト生成
+		Cygnus::ParticleEffectManager::GetInstance()->Emit("ore_break", dropPos, 20);
 
 		return true;
 	}

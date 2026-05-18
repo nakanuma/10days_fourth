@@ -129,7 +129,8 @@ void GameResourceLoader::LoadAllModelData() {
 void GameResourceLoader::RegisterAllParticleEffect() {
 	RegisterParticle("template", "Cube");
 	RegisterParticle("move_dust", "Cube");
-	RegisterParticle("pyonpyon", "Cube");
+	RegisterParticle("dush", "Cube");
+	RegisterParticle("ore_break", "Cube");
 }
 
 void GameResourceLoader::LoadAllSoundData() {
