@@ -25,8 +25,8 @@ void HUD::Update() {
 }
 
 void HUD::Draw() {
-	//// 鉱石アイコン描画
-	//spriteOreIcon_->Draw();
-	//// 歯車アイコン描画
-	//spriteGearIcon_->Draw();
+	// 鉱石アイコン描画
+	spriteOreIcon_->Draw();
+	// 歯車アイコン描画
+	spriteGearIcon_->Draw();
 }
