@@ -174,27 +174,7 @@ bool OreManager::TryBreakAt(const Cygnus::Float3& targetPos, float range) {
 
 bool OreManager::BreakAllAt(const Cygnus::Float3& targetPos, float range)
 {
-	float rangeSq = range * range; // 比較用に半径の2乗を計算
-	bool hitAny = false;
-
-	// ores_ 配列から条件に合うものを抽出・削除
-	auto it = std::remove_if(ores_.begin(), ores_.end(), [&](const std::unique_ptr<Ore>& ore)
-		{
-			Cygnus::Float3 orePos = ore->GetTranslate();
-			float dx = orePos.x - targetPos.x;
-			float dz = orePos.z - targetPos.z;
-			float distSq = dx * dx + dz * dz;
-
-			// 範囲内にあるかチェック
-			if (distSq <= rangeSq)
-			{
-				hitAny = true;
-				return true; 
-			}
-			return false;
-		});
-
 	breakRequests_.push_back({ targetPos, range });
 
-	return hitAny;
+	return true;
 }
