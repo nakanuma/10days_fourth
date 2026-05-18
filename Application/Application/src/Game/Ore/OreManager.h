@@ -69,6 +69,11 @@ private:
 	/// <param name="slippagePoint">偶数の時のズレ</param>
 	/// <param name="size">サイズ</param>
 	void HalfChecker(float& half, float& slippagePoint, float size);
+
+	/// <summary>
+	/// 一括破壊を実行
+	/// </summary>
+	void BulkDestruction();
   
 private:
 
@@ -80,5 +85,12 @@ private:
 	//半分
 	const float kHalf_ = 0.5f;
 	std::vector<std::unique_ptr<DroppedOre>> droppedOres_;	// 全ての落ちている（ドロップアイテム）鉱石オブジェクトを管理
+
+	struct BreakRequest
+	{
+		Cygnus::Float3 targetPos;
+		float range;
+	};
+	std::vector<BreakRequest> breakRequests_; // 範囲破壊時にここにリクエストを溜める
 };
 
