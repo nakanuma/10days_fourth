@@ -108,7 +108,6 @@ public:
 		if (!owner.GetIsMoving()) return;
 
 		owner.MoveForward(owner.GetAttackMoveSpeed(), deltaTime);
-		owner.OreMining();
 
 		if (GetElapsed() >= owner.GetAttackTime())
 		{

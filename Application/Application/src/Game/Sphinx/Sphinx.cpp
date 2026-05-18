@@ -110,7 +110,7 @@ void Sphinx::OreMining()
 		object_->transform_.translate_.z + frontVec.z * kMiningOffset
 	};
 
-	if (OreManager::GetInstance()->TryBreakAt(miningPos, kMiningRange))
+	if (OreManager::GetInstance()->BreakAllAt(miningPos, kMiningRange))
 	{
 		SetIsMining(true);
 	}
@@ -229,6 +229,13 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 	{
 		bool shouldFaint = false;
 
+		bool shouldCool = false;
+
+		if (tag == "Ore")
+		{
+			OreMining();
+		}
+
 		// 列車や鉱石にぶつかった場合
 		if (tag == "Carrier" || tag == "Ore")
 		{
@@ -240,12 +247,17 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 			shouldFaint = true;
 		}
 
+		if (tag == "Player")
+		{
+			shouldCool = true;
+		}
+
 		if (shouldFaint)
 		{
 			// ステートマシンに気絶への遷移を命じる
 			stateMachine_.ChangeState(SphinxState::Faint);
 		}
-		else
+		else if (shouldCool)
 		{
 			// ステートマシンに気絶への遷移を命じる
 			stateMachine_.ChangeState(SphinxState::CoolDown);
