@@ -7,6 +7,7 @@
 #include <TimeManager.h>
 #include <RandomGenerator.h>
 #include <Collider/CollisionMath.h>
+#include <ParticleEffect/ParticleEffectManager.h>
 
 // Application
 #include <src/Game/Ore/OreManager.h>
@@ -88,16 +89,22 @@ void Sphinx::MoveForward(float speed, float deltaTime)
 {
 	float angleY = object_->transform_.rotate_.y;
 	Cygnus::Float3 forward = { std::sin(angleY), 0.0f, std::cos(angleY) };
+	uint32_t effectCount = 0;
 
 	// 攻撃中なら attackDir を使い、それ以外なら向きから計算
 	if (stateMachine_.GetCurrentState() == SphinxState::Attack)
 	{
 		object_->transform_.translate_ += attackDir_ * speed * deltaTime;
+		effectCount = 6; // 攻撃中は多めにパーティクルを生成
 	}
 	else
 	{
 		object_->transform_.translate_ += forward * speed * deltaTime;
 	}
+
+	// 移動時パーティクルの生成
+	Cygnus::ParticleEffectManager::GetInstance()->Emit("move_dust", object_->transform_.translate_+Cygnus::Float3(0,-2.0f,0),effectCount);
+
 }
 
 void Sphinx::OreMining()

@@ -101,6 +101,7 @@ void GamePlayScene::Update() {
 	Cygnus::SkyBoxManager::GetInstance()->Update(); // SkyBox更新
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();	// デルタタイム取得
 
+
 	///
 	///	オブジェクト更新処理
 	/// 
@@ -123,6 +124,7 @@ void GamePlayScene::Update() {
 	///	
 	/// 
 	
+	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);	// パーティクルエフェクト管理クラス更新
 	Cygnus::CollisionManager::GetInstance()->Update();	// コライダー管理クラス更新
 }
 

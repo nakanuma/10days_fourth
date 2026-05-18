@@ -4,6 +4,7 @@
 #include <Input/Input.h>
 #include <ImguiWrapper.h>
 #include <TimeManager.h>
+#include <ParticleEffect/ParticleEffectManager.h>
 
 // Application
 #include <src/Game/Ore/OreManager.h>
@@ -12,7 +13,7 @@ void Player::Initialize() {
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Player");
-	object_->transform_.translate_ = {-10.0f, 2.0f, -10.0f};
+	object_->transform_.translate_ = { -10.0f, 2.0f, -10.0f };
 
 	// コライダー生成 + 登録
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
@@ -30,12 +31,12 @@ void Player::Update(float deltaTime) {
 
 #pragma region
 	// キーボードとゲームパッド両方の入力を加算
-	Cygnus::Float3 moveDir = {0.0f, 0.0f, 0.0f};
+	Cygnus::Float3 moveDir = { 0.0f, 0.0f, 0.0f };
 	moveDir += GetKeyInput();
 	moveDir += GetPadInput();
 
 	// 入力がある場合のみ回転と移動を行う
-	if(Cygnus::Float3::Length(moveDir) > 0.01f) {
+	if (Cygnus::Float3::Length(moveDir) > 0.01f) {
 		// 回転処理
 		float angle = std::atan2f(moveDir.x, moveDir.z);	// 入力ベクトルから角度を計算
 		const float kStep = Cygnus::PIf / 4.0f;	// 8方向に限定するため45度
@@ -50,25 +51,36 @@ void Player::Update(float deltaTime) {
 
 	// オブジェクト位置に反映
 	object_->transform_.translate_ += moveDir * kMoveSpeed * deltaTime;
+
+	// 移動パーティクル生成
+	if (Cygnus::Float3::Length(moveDir) > 0.01f) {
+		Cygnus::ParticleEffectManager::GetInstance()->Emit("move_dust", object_->transform_.translate_ + Cygnus::Float3(0, -2.0f, 0),
+			1,
+			Cygnus::Float3(0, 0, 0),
+			0.0f
+		);
+	}
+
+
 #pragma endregion
 
-#pragma region
+#pragma region 
 	if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
 		// 向きから前方のベクトルを作成する
 		float angleY = object_->transform_.rotate_.y;
-		Cygnus::Float3 frontVec = {std::sinf(angleY), 0.0f, std::cosf(angleY)};
+		Cygnus::Float3 frontVec = { std::sinf(angleY), 0.0f, std::cosf(angleY) };
 
 		// プレイヤーの少し前方を判定の中心にする
 		Cygnus::Float3 targetPos = {
-			object_->transform_.translate_.x + frontVec.x * kMiningOffset, 
-			object_->transform_.translate_.y, 
+			object_->transform_.translate_.x + frontVec.x * kMiningOffset,
+			object_->transform_.translate_.y,
 			object_->transform_.translate_.z + frontVec.z * kMiningOffset
 		};
 
 		// 鉱石採掘判定
 		if (OreManager::GetInstance()->TryBreakAt(targetPos, kMiningRange)) {
 			// 鉱石採掘時の処理
-			
+
 		}
 	}
 #pragma endregion
@@ -96,8 +108,7 @@ void Player::Debug() {
 #endif
 }
 
-void Player::OnCollision(Cygnus::Collider* other)
-{
+void Player::OnCollision(Cygnus::Collider* other) {
 	// 押し戻しを行うオブジェクトとの衝突
 	// : 線路に沿って動くオブジェクト, 鉱石オブジェクト, 工作台オブジェクト
 	if (other->GetTag() == "Carrier" || other->GetTag() == "Ore" || other->GetTag() == "WorkBench") {
@@ -105,7 +116,7 @@ void Player::OnCollision(Cygnus::Collider* other)
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
 		// 押し戻し処理
-		if(myAABB && otherAABB) {
+		if (myAABB && otherAABB) {
 			// 押し戻しベクトル取得
 			Cygnus::Float3 pushVec = myAABB->GetPushBackVector(*otherAABB);
 			// プレイヤー位置を補正
@@ -121,32 +132,30 @@ void Player::OnCollision(Cygnus::Collider* other)
 	}
 }
 
-Cygnus::Float3 Player::GetKeyInput()
-{
+Cygnus::Float3 Player::GetKeyInput() {
 	auto input = Cygnus::Input::GetInstance();
-	Cygnus::Float3 dir = {0.0f, 0.0f, 0.0f};
+	Cygnus::Float3 dir = { 0.0f, 0.0f, 0.0f };
 	// 移動キー入力
-	if(input->PushKey(DIK_W)) dir.z += 1.0f;
-	if(input->PushKey(DIK_S)) dir.z -= 1.0f;
-	if(input->PushKey(DIK_A)) dir.x -= 1.0f;
-	if(input->PushKey(DIK_D)) dir.x += 1.0f;
+	if (input->PushKey(DIK_W)) dir.z += 1.0f;
+	if (input->PushKey(DIK_S)) dir.z -= 1.0f;
+	if (input->PushKey(DIK_A)) dir.x -= 1.0f;
+	if (input->PushKey(DIK_D)) dir.x += 1.0f;
 	// キー入力結果を返す
 	return dir;
 }
 
-Cygnus::Float3 Player::GetPadInput()
-{
+Cygnus::Float3 Player::GetPadInput() {
 	auto input = Cygnus::Input::GetInstance();
 	XINPUT_STATE state;
 
 	// コントローラー取得
-	if(input->GetJoystickState(0, state)) {
+	if (input->GetJoystickState(0, state)) {
 		// 左スティック入力結果を返す
 		return {
 			state.Gamepad.sThumbLX / 32767.0f,
-			0.0f, 
+			0.0f,
 			state.Gamepad.sThumbLY / 32767.0f
 		};
 	}
-	return {0.0f, 0.0f, 0.0f};
+	return { 0.0f, 0.0f, 0.0f };
 }
