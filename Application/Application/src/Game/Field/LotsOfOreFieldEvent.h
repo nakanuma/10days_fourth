@@ -54,5 +54,5 @@ private:
 	float oreSizeY_ = 2.0f;
 
 	//イベント時間を伸ばす
-	const float kEventTime_ = 10.0f;
+	const float kEventTime_ = 1.0f;
 };

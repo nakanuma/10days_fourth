@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Field\AnubisFieldEvent.cpp" />
+    <ClCompile Include="src\Game\Mummy\Mummy.cpp" />
+    <ClCompile Include="src\Game\Mummy\MummyManager.cpp" />
     <ClCompile Include="src\Game\Field\BaseFieldEvent.cpp" />
     <ClCompile Include="src\Game\Field\FieldEventManager.cpp" />
     <ClCompile Include="src\Game\Field\NormalField.cpp" />
@@ -42,6 +45,9 @@
     <ClCompile Include="src\Game\Field\SunGodRaFieldEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Field\AnubisFieldEvent.h" />
+    <ClInclude Include="src\Game\Mummy\Mummy.h" />
+    <ClInclude Include="src\Game\Mummy\MummyManager.h" />
     <ClInclude Include="src\Game\Field\BaseFieldEvent.h" />
     <ClInclude Include="src\Game\Field\FieldEventManager.h" />
     <ClInclude Include="src\Game\Field\NormalField.h" />

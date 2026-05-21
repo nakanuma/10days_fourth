@@ -25,6 +25,7 @@
 #include <src/Game/StageEditor/StageEditor.h>
 #include <src/Game/Sphinx/Sphinx.h>
 #include <src/Game/Field/FieldEventManager.h>
+#include <src/Game/Mummy/MummyManager.h>
 
 // =========================================================
 // ゲームプレイシーンクラス
@@ -99,4 +100,7 @@ private:
 
 	// ------ フィールドイベント -----
 	std::unique_ptr<FieldEventManager> fieldManager_;
+
+	// ------ ミイラ召喚処理 ---------
+	std::unique_ptr<MummyManager> mummy;
 };

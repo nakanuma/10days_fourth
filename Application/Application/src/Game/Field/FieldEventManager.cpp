@@ -2,6 +2,7 @@
 #include "LotsOfOreFieldEvent.h"
 #include "NormalField.h"
 #include "SunGodRaFieldEvent.h"
+#include "AnubisFieldEvent.h"
 #include "Input.h"
 
 #include <random>
@@ -68,6 +69,9 @@ void FieldEventManager::ChangeField() {
 			break;
 		case FieldEventManager::SunGodRa:
 			fieldEvent_ = std::make_unique<SunGodRaFieldEvent>();
+			break;
+		case FieldEventManager::Anubis:
+			fieldEvent_ = std::make_unique<AnubisFieldEvent>();
 			break;
 		default:
 			fieldEvent_ = std::make_unique<NormalField>();

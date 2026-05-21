@@ -47,6 +47,7 @@ private:
 		normal = 0,
 		lotsOfOre,
 		SunGodRa,
+		Anubis,
 		max,
 	};
 
