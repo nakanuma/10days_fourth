@@ -55,7 +55,7 @@ void WorkBench::OnCollision(Cygnus::Collider* other) {
 		// プレイヤーが歯車の生成に必用な鉱石を所持しているか確認
 		if (player->GetOreCount() >= kRequiredOreCount) {
 			// キー or ボタン入力操作
-			if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
+			if (input->TriggerKey(DIK_SPACE)) {
 				// プレイヤーの鉱石を消費させる（生成に使用した分のみ）
 				player->ConsumeOre(kRequiredOreCount);
 				// 歯車を前方に生成

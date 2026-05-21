@@ -69,10 +69,6 @@ void GamePlayScene::Initialize() {
 	// 経路管理クラス初期化
 	PathManager::GetInstance()->Initialize();
 
-	/*stageEditor_ = std::make_unique<StageEditor>();
-	stageEditor_->LoadJsonFile("resources/stageEditor/stage_1.json");
-	stageEditor_->SpitObjects(player_);*/
-
 	// 経路に沿って移動するオブジェクト生成 + 初期化
 	carrier_ = std::make_unique<Carrier>();
 	carrier_->Initialize();
@@ -88,6 +84,15 @@ void GamePlayScene::Initialize() {
 
 	sphinx_ = std::make_unique<Sphinx>();
 	sphinx_->Initialize();
+
+	stageEditor_ = std::make_unique<StageEditor>();
+	stageEditor_->LoadJsonFile("resources/stageEditor/stage_1.json");
+	stageEditor_->SpitObjects(player_);
+
+	fieldManager_ = std::make_unique<FieldEventManager>();
+	fieldManager_->Initialize(&*spriteCommon_);
+
+	MummyManager::GetInstance()->Initialize();
 }
 
 void GamePlayScene::Finalize() { }
@@ -118,6 +123,10 @@ void GamePlayScene::Update() {
 	WorkBenchManager::GetInstance()->Update();
 	// 歯車オブジェクト管理クラス更新
 	GearManager::GetInstance()->Update();
+
+	fieldManager_->Update();
+
+	MummyManager::GetInstance()->Update(player_->GetPosition(), dt);
 
 	///
 	///	
@@ -200,6 +209,7 @@ void GamePlayScene::Draw() {
 	// 経路に沿って移動するオブジェクト描画
 	carrier_->Draw();
 	sphinx_->Draw();
+	MummyManager::GetInstance()->Draw();
 	// 鉱石オブジェクト管理クラス描画
 	OreManager::GetInstance()->Draw();
 	// 工作台オブジェクト管理クラス描画
@@ -235,7 +245,7 @@ void GamePlayScene::Draw() {
 	/// ↓ ここからスプライト描画
 	/// =========================================================
 
-
+	fieldManager_->Draw();
 
 	/// =========================================================
 	/// ↑ ここまでスプライト描画
@@ -252,8 +262,10 @@ void GamePlayScene::Draw() {
 	// 経路に沿って動くオブジェクト
 	carrier_->Debug();
 	//　ステージエディタの更新(jsonの生成処理)
-	/*stageEditor_->Update();*/
+	stageEditor_->Update();
 	sphinx_->Debug();
+	fieldManager_->Debug();
+	MummyManager::GetInstance()->Debug();
 #endif
 
 	// ImGuiの内部コマンドを生成する
