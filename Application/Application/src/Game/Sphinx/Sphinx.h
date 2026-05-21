@@ -1,99 +1,136 @@
 #pragma once
 
-// ---------------------------------------------------------
-// Engine Includes
-// ---------------------------------------------------------
 #include <Object3D.h>
 #include <Collider/CollisionManager.h>
-
-// ---------------------------------------------------------
-// Application Includes
-// ---------------------------------------------------------
 #include "RandomWalk.h"
+#include "State/StateMachine.h"
+#include "State/State.h"
 
-// =========================================================
-// ƒXƒtƒBƒ“ƒNƒXƒNƒ‰ƒX
-// =========================================================
+/// <summary>
+/// ã‚¹ãƒ†ãƒ¼ãƒˆã®ç¨®é¡
+/// </summary>
+enum class SphinxState
+{
+	Wander,
+	Charge,
+	Attack,
+	Faint,
+	CoolDown
+};
+
+/// <summary>
+/// ã‚¹ãƒ•ã‚£ãƒ³ã‚¯ã‚¹ã®åˆ¶å¾¡ã‚¯ãƒ©ã‚¹
+/// </summary>
 class Sphinx : public Cygnus::ICollisionCallback
 {
 public:
-	// =========================================================
-	// Public Methods
-	// =========================================================
-
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
 	/// </summary>
+	/// <param name="deltaTime">çµŒéæ™‚é–“</param>
+	/// <param name="targetPos">è¿½è·¡å¯¾è±¡ã®åº§æ¨™</param>
 	void Update(float deltaTime, const Cygnus::Float3& targetPos);
 
+	void UpdateAttackSign(float t);
+
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// ƒfƒoƒbƒO•\¦
+	/// ãƒ‡ãƒãƒƒã‚°ç”¨è¡¨ç¤ºå‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
 	/// </summary>
 	void Debug();
 
 	/// <summary>
-	/// Õ“ËƒR[ƒ‹ƒoƒbƒN
+	/// è¡çªæ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯å‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
 	/// </summary>
-	/// <param name="other"></param>
+	/// <param name="other">è¡çªç›¸æ‰‹ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼</param>
 	void OnCollision(Cygnus::Collider* other) override;
 
-	/// <summary>
-	/// “®‚©‚·‚©‚Ç‚¤‚©
-	/// </summary>
-	void IsMoving(bool is) { isMoving_ = is; }
-
-private:
-	// =========================================================
-	// Internal Methods
-	// =========================================================
+	// --- Getter / Setter ---
 
 	/// <summary>
-	/// ˆÚ“®ˆ—
+	/// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—ã—ã¾ã™ã€‚
 	/// </summary>
-	void Move(float deltaTime);
+	Cygnus::Object3D* GetObject() { return object_.get(); }
 
 	/// <summary>
-	/// UŒ‚‚Ì—\”õ“®ìŠJn
+	/// ãƒ©ãƒ³ãƒ€ãƒ ã‚¦ã‚©ãƒ¼ã‚¯åˆ¶å¾¡ã‚’å–å¾—ã—ã¾ã™ã€‚
 	/// </summary>
-	void StartCharge(const Cygnus::Float3& targetDir);
-	/// <summary>
-	/// UŒ‚ŠJnˆ—
-	/// </summary>
-	/// <param name="targetDir">ƒ^[ƒQƒbƒg‚Ö‚Ì³‹K‰»Œü‚«ƒxƒNƒgƒ‹</param>
-	void StartAttack();
-	/// <summary>
-	/// UŒ‚ˆ—
-	/// </summary>
-	void Attack(float deltaTime);
-	/// <summary>
-	/// UŒ‚’â~ˆ—
-	/// </summary>
-	void StopAttack();
+	RandomWalk* GetRandomWalk() { return randomWalk_.get(); }
 
 	/// <summary>
-	/// ‹Câˆ—
+	/// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆåº§æ¨™ã‚’å–å¾—ã—ã¾ã™ã€‚
 	/// </summary>
-	bool Faint(float deltaTime);
-	/// <summary>
-	/// ‹CâŠJnˆ—
-	/// </summary>
-	void StartFaint();
+	const Cygnus::Float3& GetTargetPos() const { return targetPos_; }
 
 	/// <summary>
-	/// zÎ”j‰óˆ—
+	/// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆåº§æ¨™ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// </summary>
+	void SetTargetPos(const Cygnus::Float3& pos) { targetPos_ = pos; }
+
+	/// <summary>
+	/// æ”»æ’ƒæ–¹å‘ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// </summary>
+	const Cygnus::Float3& GetAttackDir() const { return attackDir_; }
+
+	/// <summary>
+	/// æ”»æ’ƒæ–¹å‘ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// </summary>
+	void SetAttackDir(const Cygnus::Float3& dir) { attackDir_ = dir; }
+
+	/// <summary>
+	/// æ¡æ˜ä¸­ãƒ•ãƒ©ã‚°ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// </summary>
+	bool GetIsMining() const { return isMining_; }
+
+	/// <summary>
+	/// æ¡æ˜ä¸­ãƒ•ãƒ©ã‚°ã‚’è¨­å®šã—ã¾ã™ã€‚
+	/// </summary>
+	void SetIsMining(bool is) { isMining_ = is; }
+
+	// å®šæ•°ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹
+	float GetSearchRange() const { return kSearchRange_; }
+	float GetChargeTime() const { return kChargeTime_; }
+	float GetHomingLimitTime() const { return kHomingLimitTime_; }
+	float GetChargeTurnSpeed() const { return kChargeTurnSpeed_; }
+	float GetWanderTurnSpeed() const { return kWanderTurnSpeed_; }
+	float GetBounceHeight() const { return kBounceHeight_; }
+	float GetBounceSpeed() const { return kBounceSpeed_; }
+	float GetBaseY() const { return kBaseY_; }
+	float GetAttackTime() const { return kAttackTime_; }
+	float GetAttackMoveSpeed() const { return kAttackMoveSpeed_; }
+	float GetFaintTime() const { return kFaintTime_; }
+	float GetAttackCoolTime() const { return kAttackCoolTime_; }
+
+	/// <summary>
+	/// ç§»å‹•ä¸­ã‹ã©ã†ã‹ã‚’å–å¾—ã—ã¾ã™ã€‚
+	/// </summary>
+	bool GetIsMoving() { return isMoving_; }
+
+	// --- å…±é€šã‚¢ã‚¯ã‚·ãƒ§ãƒ³ (ã‚¹ãƒ†ãƒ¼ãƒˆã‹ã‚‰å‘¼ã°ã‚Œã‚‹) ---
+
+	/// <summary>
+	/// å‰æ–¹ã«ç§»å‹•ã—ã¾ã™ã€‚
+	/// </summary>
+	void MoveForward(float speed, float deltaTime);
+
+	/// <summary>
+	/// é‰±çŸ³ã®æ¡æ˜å‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
 	/// </summary>
 	void OreMining();
 
+private:
+	/// <summary>
+	/// ç§»å‹•ç¯„å›²ã®ã‚¯ãƒ©ãƒ³ãƒ—å‡¦ç†ã‚’è¡Œã„ã¾ã™ã€‚
+	/// </summary>
 	void MoveClamp();
 
 private:
@@ -101,61 +138,52 @@ private:
 	// Constants
 	// =========================================================
 
-	const float kMoveSpeed = 1.0f;	// ˆÚ“®‘¬“x
-	const float kMoveChangeTime_ = 2.0f;
-	const Cygnus::Float3 kColliderSize = { 2.0f, 2.0f, 3.0f };	// ƒRƒ‰ƒCƒ_[ƒTƒCƒY
+	const float kMoveSpeed = 1.0f;											// é€šå¸¸ç§»å‹•é€Ÿåº¦
+	const float kMoveChangeTime_ = 2.0f;									// ç§»å‹•æ–¹å‘å¤‰åŒ–ã®é–“éš”
+	const Cygnus::Float3 kColliderSize = { 2.0f, 2.0f, 3.0f };				// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ã‚µã‚¤ã‚º
+	const float kAttackMoveSpeed_ = 60.0f;									// çªé€²æ”»æ’ƒã®é€Ÿåº¦
+	const float kAttackTime_ = 0.334f;										// çªé€²æŒç¶šæ™‚é–“
+	const float kFaintTime_ = 2.0f;											// æ°—çµ¶æ™‚é–“
+	const float kSearchRange_ = kAttackMoveSpeed_ * kAttackTime_;			// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç´¢æ•µç¯„å›²
+	const float kAttackCoolTime_ = 3.0f;									// æ”»æ’ƒå¾Œã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ 
+	const float kChargeTime_ = 1.5f;										// æºœã‚æ™‚é–“
+	const float kWanderTurnSpeed_ = 6.0f;									// å¾˜å¾Šæ™‚ã®æ—‹å›ã‚¹ãƒ”ãƒ¼ãƒ‰
+	const float kChargeTurnSpeed_ = 10.0f;									// æºœã‚æ™‚ã®æ—‹å›ã‚¹ãƒ”ãƒ¼ãƒ‰
+	const float kBounceHeight_ = 2.0f;										// è·³ã­ã‚‹é«˜ã•
+	const float kHomingLimitTime_ = 0.5f;									// ãƒ›ãƒ¼ãƒŸãƒ³ã‚°ã‚’åˆ¶é™ã™ã‚‹æ™‚é–“
+	const float kBounceSpeed_ = kHomingLimitTime_ * 25.0f;					// è·³ã­ã‚‹é€Ÿåº¦
+	const float kBaseY_ = 2.0f;												// åŸºæœ¬ã®é«˜ã•(Yåº§æ¨™)
+	const float kMiningOffset = 3.5f;										// æ¡æ˜åˆ¤å®šã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+	const float kMiningRange = 5.5f;										// æ¡æ˜åˆ¤å®šã®ç¯„å›²
 
-	const float kAttackMoveSpeed_ = 40.0f;	// “Ëi‘¬“x
-	const float kAttackTime_ = 0.5f;		// “Ëi‘S‘ÌŠÔ
+	const Cygnus::Float3 kMoveMin = { -30.0f, 0.0f, -30.0f };				// ç§»å‹•å¯èƒ½ç¯„å›²ã®æœ€å°å€¤
+	const Cygnus::Float3 kMoveMax = { 30.0f, 0.0f, 15.0f };					// ç§»å‹•å¯èƒ½ç¯„å›²ã®æœ€å¤§å€¤
 
-	const float kFaintTime_ = 2.0f;
+	const Cygnus::Float4 kPlaneColor = { 1.0f, 0.3f, 0.3f, 0.75f };			// ç§»å‹•å¯èƒ½ç¯„å›²ã®æœ€å°å€¤
+	const Cygnus::Float4 kFrameColor = { 1.0f, 0.6f, 0.6f, 0.9f };			// ç§»å‹•å¯èƒ½ç¯„å›²ã®æœ€å¤§å€¤
 
-	const Cygnus::Float3 kMoveMin = { -30.0f, 0.0f, -30.0f };
-	const Cygnus::Float3 kMoveMax = { 30.0f, 0.0f, 15.0f };
-
-	const float kSearchRange_ = 20.0f;		// ƒvƒŒƒCƒ„[‚ğƒT[ƒ`(ŒŸ’m)‚·‚é”ÍˆÍ
-	const float kAttackCoolTime_ = 3.0f;	// UŒ‚Œã‚ÌƒN[ƒ‹ƒ_ƒEƒ“(‘Ò‹@)ŠÔ
-
-	const float kChargeTime_ = 1.5f;		// “Ëi‘O‚Ì—\”õ“®ìiƒ`ƒƒ[ƒWjŠÔ
-
-	// ù‰ñƒXƒs[ƒh‚Ì’è”‚ğ’Ç‰Á
-	const float kWanderTurnSpeed_ = 6.0f;	// œpœj‚Ìù‰ñƒXƒs[ƒh
-	const float kChargeTurnSpeed_ = 10.0f;	// —\’›‚Ìù‰ñƒXƒs[ƒh
-
-	const float kBounceHeight_ = 2.0f;		// ”ò‚Ñ’µ‚Ë‚é‚‚³
-	const float kBounceSpeed_ = (kMoveChangeTime_ - kChargeTime_) * 25.0f;		// ”ò‚Ñ’µ‚Ë‚éƒXƒs[ƒh
-	const float kBaseY_ = 2.0f;				// ’n–Ê‚ÌŠî–{YÀ•WiInitialize‚Åİ’è‚µ‚Ä‚¢‚é2.0fj
+	const float kRageMultiplier = 1.1f;
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	std::unique_ptr<Cygnus::Object3D> object_;	// ƒIƒuƒWƒFƒNƒg
-	std::unique_ptr<Cygnus::Collider> collider_;	// ƒRƒ‰ƒCƒ_[
+	std::unique_ptr<Cygnus::Object3D> object_;			// 3Dãƒ¢ãƒ‡ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	std::unique_ptr<Cygnus::Collider> collider_;		// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
+	std::unique_ptr<RandomWalk> randomWalk_;			// ãƒ©ãƒ³ãƒ€ãƒ ã‚¦ã‚©ãƒ¼ã‚¯åˆ¶å¾¡
 
-	std::unique_ptr<RandomWalk> randomWalk_;	// ƒ‰ƒ“ƒ_ƒ€ˆÚ“®—p
+	StateMachine<SphinxState, Sphinx> stateMachine_;	// ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³
 
-	Cygnus::Float3 velocity_ = { 0.0f, 0.0f, 0.0f };	// ‘¬“xƒxƒNƒgƒ‹
+	Cygnus::Float3 targetPos_;							// å…±æœ‰å¤‰æ•°ï¼šãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åº§æ¨™
+	Cygnus::Float3 attackDir_;							// å…±æœ‰å¤‰æ•°ï¼šçªé€²æ–¹å‘
+	bool isMining_ = false;								// å…±æœ‰å¤‰æ•°ï¼šæ¡æ˜ãƒ•ãƒ©ã‚°
+	bool isMoving_ = true;								// ç§»å‹•ä¸­ãƒ•ãƒ©ã‚°
 
-	Cygnus::Float3 moveDir_ = { 0.0f, 0.0f, 1.0f };		// ˆÚ“®‚ÌŒü‚«ƒxƒNƒgƒ‹
 
-	bool isAttack_ = false;								// “Ëió‘Ô”»’è
-	Cygnus::Float3 attackDir_ = { 0.0f, 0.0f, 1.0f };	// “ËiŒü‚«ƒxƒNƒgƒ‹
-	float attackTimer_ = 0.0f;							// “Ëi—pƒ^ƒCƒ}[
+	int rageCount_ = 0;
+	float rageMultiPlier_ = 1.0f;
 
-	float faintTimer_ = 0.0f;
 
-	float attackCoolTimer_ = 0.0f;			// ƒN[ƒ‹ƒ_ƒEƒ“—pƒ^ƒCƒ}[
-
-	bool isCharge_ = false;					// ƒ`ƒƒ[ƒWó‘Ô”»’è
-	float chargeTimer_ = 0.0f;				// ƒ`ƒƒ[ƒW—pƒ^ƒCƒ}[
-	const float kHomingLimitTime_ = 0.5f;	// ƒ`ƒƒ[ƒWI—¹‚Ìc‚è‰½•b‚Å’Ç]‚ğ~‚ß‚é‚©
-
-	bool isMining_ = false;
-
-	const float kMiningOffset = 3.5f;	// ÌŒ@‚Ì‘O•ûƒIƒtƒZƒbƒg
-	const float kMiningRange = 2.5f;	// ÌŒ@‚ÌƒuƒŒ‹–—e’l
-
-	bool isMoving_ = true;
+	std::unique_ptr<Cygnus::Object3D> attackPlane_;		// æ”»æ’ƒäºˆå…†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	std::unique_ptr<Cygnus::Object3D> attackFrame_;		// æ”»æ’ƒäºˆå…†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 };
-

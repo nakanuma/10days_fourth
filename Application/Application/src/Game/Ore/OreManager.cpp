@@ -6,8 +6,9 @@ OreManager* OreManager::GetInstance() {
 }
 
 void OreManager::Initialize() {
-	ores_.clear();
-	return;
+	ores_.clear(); 
+	droppedOres_.clear();
+	breakRequests_.clear();
 
 	// デバッグ用にベタ打ちで鉱石を追加（Todo : エディタで追加できるように変更する）
 	for(size_t i = 0; i < 3; ++i) {
@@ -39,6 +40,8 @@ void OreManager::Update() {
 	if (it != droppedOres_.end()) {
 		droppedOres_.erase(it, droppedOres_.end()); // 配列から削除
 	}
+
+	BulkDestruction();
 }
 
 void OreManager::Draw() {
@@ -89,6 +92,49 @@ void OreManager::HalfChecker(float& half, float& slippagePoint, float size) {
 	}
 }
 
+void OreManager::BulkDestruction()
+{
+	if (!breakRequests_.empty())
+	{
+		for (const auto& request : breakRequests_)
+		{
+			float rangeSq = request.range * request.range;
+
+			auto oreIt = std::remove_if(ores_.begin(), ores_.end(), [&](const std::unique_ptr<Ore>& ore)
+				{
+					Cygnus::Float3 orePos = ore->GetTranslate();
+					float dx = orePos.x - request.targetPos.x;
+					float dz = orePos.z - request.targetPos.z;
+					float distSq = dx * dx + dz * dz;
+
+					if (distSq <= rangeSq)
+					{
+						// 削除される鉱石の位置を保存
+						Cygnus::Float3 dropPos = ore->GetTranslate();
+
+						// コライダー登録解除
+						ore->UnregisterCollider();
+
+						// 落ちている鉱石（ドロップアイテム）を生成してリストに追加
+						auto newDroppedOre = std::make_unique<DroppedOre>();
+						newDroppedOre->Initialize(dropPos);
+						droppedOres_.push_back(std::move(newDroppedOre));
+
+						return true; // 削除対象
+					}
+					return false;
+				});
+
+			if (oreIt != ores_.end())
+			{
+				ores_.erase(oreIt, ores_.end());
+			}
+		}
+		// 処理が終わったらリクエストをクリア
+		breakRequests_.clear();
+	}
+}
+
 
 bool OreManager::TryBreakAt(const Cygnus::Float3& targetPos, float range) { 
 	int closestIndex = -1;
@@ -124,4 +170,11 @@ bool OreManager::TryBreakAt(const Cygnus::Float3& targetPos, float range) {
 	}
 
 	return false;
+}
+
+bool OreManager::BreakAllAt(const Cygnus::Float3& targetPos, float range)
+{
+	breakRequests_.push_back({ targetPos, range });
+
+	return true;
 }

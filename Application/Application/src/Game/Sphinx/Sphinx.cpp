@@ -1,4 +1,5 @@
 #include "Sphinx.h"
+#include "SphinxState.h"
 
 // Engine
 #include <Input/Input.h>
@@ -10,13 +11,17 @@
 // Application
 #include <src/Game/Ore/OreManager.h>
 
+// =========================================================
+// Sphinx クラスのメンバ関数
+// =========================================================
+
 void Sphinx::Initialize()
 {
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
-	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Player");
+	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Sphinx");
 	object_->transform_.translate_ = { -10.0f, 2.0f, 0.0f };
-	object_->transform_.scale_ = { kColliderSize.x, 1.0f, kColliderSize.z };
+	object_->transform_.scale_ = { 1.0f, 1.0f, 1.0f };
 
 	// コライダー生成 + 登録
 	auto obb = std::make_unique<Cygnus::OBBCollider>();
@@ -31,178 +36,83 @@ void Sphinx::Initialize()
 
 	// ランダムウォーククラス生成
 	randomWalk_ = std::make_unique<RandomWalk>();
+
+	// ステートの登録
+	stateMachine_.RegisterState<WanderState>(SphinxState::Wander, "Wander");
+	stateMachine_.RegisterState<ChargeState>(SphinxState::Charge, "Charge");
+	stateMachine_.RegisterState<AttackState>(SphinxState::Attack, "Attack");
+	stateMachine_.RegisterState<FaintState>(SphinxState::Faint, "Faint");
+	stateMachine_.RegisterState<CoolDownState>(SphinxState::CoolDown, "CoolDown");
+
+	stateMachine_.ChangeState(SphinxState::Wander);
+
+
+	// オブジェクト生成
+	attackPlane_ = std::make_unique<Cygnus::Object3D>();
+	attackPlane_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("AttackPlane");
+	attackPlane_->materialCB_.data_->color = kPlaneColor;
+
+	// オブジェクト生成
+	attackFrame_ = std::make_unique<Cygnus::Object3D>();
+	attackFrame_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("AttachFrame");
+	attackFrame_->transform_.scale_ = { 1.0f, 1.0f, kSearchRange_ / 2.0f };
+	attackFrame_->materialCB_.data_->color = kFrameColor;
 }
 
 void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
 {
-#pragma region 移動処理
+	// 共有変数の更新
+	SetTargetPos(targetPos);
 
-	// 気絶中は攻撃・移動処理を行わない
-	if (!Faint(deltaTime) && isMoving_)
-	{
-		if (attackCoolTimer_ > 0.0f)
-		{
-			attackCoolTimer_ -= deltaTime;
-		}
+	// ステートマシンの更新
+	stateMachine_.UpdateState(*this, deltaTime);
 
-		// チャージ中の処理
-		if (isCharge_)
-		{
-			chargeTimer_ -= deltaTime;
-
-			// 追従処理：残り時間が制限時間以上の間はプレイヤーを狙い続ける
-			if (chargeTimer_ > kHomingLimitTime_)
-			{
-				// 常に最新のプレイヤー座標から方向を再計算
-				Cygnus::Float3 toTarget = targetPos - object_->transform_.translate_;
-				if (Cygnus::Float3::Length(toTarget) > 0.1f) // 念のためゼロ除算防止
-				{
-					// 目標の角度を算出
-					Cygnus::Float3 targetDir = Cygnus::Float3::Normalize(toTarget);
-					float targetAngle = std::atan2(targetDir.x, targetDir.z);
-
-					// ▼ 変更：SmoothTurnで滑らかに振り向かせる（徘徊時より速い旋回スピード）
-					object_->transform_.rotate_.y = randomWalk_->SmoothTurn(object_->transform_.rotate_.y, targetAngle, kChargeTurnSpeed_, deltaTime);
-
-					// 突進方向（attackDir_）は「現在向いている方向」に随時更新しておく
-					float currentAngle = object_->transform_.rotate_.y;
-					attackDir_ = { std::sin(currentAngle), 0.0f, std::cos(currentAngle) };
-				}
-
-				// 地面につけておく
-				object_->transform_.translate_.y = kBaseY_;
-			}
-			else
-			{
-				// 角度確定後（残り時間）のぴょんぴょんジャンプ処理
-				// どれくらいジャンプの時間が経過したかを計算
-				float bounceTime = kHomingLimitTime_ - chargeTimer_;
-
-				// サイン波の絶対値を使って、下から上に跳ねる動きを作る
-				float jumpY = std::abs(std::sin(bounceTime * kBounceSpeed_)) * kBounceHeight_;
-				object_->transform_.translate_.y = kBaseY_ + jumpY;
-			}
-
-			if (chargeTimer_ <= 0.0f)
-			{
-				StartAttack();
-			}
-		}
-		else if (!isAttack_)
-		{
-			// プレイヤーをサーチ
-			Cygnus::Float3 toTarget = targetPos - object_->transform_.translate_;
-			float distance = Cygnus::Float3::Length(toTarget);
-
-			if (distance <= kSearchRange_ && attackCoolTimer_ <= 0.0f)
-			{
-				Cygnus::Float3 dir = Cygnus::Float3::Normalize(toTarget);
-				// ▼ 変更：攻撃ではなくチャージを開始
-				StartCharge(dir);
-			}
-			else
-			{
-				// 範囲外、またはクールダウン中ならランダムウォーク
-				randomWalk_->Update(deltaTime, kMoveChangeTime_);
-				Move(deltaTime);
-			}
-		}
-		else
-		{
-			Attack(deltaTime);
-		}
-	}
 	MoveClamp();
-#pragma endregion
-	// コライダー更新
 	collider_->Update();
-	// オブジェクト更新
 	object_->UpdateMatrix();
 }
 
-void Sphinx::Move(float deltaTime)
+void Sphinx::UpdateAttackSign(float t)
 {
-	moveDir_ = randomWalk_->GetRandomWalkDir();
+	attackPlane_->transform_.rotate_ = object_->transform_.rotate_;
+	attackPlane_->transform_.translate_ = { object_->transform_.translate_.x, 0.05f, object_->transform_.translate_.z };
+	attackPlane_->transform_.scale_ = { 1.0f, 1.0f, (kSearchRange_ * t) / 2.0f };
+	attackPlane_->UpdateMatrix();
 
-	// 目標とする角度
-	float targetAngle = std::atan2(moveDir_.x, moveDir_.z);
-
-	// SmoothTurnを使って滑らかに旋回させる
-	object_->transform_.rotate_.y = randomWalk_->SmoothTurn(object_->transform_.rotate_.y, targetAngle, kWanderTurnSpeed_, deltaTime);
-
-	// 「現在向いている方向（正面）」のベクトルを計算して進む
-	float currentAngle = object_->transform_.rotate_.y;
-	Cygnus::Float3 forwardVec = { std::sin(currentAngle), 0.0f, std::cos(currentAngle) };
-
-	object_->transform_.translate_ += forwardVec * kMoveSpeed * deltaTime;
+	attackFrame_->transform_.rotate_ = object_->transform_.rotate_;
+	attackFrame_->transform_.translate_ = { object_->transform_.translate_.x, 0.06f, object_->transform_.translate_.z };
+	attackFrame_->UpdateMatrix();
 }
 
-void Sphinx::StartCharge(const Cygnus::Float3& targetDir)
+void Sphinx::MoveForward(float speed, float deltaTime)
 {
-	isCharge_ = true;
-	chargeTimer_ = kChargeTime_;
-	attackDir_ = targetDir;
+	float angleY = object_->transform_.rotate_.y;
+	Cygnus::Float3 forward = { std::sin(angleY), 0.0f, std::cos(angleY) };
 
-	randomWalk_->Reset();
-}
-
-void Sphinx::StartAttack()
-{
-	isCharge_ = false;
-	isAttack_ = true;
-	isMining_ = false;
-	attackTimer_ = kAttackTime_;
-	object_->transform_.translate_.y = kBaseY_;
-}
-
-void Sphinx::Attack(float deltaTime)
-{
-	attackTimer_ -= deltaTime;
-	if(attackTimer_ > 0.0f)
+	// 攻撃中なら attackDir を使い、それ以外なら向きから計算
+	if (stateMachine_.GetCurrentState() == SphinxState::Attack)
 	{
-		object_->transform_.translate_ += attackDir_ * kAttackMoveSpeed_ * deltaTime;
-		OreMining();
+		object_->transform_.translate_ += attackDir_ * speed * deltaTime;
 	}
 	else
 	{
-		StopAttack();
+		object_->transform_.translate_ += forward * speed * deltaTime;
 	}
-}
-
-bool Sphinx::Faint(float deltaTime)
-{
-	if (faintTimer_ > 0.0f)
-	{
-		faintTimer_ -= deltaTime;
-		return true;
-	}
-	return false;
-}
-
-void Sphinx::StartFaint()
-{
-	faintTimer_ = kFaintTime_;
 }
 
 void Sphinx::OreMining()
 {
-	// 向きから前方のベクトルを作成する
 	float angleY = object_->transform_.rotate_.y;
 	Cygnus::Float3 frontVec = { std::sinf(angleY), 0.0f, std::cosf(angleY) };
-
-	// スフィンクスの少し前方を判定の中心にする
-	Cygnus::Float3 targetPos =
-	{
+	Cygnus::Float3 miningPos = {
 		object_->transform_.translate_.x + frontVec.x * kMiningOffset,
 		object_->transform_.translate_.y,
 		object_->transform_.translate_.z + frontVec.z * kMiningOffset
 	};
 
-	// 鉱石採掘判定
-	if (OreManager::GetInstance()->TryBreakAt(targetPos, kMiningRange))
+	if (OreManager::GetInstance()->BreakAllAt(miningPos, kMiningRange))
 	{
-		// 鉱石採掘時の処理
-		isMining_ = true;
+		SetIsMining(true);
 	}
 }
 
@@ -212,18 +122,16 @@ void Sphinx::MoveClamp()
 	object_->transform_.translate_.z = std::clamp(object_->transform_.translate_.z, kMoveMin.z, kMoveMax.z);
 }
 
-void Sphinx::StopAttack()
-{
-	isCharge_ = false;
-	isAttack_ = false;
-	attackTimer_ = 0.0f;
-	chargeTimer_ = 0.0f;
-	attackCoolTimer_ = kAttackCoolTime_;
-}
-
 void Sphinx::Draw()
 {
 	// オブジェクト描画
+
+	if (stateMachine_.GetCurrentState() == SphinxState::Charge)
+	{
+		attackPlane_->Draw();
+		attackFrame_->Draw();
+	}
+
 	object_->Draw();
 }
 
@@ -232,55 +140,21 @@ void Sphinx::Debug()
 #ifdef USE_IMGUI
 	ImGui::Begin("Sphinx");
 
+	// 座標調整
 	ImGui::DragFloat3("Translate", &object_->transform_.translate_.x, 0.01f);
 
+	// Pause/Resume 機能
 	if (ImGui::Button("Pause/Resume"))
 	{
-		if (isMoving_)
-		{
-			IsMoving(false);
-		}
-		else
-		{
-			IsMoving(true);
-		}
+		isMoving_ = !isMoving_; // フラグ反転
 	}
+	ImGui::Text("Current : %s", isMoving_ ? "Move" : "Pause");
 
-	if (isMoving_)
-	{
-		ImGui::Text("Current : Move");
-	}
-	else
-	{
-		ImGui::Text("Current : Pause");
-	}
+	ImGui::Separator(); // 区切り線
 
-	ImGui::Text("Status : ");
-	ImGui::SameLine();
-	if (faintTimer_ > 0.0f)
-	{
-		ImGui::Text("Faint");
-		ImGui::Text("Timer : %.02f", faintTimer_);
-	}
-	else if (isCharge_) // ▼ 追加
-	{
-		ImGui::Text("Charging");
-		ImGui::Text("Timer : %.02f", chargeTimer_);
-	}
-	else if (isAttack_)
-	{
-		ImGui::Text("Attack");
-		ImGui::Text("Timer : %.02f", attackTimer_);
-	}
-	else if (attackCoolTimer_ > 0.0f)
-	{
-		ImGui::Text("Cooling Down");
-		ImGui::Text("Timer : %.02f", attackCoolTimer_);
-	}
-	else
-	{
-		ImGui::Text("Move (Searching)");
-	}
+	// ステートマシンのデバッグ表示を呼び出す
+	// これにより、現在のステート名と経過時間(Timer)が自動で表示されます
+	stateMachine_.DebugImGui("Status");
 
 	ImGui::End();
 #endif
@@ -306,19 +180,14 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 			otherAsOBB.SetZAxis({ 0.0f, 0.0f, 1.0f });
 
 			// 押し戻しベクトルを計算
-			//Cygnus::Float3 pushVec = Cygnus::CollisionMath::CalculatePushBackOBBvsOBB(myOBB, &otherAsOBB);
+			Cygnus::Float3 pushVec = Cygnus::CollisionMath::CalculatePushBackOBBvsOBB(myOBB, &otherAsOBB);
 
 			// 位置を補正
-			//object_->transform_.translate_ += pushVec;
+			object_->transform_.translate_ += pushVec;
 			object_->UpdateMatrix();
 
 			// コライダーも更新
 			myOBB->Update();
-		}
-
-		if (isAttack_ && faintTimer_ <= 0.0f)
-		{
-			StopAttack();
 		}
 	}
 
@@ -340,30 +209,58 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 			otherAsOBB.SetZAxis({ 0.0f, 0.0f, 1.0f });
 
 			// 押し戻しベクトルを計算
-			//Cygnus::Float3 pushVec = Cygnus::CollisionMath::CalculatePushBackOBBvsOBB(myOBB, &otherAsOBB);
+			Cygnus::Float3 pushVec = Cygnus::CollisionMath::CalculatePushBackOBBvsOBB(myOBB, &otherAsOBB);
 
 			// プレイヤーの位置を補正
-			//object_->transform_.translate_ += pushVec;
+			object_->transform_.translate_ += pushVec;
 			object_->UpdateMatrix();
 
 			// コライダーも更新
 			myOBB->Update();
 		}
-
-		if (isAttack_ && faintTimer_ <= 0.0f)
-		{
-			StopAttack();
-			StartFaint();
-		}
 	}
 
-	// 落ちている鉱石（ドロップアイテム）と衝突した時も気絶判定
-	if (other->GetTag() == "DroppedOre" && isMining_)
+	// ステート遷移の判定
+	std::string tag = other->GetTag();
+	std::optional<SphinxState> currentState = stateMachine_.GetCurrentState();
+
+	// 攻撃中かつ特定のタグにぶつかった場合
+	if (currentState == SphinxState::Attack)
 	{
-		if (isAttack_ && faintTimer_ <= 0.0f)
+		bool shouldFaint = false;
+
+		bool shouldCool = false;
+
+		if (tag == "Ore")
 		{
-			StopAttack();
-			StartFaint();
+			OreMining();
+		}
+
+		// 列車や鉱石にぶつかった場合
+		if (tag == "Carrier" || tag == "Ore")
+		{
+			shouldFaint = true;
+		}
+		// 落ちている鉱石との衝突 (採掘中フラグがある場合)
+		else if (tag == "DroppedOre" && isMining_)
+		{
+			shouldFaint = true;
+		}
+
+		if (tag == "Player")
+		{
+			shouldCool = true;
+		}
+
+		if (shouldFaint)
+		{
+			// ステートマシンに気絶への遷移を命じる
+			stateMachine_.ChangeState(SphinxState::Faint);
+		}
+		else if (shouldCool)
+		{
+			// ステートマシンに気絶への遷移を命じる
+			stateMachine_.ChangeState(SphinxState::CoolDown);
 		}
 	}
 }
