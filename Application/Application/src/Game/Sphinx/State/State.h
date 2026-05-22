@@ -15,11 +15,11 @@ public:
 	virtual ~State() = default;
 
 	/// <summary>ステート進入時の初期化処理</summary>
-	virtual void Init(Owner* owner) {}
+	virtual void Init(Owner& owner) {}
 	/// <summary>ステートの更新処理</summary>
-	virtual void Update(Owner* owner, float deltaTime) {}
+	virtual void Update(Owner& owner, float deltaTime) {}
 	/// <summary>ステート脱出時の終了処理</summary>
-	virtual void Exit(Owner* owner) {}
+	virtual void Exit(Owner& owner) {}
 
 	/// <summary>ステート開始からの経過時間を取得</summary>
 	float GetElapsed() const { return stateTimer_; }

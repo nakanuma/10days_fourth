@@ -39,11 +39,11 @@ void Sphinx::Initialize()
 	randomWalk_ = std::make_unique<RandomWalk>();
 
 	// ステートの登録
-	stateMachine_.RegisterState(SphinxState::Wander, std::make_unique<WanderState>(&stateMachine_), "Wander");
-	stateMachine_.RegisterState(SphinxState::Charge, std::make_unique<ChargeState>(&stateMachine_), "Charge");
-	stateMachine_.RegisterState(SphinxState::Attack, std::make_unique<AttackState>(&stateMachine_), "Attack");
-	stateMachine_.RegisterState(SphinxState::Faint, std::make_unique<FaintState>(&stateMachine_), "Faint");
-	stateMachine_.RegisterState(SphinxState::CoolDown, std::make_unique<CoolDownState>(&stateMachine_), "CoolDown");
+	stateMachine_.RegisterState<WanderState>(SphinxState::Wander, "Wander");
+	stateMachine_.RegisterState<ChargeState>(SphinxState::Charge, "Charge");
+	stateMachine_.RegisterState<AttackState>(SphinxState::Attack, "Attack");
+	stateMachine_.RegisterState<FaintState>(SphinxState::Faint, "Faint");
+	stateMachine_.RegisterState<CoolDownState>(SphinxState::CoolDown, "CoolDown");
 
 	stateMachine_.ChangeState(SphinxState::Wander);
 
@@ -66,7 +66,7 @@ void Sphinx::Update(float deltaTime, const Cygnus::Float3& targetPos)
 	SetTargetPos(targetPos);
 
 	// ステートマシンの更新
-	stateMachine_.UpdateState(this, deltaTime);
+	stateMachine_.UpdateState(*this, deltaTime);
 
 	MoveClamp();
 	collider_->Update();
@@ -117,7 +117,7 @@ void Sphinx::OreMining()
 		object_->transform_.translate_.z + frontVec.z * kMiningOffset
 	};
 
-	if (OreManager::GetInstance()->TryBreakAt(miningPos, kMiningRange))
+	if (OreManager::GetInstance()->BreakAllAt(miningPos, kMiningRange))
 	{
 		SetIsMining(true);
 	}
@@ -229,12 +229,19 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 
 	// ステート遷移の判定
 	std::string tag = other->GetTag();
-	SphinxState currentState = stateMachine_.GetCurrentState();
+	std::optional<SphinxState> currentState = stateMachine_.GetCurrentState();
 
 	// 攻撃中かつ特定のタグにぶつかった場合
 	if (currentState == SphinxState::Attack)
 	{
 		bool shouldFaint = false;
+
+		bool shouldCool = false;
+
+		if (tag == "Ore")
+		{
+			OreMining();
+		}
 
 		// 列車や鉱石にぶつかった場合
 		if (tag == "Carrier" || tag == "Ore")
@@ -247,12 +254,17 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 			shouldFaint = true;
 		}
 
+		if (tag == "Player")
+		{
+			shouldCool = true;
+		}
+
 		if (shouldFaint)
 		{
 			// ステートマシンに気絶への遷移を命じる
 			stateMachine_.ChangeState(SphinxState::Faint);
 		}
-		else
+		else if (shouldCool)
 		{
 			// ステートマシンに気絶への遷移を命じる
 			stateMachine_.ChangeState(SphinxState::CoolDown);

@@ -19,6 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Field\AnubisFieldEvent.cpp" />
+    <ClCompile Include="src\Game\Mummy\Mummy.cpp" />
+    <ClCompile Include="src\Game\Mummy\MummyManager.cpp" />
+    <ClCompile Include="src\Game\Field\BaseFieldEvent.cpp" />
+    <ClCompile Include="src\Game\Field\FieldEventManager.cpp" />
+    <ClCompile Include="src\Game\Field\NormalField.cpp" />
+    <ClCompile Include="src\Game\Field\LotsOfOreFieldEvent.cpp" />
     <ClCompile Include="src\Game\Gear\DroppedGear.cpp" />
     <ClCompile Include="src\Game\Gear\GearManager.cpp" />
     <ClCompile Include="src\Game\Particles\ParticleStrage.cpp" />
@@ -39,9 +46,17 @@
     <ClCompile Include="src\Game\Scene\SceneFactory.cpp" />
     <ClCompile Include="src\Game\WorkBench\WorkBench.cpp" />
     <ClCompile Include="src\Game\WorkBench\WorkBenchManager.cpp" />
-    <ClCompile Include="src\Game\StageEditor.cpp" />
+    <ClCompile Include="src\Game\StageEditor\StageEditor.cpp" />
+    <ClCompile Include="src\Game\Field\SunGodRaFieldEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Field\AnubisFieldEvent.h" />
+    <ClInclude Include="src\Game\Mummy\Mummy.h" />
+    <ClInclude Include="src\Game\Mummy\MummyManager.h" />
+    <ClInclude Include="src\Game\Field\BaseFieldEvent.h" />
+    <ClInclude Include="src\Game\Field\FieldEventManager.h" />
+    <ClInclude Include="src\Game\Field\NormalField.h" />
+    <ClInclude Include="src\Game\Field\LotsOfOreFieldEvent.h" />
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
     <ClInclude Include="src\Game\Gear\GearManager.h" />
     <ClInclude Include="src\Game\Particles\ParticleStrage.h" />
@@ -64,7 +79,8 @@
     <ClInclude Include="src\Game\Sphinx\State\StateMachine.h" />
     <ClInclude Include="src\Game\WorkBench\WorkBench.h" />
     <ClInclude Include="src\Game\WorkBench\WorkBenchManager.h" />
-    <ClInclude Include="src\Game\StageEditor.h" />
+    <ClInclude Include="src\Game\StageEditor\StageEditor.h" />
+    <ClInclude Include="src\Game\Field\SunGodRaFieldEvent.h" />
     <ClInclude Include="src\Game\Sphinx\State\State.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

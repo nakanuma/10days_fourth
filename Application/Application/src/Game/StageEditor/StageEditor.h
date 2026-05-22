@@ -1,14 +1,19 @@
 #pragma once
+// ---------------------------------------------------------
+// Engine Includes
+// ---------------------------------------------------------
 #include "MyMath.h"
-
-#include "Ore/Ore.h"
-#include "Player/Player.h"
-#include "Carrier/Carrier.h"
-
 #include "Float3.h"
 
+// ---------------------------------------------------------
+// Application Includes
+// ---------------------------------------------------------
+#include "src/Game/Ore/Ore.h"
+#include "src/Game/Player/Player.h"
+#include "src/Game/Carrier/Carrier.h"
+
 /// <summary>
-/// \‘¢‘Ì_ƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚Ìİ’u
+/// æ§‹é€ ä½“_ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¨­ç½®
 /// </summary>
 struct GameObjectPosition {
 	std::string name;
@@ -17,20 +22,20 @@ struct GameObjectPosition {
 };
 
 /// <summary>
-/// ƒXƒe[ƒWƒGƒfƒBƒ^
+/// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¨ãƒ‡ã‚£ã‚¿
 /// </summary>
 class StageEditor
 {
 public:
 
 	/// <summary>
-	/// ƒXƒe[ƒW”z’ujson‚ğ“Ç‚İ‚Ş
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸é…ç½®jsonã‚’èª­ã¿è¾¼ã‚€
 	/// </summary>
-	/// <param name="stageName">“Ç‚İ‚İ‚½‚¢ƒXƒe[ƒW</param>
+	/// <param name="stageName">èª­ã¿è¾¼ã¿ãŸã„ã‚¹ãƒ†ãƒ¼ã‚¸</param>
 	void LoadJsonFile(const std::string& stageName);
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update();
 
@@ -43,7 +48,7 @@ public:
 private:
 
 	/// <summary>
-	/// ”z’u‚Ì•Û‘¶
+	/// é…ç½®ã®ä¿å­˜
 	/// </summary>
 	void Save();
 
