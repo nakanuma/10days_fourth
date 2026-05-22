@@ -163,7 +163,7 @@ void Sphinx::Debug()
 void Sphinx::OnCollision(Cygnus::Collider* other)
 {
 	// 線路に沿って動くオブジェクトとプレイヤーオブジェクトとの衝突
-	if (other->GetTag() == "Carrier" || other->GetTag() == "Player")
+	if (other->GetTag() == "Carrier" || other->GetTag() == "Player" || other->GetTag() == "WorkBench")
 	{
 		Cygnus::OBBCollider* myOBB = dynamic_cast<Cygnus::OBBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
