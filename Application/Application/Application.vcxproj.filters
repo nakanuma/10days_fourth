@@ -18,8 +18,7 @@
     <ClCompile Include="src\Game\WorkBench\WorkBenchManager.cpp" />
     <ClCompile Include="src\Game\StageEditor.cpp" />
     <ClCompile Include="src\Game\UI\UIManager.cpp" />
-    <ClCompile Include="src\Game\UI\HUD.cpp" />
-    <ClCompile Include="src\Game\UI\InterctionUI.cpp" />
+    <ClCompile Include="src\Game\UI\Parts\ItemCounter\ItemCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
@@ -39,7 +38,6 @@
     <ClInclude Include="src\Game\WorkBench\WorkBenchManager.h" />
     <ClInclude Include="src\Game\StageEditor.h" />
     <ClInclude Include="src\Game\UI\UIManager.h" />
-    <ClInclude Include="src\Game\UI\HUD.h" />
-    <ClInclude Include="src\Game\UI\InterctionUI.h" />
+    <ClInclude Include="src\Game\UI\Parts\ItemCounter\ItemCounter.h" />
   </ItemGroup>
 </Project>

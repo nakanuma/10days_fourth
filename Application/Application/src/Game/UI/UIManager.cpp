@@ -1,5 +1,8 @@
 #include "UIManager.h"
 
+// Engine
+#include <TextureManager.h>
+
 UIManager* UIManager::GetInstance() {
 	static UIManager instance;
 	return &instance;
@@ -10,25 +13,25 @@ void UIManager::Initialize() {
 	spriteCommon_ = std::make_unique<Cygnus::SpriteCommon>();
 	spriteCommon_->Initialize(Cygnus::DirectXBase::GetInstance());
 
-	// 常に表示されるUIの生成+初期化
-	hud_ = std::make_unique<HUD>();
-	hud_->Initialize(spriteCommon_.get());
+	// プレイヤー鉱石所持数UI生成 + 初期化
+	oreCounter_ = std::make_unique<ItemCounter>();
+	oreCounter_->Initialize(spriteCommon_.get(), Cygnus::TextureManager::Load("UI/oreIcon.png"), kOreCounterInitialPosition);
 
-	// 入力操作UIの生成+初期化
-	interctionUI_ = std::make_unique<InterctionUI>();
-	interctionUI_->Initialize(spriteCommon_.get());
+	// プレイヤー歯車所持数UI生成 + 初期化
+	gearCounter_ = std::make_unique<ItemCounter>();
+	gearCounter_->Initialize(spriteCommon_.get(), Cygnus::TextureManager::Load("UI/gearIcon.png"), kGearCounterInitialPosition);
 }
 
-void UIManager::Update() {
-	// 常に表示されるUI更新
-	hud_->Update();
-	// 入力操作UI更新
-	interctionUI_->Update();
+void UIManager::Update(uint32_t oreCount, bool isOreMax, uint32_t gearCount, bool isGearMax) {
+	// プレイヤー鉱石所持数UI更新
+	oreCounter_->Update(oreCount, isOreMax);
+	// プレイヤー歯車所持数UI更新
+	gearCounter_->Update(gearCount, isGearMax);
 }
 
 void UIManager::Draw() {
-	// 常に表示されるUI描画
-	hud_->Draw();
-	// 入力操作UI描画
-	interctionUI_->Draw();
+	// プレイヤー鉱石所持数UI描画
+	oreCounter_->Draw();
+	// プレイヤー鉱石所持数UI描画
+	gearCounter_->Draw();
 }

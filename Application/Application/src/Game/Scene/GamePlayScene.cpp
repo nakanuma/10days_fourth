@@ -122,7 +122,10 @@ void GamePlayScene::Update() {
 	// 歯車オブジェクト管理クラス更新
 	GearManager::GetInstance()->Update();
 	// UI管理クラス更新
-	UIManager::GetInstance()->Update();
+	UIManager::GetInstance()->Update(
+		player_->GetOreCount(), !player_->CanPickUpOre(),
+		player_->GetGearCount(), !player_->CanPickUpGear()
+	);
 
 	///
 	///	
