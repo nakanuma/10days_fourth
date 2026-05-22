@@ -86,9 +86,9 @@ private:
 
 	// ----- Objects -----
 	std::unique_ptr<Cygnus::Object3D> objectGround_;	/* 地面オブジェクト（仮） */
-	//std::unique_ptr<Player> player_;	/* プレイヤー */
-	//std::unique_ptr<Carrier> carrier_;	/* 経路に沿って移動するオブジェクト */
-	//std::unique_ptr<Sphinx> sphinx_;	/* スフィンクス */
+	std::unique_ptr<Player> player_;	/* プレイヤー */
+	std::unique_ptr<Carrier> carrier_;	/* 経路に沿って移動するオブジェクト */
+	std::unique_ptr<Sphinx> sphinx_;	/* スフィンクス */
 
 	// ----- Others -----
 	uint32_t shadowMapHandle_;                                     /* シャドウマップテクスチャ */

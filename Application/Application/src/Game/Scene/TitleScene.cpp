@@ -65,15 +65,15 @@ void TitleScene::Initialize()
 	objectGround_->materialCB_.data_->color = { 0.5f, 0.5f, 0.5f, 1.0f }; // 色変更
 
 	// プレイヤー生成 + 初期化
-	//player_ = std::make_unique<Player>();
-	//player_->Initialize();
+	player_ = std::make_unique<Player>();
+	player_->Initialize();
 
 	//// 経路管理クラス初期化
-	//PathManager::GetInstance()->Initialize();
+	PathManager::GetInstance()->Initialize();
 
 	//// 経路に沿って移動するオブジェクト生成 + 初期化
-	//carrier_ = std::make_unique<Carrier>();
-	//carrier_->Initialize();
+	carrier_ = std::make_unique<Carrier>();
+	carrier_->Initialize();
 
 	//// 鉱石オブジェクト管理クラス初期化
 	//OreManager::GetInstance()->Initialize();
@@ -84,8 +84,8 @@ void TitleScene::Initialize()
 	//// 歯車オブジェクト管理クラス初期化
 	//GearManager::GetInstance()->Initialize();
 
-	/*sphinx_ = std::make_unique<Sphinx>();
-	sphinx_->Initialize();*/
+	sphinx_ = std::make_unique<Sphinx>();
+	sphinx_->Initialize();
 }
 
 void TitleScene::Finalize()
@@ -109,10 +109,10 @@ void TitleScene::Update()
 	// 地面オブジェクト更新
 	objectGround_->UpdateMatrix();
 	// プレイヤー更新
-	//player_->Update(dt);
-	//// 経路に沿って移動するオブジェクト更新
-	//carrier_->Update(dt);
-	//sphinx_->Update(dt, player_->GetPosition());
+	player_->Update(dt);
+	// 経路に沿って移動するオブジェクト更新
+	carrier_->Update(dt);
+	sphinx_->Update(dt, player_->GetPosition());
 	//// 鉱石オブジェクト管理クラス更新
 	//OreManager::GetInstance()->Update();
 	//// 工作台オブジェクト管理クラス更新
@@ -197,12 +197,12 @@ void TitleScene::Draw()
 	// 地面オブジェクト描画
 	objectGround_->Draw();
 	// プレイヤー描画
-	//player_->Draw();
+	player_->Draw();
 	// 経路管理クラス描画
-	//PathManager::GetInstance()->Draw();
+	PathManager::GetInstance()->Draw();
 	// 経路に沿って移動するオブジェクト描画
-	//carrier_->Draw();
-	//sphinx_->Draw();
+	carrier_->Draw();
+	sphinx_->Draw();
 	//// 鉱石オブジェクト管理クラス描画
 	//OreManager::GetInstance()->Draw();
 	//// 工作台オブジェクト管理クラス描画
@@ -250,9 +250,9 @@ void TitleScene::Draw()
 	// ゲームシーン
 	Debug();
 	// プレイヤー
-	//player_->Debug();
+	player_->Debug();
 	// 経路に沿って動くオブジェクト
-	//carrier_->Debug();
+	carrier_->Debug();
 	//　ステージエディタの更新(jsonの生成処理)
 
 
