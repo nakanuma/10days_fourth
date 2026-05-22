@@ -19,6 +19,7 @@
     <ClCompile Include="src\Game\StageEditor.cpp" />
     <ClCompile Include="src\Game\UI\UIManager.cpp" />
     <ClCompile Include="src\Game\UI\Parts\ItemCounter\ItemCounter.cpp" />
+    <ClCompile Include="src\Game\UI\Parts\InteractGuide\InteractGuide.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
@@ -39,5 +40,6 @@
     <ClInclude Include="src\Game\StageEditor.h" />
     <ClInclude Include="src\Game\UI\UIManager.h" />
     <ClInclude Include="src\Game\UI\Parts\ItemCounter\ItemCounter.h" />
+    <ClInclude Include="src\Game\UI\Parts\InteractGuide\InteractGuide.h" />
   </ItemGroup>
 </Project>

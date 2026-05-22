@@ -43,7 +43,7 @@ private:
 	const Cygnus::Float2 kDisplayDigitSize = {48.0f, 48.0f}; // 描画する数字1つのサイズ
 
 	const Cygnus::Float2 kOffsetXSign = {64.0f, 32.0f};	// xマークのオフセット（アイコン基準）
-	const Cygnus::Float2 kOffsetNumber10 = {90.0f, 16.0f}; // 10の位のオフセット（アイコン基準）
+	const Cygnus::Float2 kOffsetNumber10 = {92.0f, 16.0f}; // 10の位のオフセット（アイコン基準）
 
 	const float kDigitSpacing = 36.0f;	// 数字と数字の横間隔
 

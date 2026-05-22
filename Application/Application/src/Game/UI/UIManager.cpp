@@ -13,6 +13,7 @@ void UIManager::Initialize() {
 	spriteCommon_ = std::make_unique<Cygnus::SpriteCommon>();
 	spriteCommon_->Initialize(Cygnus::DirectXBase::GetInstance());
 
+
 	// プレイヤー鉱石所持数UI生成 + 初期化
 	oreCounter_ = std::make_unique<ItemCounter>();
 	oreCounter_->Initialize(spriteCommon_.get(), Cygnus::TextureManager::Load("UI/oreIcon.png"), kOreCounterInitialPosition);
@@ -20,6 +21,11 @@ void UIManager::Initialize() {
 	// プレイヤー歯車所持数UI生成 + 初期化
 	gearCounter_ = std::make_unique<ItemCounter>();
 	gearCounter_->Initialize(spriteCommon_.get(), Cygnus::TextureManager::Load("UI/gearIcon.png"), kGearCounterInitialPosition);
+
+
+	// インタラクトUIを生成
+	interactGuides_[InteractGuide::ActionType::Insert] = std::make_unique<InteractGuide>();
+	interactGuides_[InteractGuide::ActionType::Insert]->Initialize(spriteCommon_.get())
 }
 
 void UIManager::Update(uint32_t oreCount, bool isOreMax, uint32_t gearCount, bool isGearMax) {
@@ -34,4 +40,8 @@ void UIManager::Draw() {
 	oreCounter_->Draw();
 	// プレイヤー鉱石所持数UI描画
 	gearCounter_->Draw();
+}
+
+void UIManager::RequestInteract(InteractGuide::ActionType type) {
+
 }

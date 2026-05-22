@@ -2,6 +2,7 @@
 
 // Application
 #include <src/Game/UI/Parts/ItemCounter/ItemCounter.h>
+#include <src/Game/UI/Parts/InteractGuide/InteractGuide.h>
 
 // =========================================================
 // すべてのUIを管理するクラス
@@ -33,6 +34,16 @@ public:
 	/// </summary>
 	void Draw();
 
+	// =========================================================
+	// Accessor
+	// =========================================================
+
+	/// <summary>
+	/// 外部からインタラクトUIの表示を要求
+	/// </summary>
+	/// <param name="type"></param>
+	void RequestInteract(InteractGuide::ActionType type);
+
 private:
 	// =========================================================
 	// Constants
@@ -47,4 +58,6 @@ private:
 
 	std::unique_ptr<ItemCounter> oreCounter_;  // プレイヤー鉱石所持数UI
 	std::unique_ptr<ItemCounter> gearCounter_;	// プレイヤー歯車所持数UI
+
+	std::unordered_map<InteractGuide::ActionType, std::unique_ptr<InteractGuide>> interactGuides_; // インタラクトUIを保持
 };

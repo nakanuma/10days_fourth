@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\UI\Parts\InteractGuide\InteractGuide.cpp" />
     <ClCompile Include="src\Game\UI\Parts\ItemCounter\ItemCounter.cpp" />
     <ClCompile Include="src\Game\Gear\DroppedGear.cpp" />
     <ClCompile Include="src\Game\Gear\GearManager.cpp" />
@@ -39,6 +40,7 @@
     <ClCompile Include="src\Game\UI\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\UI\Parts\InteractGuide\InteractGuide.h" />
     <ClInclude Include="src\Game\UI\Parts\ItemCounter\ItemCounter.h" />
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
     <ClInclude Include="src\Game\Gear\GearManager.h" />
