@@ -29,6 +29,7 @@
     <ClCompile Include="src\Game\Gear\DroppedGear.cpp" />
     <ClCompile Include="src\Game\Gear\GearManager.cpp" />
     <ClCompile Include="src\Game\Particles\ParticleStrage.cpp" />
+    <ClCompile Include="src\Game\Scene\TitleScene.cpp" />
     <ClCompile Include="src\Util\JsonUtil.cpp" />
     <ClCompile Include="src\Game\Particles\Particle.cpp" />
     <ClCompile Include="src\Game\Particles\ParticleEditorSystem.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
     <ClInclude Include="src\Game\Gear\GearManager.h" />
     <ClInclude Include="src\Game\Particles\ParticleStrage.h" />
+    <ClInclude Include="src\Game\Scene\TitleScene.h" />
     <ClInclude Include="src\Util\JsonUtil.h" />
     <ClInclude Include="src\Game\Particles\Particle.h" />
     <ClInclude Include="src\Game\Particles\ParticleEditorSystem.h" />

@@ -25,6 +25,12 @@
     <ClCompile Include="src\Game\Field\AnubisFieldEvent.cpp" />
     <ClCompile Include="src\Game\Mummy\Mummy.cpp" />
     <ClCompile Include="src\Game\Mummy\MummyManager.cpp" />
+    <ClCompile Include="src\Game\Particles\ParticleStrage.cpp" />
+    <ClCompile Include="src\Util\JsonUtil.cpp" />
+    <ClCompile Include="src\Game\Particles\Particle.cpp" />
+    <ClCompile Include="src\Game\Particles\ParticleEditorSystem.cpp" />
+    <ClCompile Include="src\Game\Scene\ParticleEditorScene.cpp" />
+    <ClCompile Include="src\Game\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
@@ -81,21 +87,12 @@
     <ClCompile Include="src\Game\Ore\DroppedOre.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\Scene\ParticleEditorScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Particles\ParticleEditorSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Particles\Particle.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Util\JsonUtil.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Particles\ParticleStrage.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
+    <ClInclude Include="src\Game\Particles\ParticleStrage.h" />
+    <ClInclude Include="src\Util\JsonUtil.h" />
+    <ClInclude Include="src\Game\Particles\Particle.h" />
+    <ClInclude Include="src\Game\Particles\ParticleEditorSystem.h" />
+    <ClInclude Include="src\Game\Scene\ParticleEditorScene.h" />
+    <ClInclude Include="src\Game\Scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h">
@@ -123,21 +120,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\Ore\DroppedOre.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Scene\ParticleEditorScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Particles\ParticleEditorSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Particles\Particle.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Util\JsonUtil.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Particles\ParticleStrage.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

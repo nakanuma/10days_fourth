@@ -1,4 +1,4 @@
-#include "GamePlayScene.h"
+#include "TitleScene.h"
 #include "DirectXBase.h"
 #include "ImguiWrapper.h"
 #include "RTVManager.h"
@@ -18,12 +18,14 @@
 #include <CommandManager.h>
 
 // Application
+#include <src/Game/Scene/SceneFactory.h>
 #include <src/Game/Path/PathManager.h>
 #include <src/Game/Ore/OreManager.h>
 #include <src/Game/WorkBench/WorkBenchManager.h>
 #include <src/Game/Gear/GearManager.h>
 
-void GamePlayScene::Initialize() {
+void TitleScene::Initialize()
+{
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
 	// カメラのインスタンスを生成
@@ -54,50 +56,43 @@ void GamePlayScene::Initialize() {
 	///
 	///	↓ ゲームシーン用
 	///
-	
+
 	// 地面オブジェクト生成
 	objectGround_ = std::make_unique<Cygnus::Object3D>();
 	objectGround_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Plane"); // モデル設定
-	objectGround_->transform_.rotate_ = {-Cygnus::PIf / 2.0f, 0.0f, 0.0f}; // 上向き
-	objectGround_->transform_.scale_ = {500.0f, 500.0f, 1.0f}; // スケール変更
-	objectGround_->materialCB_.data_->color = {0.5f, 0.5f, 0.5f, 1.0f}; // 色変更
+	objectGround_->transform_.rotate_ = { -Cygnus::PIf / 2.0f, 0.0f, 0.0f }; // 上向き
+	objectGround_->transform_.scale_ = { 500.0f, 500.0f, 1.0f }; // スケール変更
+	objectGround_->materialCB_.data_->color = { 0.5f, 0.5f, 0.5f, 1.0f }; // 色変更
 
 	// プレイヤー生成 + 初期化
-	player_ = std::make_unique<Player>();
-	player_->Initialize();
+	//player_ = std::make_unique<Player>();
+	//player_->Initialize();
 
-	// 経路管理クラス初期化
-	PathManager::GetInstance()->Initialize();
+	//// 経路管理クラス初期化
+	//PathManager::GetInstance()->Initialize();
 
-	// 経路に沿って移動するオブジェクト生成 + 初期化
-	carrier_ = std::make_unique<Carrier>();
-	carrier_->Initialize();
+	//// 経路に沿って移動するオブジェクト生成 + 初期化
+	//carrier_ = std::make_unique<Carrier>();
+	//carrier_->Initialize();
 
-	// 鉱石オブジェクト管理クラス初期化
-	OreManager::GetInstance()->Initialize();
+	//// 鉱石オブジェクト管理クラス初期化
+	//OreManager::GetInstance()->Initialize();
 
-	// 工作台オブジェクト管理クラス初期化
-	WorkBenchManager::GetInstance()->Initialize();
+	//// 工作台オブジェクト管理クラス初期化
+	//WorkBenchManager::GetInstance()->Initialize();
 
-	// 歯車オブジェクト管理クラス初期化
-	GearManager::GetInstance()->Initialize();
+	//// 歯車オブジェクト管理クラス初期化
+	//GearManager::GetInstance()->Initialize();
 
-	sphinx_ = std::make_unique<Sphinx>();
-	sphinx_->Initialize();
-
-	//stageEditor_ = std::make_unique<StageEditor>();
-	//stageEditor_->LoadJsonFile("resources/stageEditor/stage_1.json");
-	//stageEditor_->SpitObjects(player_);
-
-	fieldManager_ = std::make_unique<FieldEventManager>();
-	fieldManager_->Initialize(&*spriteCommon_);
-
-	MummyManager::GetInstance()->Initialize();
+	/*sphinx_ = std::make_unique<Sphinx>();
+	sphinx_->Initialize();*/
 }
 
-void GamePlayScene::Finalize() { }
+void TitleScene::Finalize()
+{}
 
-void GamePlayScene::Update() {
+void TitleScene::Update()
+{
 	///
 	///	共通更新処理
 	/// 
@@ -110,34 +105,31 @@ void GamePlayScene::Update() {
 	///
 	///	オブジェクト更新処理
 	/// 
-	
+
 	// 地面オブジェクト更新
 	objectGround_->UpdateMatrix();
 	// プレイヤー更新
-	player_->Update(dt);
-	// 経路に沿って移動するオブジェクト更新
-	carrier_->Update(dt);
-	sphinx_->Update(dt, player_->GetPosition());
-	// 鉱石オブジェクト管理クラス更新
-	OreManager::GetInstance()->Update();
-	// 工作台オブジェクト管理クラス更新
-	WorkBenchManager::GetInstance()->Update();
-	// 歯車オブジェクト管理クラス更新
-	GearManager::GetInstance()->Update();
-
-	fieldManager_->Update();
-
-	MummyManager::GetInstance()->Update(player_->GetPosition(), dt);
+	//player_->Update(dt);
+	//// 経路に沿って移動するオブジェクト更新
+	//carrier_->Update(dt);
+	//sphinx_->Update(dt, player_->GetPosition());
+	//// 鉱石オブジェクト管理クラス更新
+	//OreManager::GetInstance()->Update();
+	//// 工作台オブジェクト管理クラス更新
+	//WorkBenchManager::GetInstance()->Update();
+	//// 歯車オブジェクト管理クラス更新
+	//GearManager::GetInstance()->Update();
 
 	///
 	///	
 	/// 
-	
+
 	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);	// パーティクルエフェクト管理クラス更新
 	Cygnus::CollisionManager::GetInstance()->Update();	// コライダー管理クラス更新
 }
 
-void GamePlayScene::Draw() {
+void TitleScene::Draw()
+{
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 	Cygnus::SRVManager* srvManager = Cygnus::SRVManager::GetInstance();
 	auto* cmd = Cygnus::CommandManager::GetInstance()->GetCommandList();
@@ -205,19 +197,18 @@ void GamePlayScene::Draw() {
 	// 地面オブジェクト描画
 	objectGround_->Draw();
 	// プレイヤー描画
-	player_->Draw();
+	//player_->Draw();
 	// 経路管理クラス描画
-	PathManager::GetInstance()->Draw();
+	//PathManager::GetInstance()->Draw();
 	// 経路に沿って移動するオブジェクト描画
-	carrier_->Draw();
-	sphinx_->Draw();
-	MummyManager::GetInstance()->Draw();
-	// 鉱石オブジェクト管理クラス描画
-	OreManager::GetInstance()->Draw();
-	// 工作台オブジェクト管理クラス描画
-	WorkBenchManager::GetInstance()->Draw();
-	// 歯車オブジェクト管理クラス描画
-	GearManager::GetInstance()->Draw();
+	//carrier_->Draw();
+	//sphinx_->Draw();
+	//// 鉱石オブジェクト管理クラス描画
+	//OreManager::GetInstance()->Draw();
+	//// 工作台オブジェクト管理クラス描画
+	//WorkBenchManager::GetInstance()->Draw();
+	//// 歯車オブジェクト管理クラス描画
+	//GearManager::GetInstance()->Draw();
 
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
@@ -247,7 +238,6 @@ void GamePlayScene::Draw() {
 	/// ↓ ここからスプライト描画
 	/// =========================================================
 
-	fieldManager_->Draw();
 
 	/// =========================================================
 	/// ↑ ここまでスプライト描画
@@ -260,14 +250,13 @@ void GamePlayScene::Draw() {
 	// ゲームシーン
 	Debug();
 	// プレイヤー
-	player_->Debug();
+	//player_->Debug();
 	// 経路に沿って動くオブジェクト
-	carrier_->Debug();
+	//carrier_->Debug();
 	//　ステージエディタの更新(jsonの生成処理)
-	//stageEditor_->Update();
-	sphinx_->Debug();
-	fieldManager_->Debug();
-	MummyManager::GetInstance()->Debug();
+
+
+	//sphinx_->Debug();
 #endif
 
 	// ImGuiの内部コマンドを生成する
@@ -278,11 +267,17 @@ void GamePlayScene::Draw() {
 	dxBase->EndFrame();
 }
 
-void GamePlayScene::Debug() {
+void TitleScene::Debug()
+{
 #ifdef USE_IMGUI
-	ImGui::Begin("GamePlaySceneInfo");
+	ImGui::Begin("TitleSceneInfo");
 
 	ImGui::Text("fps:%.2f", ImGui::GetIO().Framerate);
+
+	if (ImGui::Button("GamePlayScene"))
+	{
+		TransitionTitle();
+	}
 
 	ImGui::End();
 #endif
@@ -295,4 +290,9 @@ void GamePlayScene::Debug() {
 
 	ImGui::End();
 #endif
+}
+
+void TitleScene::TransitionTitle()
+{
+	SceneFactory::GetInstance()->CreateScene("GAMEPLAY");
 }
