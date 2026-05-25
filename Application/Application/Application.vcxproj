@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Particles\Fireworks\FireworksManager.cpp" />
     <ClCompile Include="src\Game\Field\AnubisFieldEvent.cpp" />
     <ClCompile Include="src\Game\Mummy\Mummy.cpp" />
     <ClCompile Include="src\Game\Mummy\MummyManager.cpp" />
@@ -50,6 +51,7 @@
     <ClCompile Include="src\Game\Field\SunGodRaFieldEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Particles\Fireworks\FireworksManager.h" />
     <ClInclude Include="src\Game\Field\AnubisFieldEvent.h" />
     <ClInclude Include="src\Game\Mummy\Mummy.h" />
     <ClInclude Include="src\Game\Mummy\MummyManager.h" />
