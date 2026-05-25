@@ -105,6 +105,13 @@ void GamePlayScene::Update() {
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();	// デルタタイム取得
 
 	///
+	///	他更新処理
+	/// 
+
+	// UIManagerのインタラクトUI表示要求をリセット（表示され続けないため）
+	UIManager::GetInstance()->ClearInteractRequests();
+
+	///
 	///	オブジェクト更新処理
 	/// 
 	
@@ -121,17 +128,20 @@ void GamePlayScene::Update() {
 	WorkBenchManager::GetInstance()->Update();
 	// 歯車オブジェクト管理クラス更新
 	GearManager::GetInstance()->Update();
-	// UI管理クラス更新
-	UIManager::GetInstance()->Update(
-		player_->GetOreCount(), !player_->CanPickUpOre(),
-		player_->GetGearCount(), !player_->CanPickUpGear()
-	);
 
 	///
 	///	
 	/// 
 	
-	Cygnus::CollisionManager::GetInstance()->Update();	// コライダー管理クラス更新
+	// コライダー管理クラス更新
+	Cygnus::CollisionManager::GetInstance()->Update();
+
+	// UI管理クラス更新
+	UIManager::GetInstance()->Update(
+		player_->GetOreCount(), !player_->CanPickUpOre(), 
+		player_->GetGearCount(), !player_->CanPickUpGear(), 
+		player_->GetPosition()
+	);
 }
 
 void GamePlayScene::Draw() {

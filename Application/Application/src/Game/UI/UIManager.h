@@ -27,12 +27,17 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(uint32_t oreCount, bool isOreMax, uint32_t gearCount, bool isGearMax);
+	void Update(uint32_t oreCount, bool isOreMax, uint32_t gearCount, bool isGearMax, const Cygnus::Float3 playerPos);
 
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// インタラクトUI表示要求のリセット（UIが表示され続けないために使用。フレームの最初に呼ぶ）
+	/// </summary>
+	void ClearInteractRequests();
 
 	// =========================================================
 	// Accessor

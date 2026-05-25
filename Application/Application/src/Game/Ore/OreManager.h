@@ -48,6 +48,14 @@ public:
 	/// <param name="range"></param>
 	/// <returns></returns>
 	bool TryBreakAt(const Cygnus::Float3& targetPos, float range);
+
+	/// <summary>
+	/// 指定座標の射程範囲内に破壊可能な鉱石があるかチェックする
+	/// </summary>
+	/// <param name="targetPos"></param>
+	/// <param name="range"></param>
+	/// <returns></returns>
+	bool IsBreakableAt(const Cygnus::Float3& targetPos, float range);
   
 private:
 	// =========================================================

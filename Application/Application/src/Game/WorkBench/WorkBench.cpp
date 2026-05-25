@@ -6,6 +6,7 @@
 // Application
 #include <src/Game/Player/Player.h>
 #include <src/Game/Gear/GearManager.h>
+#include <src/Game/UI/UIManager.h>
 
 void WorkBench::Initialize(const Cygnus::Float3 translate) {
 	// オブジェクト生成
@@ -54,6 +55,9 @@ void WorkBench::OnCollision(Cygnus::Collider* other) {
 
 		// プレイヤーが歯車の生成に必用な鉱石を所持しているか確認
 		if (player->GetOreCount() >= kRequiredOreCount) {
+			// インタラクトUIの表示を要求
+			UIManager::GetInstance()->RequestInteract(InteractGuide::ActionType::Craft);
+
 			// キー or ボタン入力操作
 			if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
 				// プレイヤーの鉱石を消費させる（生成に使用した分のみ）

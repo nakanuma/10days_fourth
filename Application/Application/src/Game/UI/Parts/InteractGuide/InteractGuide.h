@@ -29,7 +29,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	void Update(const Cygnus::Float3& screenPos);
 
 	/// <summary>
 	/// 描画処理
@@ -56,9 +56,12 @@ private:
 	// =========================================================
 	// Constants
 	// =========================================================
-	const Cygnus::Float2 kButtonSize = {64.0f, 64.0f}; // ボタンのサイズ
-	const Cygnus::Float2 kTextSize = {192.0f, 64.0f}; // テキストのサイズ
-	const float kSpacing = 10.0f;	// ボタンと文字の隙間
+	const Cygnus::Float2 kButtonSize = {32.0f, 32.0f}; // ボタンのサイズ
+	const Cygnus::Float2 kTextSize = {96.0f, 32.0f}; // テキストのサイズ
+	const float kSpacing = -12.0f;	// ボタンと文字の隙間
+
+	const Cygnus::Float2 kAnchorPoint = {0.5f, 0.5f};
+	const float kYOffsetY = 60.0f;
 
 	// =========================================================
 	// Member Variables

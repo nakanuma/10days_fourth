@@ -7,6 +7,8 @@ void InteractGuide::Initialize(Cygnus::SpriteCommon* spriteCommon, ActionType ac
 	// ボタン画像生成+初期化
 	spriteButton_ = std::make_unique<Cygnus::Sprite>();
 	spriteButton_->Initialize(spriteCommon, Cygnus::TextureManager::Load("UI/button_a.png"));
+	spriteButton_->SetAnchorPoint(kAnchorPoint);
+	spriteButton_->SetSize(kButtonSize);
 
 	// 文字画像生成+初期化
 	uint32_t textTex = 0;
@@ -23,10 +25,29 @@ void InteractGuide::Initialize(Cygnus::SpriteCommon* spriteCommon, ActionType ac
 	}
 	spriteText_ = std::make_unique<Cygnus::Sprite>();
 	spriteText_->Initialize(spriteCommon, textTex);
+	spriteText_->SetAnchorPoint(kAnchorPoint);
+	spriteText_->SetSize(kTextSize);
 }
 
-void InteractGuide::Update() {
+void InteractGuide::Update(const Cygnus::Float3& screenPos) {
 	if (!isActive_) return;
+
+	// UI全体の横幅を計算
+	float totalWidth = kButtonSize.x + kSpacing + kTextSize.x;
+	// UI全体の左端となる位置を逆算
+	float leftEdgeX = screenPos.x - totalWidth * 0.5f;
+	// ボタンの中心位置を計算
+	Cygnus::Float2 buttonCenterPos = {
+		leftEdgeX + kButtonSize.x * 0.5f, 
+		screenPos.y - kYOffsetY
+	};
+	spriteButton_->SetPosition(buttonCenterPos);
+	// 文字の中心位置を計算
+	Cygnus::Float2 textCenterPos = {
+		buttonCenterPos.x + kButtonSize.x * 0.5f + kSpacing + kTextSize.x * 0.5f, 
+		screenPos.y - kYOffsetY
+	};
+	spriteText_->SetPosition(textCenterPos);
 
 	// ボタン更新
 	spriteButton_->Update();
@@ -40,6 +61,6 @@ void InteractGuide::Draw() {
 	// ボタン描画
 	spriteButton_->Draw();
 	// 文字描画
-	spriteButton_->Draw();
+	spriteText_->Draw();
 }
 
