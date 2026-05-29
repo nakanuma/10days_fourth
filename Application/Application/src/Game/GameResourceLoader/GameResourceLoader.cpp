@@ -133,6 +133,7 @@ void GameResourceLoader::RegisterAllParticleEffect() {
 	RegisterParticle("ore_break", "Cube");
 	RegisterParticle("fireworks_up", "Cube");
 	RegisterParticle("fireworks_diffusion", "Cube");
+	RegisterParticle("sand_rain", "Cube");
 }
 
 void GameResourceLoader::LoadAllSoundData() {

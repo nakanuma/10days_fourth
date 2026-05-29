@@ -23,6 +23,7 @@
 #include <src/Game/WorkBench/WorkBenchManager.h>
 #include <src/Game/Gear/GearManager.h>
 #include <src/Game/Particles/Fireworks/FireworksManager.h>
+#include <src/Game/Particles/SandRain/SandRainManager.h>
 
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
@@ -132,6 +133,8 @@ void GamePlayScene::Update() {
 
 	//花火パーティクル更新
 	FireworksManager::GetInstance()->Update(dt);
+	//砂嵐パーティクル更新
+	SandRainManager::GetInstance()->Update(dt);
 
 	///
 	///	
@@ -238,6 +241,7 @@ void GamePlayScene::Draw() {
 
 	// -----------------------------------------------
 	postEffectManager_->RestoreDepthBufferState();
+
 #pragma endregion
 
 	/// =========================================================
@@ -303,5 +307,7 @@ void GamePlayScene::Debug() {
 #ifdef USE_IMGUI
 	//花火パーティクルのデバッグ表示
 	FireworksManager::GetInstance()->Debug();
+	//砂嵐パーティクルのデバッグ表示
+	SandRainManager::GetInstance()->Debug();
 #endif
 }

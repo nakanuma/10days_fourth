@@ -6,13 +6,13 @@
         0.27848100662231445,
         0.0
     ],
-    "isBillboard": true,
+    "isBillboard": false,
     "maxAccerelation": [
         0.20000000298023224,
         -0.20000000298023224,
         0.20000000298023224
     ],
-    "maxLifeTime": 2.5,
+    "maxLifeTime": 2.0,
     "maxRotationSpeed": [
         3.0,
         3.0,

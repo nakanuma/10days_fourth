@@ -13,27 +13,38 @@ FireworksManager* FireworksManager::GetInstance() {
 
 void FireworksManager::Update(float dt) {
 	//全ての花火パーティクルの更新
-	for(auto& firework : fireworks_) {
-		//上昇時間を更新
+	for (size_t i = 0; i < fireworks_.size(); ) {
+		auto& firework = fireworks_[i];
+
 		firework.upTime += dt;
 
-		//上昇時間が最大値を超えた場合、花火を爆発させる
 		if (firework.upTime >= maxUpTime_) {
-			//花火の爆発エフェクトを発生させる
-			Cygnus::ParticleEffectManager::GetInstance()->Emit("fireworks_diffusion", firework.position, 50, Cygnus::Float3(0.0f, 0.0f, 0.0f), 0.0f);
-			//花火パーティクルを削除
-			firework = fireworks_.back();
+
+			Cygnus::ParticleEffectManager::GetInstance()->Emit(
+				"fireworks_diffusion",
+				firework.position,
+				20,
+				Cygnus::Float3(0.0f, 0.0f, 0.0f),
+				0.0f
+			);
+
+			fireworks_[i] = fireworks_.back();
 			fireworks_.pop_back();
 
 			continue;
 		}
 
-		//花火の位置を更新
 		firework.position.y += velocity.y * dt;
 
-		//花火の上昇エフェクトを発生させる
-		Cygnus::ParticleEffectManager::GetInstance()->Emit("fireworks_up", firework.position, 1, Cygnus::Float3(0.0f, 0.0f, 0.0f), 0.0f);
+		Cygnus::ParticleEffectManager::GetInstance()->Emit(
+			"fireworks_up",
+			firework.position,
+			1,
+			Cygnus::Float3(0.0f, 0.0f, 0.0f),
+			0.0f
+		);
 
+		++i;
 	}
 }
 
