@@ -22,6 +22,7 @@
 #include <src/Game/Ore/OreManager.h>
 #include <src/Game/WorkBench/WorkBenchManager.h>
 #include <src/Game/Gear/GearManager.h>
+#include <src/Game/Particles/Fireworks/FireworksManager.h>
 
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
@@ -128,6 +129,9 @@ void GamePlayScene::Update() {
 	fieldManager_->Update();
 
 	MummyManager::GetInstance()->Update(player_->GetPosition(), dt);
+
+	//花火パーティクル更新
+	FireworksManager::GetInstance()->Update(dt);
 
 	///
 	///	
@@ -294,5 +298,10 @@ void GamePlayScene::Debug() {
 	ImGui::DragFloat3("Rotate", &camera_->transform_.rotate_.x, 0.01f);
 
 	ImGui::End();
+#endif
+
+#ifdef USE_IMGUI
+	//花火パーティクルのデバッグ表示
+	FireworksManager::GetInstance()->Debug();
 #endif
 }
