@@ -60,7 +60,7 @@ void GamePlayScene::Initialize() {
 	objectGround_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Plane"); // モデル設定
 	objectGround_->transform_.rotate_ = {-Cygnus::PIf / 2.0f, 0.0f, 0.0f}; // 上向き
 	objectGround_->transform_.scale_ = {500.0f, 500.0f, 1.0f}; // スケール変更
-	objectGround_->materialCB_.data_->color = {0.5f, 0.5f, 0.5f, 1.0f}; // 色変更
+	objectGround_->materialCB_.data_->color = {0.82f, 0.70f, 0.55f, 1.0f}; // 色変更
 
 	// プレイヤー生成 + 初期化
 	player_ = std::make_unique<Player>();
@@ -84,6 +84,9 @@ void GamePlayScene::Initialize() {
 
 	sphinx_ = std::make_unique<Sphinx>();
 	sphinx_->Initialize();
+
+	// UI管理クラス初期化
+	UIManager::GetInstance()->Initialize();
 
 	//stageEditor_ = std::make_unique<StageEditor>();
 	//stageEditor_->LoadJsonFile("resources/stageEditor/stage_1.json");
@@ -109,6 +112,13 @@ void GamePlayScene::Update() {
 	Cygnus::SkyBoxManager::GetInstance()->Update(); // SkyBox更新
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();	// デルタタイム取得
 
+
+	///
+	///	他更新処理
+	/// 
+
+	// UIManagerのインタラクトUI表示要求をリセット（表示され続けないため）
+	UIManager::GetInstance()->ClearInteractRequests();
 
 	///
 	///	オブジェクト更新処理
@@ -139,6 +149,15 @@ void GamePlayScene::Update() {
 	///	
 	/// 
 	
+	// コライダー管理クラス更新
+	Cygnus::CollisionManager::GetInstance()->Update();
+
+	// UI管理クラス更新
+	UIManager::GetInstance()->Update(
+		player_->GetOreCount(), !player_->CanPickUpOre(), 
+		player_->GetGearCount(), !player_->CanPickUpGear(), 
+		player_->GetPosition()
+	);
 	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);	// パーティクルエフェクト管理クラス更新
 	Cygnus::CollisionManager::GetInstance()->Update();	// コライダー管理クラス更新
 }
@@ -253,6 +272,8 @@ void GamePlayScene::Draw() {
 	/// ↓ ここからスプライト描画
 	/// =========================================================
 
+	// UI管理クラス描画
+	UIManager::GetInstance()->Draw();
 	fieldManager_->Draw();
 
 	/// =========================================================

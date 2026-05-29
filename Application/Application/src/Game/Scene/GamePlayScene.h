@@ -24,6 +24,7 @@
 #include <src/Game/Carrier/Carrier.h>
 #include <src/Game/StageEditor/StageEditor.h>
 #include <src/Game/Sphinx/Sphinx.h>
+#include <src/Game/UI/UIManager.h>
 #include <src/Game/Field/FieldEventManager.h>
 #include <src/Game/Mummy/MummyManager.h>
 
@@ -90,6 +91,8 @@ private:
 	std::unique_ptr<Player> player_;	/* プレイヤー */
 	std::unique_ptr<Carrier> carrier_;	/* 経路に沿って移動するオブジェクト */
 	std::unique_ptr<Sphinx> sphinx_;	/* スフィンクス */
+
+	std::unique_ptr<UIManager> uiManager_; /* UI管理クラス */
 
 	// ----- Others -----
 	uint32_t shadowMapHandle_;                                     /* シャドウマップテクスチャ */

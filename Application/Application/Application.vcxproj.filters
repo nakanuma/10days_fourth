@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    
+    <ClCompile Include="src\Game\UI\UIManager.cpp" />
+    <ClCompile Include="src\Game\UI\Parts\ItemCounter\ItemCounter.cpp" />
+    <ClCompile Include="src\Game\UI\Parts\InteractGuide\InteractGuide.cpp" />
     <ClCompile Include="src\Game\Gear\DroppedGear.cpp" />
     <ClCompile Include="src\Game\Gear\GearManager.cpp" />
     <ClCompile Include="src\Game\Ore\DroppedOre.cpp" />
@@ -37,6 +41,9 @@
     <ClCompile Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\UI\UIManager.h" />
+    <ClInclude Include="src\Game\UI\Parts\ItemCounter\ItemCounter.h" />
+    <ClInclude Include="src\Game\UI\Parts\InteractGuide\InteractGuide.h" />
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
     <ClInclude Include="src\Game\Gear\GearManager.h" />
     <ClInclude Include="src\Game\Ore\DroppedOre.h" />
