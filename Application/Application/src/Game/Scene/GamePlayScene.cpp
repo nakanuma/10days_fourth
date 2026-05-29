@@ -97,7 +97,6 @@ void GamePlayScene::Initialize() {
 
 void GamePlayScene::Finalize() 
 {
-	Cygnus::CollisionManager::GetInstance()->Clear();
 }
 
 
@@ -280,6 +279,7 @@ void GamePlayScene::Draw() {
 	if (carrier_->IsGoal())
 	{
 		Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT");
+		Cygnus::CollisionManager::GetInstance()->Clear();
 	}
 
 	// ImGuiの内部コマンドを生成する
