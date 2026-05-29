@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Particles\Debuff\DebuffManager.cpp" />
     <ClCompile Include="src\Game\Particles\Interact\InteractManager.cpp" />
     <ClCompile Include="src\Game\Particles\SandRain\SandRainManager.cpp" />
     <ClCompile Include="src\Game\Particles\Fireworks\FireworksManager.cpp" />
@@ -53,6 +54,7 @@
     <ClCompile Include="src\Game\Field\SunGodRaFieldEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Particles\Debuff\DebuffManager.h" />
     <ClInclude Include="src\Game\Particles\Interact\InteractManager.h" />
     <ClInclude Include="src\Game\Particles\SandRain\SandRainManager.h" />
     <ClInclude Include="src\Game\Particles\Fireworks\FireworksManager.h" />

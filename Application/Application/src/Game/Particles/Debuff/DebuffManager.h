@@ -6,27 +6,27 @@
 #include <Float3.h>
 
 /// <summary>
-///	花火単体の構造体
+///	単体の構造体
 /// </summary>
-struct FireworkParticle {
+struct DebuffParticle {
 	Cygnus::Float3 position;	// パーティクルの位置
-	float upTime;				// 上昇時間
+	float time;				// 上昇時間
 };
 
 /// <summary>
-/// 花火パーティクルの管理クラス
+/// デバフ演出の管理クラス
 /// </summary>
-class FireworksManager {
+class DebuffManager {
 public:
 	// =========================================================
 	// Public Methods
 	// =========================================================
-	
+
 	/// <summary>
 	/// インスタンスの取得を行います。
 	/// </summary>
 	/// <returns>シングルトンインスタンス</returns>
-	static FireworksManager* GetInstance();
+	static DebuffManager* GetInstance();
 
 	/// <summary>
 	/// 更新処理を行います。
@@ -39,22 +39,25 @@ public:
 	void Debug();
 
 	/// <summary>
-	/// 花火の生成を行います。
+	/// 生成を行います。
 	/// </summary>
 	/// <param name="position"></param>
-	void CreateFireworks(const Cygnus::Float3& position);
+	void Create(const Cygnus::Float3& position);
 
 private:
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	std::vector<FireworkParticle> fireworks_;				/* 花火パーティクルのマップ */ 
-	const float maxUpTime_ = 1.0f;					/* 花火の上昇時間の最大値 */
-	const Cygnus::Float3 velocity = Cygnus::Float3(0.0f, 25.0f, 0.0f);
+	std::vector<DebuffParticle> debuffs_;	/* パーティクルのマップ */
 
+	const float kMaxTime_ = 1.0f;						/* パーティクルの最大時間 */
+	const float kRiseHeight_ = 5.0f;						/* 上昇高さ */
+	const float kRadius_ = 2.5f;						/* 回転縁の半径 */
+	const float kAngleSpeed_ = 20.0f;					/* 回転速度 */
 
-	Cygnus::Float3 emitPosition_;					/* (デバッグ用)発生位置 */
+	Cygnus::Float3 emitPosition_;						/* (デバッグ用)発生位置 */
+
 
 };
 
