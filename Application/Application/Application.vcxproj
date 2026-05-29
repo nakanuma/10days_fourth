@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.cpp" />
+    <ClCompile Include="src\Game\Scene\ResultScene.cpp" />
+    <ClCompile Include="src\Game\SpriteCollision\SpriteCollision.cpp" />
     <ClCompile Include="src\Game\Field\AnubisFieldEvent.cpp" />
     <ClCompile Include="src\Game\Mummy\Mummy.cpp" />
     <ClCompile Include="src\Game\Mummy\MummyManager.cpp" />
@@ -29,6 +32,7 @@
     <ClCompile Include="src\Game\Gear\DroppedGear.cpp" />
     <ClCompile Include="src\Game\Gear\GearManager.cpp" />
     <ClCompile Include="src\Game\Particles\ParticleStrage.cpp" />
+    <ClCompile Include="src\Game\Scene\TitleScene.cpp" />
     <ClCompile Include="src\Util\JsonUtil.cpp" />
     <ClCompile Include="src\Game\Particles\Particle.cpp" />
     <ClCompile Include="src\Game\Particles\ParticleEditorSystem.cpp" />
@@ -48,8 +52,12 @@
     <ClCompile Include="src\Game\WorkBench\WorkBenchManager.cpp" />
     <ClCompile Include="src\Game\StageEditor\StageEditor.cpp" />
     <ClCompile Include="src\Game\Field\SunGodRaFieldEvent.cpp" />
+    <ClCompile Include="src\Game\TitleSceneObject\TitleSceneUI\TitleSceneUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.h" />
+    <ClInclude Include="src\Game\Scene\ResultScene.h" />
+    <ClInclude Include="src\Game\SpriteCollision\SpriteCollision.h" />
     <ClInclude Include="src\Game\Field\AnubisFieldEvent.h" />
     <ClInclude Include="src\Game\Mummy\Mummy.h" />
     <ClInclude Include="src\Game\Mummy\MummyManager.h" />
@@ -60,6 +68,7 @@
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
     <ClInclude Include="src\Game\Gear\GearManager.h" />
     <ClInclude Include="src\Game\Particles\ParticleStrage.h" />
+    <ClInclude Include="src\Game\Scene\TitleScene.h" />
     <ClInclude Include="src\Util\JsonUtil.h" />
     <ClInclude Include="src\Game\Particles\Particle.h" />
     <ClInclude Include="src\Game\Particles\ParticleEditorSystem.h" />
@@ -82,6 +91,7 @@
     <ClInclude Include="src\Game\StageEditor\StageEditor.h" />
     <ClInclude Include="src\Game\Field\SunGodRaFieldEvent.h" />
     <ClInclude Include="src\Game\Sphinx\State\State.h" />
+    <ClInclude Include="src\Game\TitleSceneObject\TitleSceneUI\TitleSceneUI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

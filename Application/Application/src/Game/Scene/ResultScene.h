@@ -22,27 +22,27 @@
 // ---------------------------------------------------------
 #include <src/Game/Player/Player.h>
 #include <src/Game/Carrier/Carrier.h>
-#include <src/Game/StageEditor/StageEditor.h>
 #include <src/Game/Sphinx/Sphinx.h>
-#include <src/Game/Field/FieldEventManager.h>
-#include <src/Game/Mummy/MummyManager.h>
+// ※パスは実際のプロジェクト構成に合わせて変更してください
+#include <src/Game/ResultSceneObject/ResultSceneUI/ResultSceneUI.h>
 
 // =========================================================
-// ゲームプレイシーンクラス
+// リザルトシーンクラス
 // =========================================================
-class GamePlayScene : public Cygnus::BaseScene {
+class ResultScene : public Cygnus::BaseScene
+{
 public:
 	// =========================================================
 	// Public Methods
 	// =========================================================
 
 	/// <summary>
-	/// ゲームシーンの初期化処理を行います。
+	/// リザルトシーンの初期化処理を行います。
 	/// </summary>
 	void Initialize() override;
 
 	/// <summary>
-	/// ゲームシーンの終了処理を行います。
+	/// リザルトシーンの終了処理を行います。
 	/// </summary>
 	void Finalize() override;
 
@@ -69,6 +69,7 @@ private:
 	// =========================================================
 	// Internal Methods
 	// =========================================================
+	void TransitionResult();
 
 private:
 	// =========================================================
@@ -87,20 +88,9 @@ private:
 
 	// ----- Objects -----
 	std::unique_ptr<Cygnus::Object3D> objectGround_;	/* 地面オブジェクト（仮） */
-	std::unique_ptr<Player> player_;	/* プレイヤー */
-	std::unique_ptr<Carrier> carrier_;	/* 経路に沿って移動するオブジェクト */
-	std::unique_ptr<Sphinx> sphinx_;	/* スフィンクス */
 
 	// ----- Others -----
 	uint32_t shadowMapHandle_;                                     /* シャドウマップテクスチャ */
 	std::unique_ptr<Cygnus::PostEffectManager> postEffectManager_; /* ポストエフェクト管理クラス */
-
-	// ----- StageSetting -----
-	//std::unique_ptr<StageEditor> stageEditor_; /*ステージ配置エディタ*/
-
-	// ------ フィールドイベント -----
-	std::unique_ptr<FieldEventManager> fieldManager_;
-
-	// ------ ミイラ召喚処理 ---------
-	std::unique_ptr<MummyManager> mummy;
+	std::unique_ptr<ResultSceneUI> resultSceneUI_;                 /* リザルトシーンのUIクラス */
 };
