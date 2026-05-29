@@ -95,7 +95,11 @@ void GamePlayScene::Initialize() {
 	MummyManager::GetInstance()->Initialize();
 }
 
-void GamePlayScene::Finalize() { }
+void GamePlayScene::Finalize() 
+{
+	Cygnus::CollisionManager::GetInstance()->Clear();
+}
+
 
 void GamePlayScene::Update() {
 	///
