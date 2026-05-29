@@ -1,4 +1,4 @@
-#include "TitleScene.h"
+#include "ResultScene.h"
 #include "DirectXBase.h"
 #include "ImguiWrapper.h"
 #include "RTVManager.h"
@@ -24,7 +24,7 @@
 #include <src/Game/WorkBench/WorkBenchManager.h>
 #include <src/Game/Gear/GearManager.h>
 
-void TitleScene::Initialize()
+void ResultScene::Initialize()
 {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
@@ -56,9 +56,9 @@ void TitleScene::Initialize()
 	///
 	///	↓ ゲームシーン用
 	///
-	
-	titleSceneUI_ = std::make_unique<TitleSceneUI>();
-	titleSceneUI_->Init(spriteCommon_.get());
+
+	resultSceneUI_ = std::make_unique<ResultSceneUI>();
+	resultSceneUI_->Init(spriteCommon_.get());
 
 	// 地面オブジェクト生成
 	objectGround_ = std::make_unique<Cygnus::Object3D>();
@@ -69,10 +69,10 @@ void TitleScene::Initialize()
 
 }
 
-void TitleScene::Finalize()
+void ResultScene::Finalize()
 {}
 
-void TitleScene::Update()
+void ResultScene::Update()
 {
 	///
 	///	共通更新処理
@@ -90,7 +90,7 @@ void TitleScene::Update()
 	// 地面オブジェクト更新
 	objectGround_->UpdateMatrix();
 
-	titleSceneUI_->Update();	// タイトルシーンUI更新
+	resultSceneUI_->Update();	// リザルトシーンUI更新
 	///
 	///	
 	/// 
@@ -98,7 +98,7 @@ void TitleScene::Update()
 	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);	// パーティクルエフェクト管理クラス更新
 }
 
-void TitleScene::Draw()
+void ResultScene::Draw()
 {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 	Cygnus::SRVManager* srvManager = Cygnus::SRVManager::GetInstance();
@@ -195,7 +195,7 @@ void TitleScene::Draw()
 	/// ↓ ここからスプライト描画
 	/// =========================================================
 
-	titleSceneUI_->Draw();
+	resultSceneUI_->Draw();
 
 	/// =========================================================
 	/// ↑ ここまでスプライト描画
@@ -208,9 +208,9 @@ void TitleScene::Draw()
 
 #endif
 	// シーンチェンジは描画処理後に行う
-	if (titleSceneUI_->IsStart())
+	if (resultSceneUI_->IsNext())
 	{
-		TransitionTitle();
+		TransitionResult();
 	}
 
 	// ImGuiの内部コマンドを生成する
@@ -221,16 +221,17 @@ void TitleScene::Draw()
 	dxBase->EndFrame();
 }
 
-void TitleScene::Debug()
+void ResultScene::Debug()
 {
 #ifdef USE_IMGUI
-	ImGui::Begin("TitleSceneInfo");
+	ImGui::Begin("ResultSceneInfo");
 
 	ImGui::Text("fps:%.2f", ImGui::GetIO().Framerate);
 
-	if (ImGui::Button("GamePlayScene"))
+	// デバッグ用ボタンの遷移先名も適宜変更してください
+	if (ImGui::Button("Go To TitleScene"))
 	{
-		TransitionTitle();
+		TransitionResult();
 	}
 
 	ImGui::End();
@@ -246,7 +247,7 @@ void TitleScene::Debug()
 #endif
 }
 
-void TitleScene::TransitionTitle()
+void ResultScene::TransitionResult()
 {
-	Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT");
+	Cygnus::SceneManager::GetInstance()->ChangeScene("TITLE");
 }

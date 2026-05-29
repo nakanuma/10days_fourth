@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.cpp" />
+    <ClCompile Include="src\Game\Scene\ResultScene.cpp" />
+    <ClCompile Include="src\Game\SpriteCollision\SpriteCollision.cpp" />
     <ClCompile Include="src\Game\Field\AnubisFieldEvent.cpp" />
     <ClCompile Include="src\Game\Mummy\Mummy.cpp" />
     <ClCompile Include="src\Game\Mummy\MummyManager.cpp" />
@@ -49,8 +52,12 @@
     <ClCompile Include="src\Game\WorkBench\WorkBenchManager.cpp" />
     <ClCompile Include="src\Game\StageEditor\StageEditor.cpp" />
     <ClCompile Include="src\Game\Field\SunGodRaFieldEvent.cpp" />
+    <ClCompile Include="src\Game\TitleSceneObject\TitleSceneUI\TitleSceneUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.h" />
+    <ClInclude Include="src\Game\Scene\ResultScene.h" />
+    <ClInclude Include="src\Game\SpriteCollision\SpriteCollision.h" />
     <ClInclude Include="src\Game\Field\AnubisFieldEvent.h" />
     <ClInclude Include="src\Game\Mummy\Mummy.h" />
     <ClInclude Include="src\Game\Mummy\MummyManager.h" />
@@ -84,6 +91,7 @@
     <ClInclude Include="src\Game\StageEditor\StageEditor.h" />
     <ClInclude Include="src\Game\Field\SunGodRaFieldEvent.h" />
     <ClInclude Include="src\Game\Sphinx\State\State.h" />
+    <ClInclude Include="src\Game\TitleSceneObject\TitleSceneUI\TitleSceneUI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

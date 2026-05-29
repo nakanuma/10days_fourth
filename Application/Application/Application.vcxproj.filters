@@ -31,6 +31,10 @@
     <ClCompile Include="src\Game\Particles\ParticleEditorSystem.cpp" />
     <ClCompile Include="src\Game\Scene\ParticleEditorScene.cpp" />
     <ClCompile Include="src\Game\Scene\TitleScene.cpp" />
+    <ClCompile Include="src\Game\SpriteCollision\SpriteCollision.cpp" />
+    <ClCompile Include="src\Game\TitleSceneObject\TitleSceneUI\TitleSceneUI.cpp" />
+    <ClCompile Include="src\Game\Scene\ResultScene.cpp" />
+    <ClCompile Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
@@ -93,6 +97,10 @@
     <ClInclude Include="src\Game\Particles\ParticleEditorSystem.h" />
     <ClInclude Include="src\Game\Scene\ParticleEditorScene.h" />
     <ClInclude Include="src\Game\Scene\TitleScene.h" />
+    <ClInclude Include="src\Game\SpriteCollision\SpriteCollision.h" />
+    <ClInclude Include="src\Game\TitleSceneObject\TitleSceneUI\TitleSceneUI.h" />
+    <ClInclude Include="src\Game\Scene\ResultScene.h" />
+    <ClInclude Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h">
