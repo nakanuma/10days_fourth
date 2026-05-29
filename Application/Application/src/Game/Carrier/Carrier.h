@@ -46,6 +46,11 @@ public:
 	/// <param name="translate">座標を設定</param>
 	void SetTranslate(const Cygnus::Float3& translate) { object_->transform_.translate_ = translate; }
 
+	/// <summary>
+	/// ゴール判定取得
+	/// </summary>
+	bool IsGoal() { return isGoal_; }
+
 private:
 	// =========================================================
 	// Internal Methods
