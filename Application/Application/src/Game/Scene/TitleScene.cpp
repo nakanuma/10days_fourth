@@ -248,5 +248,5 @@ void TitleScene::Debug()
 
 void TitleScene::TransitionTitle()
 {
-	Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT");
+	Cygnus::SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 }

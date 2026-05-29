@@ -111,23 +111,26 @@ void GamePlayScene::Update() {
 	///	オブジェクト更新処理
 	/// 
 	
-	// 地面オブジェクト更新
-	objectGround_->UpdateMatrix();
-	// プレイヤー更新
-	player_->Update(dt);
-	// 経路に沿って移動するオブジェクト更新
-	carrier_->Update(dt);
-	sphinx_->Update(dt, player_->GetPosition());
-	// 鉱石オブジェクト管理クラス更新
-	OreManager::GetInstance()->Update();
-	// 工作台オブジェクト管理クラス更新
-	WorkBenchManager::GetInstance()->Update();
-	// 歯車オブジェクト管理クラス更新
-	GearManager::GetInstance()->Update();
+	if(!carrier_->IsGoal())
+	{
+		// 地面オブジェクト更新
+		objectGround_->UpdateMatrix();
+		// プレイヤー更新
+		player_->Update(dt);
+		// 経路に沿って移動するオブジェクト更新
+		carrier_->Update(dt);
+		sphinx_->Update(dt, player_->GetPosition());
+		// 鉱石オブジェクト管理クラス更新
+		OreManager::GetInstance()->Update();
+		// 工作台オブジェクト管理クラス更新
+		WorkBenchManager::GetInstance()->Update();
+		// 歯車オブジェクト管理クラス更新
+		GearManager::GetInstance()->Update();
 
-	fieldManager_->Update();
+		fieldManager_->Update();
 
-	MummyManager::GetInstance()->Update(player_->GetPosition(), dt);
+		MummyManager::GetInstance()->Update(player_->GetPosition(), dt);
+	}
 
 	///
 	///	
@@ -269,6 +272,11 @@ void GamePlayScene::Draw() {
 	fieldManager_->Debug();
 	MummyManager::GetInstance()->Debug();
 #endif
+
+	if (carrier_->IsGoal())
+	{
+		Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT");
+	}
 
 	// ImGuiの内部コマンドを生成する
 	Cygnus::ImguiWrapper::Render(cmd);
