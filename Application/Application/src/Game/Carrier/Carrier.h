@@ -46,6 +46,11 @@ public:
 	/// <param name="translate">座標を設定</param>
 	void SetTranslate(const Cygnus::Float3& translate) { object_->transform_.translate_ = translate; }
 
+	/// <summary>
+	/// ゴール判定取得
+	/// </summary>
+	bool IsGoal() { return isGoal_; }
+
 private:
 	// =========================================================
 	// Internal Methods
@@ -73,7 +78,7 @@ private:
 	const uint32_t kRequiredGearCount = 1;	// 1回の注入で消費する歯車の数
 
 	const float kMoveSpeed = 2.0f;	// 移動速度
-	const float kMaxEnergy = 8.0f;	// 歯車注入時の動作時間（秒）
+	const float kMaxEnergy = 10.0f;	// 歯車注入時の動作時間（秒）
 	const float kAccelerationTime = 1.0f;	// 動き出しの滑らかさ（秒）
 	const float kDecelerationTime = 1.5f;	// 停止時の滑らかさ（秒）
 

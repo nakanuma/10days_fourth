@@ -8,6 +8,7 @@
 
 // Application
 #include <src/Game/Ore/OreManager.h>
+#include <src/Game/UI/UIManager.h>
 
 void Player::Initialize() {
 	// オブジェクト生成
@@ -65,22 +66,27 @@ void Player::Update(float deltaTime) {
 #pragma endregion
 
 #pragma region 
+	// 向きから前方のベクトルを作成する
+	float angleY = object_->transform_.rotate_.y;
+	Cygnus::Float3 frontVec = {std::sinf(angleY), 0.0f, std::cosf(angleY)};
+
+	// プレイヤーの少し前方を判定の中心にする
+	Cygnus::Float3 targetPos = {
+		object_->transform_.translate_.x + frontVec.x * kMiningOffset, 
+		object_->transform_.translate_.y, 
+		object_->transform_.translate_.z + frontVec.z * kMiningOffset
+	};
+
+	// キー入力に関係なく、前方に鉱石があるならUI表示をリクエスト
+	if (OreManager::GetInstance()->IsBreakableAt(targetPos, kMiningRange)) {
+		UIManager::GetInstance()->RequestInteract(InteractGuide::ActionType::Mine);
+	}
+
+	// 実際の採掘実行（キー入力）
 	if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
-		// 向きから前方のベクトルを作成する
-		float angleY = object_->transform_.rotate_.y;
-		Cygnus::Float3 frontVec = { std::sinf(angleY), 0.0f, std::cosf(angleY) };
-
-		// プレイヤーの少し前方を判定の中心にする
-		Cygnus::Float3 targetPos = {
-			object_->transform_.translate_.x + frontVec.x * kMiningOffset,
-			object_->transform_.translate_.y,
-			object_->transform_.translate_.z + frontVec.z * kMiningOffset
-		};
-
 		// 鉱石採掘判定
 		if (OreManager::GetInstance()->TryBreakAt(targetPos, kMiningRange)) {
 			// 鉱石採掘時の処理
-
 		}
 	}
 #pragma endregion

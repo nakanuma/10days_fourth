@@ -40,7 +40,7 @@ private:
 
 	//生み出す時間
 	float addOreTimer_ = 0.0f;
-	const float kAddOreTime_ = 2.0f;
+	const float kAddOreTime_ = 1.0f;
 
 	//生成範囲
 	const float kBornPositionX_ = 30.0f;
@@ -54,5 +54,5 @@ private:
 	float oreSizeY_ = 2.0f;
 
 	//イベント時間を伸ばす
-	const float kEventTime_ = 1.0f;
+	const float kEventTime_ = 10.0f;
 };

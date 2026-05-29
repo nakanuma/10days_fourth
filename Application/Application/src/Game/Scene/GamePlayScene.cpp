@@ -26,6 +26,8 @@
 #include <src/Game/Particles/SandRain/SandRainManager.h>
 #include <src/Game/Particles/Interact/InteractManager.h>
 
+#include <src/Game/Sandstrom/SandstormManager.h>
+
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
@@ -88,9 +90,12 @@ void GamePlayScene::Initialize() {
 	sphinx_ = std::make_unique<Sphinx>();
 	sphinx_->Initialize();
 
-	stageEditor_ = std::make_unique<StageEditor>();
-	stageEditor_->LoadJsonFile("resources/stageEditor/stage_1.json");
-	stageEditor_->SpitObjects(player_);
+	// UI管理クラス初期化	
+	UIManager::GetInstance()->Initialize();
+
+	//stageEditor_ = std::make_unique<StageEditor>();
+	//stageEditor_->LoadJsonFile("resources/stageEditor/stage_1.json");
+	//stageEditor_->SpitObjects(player_);
 
 	fieldManager_ = std::make_unique<FieldEventManager>();
 	fieldManager_->Initialize(&*spriteCommon_);
@@ -98,7 +103,10 @@ void GamePlayScene::Initialize() {
 	MummyManager::GetInstance()->Initialize();
 }
 
-void GamePlayScene::Finalize() { }
+void GamePlayScene::Finalize()
+{
+}
+
 
 void GamePlayScene::Update() {
 	///
@@ -111,26 +119,40 @@ void GamePlayScene::Update() {
 
 
 	///
+	///	他更新処理
+	/// 
+
+	// UIManagerのインタラクトUI表示要求をリセット（表示され続けないため）
+	UIManager::GetInstance()->ClearInteractRequests();
+
+	///
 	///	オブジェクト更新処理
 	/// 
-	
-	// 地面オブジェクト更新
-	objectGround_->UpdateMatrix();
-	// プレイヤー更新
-	player_->Update(dt);
-	// 経路に沿って移動するオブジェクト更新
-	carrier_->Update(dt);
-	sphinx_->Update(dt, player_->GetPosition());
-	// 鉱石オブジェクト管理クラス更新
-	OreManager::GetInstance()->Update();
-	// 工作台オブジェクト管理クラス更新
-	WorkBenchManager::GetInstance()->Update();
-	// 歯車オブジェクト管理クラス更新
-	GearManager::GetInstance()->Update();
 
-	fieldManager_->Update();
+	if (!carrier_->IsGoal())
+	{
+		// 地面オブジェクト更新
+		objectGround_->UpdateMatrix();
+		// プレイヤー更新
+		player_->Update(dt);
+		// 経路に沿って移動するオブジェクト更新
+		carrier_->Update(dt);
+		sphinx_->Update(dt, player_->GetPosition());
+		// 鉱石オブジェクト管理クラス更新
+		OreManager::GetInstance()->Update();
+		// 工作台オブジェクト管理クラス更新
+		WorkBenchManager::GetInstance()->Update();
+		// 歯車オブジェクト管理クラス更新
+		GearManager::GetInstance()->Update();
 
-	MummyManager::GetInstance()->Update(player_->GetPosition(), dt);
+		fieldManager_->Update();
+
+		//ミイラ召喚/管理クラスの更新
+		MummyManager::GetInstance()->Update(player_->GetPosition(), dt);
+
+		//　砂嵐管理クラスの更新
+		SandstormManager::GetInstance()->Update();
+	}
 
 	//花火パーティクル更新
 	FireworksManager::GetInstance()->Update(dt);
@@ -143,8 +165,18 @@ void GamePlayScene::Update() {
 	///	
 	/// 
 	
-	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);	// パーティクルエフェクト管理クラス更新
-	Cygnus::CollisionManager::GetInstance()->Update();	// コライダー管理クラス更新
+	// コライダー管理クラス更新
+	Cygnus::CollisionManager::GetInstance()->Update();
+
+	// UI管理クラス更新
+	UIManager::GetInstance()->Update(
+		player_->GetOreCount(), !player_->CanPickUpOre(),
+		player_->GetGearCount(), !player_->CanPickUpGear(),
+		player_->GetPosition()
+	);
+
+	// パーティクルエフェクト管理クラス更新
+	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);
 }
 
 void GamePlayScene::Draw() {
@@ -228,7 +260,8 @@ void GamePlayScene::Draw() {
 	WorkBenchManager::GetInstance()->Draw();
 	// 歯車オブジェクト管理クラス描画
 	GearManager::GetInstance()->Draw();
-
+	//　砂嵐管理クラスの描画
+	SandstormManager::GetInstance()->Draw();
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
 #pragma endregion
@@ -257,7 +290,9 @@ void GamePlayScene::Draw() {
 	/// =========================================================
 	/// ↓ ここからスプライト描画
 	/// =========================================================
-
+	
+	// UI管理クラス描画
+	UIManager::GetInstance()->Draw();
 	fieldManager_->Draw();
 
 	/// =========================================================
@@ -275,11 +310,19 @@ void GamePlayScene::Draw() {
 	// 経路に沿って動くオブジェクト
 	carrier_->Debug();
 	//　ステージエディタの更新(jsonの生成処理)
-	stageEditor_->Update();
+	//stageEditor_->Update();
 	sphinx_->Debug();
 	fieldManager_->Debug();
 	MummyManager::GetInstance()->Debug();
+	//　砂嵐管理クラスのデバッグ処理
+	SandstormManager::GetInstance()->Debug();
 #endif
+
+	if (carrier_->IsGoal())
+	{
+		Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT");
+		Cygnus::CollisionManager::GetInstance()->Clear();
+	}
 
 	// ImGuiの内部コマンドを生成する
 	Cygnus::ImguiWrapper::Render(cmd);

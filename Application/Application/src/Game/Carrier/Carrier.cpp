@@ -7,6 +7,7 @@
 // Application
 #include <src/Game/Path/PathManager.h>
 #include <src/Game/Player/Player.h>
+#include <src/Game/UI/UIManager.h>
 
 void Carrier::Initialize() {
 	// オブジェクト生成
@@ -71,6 +72,7 @@ void Carrier::Debug() {
 	ImGui::Begin("Carrier");
 
 	ImGui::Checkbox("IsActive", &isActive_);
+	ImGui::Text("EnergyTimer : %.f", energyTimer_);
 	ImGui::Separator();
 	ImGui::DragFloat3("Translate", &object_->transform_.translate_.x, 0.01f);
 	ImGui::Checkbox("IsGoal", &isGoal_);
@@ -87,6 +89,9 @@ void Carrier::OnCollision(Cygnus::Collider* other) {
 
 		// プレイヤーが必要数歯車を所持しているか確認
 		if (player->GetGearCount() >= kRequiredGearCount) {
+			// インタラクトUIの表示を要求
+			UIManager::GetInstance()->RequestInteract(InteractGuide::ActionType::Insert);
+
 			// キー or ボタン入力操作
 			if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
 				// プレイヤーの歯車を消費させる

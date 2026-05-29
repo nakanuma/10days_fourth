@@ -14,8 +14,8 @@ void OreManager::Initialize() {
 	breakRequests_.clear();
 
 	// デバッグ用にベタ打ちで鉱石を追加（Todo : エディタで追加できるように変更する）
-	for(size_t i = 0; i < 3; ++i) {
-		for(size_t j = 0; j < 3; ++j) {
+	for(size_t i = 0; i < 4; ++i) {
+		for(size_t j = 0; j < 4; ++j) {
 			auto newOre = std::make_unique<Ore>();
 			newOre->Initialize(Cygnus::Float3{static_cast<float>(i) * 2.0f, 1.0f, -10.0f + static_cast<float>(j) * 2.0f});
 			ores_.push_back(std::move(newOre));
@@ -173,6 +173,26 @@ bool OreManager::TryBreakAt(const Cygnus::Float3& targetPos, float range) {
 		Cygnus::ParticleEffectManager::GetInstance()->Emit("ore_break", dropPos, 20);
 
 		return true;
+	}
+
+	return false;
+}
+
+bool OreManager::IsBreakableAt(const Cygnus::Float3& targetPos, float range) { 
+	float minDistanceSq = range * range; // 射程範囲を初期値にする
+
+	// 全ての鉱石から射程内にあるか探索
+	for (size_t i = 0; i < ores_.size(); ++i) {
+		Cygnus::Float3 orePos = ores_[i]->GetTranslate();
+		// 鉱石との距離を計算
+		float dx = orePos.x - targetPos.x;
+		float dz = orePos.z - targetPos.z;
+		float distSq = dx * dx + dz * dz;
+
+		// 射程内に1つでも鉱石があれば、その時点で破壊可能とみなす
+		if (distSq < minDistanceSq) {
+			return true;
+		}
 	}
 
 	return false;
