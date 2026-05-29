@@ -48,6 +48,7 @@ private:
 		lotsOfOre,
 		SunGodRa,
 		Anubis,
+		Seth,
 		max,
 	};
 

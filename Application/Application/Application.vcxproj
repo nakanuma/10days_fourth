@@ -19,7 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Field\SethFieldEvent.cpp" />
     <ClCompile Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.cpp" />
+    <ClCompile Include="src\Game\Sandstrom\Sandstorm.cpp" />
+    <ClCompile Include="src\Game\Sandstrom\SandstormManager.cpp" />
     <ClCompile Include="src\Game\Scene\ResultScene.cpp" />
     <ClCompile Include="src\Game\SpriteCollision\SpriteCollision.cpp" />
     <ClCompile Include="src\Game\Field\AnubisFieldEvent.cpp" />
@@ -58,7 +61,10 @@
     <ClCompile Include="src\Game\UI\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Field\SethFieldEvent.h" />
     <ClInclude Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.h" />
+    <ClInclude Include="src\Game\Sandstrom\Sandstorm.h" />
+    <ClInclude Include="src\Game\Sandstrom\SandstormManager.h" />
     <ClInclude Include="src\Game\Scene\ResultScene.h" />
     <ClInclude Include="src\Game\SpriteCollision\SpriteCollision.h" />
     <ClInclude Include="src\Game\Field\AnubisFieldEvent.h" />

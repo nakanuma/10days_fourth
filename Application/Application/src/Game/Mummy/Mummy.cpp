@@ -70,8 +70,8 @@ void Mummy::OnCollision(Cygnus::Collider* other) {
 		}
 	}
 
-	if (other->GetTag() == "Player" || other->GetTag() == "") {
-		
+	if (other->GetTag() == "Player" || other->GetTag() == "Sphinx") {
+		lifeTime_ = 0.0f;
 	}
 
 }
