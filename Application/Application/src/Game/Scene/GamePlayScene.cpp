@@ -24,6 +24,7 @@
 #include <src/Game/Gear/GearManager.h>
 #include <src/Game/Particles/Fireworks/FireworksManager.h>
 #include <src/Game/Particles/SandRain/SandRainManager.h>
+#include <src/Game/Particles/Interact/InteractManager.h>
 
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
@@ -135,6 +136,8 @@ void GamePlayScene::Update() {
 	FireworksManager::GetInstance()->Update(dt);
 	//砂嵐パーティクル更新
 	SandRainManager::GetInstance()->Update(dt);
+	//インタラクトパーティクル更新
+	InteractManager::GetInstance()->Update(dt);
 
 	///
 	///	
@@ -309,5 +312,7 @@ void GamePlayScene::Debug() {
 	FireworksManager::GetInstance()->Debug();
 	//砂嵐パーティクルのデバッグ表示
 	SandRainManager::GetInstance()->Debug();
+	//インタラクトパーティクルのデバッグ表示
+	InteractManager::GetInstance()->Debug();
 #endif
 }

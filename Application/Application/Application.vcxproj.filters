@@ -32,6 +32,7 @@
     <ClCompile Include="src\Game\Scene\ParticleEditorScene.cpp" />
     <ClCompile Include="src\Game\Particles\Fireworks\FireworksManager.cpp" />
     <ClCompile Include="src\Game\Particles\SandRain\SandRainManager.cpp" />
+    <ClCompile Include="src\Game\Particles\Interact\InteractManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="src\Game\Scene\ParticleEditorScene.h" />
     <ClInclude Include="src\Game\Particles\Fireworks\FireworksManager.h" />
     <ClInclude Include="src\Game\Particles\SandRain\SandRainManager.h" />
+    <ClInclude Include="src\Game\Particles\Interact\InteractManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h">
