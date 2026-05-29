@@ -23,6 +23,8 @@
 #include <src/Game/WorkBench/WorkBenchManager.h>
 #include <src/Game/Gear/GearManager.h>
 
+#include <src/Game/Sandstrom/SandstormManager.h>
+
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
@@ -60,7 +62,7 @@ void GamePlayScene::Initialize() {
 	objectGround_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Plane"); // モデル設定
 	objectGround_->transform_.rotate_ = {-Cygnus::PIf / 2.0f, 0.0f, 0.0f}; // 上向き
 	objectGround_->transform_.scale_ = {500.0f, 500.0f, 1.0f}; // スケール変更
-	objectGround_->materialCB_.data_->color = {0.82f, 0.70f, 0.55f, 1.0f}; // 色変更
+	objectGround_->materialCB_.data_->color = {0.5f, 0.5f, 0.5f, 1.0f}; // 色変更
 
 	// プレイヤー生成 + 初期化
 	player_ = std::make_unique<Player>();
@@ -85,7 +87,7 @@ void GamePlayScene::Initialize() {
 	sphinx_ = std::make_unique<Sphinx>();
 	sphinx_->Initialize();
 
-	// UI管理クラス初期化
+	// UI管理クラス初期化	
 	UIManager::GetInstance()->Initialize();
 
 	//stageEditor_ = std::make_unique<StageEditor>();
@@ -98,7 +100,7 @@ void GamePlayScene::Initialize() {
 	MummyManager::GetInstance()->Initialize();
 }
 
-void GamePlayScene::Finalize() 
+void GamePlayScene::Finalize()
 {
 }
 
@@ -123,8 +125,8 @@ void GamePlayScene::Update() {
 	///
 	///	オブジェクト更新処理
 	/// 
-	
-	if(!carrier_->IsGoal())
+
+	if (!carrier_->IsGoal())
 	{
 		// 地面オブジェクト更新
 		objectGround_->UpdateMatrix();
@@ -142,7 +144,11 @@ void GamePlayScene::Update() {
 
 		fieldManager_->Update();
 
+		//ミイラ召喚/管理クラスの更新
 		MummyManager::GetInstance()->Update(player_->GetPosition(), dt);
+
+		//　砂嵐管理クラスの更新
+		SandstormManager::GetInstance()->Update();
 	}
 
 	///
@@ -154,13 +160,13 @@ void GamePlayScene::Update() {
 
 	// UI管理クラス更新
 	UIManager::GetInstance()->Update(
-		player_->GetOreCount(), !player_->CanPickUpOre(), 
-		player_->GetGearCount(), !player_->CanPickUpGear(), 
+		player_->GetOreCount(), !player_->CanPickUpOre(),
+		player_->GetGearCount(), !player_->CanPickUpGear(),
 		player_->GetPosition()
 	);
 
 	// パーティクルエフェクト管理クラス更新
-	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);	
+	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);
 }
 
 void GamePlayScene::Draw() {
@@ -244,7 +250,8 @@ void GamePlayScene::Draw() {
 	WorkBenchManager::GetInstance()->Draw();
 	// 歯車オブジェクト管理クラス描画
 	GearManager::GetInstance()->Draw();
-
+	//　砂嵐管理クラスの描画
+	SandstormManager::GetInstance()->Draw();
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
 #pragma endregion
@@ -272,7 +279,7 @@ void GamePlayScene::Draw() {
 	/// =========================================================
 	/// ↓ ここからスプライト描画
 	/// =========================================================
-
+	
 	// UI管理クラス描画
 	UIManager::GetInstance()->Draw();
 	fieldManager_->Draw();
@@ -296,6 +303,8 @@ void GamePlayScene::Draw() {
 	sphinx_->Debug();
 	fieldManager_->Debug();
 	MummyManager::GetInstance()->Debug();
+	//　砂嵐管理クラスのデバッグ処理
+	SandstormManager::GetInstance()->Debug();
 #endif
 
 	if (carrier_->IsGoal())

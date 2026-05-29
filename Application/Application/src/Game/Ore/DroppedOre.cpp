@@ -26,6 +26,8 @@ void DroppedOre::Initialize(const Cygnus::Float3 translate) {
 }
 
 void DroppedOre::Update() {
+	//吹っ飛ばされる処理
+	FlyAwayOre();
 	// 上下揺れ + 回転を行うアニメーション
 	BobbingAnimation();
 
@@ -40,7 +42,7 @@ void DroppedOre::Draw() {
 	object_->Draw();
 }
 
-void DroppedOre::OnCollision(Cygnus::Collider* other) { 
+void DroppedOre::OnCollision(Cygnus::Collider* other) {
 	// プレイヤーとの衝突
 	if (other->GetTag() == "Player") {
 		Player* player = static_cast<Player*>(other->GetOwner());
@@ -50,6 +52,11 @@ void DroppedOre::OnCollision(Cygnus::Collider* other) {
 			isPickedUp_ = true;	// 自身の取得フラグを立てる（消す準備）
 			player->AddOreCount();	// プレイヤーの鉱石所持数を1増やす
 		}
+	}
+
+	//砂嵐に当たったら
+	if (other->GetTag() == "Sandstorm" && !isFlyAway_) {
+		isFlyAway_ = true;	
 	}
 }
 
@@ -63,5 +70,20 @@ void DroppedOre::BobbingAnimation() {
 
 	// 上下揺れ（sin波）
 	float offsettTop = std::sinf(timer_ * kBobbingSpeed) * kBobbingAmplitude;
-	object_->transform_.translate_.y = basePosition_.y + offsettTop;
+	object_->transform_.translate_.y = basePosition_.y + offsettTop + flyAwayY_;
+}
+
+void DroppedOre::FlyAwayOre() {
+	//飛ばされるフラグがたったら
+	if (isFlyAway_) {
+		flyAwayY_ += 0.5f;//飛び上がる
+	}
+	else {
+		flyAwayY_ -= 1.0f;//落ちる
+	}
+
+	flyAwayY_ = std::clamp(flyAwayY_, 0.0f, 100.0f);
+	if (flyAwayY_ >= 100.0f) {
+		isFlyAway_ = false;
+	}
 }

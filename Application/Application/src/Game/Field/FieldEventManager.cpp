@@ -3,9 +3,11 @@
 #include "NormalField.h"
 #include "SunGodRaFieldEvent.h"
 #include "AnubisFieldEvent.h"
+#include "SethFieldEvent.h"
 #include "Input.h"
 
 #include <random>
+#include <src/Game/Sandstrom/SandstormManager.h>
 
 void FieldEventManager::Initialize(Cygnus::SpriteCommon* spriteCommon) {
 	spriteCommon_ = spriteCommon;
@@ -53,6 +55,7 @@ void FieldEventManager::ChangeField() {
 		}
 		else {
 			number_ = 0;//通常(イベントなし)のフィールドに戻る
+			SandstormManager::GetInstance()->Reset();
 		}
 	}
 
@@ -72,6 +75,9 @@ void FieldEventManager::ChangeField() {
 			break;
 		case FieldEventManager::Anubis:
 			fieldEvent_ = std::make_unique<AnubisFieldEvent>();
+			break;
+		case FieldEventManager::Seth:
+			fieldEvent_ = std::make_unique<SethFieldEvent>();
 			break;
 		default:
 			fieldEvent_ = std::make_unique<NormalField>();

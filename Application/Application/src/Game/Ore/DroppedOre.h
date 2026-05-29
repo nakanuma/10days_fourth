@@ -61,6 +61,11 @@ private:
 	/// </summary>
 	void BobbingAnimation();
 
+	/// <summary>
+	/// 飛ばされる処理
+	/// </summary>
+	void FlyAwayOre();
+
 private:
 	// =========================================================
 	// Constants
@@ -83,4 +88,8 @@ private:
 	float timer_ = 0.0f;	// アニメーション用タイマー
 
 	bool isPickedUp_ = false;	// プレイヤーに拾われたか
+
+	bool isFlyAway_ = false;//飛ばされるフラグ
+	float flyAwayY_ = 0.0f; //飛ばし方向Y
+
 };
