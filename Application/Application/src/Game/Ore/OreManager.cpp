@@ -178,6 +178,26 @@ bool OreManager::TryBreakAt(const Cygnus::Float3& targetPos, float range) {
 	return false;
 }
 
+bool OreManager::IsBreakableAt(const Cygnus::Float3& targetPos, float range) { 
+	float minDistanceSq = range * range; // 射程範囲を初期値にする
+
+	// 全ての鉱石から射程内にあるか探索
+	for (size_t i = 0; i < ores_.size(); ++i) {
+		Cygnus::Float3 orePos = ores_[i]->GetTranslate();
+		// 鉱石との距離を計算
+		float dx = orePos.x - targetPos.x;
+		float dz = orePos.z - targetPos.z;
+		float distSq = dx * dx + dz * dz;
+
+		// 射程内に1つでも鉱石があれば、その時点で破壊可能とみなす
+		if (distSq < minDistanceSq) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bool OreManager::BreakAllAt(const Cygnus::Float3& targetPos, float range)
 {
 	breakRequests_.push_back({ targetPos, range });

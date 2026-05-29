@@ -67,7 +67,7 @@ private:
 	// Constants
 	// =========================================================
 
-	const Cygnus::Float3 kColliderSize = {0.5f, 0.5f, 0.5f}; // コライダーサイズ
+	const Cygnus::Float3 kColliderSize = {0.75f, 0.75f, 0.75f}; // コライダーサイズ
 
 	const float kRotateSpeed = 2.0f;      // 回転速度
 	const float kBobbingSpeed = 3.0f;     // 上下揺れの速さ
