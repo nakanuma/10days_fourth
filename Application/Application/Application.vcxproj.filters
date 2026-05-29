@@ -41,6 +41,7 @@
     <ClCompile Include="src\Game\Sandstrom\Sandstorm.cpp" />
     <ClCompile Include="src\Game\Sandstrom\SandstormManager.cpp" />
     <ClCompile Include="src\Game\Field\SethFieldEvent.cpp" />
+    <ClCompile Include="src\Game\UI\Parts\GearTimerBar\GearTimerBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\UI\UIManager.h" />
@@ -113,6 +114,7 @@
     <ClInclude Include="src\Game\Sandstrom\Sandstorm.h" />
     <ClInclude Include="src\Game\Sandstrom\SandstormManager.h" />
     <ClInclude Include="src\Game\Field\SethFieldEvent.h" />
+    <ClInclude Include="src\Game\UI\Parts\GearTimerBar\GearTimerBar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h">

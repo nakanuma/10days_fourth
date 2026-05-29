@@ -64,5 +64,5 @@ private:
 	std::unique_ptr<ItemCounter> oreCounter_;  // プレイヤー鉱石所持数UI
 	std::unique_ptr<ItemCounter> gearCounter_;	// プレイヤー歯車所持数UI
 
-	std::unordered_map<InteractGuide::ActionType, std::unique_ptr<InteractGuide>> interactGuides_; // インタラクトUIを保持
+	std::unordered_map<InteractGuide::ActionType, std::unique_ptr<InteractGuide>> interactGuides_; // インタラクトUI
 };
