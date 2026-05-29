@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Sandstrom\SandstormManager.cpp" />
     <ClCompile Include="src\Game\Field\AnubisFieldEvent.cpp" />
+    <ClCompile Include="src\Game\Field\SethFieldEvent.cpp" />
     <ClCompile Include="src\Game\Mummy\Mummy.cpp" />
     <ClCompile Include="src\Game\Mummy\MummyManager.cpp" />
     <ClCompile Include="src\Game\Field\BaseFieldEvent.cpp" />
@@ -29,6 +31,7 @@
     <ClCompile Include="src\Game\Gear\DroppedGear.cpp" />
     <ClCompile Include="src\Game\Gear\GearManager.cpp" />
     <ClCompile Include="src\Game\Particles\ParticleStrage.cpp" />
+    <ClCompile Include="src\Game\Sandstrom\Sandstorm.cpp" />
     <ClCompile Include="src\Util\JsonUtil.cpp" />
     <ClCompile Include="src\Game\Particles\Particle.cpp" />
     <ClCompile Include="src\Game\Particles\ParticleEditorSystem.cpp" />
@@ -50,7 +53,9 @@
     <ClCompile Include="src\Game\Field\SunGodRaFieldEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Sandstrom\SandstormManager.h" />
     <ClInclude Include="src\Game\Field\AnubisFieldEvent.h" />
+    <ClInclude Include="src\Game\Field\SethFieldEvent.h" />
     <ClInclude Include="src\Game\Mummy\Mummy.h" />
     <ClInclude Include="src\Game\Mummy\MummyManager.h" />
     <ClInclude Include="src\Game\Field\BaseFieldEvent.h" />
@@ -60,6 +65,7 @@
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
     <ClInclude Include="src\Game\Gear\GearManager.h" />
     <ClInclude Include="src\Game\Particles\ParticleStrage.h" />
+    <ClInclude Include="src\Game\Sandstrom\Sandstorm.h" />
     <ClInclude Include="src\Util\JsonUtil.h" />
     <ClInclude Include="src\Game\Particles\Particle.h" />
     <ClInclude Include="src\Game\Particles\ParticleEditorSystem.h" />

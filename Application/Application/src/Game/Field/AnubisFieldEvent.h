@@ -36,10 +36,10 @@ private:
 	void SummonCoolTime();
 
 	//イベント時間を伸ばす
-	const float kEventTime_ = 30.0f;
+	const float kEventTime_ = 10.0f;
 
 	float nextSummonTimer_ = 0.0f;         //召喚時間を測定
-	const float kNextSummonTimeMax_ = 0.2f;//召喚までの時間
+	const float kNextSummonTimeMax_ = 0.1f;//召喚までの時間
 
 	bool isSummon_ = false;
 };

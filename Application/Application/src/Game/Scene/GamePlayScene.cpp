@@ -23,6 +23,8 @@
 #include <src/Game/WorkBench/WorkBenchManager.h>
 #include <src/Game/Gear/GearManager.h>
 
+#include <src/Game/Sandstrom/SandstormManager.h>
+
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
@@ -127,7 +129,11 @@ void GamePlayScene::Update() {
 
 	fieldManager_->Update();
 
+	//ミイラ召喚/管理クラスの更新
 	MummyManager::GetInstance()->Update(player_->GetPosition(), dt);
+	
+	//　砂嵐管理クラスの更新
+	SandstormManager::GetInstance()->Update();
 
 	///
 	///	
@@ -218,7 +224,8 @@ void GamePlayScene::Draw() {
 	WorkBenchManager::GetInstance()->Draw();
 	// 歯車オブジェクト管理クラス描画
 	GearManager::GetInstance()->Draw();
-
+	//　砂嵐管理クラスの描画
+	SandstormManager::GetInstance()->Draw();
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
 #pragma endregion
@@ -268,6 +275,8 @@ void GamePlayScene::Draw() {
 	sphinx_->Debug();
 	fieldManager_->Debug();
 	MummyManager::GetInstance()->Debug();
+	//　砂嵐管理クラスのデバッグ処理
+	SandstormManager::GetInstance()->Debug();
 #endif
 
 	// ImGuiの内部コマンドを生成する
