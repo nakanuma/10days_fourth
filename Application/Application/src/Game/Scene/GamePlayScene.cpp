@@ -158,8 +158,9 @@ void GamePlayScene::Update() {
 		player_->GetGearCount(), !player_->CanPickUpGear(), 
 		player_->GetPosition()
 	);
-	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);	// パーティクルエフェクト管理クラス更新
-	Cygnus::CollisionManager::GetInstance()->Update();	// コライダー管理クラス更新
+
+	// パーティクルエフェクト管理クラス更新
+	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);	
 }
 
 void GamePlayScene::Draw() {
