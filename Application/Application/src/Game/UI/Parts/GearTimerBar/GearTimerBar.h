@@ -8,6 +8,7 @@
 // 列車の歯車残り持続時間UI
 // =========================================================
 class GearTimerBar {
+public:
 	// =========================================================
 	// Public Methods
 	// =========================================================
@@ -22,7 +23,8 @@ class GearTimerBar {
 	/// 更新処理
 	/// </summary>
 	/// <param name="screenPos">列車のスクリーン座標</param>
-	void Update(const Cygnus::Float3& screenPos);
+	/// <param name="energyRatio">列車の残り稼働時間割合</param>
+	void Update(const Cygnus::Float3& screenPos, float energyRatio);
 
 	/// <summary>
 	/// 描画処理
@@ -33,9 +35,8 @@ private:
 	// =========================================================
 	// Constants
 	// =========================================================
-	const Cygnus::Float2 kAnchorPoint = {0.5f, 0.5f};
-	const Cygnus::Float2 kBarSize = {100.0f, 20.0f};
-	const float kYOffsetY = 60.0f;
+	const Cygnus::Float2 kBarSize = {80.0f, 15.0f};
+	const float kOffsetY = 40.0f;
 
 	// =========================================================
 	// Member Variables
