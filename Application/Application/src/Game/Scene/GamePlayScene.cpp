@@ -22,6 +22,9 @@
 #include <src/Game/Ore/OreManager.h>
 #include <src/Game/WorkBench/WorkBenchManager.h>
 #include <src/Game/Gear/GearManager.h>
+#include <src/Game/Particles/Fireworks/FireworksManager.h>
+#include <src/Game/Particles/SandRain/SandRainManager.h>
+#include <src/Game/Particles/Interact/InteractManager.h>
 
 #include <src/Game/Sandstrom/SandstormManager.h>
 
@@ -151,6 +154,13 @@ void GamePlayScene::Update() {
 		SandstormManager::GetInstance()->Update();
 	}
 
+	//花火パーティクル更新
+	FireworksManager::GetInstance()->Update(dt);
+	//砂嵐パーティクル更新
+	SandRainManager::GetInstance()->Update(dt);
+	//インタラクトパーティクル更新
+	InteractManager::GetInstance()->Update(dt);
+
 	///
 	///	
 	/// 
@@ -268,6 +278,7 @@ void GamePlayScene::Draw() {
 
 	// -----------------------------------------------
 	postEffectManager_->RestoreDepthBufferState();
+
 #pragma endregion
 
 	/// =========================================================
@@ -338,5 +349,14 @@ void GamePlayScene::Debug() {
 	ImGui::DragFloat3("Rotate", &camera_->transform_.rotate_.x, 0.01f);
 
 	ImGui::End();
+#endif
+
+#ifdef USE_IMGUI
+	//花火パーティクルのデバッグ表示
+	FireworksManager::GetInstance()->Debug();
+	//砂嵐パーティクルのデバッグ表示
+	SandRainManager::GetInstance()->Debug();
+	//インタラクトパーティクルのデバッグ表示
+	InteractManager::GetInstance()->Debug();
 #endif
 }
