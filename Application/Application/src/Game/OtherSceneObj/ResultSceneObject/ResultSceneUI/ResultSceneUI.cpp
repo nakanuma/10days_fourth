@@ -1,6 +1,6 @@
 #include "ResultSceneUI.h"
 // ※SpriteCollisionのパスは実際のプロジェクトに合わせて変更してください
-#include "../../SpriteCollision/SpriteCollision.h" 
+#include "../../../SpriteCollision/SpriteCollision.h" 
 #include "ImguiWrapper.h"
 
 using namespace Cygnus;

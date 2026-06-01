@@ -1,5 +1,5 @@
 #include "StageSelectSceneUI.h"
-#include "../../SpriteCollision/SpriteCollision.h"
+#include "../../../SpriteCollision/SpriteCollision.h"
 #include "ImguiWrapper.h"
 
 using namespace Cygnus;
