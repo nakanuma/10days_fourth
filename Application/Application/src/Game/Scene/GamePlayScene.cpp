@@ -170,9 +170,10 @@ void GamePlayScene::Update() {
 
 	// UI管理クラス更新
 	UIManager::GetInstance()->Update(
-		player_->GetOreCount(), !player_->CanPickUpOre(),
-		player_->GetGearCount(), !player_->CanPickUpGear(),
-		player_->GetPosition()
+		player_->GetOreCount(), !player_->CanPickUpOre(), 
+		player_->GetGearCount(), !player_->CanPickUpGear(), 
+		player_->GetPosition(), 
+		carrier_->GetTranslate(), carrier_->GetEnergyRatio()
 	);
 
 	// パーティクルエフェクト管理クラス更新

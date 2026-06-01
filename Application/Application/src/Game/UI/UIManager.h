@@ -3,6 +3,7 @@
 // Application
 #include <src/Game/UI/Parts/ItemCounter/ItemCounter.h>
 #include <src/Game/UI/Parts/InteractGuide/InteractGuide.h>
+#include <src/Game/UI/Parts/GearTimerBar/GearTimerBar.h>
 
 // =========================================================
 // すべてのUIを管理するクラス
@@ -27,7 +28,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(uint32_t oreCount, bool isOreMax, uint32_t gearCount, bool isGearMax, const Cygnus::Float3 playerPos);
+	void Update(
+		uint32_t oreCount, bool isOreMax, 
+		uint32_t gearCount, bool isGearMax, 
+		const Cygnus::Float3 playerPos,
+		const Cygnus::Float3 carrierPos, float carrierEneryRatio
+		);
 
 	/// <summary>
 	/// 描画処理
@@ -64,5 +70,7 @@ private:
 	std::unique_ptr<ItemCounter> oreCounter_;  // プレイヤー鉱石所持数UI
 	std::unique_ptr<ItemCounter> gearCounter_;	// プレイヤー歯車所持数UI
 
-	std::unordered_map<InteractGuide::ActionType, std::unique_ptr<InteractGuide>> interactGuides_; // インタラクトUIを保持
+	std::unordered_map<InteractGuide::ActionType, std::unique_ptr<InteractGuide>> interactGuides_; // インタラクトUI
+
+	std::unique_ptr<GearTimerBar> gearTimeBar_;	// 列車の稼働時間UI
 };

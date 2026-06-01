@@ -66,8 +66,8 @@ private:
 	// =========================================================
 	// Member Variables
 	// =========================================================
-	std::unique_ptr<Cygnus::Sprite> spriteButton_;	// ボタンの画像
-	std::unique_ptr<Cygnus::Sprite> spriteText_; // 文字の画像
+	std::unique_ptr<Cygnus::Sprite> spriteButton_;	// ボタン用スプライト
+	std::unique_ptr<Cygnus::Sprite> spriteText_; // 文字用スプライト
 
 	bool isActive_ = false;	// 有効化フラグ
 };
