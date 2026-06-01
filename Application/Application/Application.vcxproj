@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Game\StageSelectSceneObject\SelectObjectManager.cpp" />
-    <ClCompile Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.cpp" />
+    <ClCompile Include="src\Game\OtherSceneObj\StageSelectSceneObject\SelectObjectManager.cpp" />
+    <ClCompile Include="src\Game\OtherSceneObj\ResultSceneObject\ResultSceneUI\ResultSceneUI.cpp" />
     <ClCompile Include="src\Game\Scene\ResultScene.cpp" />
     <ClCompile Include="src\Game\SpriteCollision\SpriteCollision.cpp" />
     <ClCompile Include="src\Game\Field\AnubisFieldEvent.cpp" />
@@ -55,14 +55,14 @@
     <ClCompile Include="src\Game\WorkBench\WorkBenchManager.cpp" />
     <ClCompile Include="src\Game\StageEditor\StageEditor.cpp" />
     <ClCompile Include="src\Game\Field\SunGodRaFieldEvent.cpp" />
-    <ClCompile Include="src\Game\TitleSceneObject\TitleSceneUI\TitleSceneUI.cpp" />
+    <ClCompile Include="src\Game\OtherSceneObj\TitleSceneObject\TitleSceneUI\TitleSceneUI.cpp" />
     <ClCompile Include="src\Game\UI\UIManager.cpp" />
     <ClCompile Include="src\Game\Scene\StageSelectScene.cpp" />
-    <ClCompile Include="src\Game\StageSelectSceneObject\StageSelectSceneUI\StageSelectSceneUI.cpp" />
+    <ClCompile Include="src\Game\OtherSceneObj\StageSelectSceneObject\StageSelectSceneUI\StageSelectSceneUI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Game\StageSelectSceneObject\SelectObjectManager.h" />
-    <ClInclude Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.h" />
+    <ClInclude Include="src\Game\OtherSceneObj\StageSelectSceneObject\SelectObjectManager.h" />
+    <ClInclude Include="src\Game\OtherSceneObj\ResultSceneObject\ResultSceneUI\ResultSceneUI.h" />
     <ClInclude Include="src\Game\Scene\ResultScene.h" />
     <ClInclude Include="src\Game\SpriteCollision\SpriteCollision.h" />
     <ClInclude Include="src\Game\Field\AnubisFieldEvent.h" />
@@ -100,10 +100,10 @@
     <ClInclude Include="src\Game\StageEditor\StageEditor.h" />
     <ClInclude Include="src\Game\Field\SunGodRaFieldEvent.h" />
     <ClInclude Include="src\Game\Sphinx\State\State.h" />
-    <ClInclude Include="src\Game\TitleSceneObject\TitleSceneUI\TitleSceneUI.h" />
+    <ClInclude Include="src\Game\OtherSceneObj\TitleSceneObject\TitleSceneUI\TitleSceneUI.h" />
     <ClInclude Include="src\Game\UI\UIManager.h" />
     <ClInclude Include="src\Game\Scene\StageSelectScene.h" />
-    <ClInclude Include="src\Game\StageSelectSceneObject\StageSelectSceneUI\StageSelectSceneUI.h" />
+    <ClInclude Include="src\Game\OtherSceneObj\StageSelectSceneObject\StageSelectSceneUI\StageSelectSceneUI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

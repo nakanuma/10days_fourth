@@ -20,8 +20,8 @@
 // ---------------------------------------------------------
 // Application Includes
 // ---------------------------------------------------------
-#include <src/Game/StageSelectSceneObject/StageSelectSceneUI/StageSelectSceneUI.h>
-#include <src/Game/StageSelectSceneObject/SelectObjectManager.h>
+#include <src/Game/OtherSceneObj/StageSelectSceneObject/StageSelectSceneUI/StageSelectSceneUI.h>
+#include <src/Game/OtherSceneObj/StageSelectSceneObject/SelectObjectManager.h>
 
 // =========================================================
 // ステージセレクトシーンクラス

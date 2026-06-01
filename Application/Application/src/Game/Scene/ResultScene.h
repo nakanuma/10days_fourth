@@ -24,7 +24,7 @@
 #include <src/Game/Carrier/Carrier.h>
 #include <src/Game/Sphinx/Sphinx.h>
 // ※パスは実際のプロジェクト構成に合わせて変更してください
-#include <src/Game/ResultSceneObject/ResultSceneUI/ResultSceneUI.h>
+#include <src/Game/OtherSceneObj/ResultSceneObject/ResultSceneUI/ResultSceneUI.h>
 
 // =========================================================
 // リザルトシーンクラス

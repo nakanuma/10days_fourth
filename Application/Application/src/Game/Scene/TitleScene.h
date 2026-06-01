@@ -23,7 +23,7 @@
 #include <src/Game/Player/Player.h>
 #include <src/Game/Carrier/Carrier.h>
 #include <src/Game/Sphinx/Sphinx.h>
-#include <src/Game/TitleSceneObject/TitleSceneUI/TitleSceneUI.h>
+#include <src/Game/OtherSceneObj/TitleSceneObject/TitleSceneUI/TitleSceneUI.h>
 
 // =========================================================
 // タイトルシーンクラス
