@@ -23,7 +23,7 @@ void FireworksManager::Update(float dt) {
 			Cygnus::ParticleEffectManager::GetInstance()->Emit(
 				"fireworks_diffusion",
 				firework.position,
-				20,
+				150,
 				Cygnus::Float3(0.0f, 0.0f, 0.0f),
 				0.0f
 			);
