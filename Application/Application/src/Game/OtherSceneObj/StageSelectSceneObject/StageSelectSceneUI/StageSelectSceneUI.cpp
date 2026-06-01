@@ -9,7 +9,6 @@ void StageSelectSceneUI::Init(SpriteCommon* spriteCommon)
 	input_ = Input::GetInstance();
 	spriteCommon_ = spriteCommon;
 
-	// ※ テクスチャパスは仮のものを設定しています
 	/*sprites_[SELECT_IMG].sprite = std::make_unique<Sprite>();
 	sprites_[SELECT_IMG].sprite->Initialize(spriteCommon_, Cygnus::TextureManager::GetInstance().Load("UI/StageSelectImg.png"));
 	sprites_[SELECT_IMG].size = sprites_[SELECT_IMG].sprite->GetSize();

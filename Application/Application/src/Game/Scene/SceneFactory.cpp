@@ -2,9 +2,9 @@
 
 #include <src/Game/Scene/GamePlayScene.h>
 #include <src/Game/Scene/ParticleEditorScene.h>
-#include <src/Game/Scene/TitleScene.h>
-#include <src/Game/Scene/ResultScene.h>
-#include <src/Game/Scene/StageSelectScene.h>
+#include <src/Game/Scene/TitleScene/TitleScene.h>
+#include <src/Game/Scene/ResultScene/ResultScene.h>
+#include <src/Game/Scene/StageSelectScene/StageSelectScene.h>
 
 SceneFactory* SceneFactory::GetInstance() {
 	static SceneFactory instance;

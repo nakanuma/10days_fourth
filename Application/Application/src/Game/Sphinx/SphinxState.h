@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Sphinx.h"
-#include "State/StateMachine.h"
-#include "State/State.h"
+#include "src/Util/State/StateMachine.h"
+#include "src/Util/State/State.h"
 
 //Engine
 #include "ParticleEffect/ParticleEffectManager.h"
