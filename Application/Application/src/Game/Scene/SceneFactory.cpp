@@ -4,6 +4,7 @@
 #include <src/Game/Scene/ParticleEditorScene.h>
 #include <src/Game/Scene/TitleScene.h>
 #include <src/Game/Scene/ResultScene.h>
+#include <src/Game/Scene/StageSelectScene.h>
 
 SceneFactory* SceneFactory::GetInstance() {
 	static SceneFactory instance;
@@ -14,6 +15,12 @@ std::unique_ptr<Cygnus::BaseScene> SceneFactory::CreateScene(const std::string& 
 	if (sceneName == "TITLE")
 	{
 		auto newScene = std::make_unique<TitleScene>();
+		newScene->Initialize();
+		return newScene;
+	}
+	else if (sceneName == "SELECT")
+	{
+		auto newScene = std::make_unique<StageSelectScene>();
 		newScene->Initialize();
 		return newScene;
 	}

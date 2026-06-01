@@ -124,6 +124,27 @@ void GameResourceLoader::LoadAllModelData() {
 		"Object/AttachFrame/attackFrame.obj",
 		"white.png"
 	);
+
+	// ステージ選択用オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"StagePointBlue",
+		"Object/stagePoint/stagePoint.obj",
+		"Object/stagePoint/stagePointBlue.png"
+	);
+
+	// ステージ選択用オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"StagePointRed",
+		"Object/stagePoint/stagePoint.obj",
+		"Object/stagePoint/stagePointRed.png"
+	);
+
+	// ステージ選択用オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"StageBar",
+		"Object/stageBar/stageBar.obj",
+		"white.png"
+	);
 }
 
 void GameResourceLoader::RegisterAllParticleEffect() {

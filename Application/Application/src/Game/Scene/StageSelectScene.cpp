@@ -1,4 +1,4 @@
-#include "TitleScene.h"
+#include "StageSelectScene.h"
 #include "DirectXBase.h"
 #include "ImguiWrapper.h"
 #include "RTVManager.h"
@@ -19,17 +19,13 @@
 
 // Application
 #include <src/Game/Scene/SceneFactory.h>
-#include <src/Game/Path/PathManager.h>
-#include <src/Game/Ore/OreManager.h>
-#include <src/Game/WorkBench/WorkBenchManager.h>
-#include <src/Game/Gear/GearManager.h>
 
-void TitleScene::Initialize()
+void StageSelectScene::Initialize()
 {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
 	// カメラのインスタンスを生成
-	camera_ = std::make_unique<Cygnus::Camera>(Cygnus::Float3{ 0.0f, 80.0f, -60.0f }, Cygnus::Float3{ 1.0f, 0.0f, 0.0f }, 0.45f);
+	camera_ = std::make_unique<Cygnus::Camera>(Cygnus::Float3{ 0.0f, 80.0f, -45.0f }, Cygnus::Float3{ 1.0f, 0.0f, 0.0f }, 0.45f);
 	Cygnus::Camera::Set(camera_.get()); // 現在のカメラをセット
 
 	// SpriteCommonの生成と初期化
@@ -56,9 +52,9 @@ void TitleScene::Initialize()
 	///
 	///	↓ ゲームシーン用
 	///
-	
-	titleSceneUI_ = std::make_unique<TitleSceneUI>();
-	titleSceneUI_->Init(spriteCommon_.get());
+
+	stageSelectSceneUI_ = std::make_unique<StageSelectSceneUI>();
+	stageSelectSceneUI_->Init(spriteCommon_.get());
 
 	// 地面オブジェクト生成
 	objectGround_ = std::make_unique<Cygnus::Object3D>();
@@ -67,12 +63,15 @@ void TitleScene::Initialize()
 	objectGround_->transform_.scale_ = { 500.0f, 500.0f, 1.0f }; // スケール変更
 	objectGround_->materialCB_.data_->color = { 0.5f, 0.5f, 0.5f, 1.0f }; // 色変更
 
+	selectObjects_ = std::make_unique<SelectObjectManager>();
+	selectObjects_->Initialize();
+
 }
 
-void TitleScene::Finalize()
+void StageSelectScene::Finalize()
 {}
 
-void TitleScene::Update()
+void StageSelectScene::Update()
 {
 	///
 	///	共通更新処理
@@ -90,15 +89,17 @@ void TitleScene::Update()
 	// 地面オブジェクト更新
 	objectGround_->UpdateMatrix();
 
-	titleSceneUI_->Update();	// タイトルシーンUI更新
+	selectObjects_->Update(dt);
+
+	stageSelectSceneUI_->Update();	// ステージセレクトシーンUI更新
 	///
 	///	
 	/// 
-	Cygnus::CollisionManager::GetInstance()->Update();
+
 	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);	// パーティクルエフェクト管理クラス更新
 }
 
-void TitleScene::Draw()
+void StageSelectScene::Draw()
 {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 	Cygnus::SRVManager* srvManager = Cygnus::SRVManager::GetInstance();
@@ -167,6 +168,9 @@ void TitleScene::Draw()
 	// 地面オブジェクト描画
 	objectGround_->Draw();
 
+
+	selectObjects_->Draw();
+
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
 #pragma endregion
@@ -195,7 +199,7 @@ void TitleScene::Draw()
 	/// ↓ ここからスプライト描画
 	/// =========================================================
 
-	titleSceneUI_->Draw();
+	stageSelectSceneUI_->Draw();
 
 	/// =========================================================
 	/// ↑ ここまでスプライト描画
@@ -203,16 +207,14 @@ void TitleScene::Draw()
 
 #ifdef _DEBUG // デバッグ表示
 
-	Cygnus::CollisionManager::GetInstance()->Draw();
 	// ゲームシーン
 	Debug();
 
 #endif
 	// シーンチェンジは描画処理後に行う
-	if (titleSceneUI_->IsStart())
+	if (stageSelectSceneUI_->IsStart() && selectObjects_->GetCurrentStage() == 0/*今は初期ステージのみ*/)
 	{
-		Cygnus::CollisionManager::GetInstance()->Clear();
-		TransitionTitle();
+		TransitionGamePlay();
 	}
 
 	// ImGuiの内部コマンドを生成する
@@ -223,16 +225,16 @@ void TitleScene::Draw()
 	dxBase->EndFrame();
 }
 
-void TitleScene::Debug()
+void StageSelectScene::Debug()
 {
 #ifdef USE_IMGUI
-	ImGui::Begin("TitleSceneInfo");
+	ImGui::Begin("StageSelectSceneInfo");
 
 	ImGui::Text("fps:%.2f", ImGui::GetIO().Framerate);
 
 	if (ImGui::Button("GamePlayScene"))
 	{
-		TransitionTitle();
+		TransitionGamePlay();
 	}
 
 	ImGui::End();
@@ -246,9 +248,10 @@ void TitleScene::Debug()
 
 	ImGui::End();
 #endif
+	selectObjects_->Debug();
 }
 
-void TitleScene::TransitionTitle()
+void StageSelectScene::TransitionGamePlay()
 {
-	Cygnus::SceneManager::GetInstance()->ChangeScene("SELECT");
+	Cygnus::SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 }
