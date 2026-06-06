@@ -35,36 +35,54 @@ void UIManager::Initialize() {
 
 	interactGuides_[InteractGuide::ActionType::Mine] = std::make_unique<InteractGuide>();
 	interactGuides_[InteractGuide::ActionType::Mine]->Initialize(spriteCommon_.get(), InteractGuide::ActionType::Mine);
+
+	/* 列車 */
+
+	// 列車の稼働時間UIを生成
+	gearTimeBar_ = std::make_unique<GearTimerBar>();
+	gearTimeBar_->Initialize(spriteCommon_.get());
 }
 
-void UIManager::Update(uint32_t oreCount, bool isOreMax, uint32_t gearCount, bool isGearMax, const Cygnus::Float3 playerPos) {
-	/* プレイヤーのアイテム所持数UI */
+void UIManager::Update(uint32_t oreCount, bool isOreMax, uint32_t gearCount, bool isGearMax, const Cygnus::Float3 playerPos, const Cygnus::Float3 carrierPos, float carrierEneryRatio) {
+	/* プレイヤーUI */
 
 	// プレイヤー鉱石所持数UI更新
 	oreCounter_->Update(oreCount, isOreMax);
 	// プレイヤー歯車所持数UI更新
 	gearCounter_->Update(gearCount, isGearMax);
 
-	/* 操作ボタン表示UI */
+	/* 操作ボタンUI */
 
-	// インタラクトUI表示
+	// インタラクトUI更新
 	for (auto& pair : interactGuides_) {
 		pair.second->Update(Cygnus::MathUtil::WorldToScreen(playerPos)); // スクリーン座標に変換して渡す
 	}
+
+	/* 列車UI */
+
+	// 列車残り稼働時間UI更新
+	gearTimeBar_->Update(Cygnus::MathUtil::WorldToScreen(carrierPos), carrierEneryRatio);
 }
 
 void UIManager::Draw() {
-	/* プレイヤーのアイテム所持数UI */
+	/* プレイヤーUI */
 
 	// プレイヤー鉱石所持数UI描画
 	oreCounter_->Draw();
 	// プレイヤー鉱石所持数UI描画
 	gearCounter_->Draw();
 
-	/* 操作ボタン表示UI */
+	/* 操作ボタンUI */
+
+	// インタラクトUI描画
 	for (auto& pair : interactGuides_) {
 		pair.second->Draw();
 	}
+
+	/* 列車UI */
+
+	// 列車残り稼働時間UI描画
+	gearTimeBar_->Draw();
 }
 
 void UIManager::ClearInteractRequests() {

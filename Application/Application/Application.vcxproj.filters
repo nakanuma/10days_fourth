@@ -41,6 +41,7 @@
     <ClCompile Include="src\Game\Sandstrom\Sandstorm.cpp" />
     <ClCompile Include="src\Game\Sandstrom\SandstormManager.cpp" />
     <ClCompile Include="src\Game\Field\SethFieldEvent.cpp" />
+    <ClCompile Include="src\Game\UI\Parts\GearTimerBar\GearTimerBar.cpp" />
     <ClCompile Include="src\Game\Particles\ParticleStrage.cpp" />
     <ClCompile Include="src\Util\JsonUtil.cpp" />
     <ClCompile Include="src\Game\Particles\Particle.cpp" />
@@ -123,6 +124,7 @@
     <ClInclude Include="src\Game\Sandstrom\Sandstorm.h" />
     <ClInclude Include="src\Game\Sandstrom\SandstormManager.h" />
     <ClInclude Include="src\Game\Field\SethFieldEvent.h" />
+    <ClInclude Include="src\Game\UI\Parts\GearTimerBar\GearTimerBar.h" />
     <ClInclude Include="src\Game\Particles\ParticleStrage.h" />
     <ClInclude Include="src\Util\JsonUtil.h" />
     <ClInclude Include="src\Game\Particles\Particle.h" />
