@@ -101,5 +101,7 @@ private:
 		float range;
 	};
 	std::vector<BreakRequest> breakRequests_; // 範囲破壊時にここにリクエストを溜める
+
+	const uint32_t kMaxOre_ = 100;//設置最大数
 };
 

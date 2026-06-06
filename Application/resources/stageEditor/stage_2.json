@@ -1,0 +1,101 @@
+{
+    "name": "StageEditor",
+    "object": [
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "Player"
+            },
+            "objectName": "Player",
+            "position": [
+                -10.0,
+                0.0,
+                -5.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "tag": "Path"
+            },
+            "objectName": "Path",
+            "position": [
+                -20.0,
+                1.0,
+                20.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "tag": "Path"
+            },
+            "objectName": "Path",
+            "position": [
+                -20.0,
+                1.0,
+                -20.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "tag": "Path"
+            },
+            "objectName": "Path",
+            "position": [
+                20.0,
+                1.0,
+                -20.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "tag": "Path"
+            },
+            "objectName": "Path",
+            "position": [
+                20.0,
+                1.0,
+                20.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    0.0,
+                    20.0
+                ],
+                "tag": "Ore"
+            },
+            "objectName": "Ore",
+            "position": [
+                -30.0,
+                1.0,
+                0.0
+            ]
+        }
+    ]
+}

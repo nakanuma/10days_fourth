@@ -26,8 +26,6 @@ void DroppedOre::Initialize(const Cygnus::Float3 translate) {
 }
 
 void DroppedOre::Update() {
-	//吹っ飛ばされる処理
-	FlyAwayOre();
 	// 上下揺れ + 回転を行うアニメーション
 	BobbingAnimation();
 
@@ -55,8 +53,8 @@ void DroppedOre::OnCollision(Cygnus::Collider* other) {
 	}
 
 	//砂嵐に当たったら
-	if (other->GetTag() == "Sandstorm" && !isFlyAway_) {
-		isFlyAway_ = true;	
+	if (other->GetTag() == "Sandstorm") {
+		flyAway_.InSandstorm();
 	}
 }
 
@@ -68,22 +66,11 @@ void DroppedOre::BobbingAnimation() {
 	// Y軸回転
 	object_->transform_.rotate_.y += kRotateSpeed * dt;
 
+
+	//砂嵐で飛ばされる
+	flyAway_.Update(velocity_);
+
 	// 上下揺れ（sin波）
 	float offsettTop = std::sinf(timer_ * kBobbingSpeed) * kBobbingAmplitude;
-	object_->transform_.translate_.y = basePosition_.y + offsettTop + flyAwayY_;
-}
-
-void DroppedOre::FlyAwayOre() {
-	//飛ばされるフラグがたったら
-	if (isFlyAway_) {
-		flyAwayY_ += 0.5f;//飛び上がる
-	}
-	else {
-		flyAwayY_ -= 1.0f;//落ちる
-	}
-
-	flyAwayY_ = std::clamp(flyAwayY_, 0.0f, 100.0f);
-	if (flyAwayY_ >= 100.0f) {
-		isFlyAway_ = false;
-	}
+	object_->transform_.translate_.y = basePosition_.y + offsettTop + velocity_.y;
 }

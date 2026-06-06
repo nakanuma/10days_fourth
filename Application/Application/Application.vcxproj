@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Sandstrom\FlyAway.cpp" />
     <ClCompile Include="src\Game\UI\Parts\GearTimerBar\GearTimerBar.cpp" />
     <ClCompile Include="src\Game\Field\SethFieldEvent.cpp" />
     <ClCompile Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.cpp" />
@@ -66,6 +67,7 @@
     <ClCompile Include="src\Game\UI\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Sandstrom\FlyAway.h" />
     <ClInclude Include="src\Game\UI\Parts\GearTimerBar\GearTimerBar.h" />
     <ClInclude Include="src\Game\Field\SethFieldEvent.h" />
     <ClInclude Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.h" />
