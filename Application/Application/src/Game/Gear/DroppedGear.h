@@ -5,6 +5,7 @@
 // ---------------------------------------------------------
 #include <Collider/CollisionManager.h>
 #include <Object3D.h>
+#include "src/Game//Sandstrom/FlyAway.h"
 
 // =========================================================
 // 落ちている歯車（ドロップアイテム）オブジェクトクラス
@@ -84,4 +85,7 @@ private:
 	float timer_ = 0.0f;          // アニメーション用タイマー
 
 	bool isPickedUp_ = false; // プレイヤーに拾われたか
+
+	FlyAway flyAway_;
+	Cygnus::Float3 velocity_;
 };

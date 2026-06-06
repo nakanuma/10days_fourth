@@ -67,16 +67,8 @@ void GamePlayScene::Initialize() {
 	objectGround_->transform_.scale_ = {500.0f, 500.0f, 1.0f}; // スケール変更
 	objectGround_->materialCB_.data_->color = {0.5f, 0.5f, 0.5f, 1.0f}; // 色変更
 
-	// プレイヤー生成 + 初期化
-	player_ = std::make_unique<Player>();
-	player_->Initialize();
-
 	// 経路管理クラス初期化
 	PathManager::GetInstance()->Initialize();
-
-	// 経路に沿って移動するオブジェクト生成 + 初期化
-	carrier_ = std::make_unique<Carrier>();
-	carrier_->Initialize();
 
 	// 鉱石オブジェクト管理クラス初期化
 	OreManager::GetInstance()->Initialize();
@@ -93,9 +85,15 @@ void GamePlayScene::Initialize() {
 	// UI管理クラス初期化	
 	UIManager::GetInstance()->Initialize();
 
-	//stageEditor_ = std::make_unique<StageEditor>();
-	//stageEditor_->LoadJsonFile("resources/stageEditor/stage_1.json");
-	//stageEditor_->SpitObjects(player_);
+	//ステージエディタ初期化
+	stageEditor_ = std::make_unique<StageEditor>();
+	stageEditor_->LoadJsonFile("resources/stageEditor/stage_2.json");//ステージジェイソンファイルを読み込む
+	stageEditor_->SpitObjects(player_);// プレイヤー生成 + 初期化
+
+	//最初の線路に設置される
+	// 経路に沿って移動するオブジェクト生成 + 初期化
+	carrier_ = std::make_unique<Carrier>();
+	carrier_->Initialize();
 
 	fieldManager_ = std::make_unique<FieldEventManager>();
 	fieldManager_->Initialize(&*spriteCommon_);
@@ -310,7 +308,7 @@ void GamePlayScene::Draw() {
 	// 経路に沿って動くオブジェクト
 	carrier_->Debug();
 	//　ステージエディタの更新(jsonの生成処理)
-	//stageEditor_->Update();
+	stageEditor_->Update();
 	sphinx_->Debug();
 	fieldManager_->Debug();
 	MummyManager::GetInstance()->Debug();

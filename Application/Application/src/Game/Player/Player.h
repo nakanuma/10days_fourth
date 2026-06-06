@@ -5,6 +5,7 @@
 // ---------------------------------------------------------
 #include <Object3D.h>
 #include <Collider/CollisionManager.h>
+#include "src/Game//Sandstrom/FlyAway.h"
 
 // =========================================================
 // プレイヤークラス
@@ -133,6 +134,9 @@ private:
 
 	const float kMoveSpeed = 20.0f;	// 移動速度
 	const Cygnus::Float3 kColliderSize = {1.0f, 2.0f, 1.0f};	// コライダーサイズ
+	
+	float slowDown_ = 0.0f;    //減速する値
+	const float kSlowDownMax_ = 15.0f;//最大減速
 
 	const float kMiningOffset = 1.5f;	// 採掘時の前方オフセット
 	const float kMiningRange = 1.2f;	// 採掘時のブレ許容値
@@ -153,5 +157,6 @@ private:
 	uint32_t oreCount_ = 0;	// 現在の所持鉱石数
 	uint32_t gearCount_ = 0; // 現在の所持歯車数
 
+	FlyAway flyAway_;
 };
 

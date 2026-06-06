@@ -10,13 +10,6 @@ PathManager* PathManager::GetInstance() {
 
 void PathManager::Initialize() {
 	points_.clear();
-	// デバッグ用にベタ打ちで座標を追加（Todo : エディタで追加できるように変更する）
-	points_.push_back({ 0.0f, 1.0f, 0.0f });
-	points_.push_back({ 10.0f, 1.0f, 0.0f });
-	points_.push_back({ 10.0f, 1.0f, -10.0f });
-	points_.push_back({ 20.0f, 1.0f, -10.0f });
-	points_.push_back({ 20.0f, 1.0f, -20.0f });
-	points_.push_back({ 30.0f, 1.0f, -20.0f });
 }
 
 void PathManager::Draw() {
