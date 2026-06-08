@@ -5,6 +5,7 @@
 // ---------------------------------------------------------
 #include <Collider/CollisionManager.h>
 #include <Object3D.h>
+#include "src/Game//Sandstrom/FlyAway.h"
 
 // =========================================================
 // 落ちている鉱石（ドロップアイテム）オブジェクトクラス
@@ -61,11 +62,6 @@ private:
 	/// </summary>
 	void BobbingAnimation();
 
-	/// <summary>
-	/// 飛ばされる処理
-	/// </summary>
-	void FlyAwayOre();
-
 private:
 	// =========================================================
 	// Constants
@@ -89,7 +85,6 @@ private:
 
 	bool isPickedUp_ = false;	// プレイヤーに拾われたか
 
-	bool isFlyAway_ = false;//飛ばされるフラグ
-	float flyAwayY_ = 0.0f; //飛ばし方向Y
-
+	FlyAway flyAway_;
+	Cygnus::Float3 velocity_;
 };

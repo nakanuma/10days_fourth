@@ -61,6 +61,8 @@ void OreManager::Draw() {
 
 void OreManager::AddPoint(const Cygnus::Float3& translate, const Cygnus::Float3& size) {
 
+	if (ores_.size() >= kMaxOre_) return;
+
 	//追加する鉱石を作成
 	
 	/// ---- 偶数か調べる ---

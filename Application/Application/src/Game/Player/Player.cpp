@@ -14,7 +14,6 @@ void Player::Initialize() {
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Player");
-	object_->transform_.translate_ = { -10.0f, 2.0f, -10.0f };
 
 	// コライダー生成 + 登録
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
@@ -50,8 +49,17 @@ void Player::Update(float deltaTime) {
 		}
 	}
 
+
 	// オブジェクト位置に反映
-	object_->transform_.translate_ += moveDir * kMoveSpeed * deltaTime;
+	object_->transform_.translate_ += moveDir * (kMoveSpeed - slowDown_) * deltaTime;
+	
+	//重力と砂嵐で飛ばされる処理
+	flyAway_.Update(object_->transform_.translate_);
+
+
+	//ミイラで遅くなる処理
+	slowDown_ -= deltaTime;
+	slowDown_ = std::clamp(slowDown_, 0.0f, kSlowDownMax_);
 
 	// 移動パーティクル生成
 	if (Cygnus::Float3::Length(moveDir) > 0.01f) {
@@ -136,6 +144,16 @@ void Player::OnCollision(Cygnus::Collider* other) {
 			myAABB->SetMax(currentMax + pushVec);
 		}
 	}
+
+
+	if (other->GetTag() == "Mummy") {
+		slowDown_ = kSlowDownMax_;
+	}
+
+	if (other->GetTag() == "Sandstorm") {
+		flyAway_.InSandstorm();
+	}
+
 }
 
 Cygnus::Float3 Player::GetKeyInput() {

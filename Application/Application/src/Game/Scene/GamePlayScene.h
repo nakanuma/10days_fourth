@@ -99,7 +99,7 @@ private:
 	std::unique_ptr<Cygnus::PostEffectManager> postEffectManager_; /* ポストエフェクト管理クラス */
 
 	// ----- StageSetting -----
-	//std::unique_ptr<StageEditor> stageEditor_; /*ステージ配置エディタ*/
+	std::unique_ptr<StageEditor> stageEditor_; /*ステージ配置エディタ*/
 
 	// ------ フィールドイベント -----
 	std::unique_ptr<FieldEventManager> fieldManager_;

@@ -77,20 +77,24 @@ void StageEditor::Update() {
 }
 
 void StageEditor::SpitObjects(std::unique_ptr<Player>& player) {
-	//名前から生成物を判断する
+	
+	// "名前" から生成物を判断します
 
 	for (auto& gameObjectPos : gameObjectPositions_){
-		//名前がプレイヤー+まだnullの場合
+		//プレイヤーがまだnullの場合
 		if (gameObjectPos.name == "Player" && player == nullptr) {
+			//プレイヤーの配置
 			std::unique_ptr<Player> object = std::make_unique<Player>();
 			object->Initialize();
 			object->SetTranslate(gameObjectPos.position);
 			player = std::move(object);
 		}
 		else if (gameObjectPos.name == "Ore") {
+			//鉱石の配置
 			OreManager::GetInstance()->AddPoint(gameObjectPos.position, gameObjectPos.collider.GetSize());
 		}
 		else if (gameObjectPos.name == "Path") {
+			//ルートの配置
 			PathManager::GetInstance()->AddPoint(gameObjectPos.position);
 		}
 	}
@@ -101,6 +105,7 @@ void StageEditor::SettingStage() {
 
 	if (isCreateNewObject_) {
 		ImGui::Text("parameter");
+		ImGui::Text("NameList : Player . Path . Ore");//名前リスト
 		ImGui::InputText("name", objectName_.data(), IM_ARRAYSIZE(textureFileName));//オブジェクトの名前
 		ImGui::DragFloat3("position", &newObject_.position.x);//座標位置
 		ImGui::DragFloat3("colliderSize", &colliderSize.x);//当たり判定サイズ

@@ -40,11 +40,27 @@ public:
 	/// <param name="collider"></param>
 	void OnCollision(Cygnus::Collider* other) override;
 	
+	// =========================================================
+	// Accessor
+	// =========================================================
+
+	/// <summary>
+	/// 現在位置を取得
+	/// </summary>
+	/// <returns></returns>
+	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; }
+
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="translate">座標を設定</param>
 	void SetTranslate(const Cygnus::Float3& translate) { object_->transform_.translate_ = translate; }
+
+	/// <summary>
+	/// 残り稼働時間の割合を取得します。
+	/// </summary>
+	/// <returns></returns>
+	float GetEnergyRatio() const { return energyTimer_ / kMaxEnergy; }
 
 	/// <summary>
 	/// ゴール判定取得

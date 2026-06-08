@@ -4,13 +4,13 @@
 #include <TextureManager.h>
 
 void InteractGuide::Initialize(Cygnus::SpriteCommon* spriteCommon, ActionType actionType) {
-	// ボタン画像生成+初期化
+	// ボタン用スプライト生成+初期化
 	spriteButton_ = std::make_unique<Cygnus::Sprite>();
 	spriteButton_->Initialize(spriteCommon, Cygnus::TextureManager::Load("UI/button_a.png"));
 	spriteButton_->SetAnchorPoint(kAnchorPoint);
 	spriteButton_->SetSize(kButtonSize);
 
-	// 文字画像生成+初期化
+	// 文字用スプライト生成+初期化
 	uint32_t textTex = 0;
 	switch (actionType) { // 指定されたタイプに応じてテクスチャ変更
 	case ActionType::Insert:

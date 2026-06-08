@@ -51,6 +51,10 @@ void DroppedGear::OnCollision(Cygnus::Collider* other) {
 			player->AddGearCount(); // プレイヤーの歯車所持数を1増やす
 		}
 	}
+
+	if (other->GetTag() == "Sandstorm") {
+		flyAway_.InSandstorm();
+	}
 }
 
 void DroppedGear::BobbingAnimation() {
@@ -61,7 +65,9 @@ void DroppedGear::BobbingAnimation() {
 	// Y軸回転
 	object_->transform_.rotate_.y += kRotateSpeed * dt;
 
+	flyAway_.Update(velocity_);
+
 	// 上下揺れ（sin波）
 	float offsettTop = std::sinf(timer_ * kBobbingSpeed) * kBobbingAmplitude;
-	object_->transform_.translate_.y = basePosition_.y + offsettTop;
+	object_->transform_.translate_.y = basePosition_.y + offsettTop + velocity_.y;;
 }
