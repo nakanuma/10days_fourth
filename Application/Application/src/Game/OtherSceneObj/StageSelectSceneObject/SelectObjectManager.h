@@ -47,8 +47,9 @@ public:
 	void Front() { playerObject_->transform_.rotate_.y = 0.0f; };
 
 private:
-
 	void SwapModel();
+
+	void FloatingObj();
 	
 
 private:
@@ -59,14 +60,20 @@ private:
 
 	static constexpr float kPointDistance = 15.0f;
 
+	static constexpr float kFloatingTime_ = 3.0f;
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
 	Cygnus::Input* input_ = nullptr;
 
+	float deltaTime_;
+
 	std::array<std::unique_ptr<Cygnus::Object3D>, kStageNum> selectObjects_;		// 選択オブジェクトの配列
 	std::array<std::unique_ptr<Cygnus::Object3D>, kStageNum - 1> barObjects_;	// 中間オブジェクトの配列
+
+	std::array<std::unique_ptr<Cygnus::Object3D>, kStageNum> stageObjects_;		// ステージの見た目オブジェクトの配列
 
 	std::unique_ptr<Cygnus::Object3D> playerObject_;	// プレイヤーオブジェクト
 
@@ -74,4 +81,6 @@ private:
 	int prevStage_ = 0;
 
 	int dir_ = 0.0f;
+
+	float floatingTimer_ = 0.0f;
 };

@@ -39,14 +39,39 @@ void SelectObjectManager::Initialize()
 
 		barObjects_[i]->transform_.scale_.x = kPointDistance;
 	}
+
+	auto InitStageObj = [&](int index, const std::string& modelKey, const Cygnus::Float3& offsetPos = { 0.0f,0.0f,0.0f }, float offsetScale = 1.0f)
+		{
+			stageObjects_[index] = std::make_unique<Cygnus::Object3D>();
+			stageObjects_[index]->model_ = &Cygnus::ModelManager::GetInstance()->GetModel(modelKey);
+			stageObjects_[index]->transform_.translate_ = selectObjects_[index]->transform_.translate_ + offsetPos;
+			stageObjects_[index]->transform_.scale_ = stageObjects_[index]->transform_.scale_ * offsetScale;
+			stageObjects_[index]->transform_.rotate_.y = std::numbers::pi_v<float>;
+		};
+
+	for (size_t i = 0; i < stageObjects_.size(); ++i)
+	{
+		InitStageObj(i, "Sphinx", { 0.0f, 4.0f, 9.0f }, 1.5f);
+	}
 }
 
 void SelectObjectManager::Update(float deltaTime)
 {
+	deltaTime_ = deltaTime;
+
+	FloatingObj();
+
 	playerObject_->UpdateMatrix();
 
 	// すべてのオブジェクトの行列を更新
 	for (auto& obj : selectObjects_)
+	{
+		if (obj) // nullptr チェック
+		{
+			obj->UpdateMatrix();
+		}
+	}
+	for (auto& obj : stageObjects_)
 	{
 		if (obj) // nullptr チェック
 		{
@@ -68,6 +93,13 @@ void SelectObjectManager::Draw()
 	for (auto& obj : selectObjects_)
 	{
 		if (obj)
+		{
+			obj->Draw();
+		}
+	}
+	for (auto& obj : stageObjects_)
+	{
+		if (obj) // nullptr チェック
 		{
 			obj->Draw();
 		}
@@ -120,4 +152,44 @@ void SelectObjectManager::SwapModel()
 {
 	selectObjects_[prevStage_]->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("StagePointBlue");
 	selectObjects_[currentStage_]->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("StagePointRed");
+}
+
+void SelectObjectManager::FloatingObj()
+{
+	for (size_t i = 0; i < selectObjects_.size(); ++i)
+	{
+		if (i != currentStage_)
+		{
+			stageObjects_[i]->transform_.translate_.y = 4.0f;
+			stageObjects_[i]->transform_.rotate_.y = std::numbers::pi_v<float>;
+		}
+	}
+	static bool isUP = true;
+	if(floatingTimer_ < kFloatingTime_ && isUP)
+	{
+		floatingTimer_ += deltaTime_;
+		if (floatingTimer_ >= kFloatingTime_) 
+		{
+			isUP = false;
+			floatingTimer_ = 0.0f;
+		}
+	}
+	else
+	{
+		floatingTimer_ += deltaTime_;
+		if (floatingTimer_ >= kFloatingTime_)
+		{
+			isUP = true;
+			floatingTimer_ = 0.0f;
+		}
+	}
+	if(isUP)
+	{
+		stageObjects_[currentStage_]->transform_.translate_.y = std::lerp(3.0f, 6.0f, floatingTimer_ / kFloatingTime_);
+	}
+	else
+	{
+		stageObjects_[currentStage_]->transform_.translate_.y = std::lerp(6.0f, 3.0f, floatingTimer_ / kFloatingTime_);
+	}
+	stageObjects_[currentStage_]->transform_.rotate_.y += (std::numbers::pi_v<float> / 6.0f) * deltaTime_;
 }
