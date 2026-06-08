@@ -20,13 +20,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game\Mummy\MummyBaseState.cpp" />
+    <ClCompile Include="src\Game\Scene\OtherSceneBase.cpp" />
+    <ClCompile Include="src\Game\OtherSceneObj\OtherSceneUIBase.cpp" />
+    <ClCompile Include="src\Game\OtherSceneObj\StageSelectSceneObject\SelectObjectManager.cpp" />
+    <ClCompile Include="src\Game\OtherSceneObj\ResultSceneObject\ResultSceneUI\ResultSceneUI.cpp" />
+    <ClCompile Include="src\Game\Scene\ResultScene\ResultScene.cpp" />
     <ClCompile Include="src\Game\Sandstrom\FlyAway.cpp" />
     <ClCompile Include="src\Game\UI\Parts\GearTimerBar\GearTimerBar.cpp" />
     <ClCompile Include="src\Game\Field\SethFieldEvent.cpp" />
-    <ClCompile Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.cpp" />
     <ClCompile Include="src\Game\Sandstrom\Sandstorm.cpp" />
     <ClCompile Include="src\Game\Sandstrom\SandstormManager.cpp" />
-    <ClCompile Include="src\Game\Scene\ResultScene.cpp" />
     <ClCompile Include="src\Game\SpriteCollision\SpriteCollision.cpp" />
     <ClCompile Include="src\Game\Particles\Debuff\DebuffManager.cpp" />
     <ClCompile Include="src\Game\Particles\Interact\InteractManager.cpp" />
@@ -44,7 +47,7 @@
     <ClCompile Include="src\Game\Gear\DroppedGear.cpp" />
     <ClCompile Include="src\Game\Gear\GearManager.cpp" />
     <ClCompile Include="src\Game\Particles\ParticleStrage.cpp" />
-    <ClCompile Include="src\Game\Scene\TitleScene.cpp" />
+    <ClCompile Include="src\Game\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="src\Util\JsonUtil.cpp" />
     <ClCompile Include="src\Game\Particles\Particle.cpp" />
     <ClCompile Include="src\Game\Particles\ParticleEditorSystem.cpp" />
@@ -64,19 +67,25 @@
     <ClCompile Include="src\Game\WorkBench\WorkBenchManager.cpp" />
     <ClCompile Include="src\Game\StageEditor\StageEditor.cpp" />
     <ClCompile Include="src\Game\Field\SunGodRaFieldEvent.cpp" />
-    <ClCompile Include="src\Game\TitleSceneObject\TitleSceneUI\TitleSceneUI.cpp" />
+    <ClCompile Include="src\Game\OtherSceneObj\TitleSceneObject\TitleSceneUI\TitleSceneUI.cpp" />
     <ClCompile Include="src\Game\UI\UIManager.cpp" />
-    <ClCompile Include="src\Game\SunLaser\SunLaser.cpp" />
+    <ClCompile Include="src\Game\SunLaser\SunLaser.cpp" />    
+    <ClCompile Include="src\Game\Scene\StageSelectScene\StageSelectScene.cpp" />
+    <ClCompile Include="src\Game\OtherSceneObj\StageSelectSceneObject\StageSelectSceneUI\StageSelectSceneUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Mummy\MummyBaseState.h" />
+    <ClInclude Include="src\Game\Scene\OtherSceneBase.h" />
+    <ClInclude Include="src\Game\OtherSceneObj\OtherSceneUIBase.h" />
+    <ClInclude Include="src\Game\OtherSceneObj\StageSelectSceneObject\SelectObjectManager.h" />
+    <ClInclude Include="src\Game\OtherSceneObj\ResultSceneObject\ResultSceneUI\ResultSceneUI.h" />
+    <ClInclude Include="src\Game\Scene\ResultScene\ResultScene.h" />
+    <ClInclude Include="src\Game\Scene\StageSelectScene\SelectSceneState.h" />
     <ClInclude Include="src\Game\Sandstrom\FlyAway.h" />
     <ClInclude Include="src\Game\UI\Parts\GearTimerBar\GearTimerBar.h" />
     <ClInclude Include="src\Game\Field\SethFieldEvent.h" />
-    <ClInclude Include="src\Game\ResultSceneObject\ResultSceneUI\ResultSceneUI.h" />
     <ClInclude Include="src\Game\Sandstrom\Sandstorm.h" />
     <ClInclude Include="src\Game\Sandstrom\SandstormManager.h" />
-    <ClInclude Include="src\Game\Scene\ResultScene.h" />
     <ClInclude Include="src\Game\SpriteCollision\SpriteCollision.h" />
     <ClInclude Include="src\Game\Particles\Debuff\DebuffManager.h" />
     <ClInclude Include="src\Game\Particles\Interact\InteractManager.h" />
@@ -94,7 +103,7 @@
     <ClInclude Include="src\Game\Gear\DroppedGear.h" />
     <ClInclude Include="src\Game\Gear\GearManager.h" />
     <ClInclude Include="src\Game\Particles\ParticleStrage.h" />
-    <ClInclude Include="src\Game\Scene\TitleScene.h" />
+    <ClInclude Include="src\Game\Scene\TitleScene\TitleScene.h" />
     <ClInclude Include="src\Util\JsonUtil.h" />
     <ClInclude Include="src\Game\Particles\Particle.h" />
     <ClInclude Include="src\Game\Particles\ParticleEditorSystem.h" />
@@ -111,15 +120,17 @@
     <ClInclude Include="src\Game\Scene\GamePlayScene.h" />
     <ClInclude Include="src\Game\Scene\SceneFactory.h" />
     <ClInclude Include="src\Game\Sphinx\SphinxState.h" />
-    <ClInclude Include="src\Game\Sphinx\State\StateMachine.h" />
+    <ClInclude Include="src\Util\State\StateMachine.h" />
     <ClInclude Include="src\Game\WorkBench\WorkBench.h" />
     <ClInclude Include="src\Game\WorkBench\WorkBenchManager.h" />
     <ClInclude Include="src\Game\StageEditor\StageEditor.h" />
     <ClInclude Include="src\Game\Field\SunGodRaFieldEvent.h" />
-    <ClInclude Include="src\Game\Sphinx\State\State.h" />
-    <ClInclude Include="src\Game\TitleSceneObject\TitleSceneUI\TitleSceneUI.h" />
+    <ClInclude Include="src\Util\State\State.h" />
+    <ClInclude Include="src\Game\OtherSceneObj\TitleSceneObject\TitleSceneUI\TitleSceneUI.h" />
     <ClInclude Include="src\Game\UI\UIManager.h" />
     <ClInclude Include="src\Game\SunLaser\SunLaser.h" />
+    <ClInclude Include="src\Game\Scene\StageSelectScene\StageSelectScene.h" />
+    <ClInclude Include="src\Game\OtherSceneObj\StageSelectSceneObject\StageSelectSceneUI\StageSelectSceneUI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
