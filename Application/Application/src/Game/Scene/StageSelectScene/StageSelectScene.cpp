@@ -72,7 +72,10 @@ void StageSelectScene::Update()
 	selectObjects_->Update(dt);
 	stageSelectSceneUI_->Update();
 
-	selectObjects_->SetPlayerObjectPosX(camera_->transform_.translate_.x);
+	if(stateMachine_.GetCurrentState() !=  SelectSceneState::FADE_OUT)
+	{
+		selectObjects_->SetPlayerObjectPosX(camera_->transform_.translate_.x);
+	}
 
 	Cygnus::ParticleEffectManager::GetInstance()->Update(dt);
 
