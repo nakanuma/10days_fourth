@@ -7,10 +7,16 @@ void SunGodRaFieldEvent::Initialize(Cygnus::SpriteCommon* spriteCommon) {
 	effect_->SetPosition({ 100.0f,100.0f });
 	effect_->SetSize({ 32.0f,32.0f });
 
+	sunLaser_ = std::make_unique<SunLaser>();
+
+	eventTimer_ = kEventTime_;
+
+	SunLaser::GetInstance()->Initialize();
 }
 
 void SunGodRaFieldEvent::Update() {
 	effect_->Update();
+	SunLaser::GetInstance()->IsEventStart();
 }
 
 void SunGodRaFieldEvent::Draw() {

@@ -3,6 +3,7 @@
 // Application Includes
 // ---------------------------------------------------------
 #include "BaseFieldEvent.h"
+#include "src/Game/SunLaser/SunLaser.h"
 
 /// <summary>
 /// 太陽神ラーのフィールドイベント
@@ -27,5 +28,8 @@ public:
 	void Debug() override;
 
 private:
+
+	std::unique_ptr<SunLaser> sunLaser_ = nullptr;
+	const float kEventTime_ = 21.0f;
 };
 

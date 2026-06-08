@@ -87,7 +87,7 @@ void GamePlayScene::Initialize() {
 
 	//ステージエディタ初期化
 	stageEditor_ = std::make_unique<StageEditor>();
-	stageEditor_->LoadJsonFile("resources/stageEditor/stage_2.json");//ステージジェイソンファイルを読み込む
+	stageEditor_->LoadJsonFile("resources/stageEditor/stage_3.json");//ステージジェイソンファイルを読み込む
 	stageEditor_->SpitObjects(player_);// プレイヤー生成 + 初期化
 
 	//最初の線路に設置される
@@ -99,6 +99,8 @@ void GamePlayScene::Initialize() {
 	fieldManager_->Initialize(&*spriteCommon_);
 
 	MummyManager::GetInstance()->Initialize();
+
+	SunLaser::GetInstance()->Initialize();
 }
 
 void GamePlayScene::Finalize()
@@ -143,7 +145,8 @@ void GamePlayScene::Update() {
 		// 歯車オブジェクト管理クラス更新
 		GearManager::GetInstance()->Update();
 
-		fieldManager_->Update();
+		fieldManager_->Update(dt);
+		SunLaser::GetInstance()->Update(player_->GetPosition(), dt);
 
 		//ミイラ召喚/管理クラスの更新
 		MummyManager::GetInstance()->Update(player_->GetPosition(), dt);
@@ -259,8 +262,10 @@ void GamePlayScene::Draw() {
 	WorkBenchManager::GetInstance()->Draw();
 	// 歯車オブジェクト管理クラス描画
 	GearManager::GetInstance()->Draw();
-	//　砂嵐管理クラスの描画
+	// 砂嵐管理クラスの描画
 	SandstormManager::GetInstance()->Draw();
+
+	SunLaser::GetInstance()->Draw();
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
 #pragma endregion

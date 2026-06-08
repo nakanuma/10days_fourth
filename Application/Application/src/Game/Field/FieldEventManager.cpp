@@ -15,9 +15,9 @@ void FieldEventManager::Initialize(Cygnus::SpriteCommon* spriteCommon) {
 	fieldEvent_->Initialize(spriteCommon_);
 }
 
-void FieldEventManager::Update() {
+void FieldEventManager::Update(float deltaTime) {
 	//時間を進める
-	fieldEvent_->EventTimeUpdate();
+	fieldEvent_->EventTimeUpdate(deltaTime);
 	//変更するフィールドイベント
 	ChangeField();
 	//

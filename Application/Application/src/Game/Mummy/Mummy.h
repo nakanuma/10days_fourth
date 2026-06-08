@@ -59,17 +59,22 @@ private:
 namespace MummyState {
 	class BaseState {
 	public:
-		virtual void Update();
+		virtual void Update(Mummy& mummy) = 0;
 	};
 
 	class SummonState : public BaseState {
 	public:
-		void Update() override;
+		void Update(Mummy& mummy) override;
 	};
 
 	class MoveState : public BaseState {
 	public:
-		void Update() override;
+		void Update(Mummy& mummy) override;
+	};
+
+	class DeadState : public BaseState {
+	public:
+		void Update(Mummy& mummy) override;
 	};
 
 }
