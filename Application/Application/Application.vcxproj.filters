@@ -41,6 +41,8 @@
     <ClCompile Include="src\Game\Scene\StageSelectScene\StageSelectScene.cpp" />
     <ClCompile Include="src\Game\OtherSceneObj\StageSelectSceneObject\StageSelectSceneUI\StageSelectSceneUI.cpp" />
     <ClCompile Include="src\Game\OtherSceneObj\StageSelectSceneObject\SelectObjectManager.cpp" />
+    <ClCompile Include="src\Game\OtherSceneObj\OtherSceneUIBase.cpp" />
+    <ClCompile Include="src\Game\Scene\OtherSceneBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\UI\UIManager.h" />
@@ -113,6 +115,9 @@
     <ClInclude Include="src\Game\Scene\StageSelectScene\StageSelectScene.h" />
     <ClInclude Include="src\Game\OtherSceneObj\StageSelectSceneObject\StageSelectSceneUI\StageSelectSceneUI.h" />
     <ClInclude Include="src\Game\OtherSceneObj\StageSelectSceneObject\SelectObjectManager.h" />
+    <ClInclude Include="src\Game\OtherSceneObj\OtherSceneUIBase.h" />
+    <ClInclude Include="src\Game\Scene\OtherSceneBase.h" />
+    <ClInclude Include="src\Game\Scene\StageSelectScene\SelectSceneState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h">

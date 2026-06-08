@@ -1,66 +1,50 @@
 #pragma once
-
-// ---------------------------------------------------------
-// Engine Includes
-// ---------------------------------------------------------
-#include <BaseScene.h>
-#include <Camera.h>
-#include <Engine/Collider/CollisionManager.h>
-#include <Engine/Texture/PostEffectManager.h>
-#include <Engine/Util/TimeManager.h>
-#include <Input.h>
-#include <LightManager.h>
-#include <ModelManager.h>
-#include <Object3D.h>
-#include <SoundManager.h>
-#include <Sprite.h>
-#include <SpriteCommon.h>
-#include <TextureManager.h>
-
 // ---------------------------------------------------------
 // Application Includes
 // ---------------------------------------------------------
+#include "../OtherSceneBase.h"
 #include <src/Game/OtherSceneObj/StageSelectSceneObject/StageSelectSceneUI/StageSelectSceneUI.h>
 #include <src/Game/OtherSceneObj/StageSelectSceneObject/SelectObjectManager.h>
+#include "src/Util/State/StateMachine.h"
+
+enum class SelectSceneState
+{
+	FADE_IN,        /* フェードイン中 */
+	SELECTING,      /* ステージ選択中 */
+	MOVING,         /* ステージ移動中 */
+	FADE_OUT,       /* フェードアウト中 */
+};
 
 // =========================================================
 // ステージセレクトシーンクラス
 // =========================================================
-class StageSelectScene : public Cygnus::BaseScene
+class StageSelectScene : public OtherSceneBase
 {
 public:
 	// =========================================================
 	// Public Methods
 	// =========================================================
-
-	/// <summary>
-	/// ステージセレクトシーンの初期化処理を行います。
-	/// </summary>
 	void Initialize() override;
-
-	/// <summary>
-	/// ステージセレクトシーンの終了処理を行います。
-	/// </summary>
 	void Finalize() override;
-
-	/// <summary>
-	/// 毎フレームの更新処理を行います。
-	/// </summary>
 	void Update() override;
 
-	/// <summary>
-	/// シーンの描画処理を行います。
-	/// </summary>
-	void Draw() override;
+	bool IsStartSelected() const
+	{
+		return stageSelectSceneUI_->IsStart() && selectObjects_->GetCurrentStage() == 0;
+	}
 
-	/// <summary>
-	/// デバッグ表示を行います。
-	/// </summary>
-	void Debug();
+	Cygnus::Camera* GetCamera() const { return camera_.get(); }
 
+	SelectObjectManager* GetSelectObjectManager() const { return selectObjects_.get(); }
+
+protected:
 	// =========================================================
-	// Accessor
+	// Draw Hooks (OtherSceneBaseのDrawから呼ばれる)
 	// =========================================================
+	void DrawMainScene3D() override { selectObjects_->Draw(); }
+	void DrawUI() override { stageSelectSceneUI_->Draw(); }
+	void CheckSceneTransition() override;
+	void Debug() override;
 
 private:
 	// =========================================================
@@ -70,25 +54,19 @@ private:
 
 private:
 	// =========================================================
-	// Constants
-	// =========================================================
-
-	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	// ----- System -----
-	std::unique_ptr<Cygnus::Camera> camera_ = nullptr;             /* 3Dカメラクラス */
-	std::unique_ptr<Cygnus::SpriteCommon> spriteCommon_ = nullptr; /* スプライト共通処理 */
-	Cygnus::Input* input_ = nullptr;                               /* 入力管理クラス */
-	Cygnus::LightManager* lightManager_ = nullptr;                 /* 各ライト管理クラス */
-
 	// ----- Objects -----
-	std::unique_ptr<Cygnus::Object3D> objectGround_;	/* 地面オブジェクト（仮） */
 	std::unique_ptr<SelectObjectManager> selectObjects_;
 
 	// ----- Others -----
-	uint32_t shadowMapHandle_;                                     /* シャドウマップテクスチャ */
-	std::unique_ptr<Cygnus::PostEffectManager> postEffectManager_; /* ポストエフェクト管理クラス */
 	std::unique_ptr<StageSelectSceneUI> stageSelectSceneUI_;       /* ステージセレクトシーンのUIクラス */
+
+	// ----- State Machine -----
+	// 追加：このシーンの状態を管理するステートマシン
+	StateMachine<SelectSceneState, StageSelectScene> stateMachine_;
+
+	static constexpr Cygnus::Float3 kCameraInitialPosition = { 0.0f, 80.0f, -45.0f }; /* カメラの初期位置 */
+	Cygnus::Float3 cameraPosition_;    /* カメラの位置 */
 };

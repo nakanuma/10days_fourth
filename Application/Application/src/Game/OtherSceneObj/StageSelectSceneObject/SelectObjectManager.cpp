@@ -5,6 +5,10 @@ void SelectObjectManager::Initialize()
 {
 	input_ = Cygnus::Input::GetInstance();
 
+	// オブジェクト生成
+	playerObject_ = std::make_unique<Cygnus::Object3D>();
+	playerObject_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Player");
+	playerObject_->transform_.translate_ = { 0.0f, 2.3f, 0.0f };
 
 	// 選択オブジェクトの生成と初期化
 	for (size_t i = 0; i < selectObjects_.size(); ++i)
@@ -39,7 +43,7 @@ void SelectObjectManager::Initialize()
 
 void SelectObjectManager::Update(float deltaTime)
 {
-	SelectStage();
+	playerObject_->UpdateMatrix();
 
 	// すべてのオブジェクトの行列を更新
 	for (auto& obj : selectObjects_)
@@ -75,6 +79,7 @@ void SelectObjectManager::Draw()
 			bar->Draw();
 		}
 	}
+	playerObject_->Draw();
 }
 
 void SelectObjectManager::Debug()
@@ -82,7 +87,7 @@ void SelectObjectManager::Debug()
 	// ImGui などのデバッグ用表示処理を記述します
 }
 
-void SelectObjectManager::SelectStage()
+bool SelectObjectManager::SelectStage()
 {
 	if (input_->TriggerKey(DIK_A))
 	{
@@ -90,7 +95,10 @@ void SelectObjectManager::SelectStage()
 		{
 			prevStage_ = currentStage_;
 			currentStage_--;
+			dir_--;
+			Right();
 			SwapModel();
+			return true; // ステージが変更されたことを示す
 		}
 	}
 	if (input_->TriggerKey(DIK_D))
@@ -99,9 +107,13 @@ void SelectObjectManager::SelectStage()
 		{
 			prevStage_ = currentStage_;
 			currentStage_++;
+			dir_++;
+			Left();
 			SwapModel();
+			return true; // ステージが変更されたことを示す
 		}
 	}
+	return false; // ステージが変更されなかったことを示す
 }
 
 void SelectObjectManager::SwapModel()

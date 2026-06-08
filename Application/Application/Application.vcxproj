@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Scene\OtherSceneBase.cpp" />
+    <ClCompile Include="src\Game\OtherSceneObj\OtherSceneUIBase.cpp" />
     <ClCompile Include="src\Game\OtherSceneObj\StageSelectSceneObject\SelectObjectManager.cpp" />
     <ClCompile Include="src\Game\OtherSceneObj\ResultSceneObject\ResultSceneUI\ResultSceneUI.cpp" />
     <ClCompile Include="src\Game\Scene\ResultScene\ResultScene.cpp" />
@@ -61,9 +63,12 @@
     <ClCompile Include="src\Game\OtherSceneObj\StageSelectSceneObject\StageSelectSceneUI\StageSelectSceneUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Scene\OtherSceneBase.h" />
+    <ClInclude Include="src\Game\OtherSceneObj\OtherSceneUIBase.h" />
     <ClInclude Include="src\Game\OtherSceneObj\StageSelectSceneObject\SelectObjectManager.h" />
     <ClInclude Include="src\Game\OtherSceneObj\ResultSceneObject\ResultSceneUI\ResultSceneUI.h" />
     <ClInclude Include="src\Game\Scene\ResultScene\ResultScene.h" />
+    <ClInclude Include="src\Game\Scene\StageSelectScene\SelectSceneState.h" />
     <ClInclude Include="src\Game\SpriteCollision\SpriteCollision.h" />
     <ClInclude Include="src\Game\Field\AnubisFieldEvent.h" />
     <ClInclude Include="src\Game\Mummy\Mummy.h" />

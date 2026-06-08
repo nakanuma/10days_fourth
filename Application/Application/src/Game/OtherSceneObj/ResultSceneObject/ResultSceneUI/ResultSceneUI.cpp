@@ -1,20 +1,22 @@
 #include "ResultSceneUI.h"
-// ※SpriteCollisionのパスは実際のプロジェクトに合わせて変更してください
-#include "../../../SpriteCollision/SpriteCollision.h" 
 #include "ImguiWrapper.h"
 
 using namespace Cygnus;
 
 void ResultSceneUI::Init(SpriteCommon* spriteCommon)
 {
-	input_ = Input::GetInstance();
-	spriteCommon_ = spriteCommon;
+	// 1. ベースクラスの共通初期化
+	OtherSceneUIBase::Init(spriteCommon);
 
+	// 2. スプライトの最大数に合わせてリサイズ
+	sprites_.resize(SpriteNum);
+
+	// 背景画像
 	sprites_[RESULT_IMG].sprite = std::make_unique<Sprite>();
 	sprites_[RESULT_IMG].sprite->Initialize(spriteCommon_, Cygnus::TextureManager::GetInstance().Load("UI/ResultImg.png"));
 	sprites_[RESULT_IMG].size = sprites_[RESULT_IMG].sprite->GetSize();
 
-	// リザルトロゴ（テキスト）用スプライト
+	// リザルトロゴ
 	sprites_[RESULT_TEX].sprite = std::make_unique<Sprite>();
 	sprites_[RESULT_TEX].sprite->Initialize(spriteCommon_, Cygnus::TextureManager::GetInstance().Load("UI/ResultText.png"));
 	sprites_[RESULT_TEX].sprite->SetAnchorPoint({ 0.5f, 0.5f });
@@ -22,7 +24,7 @@ void ResultSceneUI::Init(SpriteCommon* spriteCommon)
 	sprites_[RESULT_TEX].size = sprites_[RESULT_TEX].sprite->GetSize();
 	sprites_[RESULT_TEX].sprite->SetPosition(sprites_[RESULT_TEX].pos);
 
-	// 次へ（またはタイトルへ戻る）ボタン用スプライト
+	// 次へボタン
 	sprites_[NEXT_TEX].sprite = std::make_unique<Sprite>();
 	sprites_[NEXT_TEX].sprite->Initialize(spriteCommon_, Cygnus::TextureManager::GetInstance().Load("UI/TitleSpace.png"));
 	sprites_[NEXT_TEX].sprite->SetAnchorPoint({ 0.5f, 0.5f });
@@ -33,52 +35,9 @@ void ResultSceneUI::Init(SpriteCommon* spriteCommon)
 
 void ResultSceneUI::Update()
 {
-#ifdef _DEBUG
-#endif // _DEBUG
+	// 1. 全スプライトの基本更新
+	OtherSceneUIBase::Update();
 
-	for (auto& sprite : sprites_)
-	{
-		sprite.sprite->Update();
-	}
-
-	NextButtonUpdate();
-
-	// マウスカーソルが重なった際のボタン拡大処理
-	SpriteCollision collision;
-	if (collision.IsMouseHover(*sprites_[NEXT_TEX].sprite.get()))
-	{
-		sprites_[NEXT_TEX].scale = 1.2f; // マウスオーバー時の拡大率
-	}
-	else
-	{
-		sprites_[NEXT_TEX].scale = 1.0f;
-	}
-
-	sprites_[NEXT_TEX].sprite->SetSize(sprites_[NEXT_TEX].size * sprites_[NEXT_TEX].scale);
-}
-
-void ResultSceneUI::Draw()
-{
-	for (auto& sprite : sprites_)
-	{
-		sprite.sprite->Draw();
-	}
-
-#ifdef USE_IMGUI
-	ImGui::Begin("ResultUI");
-
-	ImGui::Text("bool : %d", isNext_);
-
-	ImGui::End();
-#endif
-}
-
-void ResultSceneUI::NextButtonUpdate()
-{
-	SpriteCollision collision;
-	// スペースキーが押されたか、ボタンがクリックされたらフラグを立てる
-	if (input_->TriggerKey(DIK_SPACE) || collision.IsMouseClicked(*sprites_[NEXT_TEX].sprite.get()))
-	{
-		isNext_ = true;
-	}
+	// 2. 次へボタン（NEXT_TEX）のホバー・クリック処理
+	UpdateButtonLogic(NEXT_TEX);
 }
