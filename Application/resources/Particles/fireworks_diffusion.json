@@ -14,9 +14,9 @@
     ],
     "isBillboard": false,
     "maxAccerelation": [
-        0.20000000298023224,
+        0.0,
         -9.800000190734863,
-        0.20000000298023224
+        0.0
     ],
     "maxLifeTime": 2.5,
     "maxRotationSpeed": [
@@ -35,9 +35,9 @@
         20.0
     ],
     "minAccerelation": [
-        -0.20000000298023224,
+        -3.0,
         -9.800000190734863,
-        -0.20000000298023224
+        -3.0
     ],
     "minLifeTime": 2.0,
     "minRotationSpeed": [

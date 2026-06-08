@@ -10,7 +10,6 @@
 /// </summary>
 struct FireworkParticle {
 	Cygnus::Float3 position;	// パーティクルの位置
-	float upTime;				// 上昇時間
 };
 
 /// <summary>
@@ -50,9 +49,7 @@ private:
 	// =========================================================
 
 	std::vector<FireworkParticle> fireworks_;				/* 花火パーティクルのマップ */ 
-	const float maxUpTime_ = 1.0f;					/* 花火の上昇時間の最大値 */
-	const Cygnus::Float3 velocity = Cygnus::Float3(0.0f, 25.0f, 0.0f);
-
+	float diffusionHeight_ = 20.0f;						/* 花火の拡散高さ */
 
 	Cygnus::Float3 emitPosition_;					/* (デバッグ用)発生位置 */
 
