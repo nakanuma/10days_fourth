@@ -8,6 +8,7 @@
 #include <src/Game/Path/PathManager.h>
 #include <src/Game/Player/Player.h>
 #include <src/Game/UI/UIManager.h>
+#include <src/Game/Particles/Interact/InteractManager.h>
 
 void Carrier::Initialize() {
 	// オブジェクト生成
@@ -98,6 +99,9 @@ void Carrier::OnCollision(Cygnus::Collider* other) {
 				player->ConsumeGear(kRequiredGearCount);
 				// 列車に歯車を注入された際の処理
 				SupplyGear();
+				// インタラクトエフェクトの表示を要求
+				InteractManager::GetInstance()->Create(object_->transform_.translate_);
+
 			}
 		}
 	}
