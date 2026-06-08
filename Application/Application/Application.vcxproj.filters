@@ -53,6 +53,7 @@
     <ClCompile Include="src\Game\Particles\Debuff\DebuffManager.cpp" />
     <ClCompile Include="src\Game\Sandstrom\FlyAway.cpp" />
     <ClCompile Include="src\Game\SunLaser\SunLaser.cpp" />
+    <ClCompile Include="src\Game\Mummy\MummyBaseState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\UI\UIManager.h" />
@@ -137,6 +138,7 @@
     <ClInclude Include="src\Game\Particles\Debuff\DebuffManager.h" />
     <ClInclude Include="src\Game\Sandstrom\FlyAway.h" />
     <ClInclude Include="src\Game\SunLaser\SunLaser.h" />
+    <ClInclude Include="src\Game\Mummy\MummyBaseState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h">

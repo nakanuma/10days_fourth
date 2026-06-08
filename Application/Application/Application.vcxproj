@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Mummy\MummyBaseState.cpp" />
     <ClCompile Include="src\Game\Sandstrom\FlyAway.cpp" />
     <ClCompile Include="src\Game\UI\Parts\GearTimerBar\GearTimerBar.cpp" />
     <ClCompile Include="src\Game\Field\SethFieldEvent.cpp" />
@@ -68,6 +69,7 @@
     <ClCompile Include="src\Game\SunLaser\SunLaser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Mummy\MummyBaseState.h" />
     <ClInclude Include="src\Game\Sandstrom\FlyAway.h" />
     <ClInclude Include="src\Game\UI\Parts\GearTimerBar\GearTimerBar.h" />
     <ClInclude Include="src\Game\Field\SethFieldEvent.h" />
