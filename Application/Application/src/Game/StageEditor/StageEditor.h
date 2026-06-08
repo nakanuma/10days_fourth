@@ -40,9 +40,9 @@ public:
 	void Update();
 
 	/// <summary>
-	/// 
+	/// オブジェクトの設置
 	/// </summary>
-	/// <param name="gameObjectPos"></param>
+	/// <param name="gameObjectPos">プレイヤーをもらう</param>
 	void SpitObjects(std::unique_ptr<Player>& player);
 
 private:
@@ -58,14 +58,12 @@ private:
 	void SettingStage();
 
 
-	std::vector<GameObjectPosition> gameObjectPositions_;
+	std::list<GameObjectPosition> gameObjectPositions_;
 
 	std::string objectName_ = "";
 
 	std::string imGuiText_ = "";
 	char textureFileName[1024 * 160] = "";
-
-	int objectNum_ = 0;
 
 	GameObjectPosition newObject_;
 	bool isCreateNewObject_ = false;

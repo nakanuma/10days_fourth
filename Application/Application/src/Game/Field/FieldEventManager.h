@@ -23,7 +23,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	void Update(float deltaTime);
 	/// <summary>
 	/// 描画処理
 	/// </summary>

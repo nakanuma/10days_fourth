@@ -53,7 +53,7 @@ void AnubisFieldEvent::Summon() {
 
 	std::uniform_real_distribution<float> summonPos(-30.0f, 30.0f);
 
-	Cygnus::Float3 position = { summonPos(random),2.0f,summonPos(random) };
+	Cygnus::Float3 position = { summonPos(random),0.0f,summonPos(random) };
 
 	//召喚
 	MummyManager::GetInstance()->AddMummy(position);

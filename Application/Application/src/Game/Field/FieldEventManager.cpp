@@ -15,9 +15,9 @@ void FieldEventManager::Initialize(Cygnus::SpriteCommon* spriteCommon) {
 	fieldEvent_->Initialize(spriteCommon_);
 }
 
-void FieldEventManager::Update() {
+void FieldEventManager::Update(float deltaTime) {
 	//時間を進める
-	fieldEvent_->EventTimeUpdate();
+	fieldEvent_->EventTimeUpdate(deltaTime);
 	//変更するフィールドイベント
 	ChangeField();
 	//
@@ -51,7 +51,7 @@ void FieldEventManager::ChangeField() {
 			std::mt19937 random(seed());
 			std::uniform_int_distribution<uint32_t> eventNum (1, max - 1);//fieldEventのmax - 1
 			//ナンバーを変更
-			number_ = eventNum(random);
+			number_ = Anubis;
 		}
 		else {
 			number_ = 0;//通常(イベントなし)のフィールドに戻る
