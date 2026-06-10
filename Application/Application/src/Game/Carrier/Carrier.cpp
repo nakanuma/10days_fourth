@@ -3,12 +3,12 @@
 // Engine
 #include <ImguiWrapper.h>
 #include <Input/Input.h>
+#include <ParticleEffect/ParticleEffectManager.h>
 
 // Application
 #include <src/Game/Path/PathManager.h>
 #include <src/Game/Player/Player.h>
 #include <src/Game/UI/UIManager.h>
-#include <src/Game/Particles/Interact/InteractManager.h>
 
 void Carrier::Initialize() {
 	// オブジェクト生成
@@ -100,7 +100,7 @@ void Carrier::OnCollision(Cygnus::Collider* other) {
 				// 列車に歯車を注入された際の処理
 				SupplyGear();
 				// インタラクトエフェクトの表示を要求
-				InteractManager::GetInstance()->Create(object_->transform_.translate_);
+				Cygnus::ParticleEffectManager::GetInstance()->Emit("get", object_->transform_.translate_,30);
 
 			}
 		}

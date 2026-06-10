@@ -2,12 +2,12 @@
 
 // Engine
 #include <Input/Input.h>
+#include <ParticleEffect/ParticleEffectManager.h>
 
 // Application
 #include <src/Game/Player/Player.h>
 #include <src/Game/Gear/GearManager.h>
 #include <src/Game/UI/UIManager.h>
-#include <src/Game/Particles/Interact/InteractManager.h>
 
 void WorkBench::Initialize(const Cygnus::Float3 translate) {
 	// オブジェクト生成
@@ -66,7 +66,7 @@ void WorkBench::OnCollision(Cygnus::Collider* other) {
 				// 歯車を前方に生成
 				GearManager::GetInstance()->Spawn(object_->transform_.translate_ + Cygnus::Float3{0.0f, 0.0f, kDropOffset});
 				//プレイヤーの位置にインタラクトエフェクトを発生
-				InteractManager::GetInstance()->Create(player->GetPosition());
+				Cygnus::ParticleEffectManager::GetInstance()->Emit("get", player->GetPosition(),30);
 
 			}
 		}

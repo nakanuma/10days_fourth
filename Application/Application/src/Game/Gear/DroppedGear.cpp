@@ -2,9 +2,11 @@
 
 // Engine
 #include <TimeManager.h>
+#include <ParticleEffect/ParticleEffectManager.h>
 
 // Application
 #include <src/Game/Player/Player.h>
+
 
 void DroppedGear::Initialize(const Cygnus::Float3 translate) {
 	// オブジェクト生成
@@ -49,6 +51,8 @@ void DroppedGear::OnCollision(Cygnus::Collider* other) {
 		if (player->CanPickUpGear()) {
 			isPickedUp_ = true;    // 自身の取得フラグを立てる（消す準備）
 			player->AddGearCount(); // プレイヤーの歯車所持数を1増やす
+			//取得パーティクルを発生
+			Cygnus::ParticleEffectManager::GetInstance()->Emit("get", player->GetPosition(), 20);
 		}
 	}
 
