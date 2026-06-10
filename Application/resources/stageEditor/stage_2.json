@@ -1,4 +1,10 @@
 {
+    "EventRatio": {
+        "Anubis": 0,
+        "LotOfOre": 100,
+        "Seth": 0,
+        "SunGodRa": 0
+    },
     "name": "StageEditor",
     "object": [
         {
@@ -12,89 +18,137 @@
             },
             "objectName": "Player",
             "position": [
-                -10.0,
                 0.0,
-                -5.0
-            ]
-        },
-        {
-            "collider": {
-                "size": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "tag": "Path"
-            },
-            "objectName": "Path",
-            "position": [
-                -20.0,
                 1.0,
-                20.0
-            ]
-        },
-        {
-            "collider": {
-                "size": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "tag": "Path"
-            },
-            "objectName": "Path",
-            "position": [
-                -20.0,
-                1.0,
-                -20.0
-            ]
-        },
-        {
-            "collider": {
-                "size": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "tag": "Path"
-            },
-            "objectName": "Path",
-            "position": [
-                20.0,
-                1.0,
-                -20.0
-            ]
-        },
-        {
-            "collider": {
-                "size": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "tag": "Path"
-            },
-            "objectName": "Path",
-            "position": [
-                20.0,
-                1.0,
-                20.0
+                0.0
             ]
         },
         {
             "collider": {
                 "size": [
                     1.0,
-                    0.0,
-                    20.0
+                    1.0,
+                    1.0
                 ],
-                "tag": "Ore"
+                "tag": "Path"
             },
-            "objectName": "Ore",
+            "objectName": "Path",
             "position": [
-                -30.0,
+                -20.0,
+                1.0,
+                -1.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "Path"
+            },
+            "objectName": "Path",
+            "position": [
+                -4.0,
+                1.0,
+                -20.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "Path"
+            },
+            "objectName": "Path",
+            "position": [
+                8.0,
+                1.0,
+                10.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "Path"
+            },
+            "objectName": "Path",
+            "position": [
+                12.0,
                 1.0,
                 0.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "Path"
+            },
+            "objectName": "Path",
+            "position": [
+                19.0,
+                1.0,
+                0.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "WorkBench"
+            },
+            "objectName": "WorkBench",
+            "position": [
+                -8.0,
+                1.0,
+                10.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "Sphinx"
+            },
+            "objectName": "Sphinx",
+            "position": [
+                20.0,
+                1.0,
+                3.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "tag": "WorkBench"
+            },
+            "objectName": "WorkBench",
+            "position": [
+                4.0,
+                0.0,
+                -15.0
             ]
         }
     ]

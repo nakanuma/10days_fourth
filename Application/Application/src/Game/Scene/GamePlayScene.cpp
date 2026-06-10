@@ -79,6 +79,9 @@ void GamePlayScene::Initialize() {
 	// 歯車オブジェクト管理クラス初期化
 	GearManager::GetInstance()->Initialize();
 
+	player_ = std::make_unique<Player>();
+	player_->Initialize();
+
 	sphinx_ = std::make_unique<Sphinx>();
 	sphinx_->Initialize();
 
@@ -87,8 +90,8 @@ void GamePlayScene::Initialize() {
 
 	//ステージエディタ初期化
 	stageEditor_ = std::make_unique<StageEditor>();
-	stageEditor_->LoadJsonFile("resources/stageEditor/stage_3.json");//ステージジェイソンファイルを読み込む
-	stageEditor_->SpitObjects(player_);// プレイヤー生成 + 初期化
+	stageEditor_->LoadJsonFile("resources/stageEditor/stage_5.json");//ステージジェイソンファイルを読み込む
+	stageEditor_->SpitObjects(player_,sphinx_);// プレイヤー生成 + 初期化
 
 	//最初の線路に設置される
 	// 経路に沿って移動するオブジェクト生成 + 初期化
@@ -96,7 +99,7 @@ void GamePlayScene::Initialize() {
 	carrier_->Initialize();
 
 	fieldManager_ = std::make_unique<FieldEventManager>();
-	fieldManager_->Initialize(&*spriteCommon_);
+	fieldManager_->Initialize(&*spriteCommon_, stageEditor_->GetEventRatio());
 
 	MummyManager::GetInstance()->Initialize();
 

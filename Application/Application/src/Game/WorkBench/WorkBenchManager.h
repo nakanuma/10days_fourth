@@ -24,6 +24,11 @@ public:
 
 	void Draw();
 
+	/// <summary>
+	/// ワークベンチを追加配置する
+	/// </summary>
+	void AddWorkBench(const Cygnus::Float3& position);
+
 private:
 	// =========================================================
 	// Member Variables
