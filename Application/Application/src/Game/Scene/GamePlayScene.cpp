@@ -26,6 +26,7 @@
 #include <src/Game/Particles/SandRain/SandRainManager.h>
 #include <src/Game/Particles/Interact/InteractManager.h>
 #include <src/Game/Particles/Debuff/DebuffManager.h>
+#include <src/Game/Particles/Storm/StormManager.h>
 
 #include <src/Game/Sandstrom/SandstormManager.h>
 
@@ -164,6 +165,8 @@ void GamePlayScene::Update() {
 	InteractManager::GetInstance()->Update(dt);
 	//デバフパーティクル更新
 	DebuffManager::GetInstance()->Update(dt);
+	//竜巻パーティクル更新
+	StormManager::GetInstance()->Update(dt);
 
 	///
 	///	
@@ -366,6 +369,9 @@ void GamePlayScene::Debug() {
 	InteractManager::GetInstance()->Debug();
 	//デバフパーティクルのデバッグ表示
 	DebuffManager::GetInstance()->Debug();
+	//砂嵐管理クラスのデバッグ表示
+	StormManager::GetInstance()->Debug();
+
 
 #endif
 }

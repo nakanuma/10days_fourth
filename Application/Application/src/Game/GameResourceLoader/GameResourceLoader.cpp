@@ -170,6 +170,7 @@ void GameResourceLoader::RegisterAllParticleEffect() {
 	RegisterParticle("interact", "Plane");
 	RegisterParticle("debuff", "Cube");
 	RegisterParticle("get", "Cube");
+	RegisterParticle("sand_grain", "Cube");
 }
 
 void GameResourceLoader::LoadAllSoundData() {
