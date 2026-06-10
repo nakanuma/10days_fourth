@@ -39,6 +39,7 @@ public:
 		}
 		if (owner.IsStartSelected())
 		{
+			owner.GetSelectObjectManager()->StartJumpToStage();
 			GetSM()->ChangeState(SelectSceneState::FADE_OUT);
 		}
 	}
@@ -97,10 +98,25 @@ public:
 
 	void Update(StageSelectScene& owner, float deltaTime) override
 	{
-		if (true /* フェードアウト完了条件 */)
+		if (!owner.GetSelectObjectManager()->IsJumping())
+		{
+			isStaging_ = false;
+		}
+
+		if (!isStaging_ && !isReacting_ && !owner.GetSelectObjectManager()->IsStageReacting())
+		{
+			owner.GetSelectObjectManager()->StartStageReaction();
+			isReacting_ = true;
+		}
+
+		if (isReacting_ && !owner.GetSelectObjectManager()->IsStageReacting())
 		{
 			// フェードが完全に終わったら、親クラスの遷移フラグを立てる
 			owner.SetTransition(true);
 		}
 	}
+
+private:
+	bool isStaging_ = true;
+	bool isReacting_ = false;
 };
