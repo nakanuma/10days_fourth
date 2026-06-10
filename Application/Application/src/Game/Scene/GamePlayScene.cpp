@@ -65,7 +65,7 @@ void GamePlayScene::Initialize() {
 	objectGround_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Plane"); // モデル設定
 	objectGround_->transform_.rotate_ = {-Cygnus::PIf / 2.0f, 0.0f, 0.0f}; // 上向き
 	objectGround_->transform_.scale_ = {500.0f, 500.0f, 1.0f}; // スケール変更
-	objectGround_->materialCB_.data_->color = {0.5f, 0.5f, 0.5f, 1.0f}; // 色変更
+	objectGround_->materialCB_.data_->color = {0.95f, 0.9f, 0.56f, 1.0f}; // 色変更
 
 	// 経路管理クラス初期化
 	PathManager::GetInstance()->Initialize();
@@ -94,6 +94,10 @@ void GamePlayScene::Initialize() {
 	// 経路に沿って移動するオブジェクト生成 + 初期化
 	carrier_ = std::make_unique<Carrier>();
 	carrier_->Initialize();
+
+	// ゴールオブジェクト生成 + 初期化
+	goal_ = std::make_unique<Goal>();
+	goal_->Initialize();
 
 	fieldManager_ = std::make_unique<FieldEventManager>();
 	fieldManager_->Initialize(&*spriteCommon_);
@@ -144,6 +148,8 @@ void GamePlayScene::Update() {
 		WorkBenchManager::GetInstance()->Update();
 		// 歯車オブジェクト管理クラス更新
 		GearManager::GetInstance()->Update();
+		// ゴールオブジェクト更新
+		goal_->Update();
 
 		fieldManager_->Update(dt);
 		SunLaser::GetInstance()->Update(player_->GetPosition(), dt);
@@ -255,6 +261,8 @@ void GamePlayScene::Draw() {
 	// 経路に沿って移動するオブジェクト描画
 	carrier_->Draw();
 	sphinx_->Draw();
+	// ゴールオブジェクト描画
+	goal_->Draw();
 	MummyManager::GetInstance()->Draw();
 	// 鉱石オブジェクト管理クラス描画
 	OreManager::GetInstance()->Draw();

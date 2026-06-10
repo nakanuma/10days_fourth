@@ -59,6 +59,7 @@
     <ClCompile Include="src\Game\Sandstrom\FlyAway.cpp" />
     <ClCompile Include="src\Game\SunLaser\SunLaser.cpp" />
     <ClCompile Include="src\Game\Mummy\MummyBaseState.cpp" />
+    <ClCompile Include="src\Game\Goal\Goal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\UI\UIManager.h" />
@@ -151,6 +152,7 @@
     <ClInclude Include="src\Game\GameData\GameDataManager.h" />
     <ClInclude Include="src\Game\SunLaser\SunLaser.h" />
     <ClInclude Include="src\Game\Mummy\MummyBaseState.h" />
+    <ClInclude Include="src\Game\Goal\Goal.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h">
