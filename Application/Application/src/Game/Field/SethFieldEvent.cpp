@@ -32,6 +32,8 @@ void SethFieldEvent::Draw() {
 }
 
 void SethFieldEvent::Debug() {
+#ifdef USE_IMGUI
 	ImGui::Text("Seth");
+#endif // USE_IMGUI
 }
 

@@ -21,7 +21,7 @@ void Sphinx::Initialize()
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Sphinx");
-	object_->transform_.translate_ = { -10.0f, 2.0f, 0.0f };
+	object_->transform_.translate_ = { 0.0f, -100.0f, 0.0f };
 	object_->transform_.scale_ = { 1.0f, 1.0f, 1.0f };
 
 	// コライダー生成 + 登録
@@ -270,4 +270,9 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 			stateMachine_.ChangeState(SphinxState::CoolDown);
 		}
 	}
+}
+
+
+void Sphinx::SetPosition(const Cygnus::Float3& position) {
+	object_->transform_.translate_ = position;
 }

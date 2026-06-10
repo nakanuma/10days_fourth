@@ -127,6 +127,8 @@ public:
 	/// </summary>
 	void OreMining();
 
+	void SetPosition(const Cygnus::Float3& position);
+
 private:
 	/// <summary>
 	/// 移動範囲のクランプ処理を行います。

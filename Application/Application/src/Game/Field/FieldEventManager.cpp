@@ -9,10 +9,12 @@
 #include <random>
 #include <src/Game/Sandstrom/SandstormManager.h>
 
-void FieldEventManager::Initialize(Cygnus::SpriteCommon* spriteCommon) {
+void FieldEventManager::Initialize(Cygnus::SpriteCommon* spriteCommon,const EventRatio& eventRatio) {
 	spriteCommon_ = spriteCommon;
 	fieldEvent_ = std::make_unique<NormalField>();//最初はイベントなし
 	fieldEvent_->Initialize(spriteCommon_);
+
+	eventRatio_ = eventRatio;
 }
 
 void FieldEventManager::Update(float deltaTime) {
@@ -44,49 +46,58 @@ void FieldEventManager::ChangeField() {
 	//一定の時間がたった場合
 	if (fieldEvent_->EventEnd()) {
 		//ランダムイベントが発動する処理
-		//通常(イベントなし)の場合
-		if (number_ == 0) {
+
+		if (number_ > 0) {
+			number_ = 0;
+		}
+		else {
 			//ランダム
 			std::random_device seed;
 			std::mt19937 random(seed());
-			std::uniform_int_distribution<uint32_t> eventNum (1, max - 1);//fieldEventのmax - 1
+			std::uniform_int_distribution<uint32_t> eventNum(1, 100);//fieldEventのmax - 1
 			//ナンバーを変更
-			number_ = Anubis;
+			number_ = eventNum(random);
 		}
-		else {
-			number_ = 0;//通常(イベントなし)のフィールドに戻る
-			SandstormManager::GetInstance()->Reset();
-		}
-	}
-
-	//変更された時
-	if (prevNum_ != number_) {
 		fieldEvent_.reset();
-		switch (number_)
-		{
-		case FieldEventManager::normal:
-			fieldEvent_ = std::make_unique<NormalField>();
-			break;
-		case FieldEventManager::lotsOfOre:
-			fieldEvent_ = std::make_unique<LotsOfOreFieldEvent>();
-			break;
-		case FieldEventManager::SunGodRa:
-			fieldEvent_ = std::make_unique<SunGodRaFieldEvent>();
-			break;
-		case FieldEventManager::Anubis:
-			fieldEvent_ = std::make_unique<AnubisFieldEvent>();
-			break;
-		case FieldEventManager::Seth:
-			fieldEvent_ = std::make_unique<SethFieldEvent>();
-			break;
-		default:
-			fieldEvent_ = std::make_unique<NormalField>();
-			number_ = 0; 
-			break;
+
+
+		ratioCount_ = 0;
+		if (number_ == ratioCount_) {
+			FieldSelect(std::make_unique<NormalField>());
+			SandstormManager::GetInstance()->Reset();
+			return;
 		}
-		fieldEvent_->Initialize(spriteCommon_);
-		prevNum_ = number_;//現在 -> 前回に
+		ratioCount_ += eventRatio_.LotOfOre;
+		if (number_ < ratioCount_) {
+			FieldSelect(std::make_unique<LotsOfOreFieldEvent>());
+			return;
+		}
+		ratioCount_ += eventRatio_.Seth;
+		if (number_ < ratioCount_) {
+			FieldSelect(std::make_unique<SethFieldEvent>());
+			return;
+		}
+
+		ratioCount_ += eventRatio_.Anubis;
+		if (number_ < ratioCount_) {
+			FieldSelect(std::make_unique<AnubisFieldEvent>());
+			return;
+		}
+
+		ratioCount_ += eventRatio_.SunGodRa;
+		if (number_ < ratioCount_) {
+			FieldSelect(std::make_unique<SunGodRaFieldEvent>());
+			return;
+		};
+
+		FieldSelect(std::make_unique<NormalField>());
+		SandstormManager::GetInstance()->Reset();
 	}
 }
 
+void FieldEventManager::FieldSelect(std::unique_ptr<BaseFieldEvent> fieldEvent) {
+	fieldEvent_ = std::move(fieldEvent);
+	fieldEvent_->Initialize(spriteCommon_);
+	number_ = ratioCount_;
+}
 
