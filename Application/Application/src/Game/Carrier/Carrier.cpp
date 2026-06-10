@@ -134,6 +134,8 @@ void Carrier::MoveAlongPath(float deltaTime)
 	Cygnus::Float3 targetPos = pathManager->GetPoint(targetIndex_);
 
 	Cygnus::Float3 diff = targetPos - currentPos;
+	diff.y = 0.0f; // Y軸の差分をゼロにする（上下移動なし）
+
 	float distance = Cygnus::Float3::Length(diff);
 
 	// 進行方向への回転処理
@@ -148,9 +150,9 @@ void Carrier::MoveAlongPath(float deltaTime)
 		while(angleDiff > Cygnus::PIf) angleDiff -= kTwoPi;
 
 		// 回転
-		object_->transform_.rotate_.y += (targetAngleY - object_->transform_.rotate_.y) * kTurnSpeed * deltaTime;
+		object_->transform_.rotate_.y += angleDiff * kTurnSpeed * deltaTime;
 
-		// 増え続けないよう
+		// 増え続けないよう制限
 		object_->transform_.rotate_.y = std::fmod(object_->transform_.rotate_.y, kTwoPi);
 	}
 
@@ -159,10 +161,13 @@ void Carrier::MoveAlongPath(float deltaTime)
 
 	// ポイント到着判定 + オブジェクト移動処理
 	if(distance < kMoveSpeed * deltaTime) {
-		currentPos = targetPos;
+		currentPos.x = targetPos.x;
+		currentPos.z = targetPos.z;
 		targetIndex_++;	// 次のポイントへ
 	} else {
-		currentPos += (diff / distance) * frameSpeed;
+		Cygnus::Float3 moveVec = (diff / distance) * frameSpeed;
+		currentPos.x += moveVec.x;
+		currentPos.z += moveVec.z;
 	}
 }
 
