@@ -39,6 +39,7 @@ public:
 		}
 		if (owner.IsStartSelected())
 		{
+			Cygnus::SoundManager::GetInstance()->Play("enter");
 			owner.GetSelectObjectManager()->StartJumpToStage();
 			GetSM()->ChangeState(SelectSceneState::FADE_OUT);
 		}

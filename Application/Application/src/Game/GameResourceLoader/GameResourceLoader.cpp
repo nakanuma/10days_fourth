@@ -173,4 +173,6 @@ void GameResourceLoader::RegisterAllParticleEffect() {
 
 void GameResourceLoader::LoadAllSoundData() {
 	auto soundManager = Cygnus::SoundManager::GetInstance();
+
+	soundManager->Load("resources/Sounds/enter.wav", "enter");
 }

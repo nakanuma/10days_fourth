@@ -239,7 +239,12 @@ bool SelectObjectManager::UpdateStageReaction()
 
 bool SelectObjectManager::SelectStage()
 {
-	if (input_->TriggerKey(DIK_A))
+	XINPUT_STATE state;
+
+	// コントローラー取得
+	input_->GetJoystickState(0, state);
+	Cygnus::Float2 dir = { state.Gamepad.sThumbLX / 32767.0f, state.Gamepad.sThumbLY / 32767.0f };
+	if (input_->TriggerKey(DIK_A) || dir.x < 0)
 	{
 		if (currentStage_ > 0)
 		{
@@ -252,7 +257,7 @@ bool SelectObjectManager::SelectStage()
 			return true; // ステージが変更されたことを示す
 		}
 	}
-	if (input_->TriggerKey(DIK_D))
+	if (input_->TriggerKey(DIK_D) || dir.x > 0)
 	{
 		if (currentStage_ < kStageNum - 1)
 		{
