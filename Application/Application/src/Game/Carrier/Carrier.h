@@ -88,8 +88,10 @@ private:
 	// Constants
 	// =========================================================
 
-	const Cygnus::Float3 kColliderSize = {1.0f, 1.0f, 1.0f}; // コライダーサイズ
-	const Cygnus::Float3 kSensorSize = {2.5f, 1.0f, 2.5f};	// 歯車注入範囲コライダーサイズ
+	const float kCoordinateY = 2.0f;
+
+	const Cygnus::Float3 kColliderSize = {1.0f, 2.0f, 3.0f}; // コライダーサイズ
+	const Cygnus::Float3 kSensorSize = { 2.5f, 2.0f, 4.5f };	// 歯車注入範囲コライダーサイズ
 
 	const uint32_t kRequiredGearCount = 1;	// 1回の注入で消費する歯車の数
 
@@ -97,6 +99,8 @@ private:
 	const float kMaxEnergy = 10.0f;	// 歯車注入時の動作時間（秒）
 	const float kAccelerationTime = 1.0f;	// 動き出しの滑らかさ（秒）
 	const float kDecelerationTime = 1.5f;	// 停止時の滑らかさ（秒）
+
+	const float kTurnSpeed = 1.5f; // 旋回速度
 
 	// =========================================================
 	// Member Variables

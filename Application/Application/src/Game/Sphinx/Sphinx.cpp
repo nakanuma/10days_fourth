@@ -170,7 +170,7 @@ void Sphinx::Debug()
 void Sphinx::OnCollision(Cygnus::Collider* other)
 {
 	// 線路に沿って動くオブジェクトとプレイヤーオブジェクトとの衝突
-	if (other->GetTag() == "Carrier" || other->GetTag() == "Player" || other->GetTag() == "WorkBench")
+	if (other->GetTag() == "Player" || other->GetTag() == "WorkBench")
 	{
 		Cygnus::OBBCollider* myOBB = dynamic_cast<Cygnus::OBBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
@@ -194,6 +194,20 @@ void Sphinx::OnCollision(Cygnus::Collider* other)
 			object_->UpdateMatrix();
 
 			// コライダーも更新
+			myOBB->Update();
+		}
+	}
+	// Carrierとの押し戻し（OBB）
+	if(other->GetTag() == "Carrier") {
+		Cygnus::OBBCollider* myOBB = myOBB = dynamic_cast<Cygnus::OBBCollider*>(collider_.get());
+		Cygnus::OBBCollider* otherOBB = dynamic_cast<Cygnus::OBBCollider*>(other);
+
+		if(myOBB && otherOBB) {
+			Cygnus::Float3 pushVec = Cygnus::CollisionMath::CalculatePushBackOBBvsOBB(myOBB, otherOBB);
+
+			object_->transform_.translate_ += pushVec;
+			object_->UpdateMatrix();
+
 			myOBB->Update();
 		}
 	}
