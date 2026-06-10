@@ -11,7 +11,6 @@
 #include "src/Game/Ore/Ore.h"
 #include "src/Game/Player/Player.h"
 #include "src/Game/Carrier/Carrier.h"
-#include <src/Game/Sphinx/Sphinx.h>
 
 /// <summary>
 /// 構造体_ゲームオブジェクトの設置
@@ -20,13 +19,6 @@ struct GameObjectPosition {
 	std::string name;
 	Cygnus::Float3 position;
 	Cygnus::AABBCollider collider;
-};
-
-struct EventRatio {
-	int Anubis;
-	int Seth;
-	int LotOfOre;
-	int SunGodRa;
 };
 
 /// <summary>
@@ -51,9 +43,7 @@ public:
 	/// オブジェクトの設置
 	/// </summary>
 	/// <param name="gameObjectPos">プレイヤーをもらう</param>
-	void SpitObjects(std::unique_ptr<Player>& player,std::unique_ptr<Sphinx>& sphinx);
-
-	const EventRatio& GetEventRatio() { return eventRatio_; }
+	void SpitObjects(std::unique_ptr<Player>& player);
 
 private:
 
@@ -79,8 +69,5 @@ private:
 	bool isCreateNewObject_ = false;
 	
 	Cygnus::Float3 colliderSize;
-
-
-	EventRatio eventRatio_;
 };
 

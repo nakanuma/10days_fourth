@@ -69,7 +69,7 @@
     <ClCompile Include="src\Game\Field\SunGodRaFieldEvent.cpp" />
     <ClCompile Include="src\Game\OtherSceneObj\TitleSceneObject\TitleSceneUI\TitleSceneUI.cpp" />
     <ClCompile Include="src\Game\UI\UIManager.cpp" />
-    <ClCompile Include="src\Game\SunLaser\SunLaser.cpp" />
+    <ClCompile Include="src\Game\SunLaser\SunLaser.cpp" />    
     <ClCompile Include="src\Game\Scene\StageSelectScene\StageSelectScene.cpp" />
     <ClCompile Include="src\Game\OtherSceneObj\StageSelectSceneObject\StageSelectSceneUI\StageSelectSceneUI.cpp" />
   </ItemGroup>

@@ -8,13 +8,13 @@ WorkBenchManager* WorkBenchManager::GetInstance() {
 void WorkBenchManager::Initialize() { 
 	workBenches_.clear(); 
 	// デバッグ用にベタ打ちで座標を追加（Todo : エディタで追加できるように変更する）
-	//auto workBench1 = std::make_unique<WorkBench>();
-	//workBench1->Initialize({15.0f, 1.0f, 0.0f});
-	//workBenches_.push_back(std::move(workBench1));
+	auto workBench1 = std::make_unique<WorkBench>();
+	workBench1->Initialize({15.0f, 1.0f, 0.0f});
+	workBenches_.push_back(std::move(workBench1));
 
-	//auto workBench2 = std::make_unique<WorkBench>();
-	//workBench2->Initialize({0.0f, 1.0f, 10.0f});
-	//workBenches_.push_back(std::move(workBench2));
+	auto workBench2 = std::make_unique<WorkBench>();
+	workBench2->Initialize({0.0f, 1.0f, 10.0f});
+	workBenches_.push_back(std::move(workBench2));
 }
 
 void WorkBenchManager::Update() {
@@ -28,11 +28,3 @@ void WorkBenchManager::Draw() {
 		workBench->Draw();
 	}
 }
-
-
-void WorkBenchManager::AddWorkBench(const Cygnus::Float3& position) {
-	auto addWorkBench = std::make_unique<WorkBench>();
-	addWorkBench->Initialize(position);
-	workBenches_.push_back(std::move(addWorkBench));
-}
-

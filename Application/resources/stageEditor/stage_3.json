@@ -1,10 +1,4 @@
 {
-    "EventRatio": {
-        "Anubis": 50,
-        "LotOfOre": 50,
-        "Seth": 0,
-        "SunGodRa": 0
-    },
     "name": "StageEditor",
     "object": [
         {
@@ -133,22 +127,6 @@
                 20.0,
                 1.0,
                 -20.0
-            ]
-        },
-        {
-            "collider": {
-                "size": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "tag": "Sphinx"
-            },
-            "objectName": "Sphinx",
-            "position": [
-                -11.0,
-                1.0,
-                -14.0
             ]
         }
     ]
