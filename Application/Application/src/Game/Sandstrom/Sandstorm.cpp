@@ -53,7 +53,11 @@ void Sandstorm::Draw() {
 }
 
 void Sandstorm::Debug() {
+#ifdef USE_IMGUI
+
 	ImGui::Text("CarvePoint: %f,%f,%f", carvePoint_.x, carvePoint_.y, carvePoint_.z);
+
+#endif // USE_IMGUI
 }
 
 void Sandstorm::Finalize() {

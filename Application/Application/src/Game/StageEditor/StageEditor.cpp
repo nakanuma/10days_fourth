@@ -7,6 +7,7 @@
 #include <sstream>
 #include "src/Game/Path/PathManager.h"
 #include "src/Game/Ore/OreManager.h"
+#include "src/Game/WorkBench/WorkBenchManager.h"
 
 using namespace Cygnus;
 
@@ -57,6 +58,15 @@ void StageEditor::LoadJsonFile(const std::string& stageName) {
 
 		gameObjectPositions_.push_back(gameObjectPos);
 	}
+
+
+	if (!json.contains("EventRatio")) return;
+
+	eventRatio_.LotOfOre = json["EventRatio"]["LotOfOre"];//のイベント比率
+	eventRatio_.Seth = json["EventRatio"]["Seth"];//のイベント比率
+	eventRatio_.Anubis = json["EventRatio"]["Anubis"];//アヌビスのイベント比率
+	eventRatio_.SunGodRa = json["EventRatio"]["SunGodRa"];//のイベント比率
+	
 }
 
 #endif // !初期化系統
@@ -76,18 +86,15 @@ void StageEditor::Update() {
 #endif // _DEBUG
 }
 
-void StageEditor::SpitObjects(std::unique_ptr<Player>& player) {
+void StageEditor::SpitObjects(std::unique_ptr<Player>& player, std::unique_ptr<Sphinx>& sphinx) {
 	
 	// "名前" から生成物を判断します
 
 	for (auto& gameObjectPos : gameObjectPositions_){
 		//プレイヤーがまだnullの場合
-		if (gameObjectPos.name == "Player" && player == nullptr) {
+		if (gameObjectPos.name == "Player") {
 			//プレイヤーの配置
-			std::unique_ptr<Player> object = std::make_unique<Player>();
-			object->Initialize();
-			object->SetTranslate(gameObjectPos.position);
-			player = std::move(object);
+			player->SetTranslate(gameObjectPos.position);
 		}
 		else if (gameObjectPos.name == "Ore") {
 			//鉱石の配置
@@ -97,6 +104,13 @@ void StageEditor::SpitObjects(std::unique_ptr<Player>& player) {
 			//ルートの配置
 			PathManager::GetInstance()->AddPoint(gameObjectPos.position);
 		}
+		else if (gameObjectPos.name == "WorkBench") {
+			//プレイヤーの配置
+			WorkBenchManager::GetInstance()->AddWorkBench(gameObjectPos.position);
+		}
+		else if (gameObjectPos.name == "Sphinx") {
+			sphinx->SetPosition(gameObjectPos.position);
+		}
 	}
 }
 
@@ -105,7 +119,7 @@ void StageEditor::SettingStage() {
 
 	if (isCreateNewObject_) {
 		ImGui::Text("parameter");
-		ImGui::Text("NameList : Player . Path . Ore");//名前リスト
+		ImGui::Text("NameList : Player . Path . Ore , Sphinx , WorkBench");//名前リスト
 		ImGui::InputText("name", objectName_.data(), IM_ARRAYSIZE(textureFileName));//オブジェクトの名前
 		ImGui::DragFloat3("position", &newObject_.position.x);//座標位置
 		ImGui::DragFloat3("colliderSize", &colliderSize.x);//当たり判定サイズ
@@ -130,6 +144,15 @@ void StageEditor::SettingStage() {
 		isCreateNewObject_ = !isCreateNewObject_;//オブジェクトの追加開始
 	}
 
+	// --- イベント ---
+	if (ImGui::TreeNode("EventRatio")) {
+		ImGui::InputInt("LotOfOreEventRatio", &eventRatio_.LotOfOre);//のイベント比率
+		ImGui::InputInt("SethEventRatio", &eventRatio_.Seth);//のイベント比率
+		ImGui::InputInt("AnubisEventRatio", &eventRatio_.Anubis);//アヌビスのイベント比率
+		ImGui::InputInt("SunGotRaEventRatio", &eventRatio_.SunGodRa);//のイベント比率
+		ImGui::TreePop();
+	}
+
 	//配列が空っぽなら通さない
 	if (gameObjectPositions_.size() <= 0) return;
 
@@ -142,9 +165,24 @@ void StageEditor::SettingStage() {
 			ImGui::Text("position : %f,%f,%f", object->position.x, object->position.y, object->position.z);//位置
 			ImGui::Text("colliderTag : %s", object->name.c_str());//タグ(名前)
 			ImGui::Text("colliderSize : %f,%f,%f", object->collider.GetSize().x, object->collider.GetSize().y, object->collider.GetSize().z);//当たり判定のサイズ
+					
+			const std::string label1 = "name " + std::to_string(number);//ボタン表記の変更
+			const std::string label2 = "position" + std::to_string(number);//ボタン表記の変更
+			const std::string label3 = "colliderSize" + std::to_string(number);//ボタン表記の変更
+
+			std::string name = object->name;
+			ImGui::InputText(label1.c_str(), name.data(), IM_ARRAYSIZE(textureFileName));//オブジェクトの名前	
+			object->name = name.c_str();
+
+			ImGui::DragFloat3(label2.c_str(), &object->position.x);//座標位置	
 			
+			Cygnus::Float3 size = object->collider.GetSize();
+			ImGui::DragFloat3(label3.c_str(), &size.x);//当たり判定サイズ		
+			object->collider.SetSize(size);
+
 			//一部削除するボタン
 			const std::string label = "delete" + std::to_string(number);//ボタン表記の変更
+
 			if (ImGui::Button(label.c_str())) {
 				object = gameObjectPositions_.erase(object);
 			}
@@ -194,6 +232,12 @@ void StageEditor::Save() {
 			jsonFile["object"][num]["collider"]["size"][2] = gameObject.collider.GetSize().z;
 			num++;
 		}
+
+		//イベントデータを設定
+		jsonFile["EventRatio"]["LotOfOre"] = eventRatio_.LotOfOre;
+		jsonFile["EventRatio"]["Seth"] = eventRatio_.Seth;
+		jsonFile["EventRatio"]["Anubis"] = eventRatio_.Anubis;
+		jsonFile["EventRatio"]["SunGodRa"] = eventRatio_.SunGodRa;
 
 		//保存場所の設定
 		std::string outputFileName = "resources/stageEditor/" + fileName + ".json";

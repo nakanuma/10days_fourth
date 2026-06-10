@@ -10,6 +10,8 @@
 // ---------------------------------------------------------
 #include "BaseFieldEvent.h"
 
+#include <src/Game/StageEditor/StageEditor.h>
+
 /// <summary>
 /// フィールドイベントマネージャ
 /// </summary>
@@ -19,7 +21,7 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="spriteCommon">スプライト描画でいる</param>
-	void Initialize(Cygnus::SpriteCommon* spriteCommon);
+	void Initialize(Cygnus::SpriteCommon* spriteCommon, const EventRatio& eventRatio);
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -40,22 +42,15 @@ private:
 	/// </summary>
 	void ChangeField();
 
-	/// <summary>
-	/// フィールドイベントたち
-	/// </summary>
-	enum FieldEvents {
-		normal = 0,
-		lotsOfOre,
-		SunGodRa,
-		Anubis,
-		Seth,
-		max,
-	};
+	void FieldSelect(std::unique_ptr<BaseFieldEvent> fieldEvent);
 
 	//番号
 	uint32_t number_ = 0; //現在のフィールド番号
-	uint32_t prevNum_ = 0;//前回のフィールド番号
+	
 
+	uint32_t ratioCount_ = 0;
+
+	EventRatio eventRatio_;
 
 	std::unique_ptr<BaseFieldEvent> fieldEvent_ = nullptr;
 
