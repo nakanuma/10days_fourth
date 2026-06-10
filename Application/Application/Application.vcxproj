@@ -74,6 +74,7 @@
     <ClCompile Include="src\Game\OtherSceneObj\StageSelectSceneObject\StageSelectSceneUI\StageSelectSceneUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\GameData\GameDataManager.h" />
     <ClInclude Include="src\Game\Mummy\MummyBaseState.h" />
     <ClInclude Include="src\Game\Scene\OtherSceneBase.h" />
     <ClInclude Include="src\Game\OtherSceneObj\OtherSceneUIBase.h" />

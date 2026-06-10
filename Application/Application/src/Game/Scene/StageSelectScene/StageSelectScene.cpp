@@ -19,6 +19,7 @@
 
 // Application
 #include "SelectSceneState.h"
+#include <src/Game/GameData/GameDataManager.h>
 
 void StageSelectScene::Initialize()
 {
@@ -53,6 +54,8 @@ void StageSelectScene::Initialize()
 
 	// 最初の状態をフェードインに設定
 	stateMachine_.ChangeState(SelectSceneState::FADE_IN);
+
+	GameDataManager::GetInstance()->SetTargetStage(0);
 }
 
 void StageSelectScene::Finalize()
