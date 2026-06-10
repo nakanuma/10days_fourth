@@ -7,7 +7,7 @@
 #include <Math/MyMath.h>
 
 // =========================================================
-// 移動オブジェクト用の経路管理クラス
+// 遘ｻ蜍輔が繝悶ず繧ｧ繧ｯ繝育畑縺ｮ邨瑚ｷｯ邂｡逅・け繝ｩ繧ｹ
 // =========================================================
 class PathManager
 {
@@ -17,18 +17,18 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// インスタンス取得
+	/// 繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ蜿門ｾ・
 	/// </summary>
 	/// <returns></returns>
 	static PathManager* GetInstance();
 
 	/// <summary>
-	/// 初期化処理
+	/// 蛻晄悄蛹門・逅・
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// 描画処理
+	/// 謠冗判蜃ｦ逅・
 	/// </summary>
 	void Draw();
 
@@ -37,22 +37,22 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// 指定したポイントの座標を取得
+	/// 謖・ｮ壹＠縺溘・繧､繝ｳ繝医・蠎ｧ讓吶ｒ蜿門ｾ・
 	/// </summary>
-	/// <param name="index">ポイントの番号</param>
+	/// <param name="index">繝昴う繝ｳ繝医・逡ｪ蜿ｷ</param>
 	/// <returns></returns>
 	const Cygnus::Float3& GetPoint(size_t index) const { return points_[index]; }
 
 	/// <summary>
-	/// 登録されたポイントの総数を取得
+	/// 逋ｻ骭ｲ縺輔ｌ縺溘・繧､繝ｳ繝医・邱乗焚繧貞叙蠕・
 	/// </summary>
 	/// <returns></returns>
 	size_t GetPointCount() const { return points_.size(); }
 
 	/// <summary>
-	/// �|�C���g���W��ǉ�
+	/// ポイント座標を追加
 	/// </summary>
-	/// <param name="point">�ǉ�������W</param>
+	/// <param name="point">追加する座標</param>
 	void AddPoint(const Cygnus::Float3& point) { points_.push_back(point); }
 
 private:
@@ -60,12 +60,12 @@ private:
 	// Constants
 	// =========================================================
 
-	const Cygnus::Float4 kPathColor = {1.0f, 0.0f, 0.0f, 1.0f};	// 線の色
+	const Cygnus::Float4 kPathColor = {1.0f, 0.0f, 0.0f, 1.0f};	// 邱壹・濶ｲ
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	std::vector<Cygnus::Float3> points_;	// 経路の頂点
+	std::vector<Cygnus::Float3> points_;	// 邨瑚ｷｯ縺ｮ鬆らせ
 };
 

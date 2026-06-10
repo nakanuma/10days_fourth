@@ -10,28 +10,35 @@
 #include <src/Game/UI/UIManager.h>
 
 void Carrier::Initialize() {
+	auto pathManager = PathManager::GetInstance();
+
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Carrier");
-	object_->transform_.translate_ = PathManager::GetInstance()->GetPoint(0); // 経路の始点座標をセット
+	Cygnus::Float3 firstPosition = pathManager->GetPoint(0); // 経路の始点座標
+	object_->transform_.translate_ = {firstPosition.x, kCoordinateY, firstPosition.z};
+	Cygnus::Float3 firstDiff = pathManager->GetPoint(1) - pathManager->GetPoint(0);
+	object_->transform_.rotate_.y = std::atan2(firstDiff.x, firstDiff.z);
 
 	// コライダー生成 + 登録
-	auto aabb = std::make_unique<Cygnus::AABBCollider>();
-	aabb->SetTag("Carrier");
-	aabb->SetFollowTarget(&object_->transform_.translate_);
-	aabb->SetSize(kColliderSize);
-	aabb->SetOwner(this);
+	auto obb = std::make_unique<Cygnus::OBBCollider>();
+	obb->SetTag("Carrier");
+	obb->SetFollowTarget(&object_->transform_.translate_);
+	obb->SetFollowRotation(&object_->transform_.rotate_);
+	obb->SetSize(kColliderSize);
+	obb->SetOwner(this);
 
-	collider_ = std::move(aabb);
+	collider_ = std::move(obb);
 	Cygnus::CollisionManager::GetInstance()->Register(collider_.get());
 
-	auto sensor = std::make_unique<Cygnus::AABBCollider>();
-	sensor->SetTag("carrierSensor");
-	sensor->SetFollowTarget(&object_->transform_.translate_);
-	sensor->SetSize(kSensorSize);
-	sensor->SetOwner(this);
+	auto sensorObb = std::make_unique<Cygnus::OBBCollider>();
+	sensorObb->SetTag("carrierSensor");
+	sensorObb->SetFollowTarget(&object_->transform_.translate_);
+	sensorObb->SetFollowRotation(&object_->transform_.rotate_);
+	sensorObb->SetSize(kSensorSize);
+	sensorObb->SetOwner(this);
 
-	colliderSensor_ = std::move(sensor);
+	colliderSensor_ = std::move(sensorObb);
 	Cygnus::CollisionManager::GetInstance()->Register(colliderSensor_.get());
 }
 
@@ -76,6 +83,10 @@ void Carrier::Debug() {
 	ImGui::Separator();
 	ImGui::DragFloat3("Translate", &object_->transform_.translate_.x, 0.01f);
 	ImGui::Checkbox("IsGoal", &isGoal_);
+
+	if(ImGui::Button("SupplyGear")) {
+		SupplyGear();
+	}
 
 	ImGui::End();
 #endif
@@ -123,17 +134,40 @@ void Carrier::MoveAlongPath(float deltaTime)
 	Cygnus::Float3 targetPos = pathManager->GetPoint(targetIndex_);
 
 	Cygnus::Float3 diff = targetPos - currentPos;
+	diff.y = 0.0f; // Y軸の差分をゼロにする（上下移動なし）
+
 	float distance = Cygnus::Float3::Length(diff);
+
+	// 進行方向への回転処理
+	if(distance > 0.001f) {
+		float targetAngleY = std::atan2(diff.x, diff.z);
+
+		float angleDiff = targetAngleY - object_->transform_.rotate_.y;
+
+		// 角度の回り込み補正
+		const float kTwoPi = Cygnus::PIf * 2.0f;
+		while(angleDiff < -Cygnus::PIf) angleDiff += kTwoPi;
+		while(angleDiff > Cygnus::PIf) angleDiff -= kTwoPi;
+
+		// 回転
+		object_->transform_.rotate_.y += angleDiff * kTurnSpeed * deltaTime;
+
+		// 増え続けないよう制限
+		object_->transform_.rotate_.y = std::fmod(object_->transform_.rotate_.y, kTwoPi);
+	}
 
 	// 現在フレームの移動速度を計算
 	float frameSpeed = kMoveSpeed * currentVelocityRate_ * deltaTime;
 
 	// ポイント到着判定 + オブジェクト移動処理
 	if(distance < kMoveSpeed * deltaTime) {
-		currentPos = targetPos;
+		currentPos.x = targetPos.x;
+		currentPos.z = targetPos.z;
 		targetIndex_++;	// 次のポイントへ
 	} else {
-		currentPos += (diff / distance) * frameSpeed;
+		Cygnus::Float3 moveVec = (diff / distance) * frameSpeed;
+		currentPos.x += moveVec.x;
+		currentPos.z += moveVec.z;
 	}
 }
 

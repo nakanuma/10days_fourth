@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Goal\Goal.cpp" />
     <ClCompile Include="src\Game\Mummy\MummyBaseState.cpp" />
     <ClCompile Include="src\Game\Scene\OtherSceneBase.cpp" />
     <ClCompile Include="src\Game\OtherSceneObj\OtherSceneUIBase.cpp" />
@@ -69,11 +70,12 @@
     <ClCompile Include="src\Game\Field\SunGodRaFieldEvent.cpp" />
     <ClCompile Include="src\Game\OtherSceneObj\TitleSceneObject\TitleSceneUI\TitleSceneUI.cpp" />
     <ClCompile Include="src\Game\UI\UIManager.cpp" />
-    <ClCompile Include="src\Game\SunLaser\SunLaser.cpp" />    
+    <ClCompile Include="src\Game\SunLaser\SunLaser.cpp" />
     <ClCompile Include="src\Game\Scene\StageSelectScene\StageSelectScene.cpp" />
     <ClCompile Include="src\Game\OtherSceneObj\StageSelectSceneObject\StageSelectSceneUI\StageSelectSceneUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Goal\Goal.h" />
     <ClInclude Include="src\Game\GameData\GameDataManager.h" />
     <ClInclude Include="src\Game\Mummy\MummyBaseState.h" />
     <ClInclude Include="src\Game\Scene\OtherSceneBase.h" />

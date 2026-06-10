@@ -5,6 +5,7 @@
 #include <ImguiWrapper.h>
 #include <TimeManager.h>
 #include <ParticleEffect/ParticleEffectManager.h>
+#include <Collider/CollisionMath.h>
 
 // Application
 #include <src/Game/Ore/OreManager.h>
@@ -124,8 +125,8 @@ void Player::Debug() {
 
 void Player::OnCollision(Cygnus::Collider* other) {
 	// 押し戻しを行うオブジェクトとの衝突
-	// : 線路に沿って動くオブジェクト, 鉱石オブジェクト, 工作台オブジェクト
-	if (other->GetTag() == "Carrier" || other->GetTag() == "Ore" || other->GetTag() == "WorkBench") {
+	// : 鉱石オブジェクト, 工作台オブジェクト
+	if (other->GetTag() == "Ore" || other->GetTag() == "WorkBench") {
 		Cygnus::AABBCollider* myAABB = dynamic_cast<Cygnus::AABBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
@@ -142,6 +143,34 @@ void Player::OnCollision(Cygnus::Collider* other) {
 			Cygnus::Float3 currentMax = myAABB->GetMax();
 			myAABB->SetMin(currentMin + pushVec);
 			myAABB->SetMax(currentMax + pushVec);
+		}
+	}
+	// 列車オブジェクト（OBB）
+	if(other->GetTag() == "Carrier") {
+		Cygnus::AABBCollider* myAABB = dynamic_cast<Cygnus::AABBCollider*>(collider_.get());
+		Cygnus::OBBCollider* otherOBB = dynamic_cast<Cygnus::OBBCollider*>(other);
+
+		if(myAABB && otherOBB) {
+			// 自身のAABBを一時的にOBBにする
+			Cygnus::OBBCollider myAsOBB;
+			myAsOBB.SetCenter((myAABB->GetMin() + myAABB->GetMax()) * 0.5f);
+			myAsOBB.SetSize((myAABB->GetMax() - myAABB->GetMin()) * 0.5f);
+			myAsOBB.SetXAxis({ 1.0f, 0.0f, 0.0f });
+			myAsOBB.SetYAxis({ 0.0f, 1.0f, 0.0f });
+			myAsOBB.SetZAxis({ 0.0f, 0.0f, 1.0f });
+
+			// OBB vs OBBの押し戻しベクトルを計算
+			Cygnus::Float3 pushVec = Cygnus::CollisionMath::CalculatePushBackOBBvsOBB(otherOBB, &myAsOBB);
+
+			// プレイヤー位置を補正
+			object_->transform_.translate_ -= pushVec;
+			object_->UpdateMatrix();
+
+			// AABBコライダーも更新
+			Cygnus::Float3 currentMin = myAABB->GetMin();
+			Cygnus::Float3 currentMax = myAABB->GetMax();
+			myAABB->SetMin(currentMin - pushVec);
+			myAABB->SetMax(currentMax - pushVec);
 		}
 	}
 

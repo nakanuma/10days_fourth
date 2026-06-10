@@ -28,6 +28,7 @@
 #include <src/Game/Field/FieldEventManager.h>
 #include <src/Game/Mummy/MummyManager.h>
 #include "src/Game/SunLaser/SunLaser.h"
+#include <src/Game/Goal/Goal.h>
 
 // =========================================================
 // ゲームプレイシーンクラス
@@ -92,6 +93,7 @@ private:
 	std::unique_ptr<Player> player_;	/* プレイヤー */
 	std::unique_ptr<Carrier> carrier_;	/* 経路に沿って移動するオブジェクト */
 	std::unique_ptr<Sphinx> sphinx_;	/* スフィンクス */
+	std::unique_ptr<Goal> goal_;	/* ゴール */
 
 	std::unique_ptr<UIManager> uiManager_; /* UI管理クラス */
 

@@ -117,6 +117,13 @@ void GameResourceLoader::LoadAllModelData() {
 		"Object/Gear/gear.png"
 	);
 
+	// ゴールオブジェクト
+	modelManager->LoadAndRegisterModel(
+		"Goal",
+		"Object/Goal/goal.obj",
+		"Object/Goal/goal.png"
+	);
+
 	// 攻撃予兆オブジェクト
 	modelManager->LoadAndRegisterModel(
 		"AttackPlane",
