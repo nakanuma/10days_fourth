@@ -1,5 +1,7 @@
 #include "SelectObjectManager.h"
 #include <ModelManager.h>
+#include <src/Game/GameData/GameDataManager.h>
+#include <Easing.h>
 
 void SelectObjectManager::Initialize()
 {
@@ -47,6 +49,9 @@ void SelectObjectManager::Initialize()
 			stageObjects_[index]->transform_.translate_ = selectObjects_[index]->transform_.translate_ + offsetPos;
 			stageObjects_[index]->transform_.scale_ = stageObjects_[index]->transform_.scale_ * offsetScale;
 			stageObjects_[index]->transform_.rotate_.y = std::numbers::pi_v<float>;
+
+			// 生成直後の初期スケールを記憶しておく
+			stageInitialScales_[index] = stageObjects_[index]->transform_.scale_;
 		};
 
 	for (size_t i = 0; i < stageObjects_.size(); ++i)
@@ -60,6 +65,9 @@ void SelectObjectManager::Update(float deltaTime)
 	deltaTime_ = deltaTime;
 
 	FloatingObj();
+
+	UpdateJumpAnimation();
+	UpdateStageReaction();
 
 	playerObject_->UpdateMatrix();
 
@@ -116,7 +124,117 @@ void SelectObjectManager::Draw()
 
 void SelectObjectManager::Debug()
 {
-	// ImGui などのデバッグ用表示処理を記述します
+}
+
+void SelectObjectManager::StartJumpToStage()
+{
+	isJumping_ = true;
+	jumpTimer_ = 0.0f;
+
+	// ジャンプの開始位置は「現在のプレイヤーの位置」
+	jumpStartPos_ = playerObject_->transform_.translate_;
+
+	// ジャンプの目標位置は「現在選択されているステージオブジェクトの位置」
+	jumpEndPos_ = stageObjects_[currentStage_]->transform_.translate_;
+
+	jumpScaleF3_ = playerObject_->transform_.scale_;
+}
+
+bool SelectObjectManager::UpdateJumpAnimation()
+{
+	if (!isJumping_)
+	{
+		return false; // ジャンプ中でなければ即座に終了
+	}
+
+	// タイマーを進める
+	jumpTimer_ += deltaTime_;
+
+	// 進行度を 0.0 ～ 1.0 の範囲で計算 (t)
+	float t = std::clamp(jumpTimer_ / kJumpDuration_, 0.0f, 1.0f);
+
+	// 飛び込み中にプレイヤーを縮小させる
+	playerObject_->transform_.scale_ = jumpScaleF3_ * (1.0f - t);
+
+	// 飛び込み中にプレイヤーを回転させる
+	playerObject_->transform_.rotate_.y -= (std::numbers::pi_v<float> *2.0f) * deltaTime_;
+
+	t = Cygnus::Easing::EaseOutQuad(t);
+
+	// --- 座標の計算 ---
+	// XとZは開始地点から目標地点まで直線的に移動 (Lerp)
+	playerObject_->transform_.translate_.x = std::lerp(jumpStartPos_.x, jumpEndPos_.x, t);
+	playerObject_->transform_.translate_.z = std::lerp(jumpStartPos_.z, jumpEndPos_.z, t);
+
+	// Y軸は、直線的な移動に加えて、sin波を使って上に凸の弧を足し合わせる
+	float baseY = std::lerp(jumpStartPos_.y, jumpEndPos_.y, t);
+	float arcY = std::sin(t * std::numbers::pi_v<float>) * kJumpHeight_;
+	playerObject_->transform_.translate_.y = baseY + arcY;
+
+	// 行列を更新
+	playerObject_->UpdateMatrix();
+
+	// tが1.0に達したら演出完了
+	if (t >= 1.0f)
+	{
+		isJumping_ = false;
+		return true; // 完了を知らせる
+	}
+
+	return false;
+}
+
+void SelectObjectManager::StartStageReaction()
+{
+	isStageReacting_ = true;
+	stageReactTimer_ = 0.0f;
+}
+
+bool SelectObjectManager::UpdateStageReaction()
+{
+	if (!isStageReacting_)
+	{
+		return false;
+	}
+
+	stageReactTimer_ += deltaTime_;
+	float t = std::clamp(stageReactTimer_ / kReactionDuration_, 0.0f, 1.0f);
+
+	// プルンとした弾力を出すための波形計算 (減衰振動)
+	// 3.0f * PI で「潰れる -> 伸びる -> 軽く潰れる -> 戻る」という1往復半の動きになります
+	// (1.0f - t) を掛けることで、時間が経つにつれて揺れが収束します
+	float wave = std::sin(t * std::numbers::pi_v<float> *3.0f) * (1.0f - t);
+
+	// 現在選択されているステージの参照と初期スケールを取得
+	auto& targetObj = stageObjects_[currentStage_];
+	const auto& baseScale = stageInitialScales_[currentStage_];
+
+	// --- スケールの計算 ---
+	// wave がプラスのとき：Y軸が縮み（潰れる）、XZ平面が広がる
+	// wave がマイナスのとき：Y軸が伸び（反動）、XZ平面が縮む
+	float scaleY = 1.0f - (wave * kSquashFactor_);
+	float scaleXZ = 1.0f + (wave * kStretchFactor_);
+
+	targetObj->transform_.scale_.x = baseScale.x * scaleXZ;
+	targetObj->transform_.scale_.y = baseScale.y * scaleY;
+	targetObj->transform_.scale_.z = baseScale.z * scaleXZ;
+
+	// 行列の更新
+	targetObj->UpdateMatrix();
+
+	// 演出終了判定
+	if (t >= 1.0f)
+	{
+		isStageReacting_ = false;
+
+		// 念のため完全に初期スケールに戻す
+		targetObj->transform_.scale_ = baseScale;
+		targetObj->UpdateMatrix();
+
+		return true; // 演出完了
+	}
+
+	return false;
 }
 
 bool SelectObjectManager::SelectStage()
@@ -129,7 +247,8 @@ bool SelectObjectManager::SelectStage()
 			currentStage_--;
 			dir_--;
 			Right();
-			SwapModel();
+			SwapModel(); 
+			GameDataManager::GetInstance()->SetTargetStage(currentStage_);
 			return true; // ステージが変更されたことを示す
 		}
 	}
@@ -142,6 +261,7 @@ bool SelectObjectManager::SelectStage()
 			dir_++;
 			Left();
 			SwapModel();
+			GameDataManager::GetInstance()->SetTargetStage(currentStage_);
 			return true; // ステージが変更されたことを示す
 		}
 	}
