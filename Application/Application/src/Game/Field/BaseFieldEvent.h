@@ -31,7 +31,7 @@ public:
 	/// <summary>
 	/// 時間が進む処理
 	/// </summary>
-	void EventTimeUpdate();
+	void EventTimeUpdate(float deltaTime);
 
 	/// <summary>
 	/// 時間経過し終了

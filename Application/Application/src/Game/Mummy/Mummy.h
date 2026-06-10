@@ -3,6 +3,7 @@
 #include "Object3D.h"
 #include "Float3.h"
 #include <memory>
+#include "MummyBaseState.h"
 
 class Player;
 /// <summary>
@@ -41,35 +42,30 @@ public:
 	/// <returns>倒されているなら true</returns>
 	bool IsDead() { return isDead_; }
 
-private:
+	void OnDeadFlag() { isDead_ = true; }
 
-	const float kMoveSpeed_ = 2.0f; //移動速度
+	void Move(const Cygnus::Float3& move);
+
+	void Rotate(const Cygnus::Float3 rotate);
+
+	void CreateCollider();
+
+	void DeleteCollider();
+
+	Cygnus::Float3 GetPlayerMummyLength() { return playerAndMummyLength_; }
+
+	void ChangeMummyState(std::unique_ptr<MummyState::BaseState> nextState);
+
+private:
 
 	std::unique_ptr<Cygnus::Object3D> object_;	// オブジェクト
 	std::unique_ptr<Cygnus::Collider> collider_;	// コライダー
 
-	Cygnus::Float3 velocity_ = { 0.0f, 0.0f, 0.0f };	// 速度ベクトル
+	std::unique_ptr<MummyState::BaseState> state_;
 
-	float lifeTime_ = 6.0f;//生存時間
+	Cygnus::Float3 playerAndMummyLength_;
+
 	bool isDead_ = false;//死亡フラグ
 
 	const Cygnus::Float3 kColliderSize_ = { 1,1,1 };
 };
-
-namespace MummyState {
-	class BaseState {
-	public:
-		virtual void Update();
-	};
-
-	class SummonState : public BaseState {
-	public:
-		void Update() override;
-	};
-
-	class MoveState : public BaseState {
-	public:
-		void Update() override;
-	};
-
-}

@@ -79,6 +79,12 @@ void GameResourceLoader::LoadAllModelData() {
 		"Character/Sphinx/sphinx.png"
 	);
 
+	modelManager->LoadAndRegisterModel(
+		"Mummy",
+		"Character/Mummy/Mummy.obj",
+		"Character/Mummy/mummy.png"
+	);
+
 	// ---------------------------------------------------------
 	// オブジェクト
 	// ---------------------------------------------------------
@@ -122,6 +128,34 @@ void GameResourceLoader::LoadAllModelData() {
 	modelManager->LoadAndRegisterModel(
 		"AttachFrame",
 		"Object/AttachFrame/attackFrame.obj",
+		"white.png"
+	);
+
+	// 太陽レーザーオブジェクト
+	modelManager->LoadAndRegisterModel(
+		"SunLaserArea",
+		"Object/SunLaserArea/SunLaserArea.obj",
+    "white.png"
+	);
+  
+	// ステージ選択用オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"StagePointBlue",
+		"Object/stagePoint/stagePoint.obj",
+		"Object/stagePoint/stagePointBlue.png"
+	);
+
+	// ステージ選択用オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"StagePointRed",
+		"Object/stagePoint/stagePoint.obj",
+		"Object/stagePoint/stagePointRed.png"
+	);
+
+	// ステージ選択用オブジェクト
+	modelManager->LoadAndRegisterModel(
+		"StageBar",
+		"Object/stageBar/stageBar.obj",
 		"white.png"
 	);
 }

@@ -130,34 +130,36 @@ void StageEditor::SettingStage() {
 		isCreateNewObject_ = !isCreateNewObject_;//オブジェクトの追加開始
 	}
 
-	//現在のデータを表示
+	//配列が空っぽなら通さない
+	if (gameObjectPositions_.size() <= 0) return;
+
+	//現在の配置データを表示
 	if (ImGui::TreeNode("now ObjectData")) {
 		ImGui::Separator();//行分け
-		for (auto& object : gameObjectPositions_) {
-			ImGui::Text("position : %f,%f,%f", object.position.x, object.position.y, object.position.z);//位置
-			ImGui::Text("colliderTag : %s", object.name.c_str());//タグ(名前)
-			ImGui::Text("colliderSize : %f,%f,%f", object.collider.GetSize().x, object.collider.GetSize().y, object.collider.GetSize().z);//当たり判定のサイズ
+		uint32_t number = 0;//配列の順番
+		for (auto object = gameObjectPositions_.begin(); object != gameObjectPositions_.end();) {
+			ImGui::Text("%d", number);
+			ImGui::Text("position : %f,%f,%f", object->position.x, object->position.y, object->position.z);//位置
+			ImGui::Text("colliderTag : %s", object->name.c_str());//タグ(名前)
+			ImGui::Text("colliderSize : %f,%f,%f", object->collider.GetSize().x, object->collider.GetSize().y, object->collider.GetSize().z);//当たり判定のサイズ
+			
+			//一部削除するボタン
+			const std::string label = "delete" + std::to_string(number);//ボタン表記の変更
+			if (ImGui::Button(label.c_str())) {
+				object = gameObjectPositions_.erase(object);
+			}
+			else {
+				++object;
+			}	
 			ImGui::Separator();//行分け
+			number++;//加算
 		}
 		ImGui::TreePop();
 	}
 
-	//何もないなら
-	if (gameObjectPositions_.size() <= 0) return;
-
-	//現在のデータを表示
-	if (ImGui::TreeNode("delete ObjectData")) {
-		ImGui::InputInt("objectNum", &objectNum_);//消したい配列番号を入力
-		objectNum_ = std::clamp(objectNum_, 0, int(gameObjectPositions_.size() - 1));
-		if (ImGui::Button("delete")) {
-			gameObjectPositions_.erase(gameObjectPositions_.begin() + objectNum_);
-		}
-		ImGui::Separator();
-		//現在のデータをリセットする
-		if (ImGui::Button("Reset Objects")) {
-			gameObjectPositions_.clear();
-		}
-		ImGui::TreePop();
+	//現在の配置データをすべてリセットする
+	if (ImGui::Button("Reset Objects")) {
+		gameObjectPositions_.clear();
 	}
 
 #endif // DEBUG
