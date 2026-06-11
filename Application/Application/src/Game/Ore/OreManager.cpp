@@ -2,6 +2,7 @@
 
 //Engine
 #include <ParticleEffect/ParticleEffectManager.h>
+#include <SoundManager.h>
 
 OreManager* OreManager::GetInstance() {
 	static OreManager instance;
@@ -119,6 +120,7 @@ void OreManager::BulkDestruction()
 
 						// コライダー登録解除
 						ore->UnregisterCollider();
+						Cygnus::SoundManager::GetInstance()->Play("iwakudaki");
 
 						// 落ちている鉱石（ドロップアイテム）を生成してリストに追加
 						auto newDroppedOre = std::make_unique<DroppedOre>();
@@ -165,6 +167,8 @@ bool OreManager::TryBreakAt(const Cygnus::Float3& targetPos, float range) {
 		Cygnus::Float3 dropPos = ores_[closestIndex]->GetTranslate();	// 削除される鉱石の位置を保存
 		ores_[closestIndex]->UnregisterCollider();	// コライダー登録解除
 		ores_.erase(ores_.begin() + closestIndex);	// 配列から削除
+		Cygnus::SoundManager::GetInstance()->Play("horu");
+		Cygnus::SoundManager::GetInstance()->Play("iwakudaki");
 
 		// 落ちている鉱石（ドロップアイテム）の生成
 		auto newDroppedOre = std::make_unique<DroppedOre>();

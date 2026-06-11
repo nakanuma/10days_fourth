@@ -2,6 +2,7 @@
 
 // Engine
 #include <TimeManager.h>
+#include <SoundManager.h>
 
 // Application
 #include <src/Game/Player/Player.h>
@@ -49,6 +50,7 @@ void DroppedGear::OnCollision(Cygnus::Collider* other) {
 		if (player->CanPickUpGear()) {
 			isPickedUp_ = true;    // 自身の取得フラグを立てる（消す準備）
 			player->AddGearCount(); // プレイヤーの歯車所持数を1増やす
+			Cygnus::SoundManager::GetInstance()->Play("get");
 		}
 	}
 

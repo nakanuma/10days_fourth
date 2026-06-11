@@ -5,6 +5,7 @@
 #include <ImguiWrapper.h>
 #include <TimeManager.h>
 #include <ParticleEffect/ParticleEffectManager.h>
+#include <SoundManager.h>
 
 // Application
 #include <src/Game/Ore/OreManager.h>
@@ -147,7 +148,8 @@ void Player::OnCollision(Cygnus::Collider* other) {
 
 
 	if (other->GetTag() == "Mummy") {
-		slowDown_ = kSlowDownMax_;
+		slowDown_ = kSlowDownMax_; 
+		Cygnus::SoundManager::GetInstance()->Play("slow");
 	}
 
 	if (other->GetTag() == "Sandstorm") {

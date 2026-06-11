@@ -78,6 +78,7 @@ public:
 			if(GetElapsed() >= movingTime_)
 			{
 				isMoving_ = false; // カメラ移動完了
+				Cygnus::SoundManager::GetInstance()->Play("idou");
 				owner.GetSelectObjectManager()->ResetDir();
 				owner.GetSelectObjectManager()->Front();
 			}
@@ -108,6 +109,7 @@ public:
 		{
 			owner.GetSelectObjectManager()->StartStageReaction();
 			isReacting_ = true;
+			Cygnus::SoundManager::GetInstance()->Play("totunyuu");
 		}
 
 		if (isReacting_ && !owner.GetSelectObjectManager()->IsStageReacting())

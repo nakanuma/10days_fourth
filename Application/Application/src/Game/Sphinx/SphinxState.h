@@ -6,6 +6,7 @@
 
 //Engine
 #include "ParticleEffect/ParticleEffectManager.h"
+#include <SoundManager.h>
 
 // =========================================================
 // 各ステートクラスの実装
@@ -103,6 +104,8 @@ public:
 	{
 		owner.SetIsMining(false);
 		owner.GetObject()->transform_.translate_.y = owner.GetBaseY();
+
+		Cygnus::SoundManager::GetInstance()->Play("tossin");
 
 		//攻撃ので始めにエフェクトを出す
 		Cygnus::ParticleEffectManager::GetInstance()->Emit("dush", owner.GetObject()->transform_.translate_, 20);

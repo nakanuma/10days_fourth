@@ -51,7 +51,7 @@ void FieldEventManager::ChangeField() {
 			std::mt19937 random(seed());
 			std::uniform_int_distribution<uint32_t> eventNum (1, max - 1);//fieldEventのmax - 1
 			//ナンバーを変更
-			number_ = Anubis;
+			number_ = Seth;
 		}
 		else {
 			number_ = 0;//通常(イベントなし)のフィールドに戻る
