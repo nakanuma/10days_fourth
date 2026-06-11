@@ -15,6 +15,8 @@ struct ParticleData {
 	Cygnus::Transform updateTransform;	/* 更新トランスフォーム */
 	Cygnus::Float3 accerelation;		/* 加速度 */
 	Cygnus::Float4 color;				/* 色 */
+	Cygnus::Float4 sColor;				/* 開始色 */
+	Cygnus::Float4 eColor;				/* 終了色 */
 	float lifeTime;						/* 生存時間 */
 	float currentTime;					/* 経過時間 */
 };
@@ -25,8 +27,10 @@ struct ParticleData {
 struct ConstantsData {
 	Cygnus::Float3 minScale;				/* 最小スケール */
 	Cygnus::Float3 maxScale;				/* 最大スケール */
-	Cygnus::Float4 startColor;				/* 開始色 */
-	Cygnus::Float4 endColor;				/* 終了色 */
+	Cygnus::Float4 startMinColor;			/* 開始最小色 */
+	Cygnus::Float4 startMaxColor;			/* 開始最大色 */
+	Cygnus::Float4 endMinColor;				/* 終了最小色 */
+	Cygnus::Float4 endMaxColor;				/* 終了最大色 */
 	float minLifeTime;						/* 最小生存時間 */
 	float maxLifeTime;						/* 最大生存時間 */
 	Cygnus::Float3 minVelocity;				/* 最小速度 */

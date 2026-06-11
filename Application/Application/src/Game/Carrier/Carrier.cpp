@@ -3,6 +3,7 @@
 // Engine
 #include <ImguiWrapper.h>
 #include <Input/Input.h>
+#include <ParticleEffect/ParticleEffectManager.h>
 #include <SoundManager.h>
 
 // Application
@@ -109,6 +110,10 @@ void Carrier::OnCollision(Cygnus::Collider* other) {
 				// プレイヤーの歯車を消費させる
 				player->ConsumeGear(kRequiredGearCount);
 				// 列車に歯車を注入された際の処理
+				SupplyGear();
+				// インタラクトエフェクトの表示を要求
+				Cygnus::ParticleEffectManager::GetInstance()->Emit("get", object_->transform_.translate_,30);
+
 				SupplyGear(); 
 				Cygnus::SoundManager::GetInstance()->Play("hameru");
 			}

@@ -135,8 +135,10 @@ void ParticleEditorSystem::Debug() {
 
 		//色
 		if (ImGui::CollapsingHeader("Color")) {
-			ImGui::ColorEdit4("Start Color", &constantsData.startColor.x);
-			ImGui::ColorEdit4("End Color", &constantsData.endColor.x);
+			ImGui::ColorEdit4("Start Min Color", &constantsData.startMinColor.x);
+			ImGui::ColorEdit4("Start Max Color", &constantsData.startMaxColor.x);
+			ImGui::ColorEdit4("End Min Color", &constantsData.endMinColor.x);
+			ImGui::ColorEdit4("End Max Color", &constantsData.endMaxColor.x);
 		}
 
 		//寿命
@@ -269,17 +271,29 @@ void ParticleEditorSystem::Debug() {
 					constantsData.maxVelocity.y,
 					constantsData.maxVelocity.z
 				};
-				jsonData["startColor"] = {
-					constantsData.startColor.x,
-					constantsData.startColor.y,
-					constantsData.startColor.z,
-					constantsData.startColor.w
+				jsonData["startMinColor"] = {
+					constantsData.startMinColor.x,
+					constantsData.startMinColor.y,
+					constantsData.startMinColor.z,
+					constantsData.startMinColor.w
 				};
-				jsonData["endColor"] = {
-					constantsData.endColor.x,
-					constantsData.endColor.y,
-					constantsData.endColor.z,
-					constantsData.endColor.w
+				jsonData["startMaxColor"] = {
+					constantsData.startMaxColor.x,
+					constantsData.startMaxColor.y,
+					constantsData.startMaxColor.z,
+					constantsData.startMaxColor.w
+				};
+				jsonData["endMinColor"] = {
+					constantsData.endMinColor.x,
+					constantsData.endMinColor.y,
+					constantsData.endMinColor.z,
+					constantsData.endMinColor.w
+				};
+				jsonData["endMaxColor"] = {
+					constantsData.endMaxColor.x,
+					constantsData.endMaxColor.y,
+					constantsData.endMaxColor.z,
+					constantsData.endMaxColor.w
 				};
 				jsonData["minLifeTime"] = constantsData.minLifeTime;
 				jsonData["maxLifeTime"] = constantsData.maxLifeTime;
