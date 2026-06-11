@@ -1,0 +1,107 @@
+{
+    "EventRatio": {
+        "Anubis": 0,
+        "LotOfOre": 0,
+        "Seth": 0,
+        "SunGodRa": 0
+    },
+    "name": "StageEditor",
+    "object": [
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "Player"
+            },
+            "objectName": "Player",
+            "position": [
+                -15.0,
+                1.0,
+                0.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "WorkBench"
+            },
+            "objectName": "WorkBench",
+            "position": [
+                -16.0,
+                1.0,
+                3.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "Path"
+            },
+            "objectName": "Path",
+            "position": [
+                -6.0,
+                1.0,
+                4.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "Path"
+            },
+            "objectName": "Path",
+            "position": [
+                21.0,
+                1.0,
+                4.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "tag": "Path"
+            },
+            "objectName": "Path",
+            "position": [
+                21.0,
+                1.0,
+                -10.0
+            ]
+        },
+        {
+            "collider": {
+                "size": [
+                    6.0,
+                    1.0,
+                    6.0
+                ],
+                "tag": "Ore"
+            },
+            "objectName": "Ore",
+            "position": [
+                -4.0,
+                1.0,
+                -10.0
+            ]
+        }
+    ]
+}
