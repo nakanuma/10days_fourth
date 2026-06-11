@@ -2,6 +2,8 @@
 
 // Engine
 #include <Input/Input.h>
+#include <ParticleEffect/ParticleEffectManager.h>
+#include <SoundManager.h>
 
 // Application
 #include <src/Game/Player/Player.h>
@@ -59,11 +61,15 @@ void WorkBench::OnCollision(Cygnus::Collider* other) {
 			UIManager::GetInstance()->RequestInteract(InteractGuide::ActionType::Craft);
 
 			// キー or ボタン入力操作
-			if (input->TriggerKey(DIK_SPACE)) {
+			if (input->TriggerKey(DIK_SPACE) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A)) {
 				// プレイヤーの鉱石を消費させる（生成に使用した分のみ）
 				player->ConsumeOre(kRequiredOreCount);
 				// 歯車を前方に生成
 				GearManager::GetInstance()->Spawn(object_->transform_.translate_ + Cygnus::Float3{0.0f, 0.0f, kDropOffset});
+				//プレイヤーの位置にインタラクトエフェクトを発生
+				Cygnus::ParticleEffectManager::GetInstance()->Emit("get", player->GetPosition(),30);
+
+				Cygnus::SoundManager::GetInstance()->Play("craft");
 			}
 		}
 	}

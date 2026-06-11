@@ -40,7 +40,7 @@ void StageSelectScene::Initialize()
 	objectGround_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Plane"); // モデル設定
 	objectGround_->transform_.rotate_ = { -Cygnus::PIf / 2.0f, 0.0f, 0.0f }; // 上向き
 	objectGround_->transform_.scale_ = { 500.0f, 500.0f, 1.0f }; // スケール変更
-	objectGround_->materialCB_.data_->color = { 0.5f, 0.5f, 0.5f, 1.0f }; // 色変更
+	objectGround_->materialCB_.data_->color = { 0.85f, 0.625f, 0.4f, 1.0f }; // 色変更
 
 	// 固有オブジェクトの生成
 	selectObjects_ = std::make_unique<SelectObjectManager>();
@@ -56,10 +56,13 @@ void StageSelectScene::Initialize()
 	stateMachine_.ChangeState(SelectSceneState::FADE_IN);
 
 	GameDataManager::GetInstance()->SetTargetStage(0);
+	Cygnus::SoundManager::GetInstance()->Play("sandstorm", true, 0.5f);
 }
 
 void StageSelectScene::Finalize()
-{}
+{
+	Cygnus::SoundManager::GetInstance()->Stop("sandstorm");
+}
 
 void StageSelectScene::Update()
 {

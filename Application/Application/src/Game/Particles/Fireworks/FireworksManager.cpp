@@ -16,35 +16,16 @@ void FireworksManager::Update(float dt) {
 	for (size_t i = 0; i < fireworks_.size(); ) {
 		auto& firework = fireworks_[i];
 
-		firework.upTime += dt;
-
-		if (firework.upTime >= maxUpTime_) {
-
-			Cygnus::ParticleEffectManager::GetInstance()->Emit(
-				"fireworks_diffusion",
-				firework.position,
-				20,
-				Cygnus::Float3(0.0f, 0.0f, 0.0f),
-				0.0f
-			);
-
-			fireworks_[i] = fireworks_.back();
-			fireworks_.pop_back();
-
-			continue;
-		}
-
-		firework.position.y += velocity.y * dt;
-
 		Cygnus::ParticleEffectManager::GetInstance()->Emit(
-			"fireworks_up",
+			"fireworks_diffusion",
 			firework.position,
-			1,
+			150,
 			Cygnus::Float3(0.0f, 0.0f, 0.0f),
 			0.0f
 		);
 
-		++i;
+		fireworks_[i] = fireworks_.back();
+		fireworks_.pop_back();
 	}
 }
 
@@ -67,7 +48,7 @@ void FireworksManager::CreateFireworks(const Cygnus::Float3& position) {
 	// 花火の生成
 	FireworkParticle firework;
 	firework.position = position;
-	firework.upTime = 0.0f;
+	firework.position.y = diffusionHeight_;
 
 	// 花火パーティクルをマップに追加
 	fireworks_.push_back(firework);

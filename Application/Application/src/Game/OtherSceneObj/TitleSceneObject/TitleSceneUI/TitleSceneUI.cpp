@@ -19,7 +19,7 @@ void TitleSceneUI::Init(SpriteCommon* spriteCommon)
 	sprites_[TITLE_TEX].sprite = std::make_unique<Sprite>();
 	sprites_[TITLE_TEX].sprite->Initialize(spriteCommon_, Cygnus::TextureManager::GetInstance().Load("UI/TitleText.png"));
 	sprites_[TITLE_TEX].sprite->SetAnchorPoint({ 0.5f, 0.5f });
-	sprites_[TITLE_TEX].pos = { 640.0f, 150.0f };
+	sprites_[TITLE_TEX].pos = { 640.0f, 350.0f };
 	sprites_[TITLE_TEX].size = sprites_[TITLE_TEX].sprite->GetSize();
 	sprites_[TITLE_TEX].sprite->SetPosition(sprites_[TITLE_TEX].pos);
 

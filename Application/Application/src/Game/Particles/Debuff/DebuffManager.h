@@ -3,14 +3,15 @@
 #include <vector>
 
 //Engine
+#include <Float2.h>
 #include <Float3.h>
 
 /// <summary>
 ///	単体の構造体
 /// </summary>
 struct DebuffParticle {
-	Cygnus::Float3 position;	// パーティクルの位置
-	float time;				// 上昇時間
+	Cygnus::Float3 position;	// 基礎座標
+	float time;					// 演出時間
 };
 
 /// <summary>
@@ -51,10 +52,9 @@ private:
 
 	std::vector<DebuffParticle> debuffs_;	/* パーティクルのマップ */
 
-	const float kMaxTime_ = 1.0f;						/* パーティクルの最大時間 */
-	const float kRiseHeight_ = 5.0f;						/* 上昇高さ */
-	const float kRadius_ = 2.5f;						/* 回転縁の半径 */
-	const float kAngleSpeed_ = 20.0f;					/* 回転速度 */
+	const float kMaxTime_ = 0.8f;						/* パーティクルの最大時間 */
+	const float kHeight_ = 5.0f;						/* 発生高度 */
+	const Cygnus::Float2 kRange_ = { 2.0f,2.0f };		/* 発生範囲 */
 
 	Cygnus::Float3 emitPosition_;						/* (デバッグ用)発生位置 */
 

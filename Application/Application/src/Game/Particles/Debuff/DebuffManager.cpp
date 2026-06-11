@@ -1,4 +1,7 @@
 #include "DebuffManager.h"
+//C++
+#include <random>
+
 
 //application
 #include <ParticleEffect/ParticleEffectManager.h>
@@ -22,9 +25,19 @@ void DebuffManager::Update(float dt) {
 		// =====================================================
 		debuff.time += dt;
 
+		//発生高度と発生範囲からランダムの位置からパーティクルを発生させる
+		if (debuff.time < kMaxTime_) {
+			std::random_device rd;
+			std::mt19937 gen(rd());
+			std::uniform_real_distribution<float> disX(-kRange_.x, kRange_.x);
+			std::uniform_real_distribution<float> disZ(-kRange_.y, kRange_.y);
+			std::uniform_int_distribution<int> countDis(0, 1); // 1から2の整数を生成する分布
 
+			int count = countDis(gen); // 生成された整数を取得
 
+			Cygnus::ParticleEffectManager::GetInstance()->Emit("debuff", debuff.position + Cygnus::Float3{ debuff.position.x+disX(gen), debuff.position.y + kHeight_, debuff.position.z + disZ(gen) }, count);
 
+		}
 
 		++i;
 	}

@@ -1,16 +1,22 @@
 {
     "blendMode": 1,
-    "endColor": [
-        1.0,
+    "endMaxColor": [
         0.0,
-        0.27848100662231445,
+        0.0,
+        0.0,
+        0.0
+    ],
+    "endMinColor": [
+        1.0,
+        1.0,
+        1.0,
         0.0
     ],
     "isBillboard": false,
     "maxAccerelation": [
-        0.20000000298023224,
+        0.0,
         -9.800000190734863,
-        0.20000000298023224
+        0.0
     ],
     "maxLifeTime": 2.5,
     "maxRotationSpeed": [
@@ -29,9 +35,9 @@
         20.0
     ],
     "minAccerelation": [
-        -0.20000000298023224,
+        -3.0,
         -9.800000190734863,
-        -0.20000000298023224
+        -3.0
     ],
     "minLifeTime": 2.0,
     "minRotationSpeed": [
@@ -49,10 +55,16 @@
         -20.0,
         -20.0
     ],
-    "startColor": [
+    "startMaxColor": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+    ],
+    "startMinColor": [
         1.0,
-        0.0,
-        0.0,
+        1.0,
+        1.0,
         1.0
     ]
 }

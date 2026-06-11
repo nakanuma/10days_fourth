@@ -51,10 +51,10 @@ private:
 
 	std::vector<InteractParticle> interacts_;	/* 花火パーティクルのマップ */
 
-	const float kMaxTime_ = 1.0f;						/* パーティクルの最大時間 */
-	const float kRiseHeight_ = 5.0f;						/* 上昇高さ */
-	const float kRadius_ = 2.5f;						/* 回転縁の半径 */
-	const float kAngleSpeed_ = 20.0f;					/* 回転速度 */
+	const float kMaxTime_ = 0.5f;						/* パーティクルの最大時間 */
+	const float kRiseHeight_ = 7.0f;						/* 上昇高さ */
+	const float kRadius_ = 2.2f;						/* 回転縁の半径 */
+	const float kAngleSpeed_ = 22.0f;					/* 回転速度 */
 
 	Cygnus::Float3 emitPosition_;						/* (デバッグ用)発生位置 */
 

@@ -1,6 +1,12 @@
 {
     "blendMode": 1,
-    "endColor": [
+    "endMinColor": [
+        1.0,
+        1.0,
+        1.0,
+        0.0
+    ],
+    "endMaxColor": [
         1.0,
         1.0,
         1.0,
@@ -49,7 +55,13 @@
         17.0,
         -16.0
     ],
-    "startColor": [
+    "startMinColor": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+    ],
+    "startMaxColor": [
         1.0,
         1.0,
         1.0,

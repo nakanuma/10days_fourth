@@ -9,6 +9,9 @@
 //engine
 #include <Engine/Util/RandomGenerator.h>
 
+#undef min
+#undef max
+
 Particle::Particle(Cygnus::ModelManager::ModelData& model) {
 	// オブジェクト設定
 	object_.model_ = &model;
@@ -59,17 +62,29 @@ void Particle::LoadJsonData(const std::string& fileName) {
 		j["maxVelocity"][1],
 		j["maxVelocity"][2]
 	};
-	constantsData_.startColor = {
-		j["startColor"][0],
-		j["startColor"][1],
-		j["startColor"][2],
-		j["startColor"][3]
+	constantsData_.startMinColor = {
+		j["startMinColor"][0],
+		j["startMinColor"][1],
+		j["startMinColor"][2],
+		j["startMinColor"][3]
 	};
-	constantsData_.endColor = {
-		j["endColor"][0],
-		j["endColor"][1],
-		j["endColor"][2],
-		j["endColor"][3]
+	constantsData_.startMaxColor = {
+		j["startMaxColor"][0],
+		j["startMaxColor"][1],
+		j["startMaxColor"][2],
+		j["startMaxColor"][3]
+	};
+	constantsData_.endMinColor = {
+		j["endMinColor"][0],
+		j["endMinColor"][1],
+		j["endMinColor"][2],
+		j["endMinColor"][3]
+	};
+	constantsData_.endMaxColor = {
+		j["endMaxColor"][0],
+		j["endMaxColor"][1],
+		j["endMaxColor"][2],
+		j["endMaxColor"][3]
 	};
 	constantsData_.minLifeTime = j["minLifeTime"];
 	constantsData_.maxLifeTime = j["maxLifeTime"];
@@ -121,7 +136,35 @@ ParticleData Particle::CreateParticle(const Cygnus::Float3& pos, const Cygnus::F
 	p.accerelation = rand->RandomValue(constantsData_.minAccerelation, constantsData_.maxAccerelation);
 	
 	// 色
-	p.color = constantsData_.startColor;
+	p.sColor = {
+		rand->RandomValue(
+			std::min(constantsData_.startMinColor.x, constantsData_.startMaxColor.x),
+			std::max(constantsData_.startMinColor.x, constantsData_.startMaxColor.x)),
+		rand->RandomValue(
+			std::min(constantsData_.startMinColor.y, constantsData_.startMaxColor.y),
+			std::max(constantsData_.startMinColor.y, constantsData_.startMaxColor.y)),
+		rand->RandomValue(
+			std::min(constantsData_.startMinColor.z, constantsData_.startMaxColor.z),
+			std::max(constantsData_.startMinColor.z, constantsData_.startMaxColor.z)),
+		rand->RandomValue(
+			std::min(constantsData_.startMinColor.w, constantsData_.startMaxColor.w),
+			std::max(constantsData_.startMinColor.w, constantsData_.startMaxColor.w)),
+	};
+
+	p.eColor = {
+		rand->RandomValue(
+			std::min(constantsData_.endMinColor.x, constantsData_.endMaxColor.x),
+			std::max(constantsData_.endMinColor.x, constantsData_.endMaxColor.x)),
+		rand->RandomValue(
+			std::min(constantsData_.endMinColor.y, constantsData_.endMaxColor.y),
+			std::max(constantsData_.endMinColor.y, constantsData_.endMaxColor.y)),
+		rand->RandomValue(
+			std::min(constantsData_.endMinColor.z, constantsData_.endMaxColor.z),
+			std::max(constantsData_.endMinColor.z, constantsData_.endMaxColor.z)),
+		rand->RandomValue(
+			std::min(constantsData_.endMinColor.w, constantsData_.endMaxColor.w),
+			std::max(constantsData_.endMinColor.w, constantsData_.endMaxColor.w)),
+	};
 	// 生存時間
 	p.lifeTime = rand->RandomValue(constantsData_.minLifeTime, constantsData_.maxLifeTime);
 	// 経過時間
@@ -138,7 +181,7 @@ ParticleData Particle::CreateParticle(const Cygnus::Float3& pos, const Cygnus::F
 void Particle::UpdateParticle(ParticleData& p, float dt) {
 
 	// 色の線形補間
-	p.color = Cygnus::Float4::Lerp(constantsData_.startColor, constantsData_.endColor, p.currentTime / p.lifeTime);
+	p.color = Cygnus::Float4::Lerp(p.sColor,p.eColor, p.currentTime / p.lifeTime);
 
 	// スケールの更新
 	p.transform.scale_ += p.updateTransform.scale_ * dt;

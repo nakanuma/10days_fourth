@@ -172,12 +172,30 @@ void GameResourceLoader::RegisterAllParticleEffect() {
 	RegisterParticle("move_dust", "Cube");
 	RegisterParticle("dush", "Cube");
 	RegisterParticle("ore_break", "Cube");
-	RegisterParticle("fireworks_up", "Cube");
 	RegisterParticle("fireworks_diffusion", "Cube");
 	RegisterParticle("sand_rain", "Cube");
 	RegisterParticle("interact", "Plane");
+	RegisterParticle("debuff", "Cube");
+	RegisterParticle("get", "Cube");
+	RegisterParticle("sand_grain", "Cube");
 }
 
 void GameResourceLoader::LoadAllSoundData() {
 	auto soundManager = Cygnus::SoundManager::GetInstance();
+
+	soundManager->Load("resources/Sounds/enter.wav", "enter");
+	soundManager->Load("resources/Sounds/idou.wav", "idou");
+	soundManager->Load("resources/Sounds/totunyuu.wav", "totunyuu");
+
+	soundManager->Load("resources/Sounds/craft.wav", "craft");
+	soundManager->Load("resources/Sounds/get.wav", "get");
+	soundManager->Load("resources/Sounds/hameru.wav", "hameru");
+	soundManager->Load("resources/Sounds/horu.wav", "horu");
+	soundManager->Load("resources/Sounds/iwakudaki.wav", "iwakudaki");
+	soundManager->Load("resources/Sounds/resshaugoku.wav", "resshaugoku");
+	soundManager->Load("resources/Sounds/sandstorm.wav", "sandstorm");
+	soundManager->Load("resources/Sounds/slow.wav", "slow");
+	soundManager->Load("resources/Sounds/tossin.wav", "tossin");
+	soundManager->Load("resources/Sounds/fanfare.wav", "fanfare");
+	soundManager->Load("resources/Sounds/bgm.wav", "bgm");
 }

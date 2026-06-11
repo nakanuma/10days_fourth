@@ -5,6 +5,7 @@
 #include <ImguiWrapper.h>
 #include <TimeManager.h>
 #include <ParticleEffect/ParticleEffectManager.h>
+#include <SoundManager.h>
 #include <Collider/CollisionMath.h>
 
 // Application
@@ -126,7 +127,7 @@ void Player::Debug() {
 void Player::OnCollision(Cygnus::Collider* other) {
 	// 押し戻しを行うオブジェクトとの衝突
 	// : 鉱石オブジェクト, 工作台オブジェクト
-	if (other->GetTag() == "Ore" || other->GetTag() == "WorkBench") {
+	if (other->GetTag() == "Ore" || other->GetTag() == "WorkBench" || other->GetTag() == "Sphinx") {
 		Cygnus::AABBCollider* myAABB = dynamic_cast<Cygnus::AABBCollider*>(collider_.get());
 		Cygnus::AABBCollider* otherAABB = dynamic_cast<Cygnus::AABBCollider*>(other);
 
@@ -176,7 +177,8 @@ void Player::OnCollision(Cygnus::Collider* other) {
 
 
 	if (other->GetTag() == "Mummy") {
-		slowDown_ = kSlowDownMax_;
+		slowDown_ = kSlowDownMax_; 
+		Cygnus::SoundManager::GetInstance()->Play("slow", false, 0.5f);
 	}
 
 	if (other->GetTag() == "Sandstorm") {
