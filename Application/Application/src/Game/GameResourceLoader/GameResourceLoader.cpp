@@ -195,4 +195,5 @@ void GameResourceLoader::LoadAllSoundData() {
 	soundManager->Load("resources/Sounds/slow.wav", "slow");
 	soundManager->Load("resources/Sounds/tossin.wav", "tossin");
 	soundManager->Load("resources/Sounds/fanfare.wav", "fanfare");
+	soundManager->Load("resources/Sounds/bgm.wav", "bgm");
 }

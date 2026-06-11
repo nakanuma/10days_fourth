@@ -130,12 +130,14 @@ void GamePlayScene::Initialize() {
 	MummyManager::GetInstance()->Initialize();
 
 	SunLaser::GetInstance()->Initialize();
+	Cygnus::SoundManager::GetInstance()->Play("bgm", true, 0.5f);
 }
 
 void GamePlayScene::Finalize()
 {
 	Cygnus::SoundManager::GetInstance()->Stop("sandstorm");
 	Cygnus::SoundManager::GetInstance()->Stop("resshaugoku");
+	Cygnus::SoundManager::GetInstance()->Stop("bgm");
 }
 
 

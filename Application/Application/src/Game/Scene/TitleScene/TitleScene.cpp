@@ -38,10 +38,12 @@ void TitleScene::Initialize()
 	objectGround_->transform_.rotate_ = { -Cygnus::PIf / 2.0f, 0.0f, 0.0f }; // 上向き
 	objectGround_->transform_.scale_ = { 500.0f, 500.0f, 1.0f }; // スケール変更
 	objectGround_->materialCB_.data_->color = { 0.5f, 0.5f, 0.5f, 1.0f }; // 色変更
+	Cygnus::SoundManager::GetInstance()->Play("sandstorm", true, 0.5f);
 }
 
 void TitleScene::Finalize()
 {
+	Cygnus::SoundManager::GetInstance()->Stop("sandstorm");
 }
 
 void TitleScene::Update()
