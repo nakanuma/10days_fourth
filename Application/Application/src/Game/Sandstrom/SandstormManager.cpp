@@ -1,5 +1,6 @@
 #include "SandstormManager.h"
 #include "ImguiWrapper.h"
+#include <src/Game/Particles/storm/StormManager.h>
 
 SandstormManager* SandstormManager::GetInstance() {
 	static SandstormManager sInstance;
@@ -33,6 +34,9 @@ void SandstormManager::Debug() {
 }
 
 void SandstormManager::AddSandstrom(const Cygnus::Float3& translate) {
+	
+	StormManager::GetInstance()->Delete("SandStorm");//削除
+
 	std::unique_ptr<Sandstorm> newSandstorm = std::make_unique<Sandstorm>();
 	newSandstorm->Initialize(translate);
 	sandStorms_.push_back(std::move(newSandstorm));
@@ -42,5 +46,6 @@ void SandstormManager::Reset() {
 	for (auto& sandstorm : sandStorms_) {
 		sandstorm->Finalize();
 	}
+	StormManager::GetInstance()->Delete("SandStorm");//削除
 	sandStorms_.clear();
 }
