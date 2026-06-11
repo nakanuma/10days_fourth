@@ -112,6 +112,7 @@ void GamePlayScene::Initialize() {
 
 void GamePlayScene::Finalize()
 {
+	Cygnus::SoundManager::GetInstance()->Stop("sandstorm");
 }
 
 

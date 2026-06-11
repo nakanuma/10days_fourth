@@ -39,7 +39,7 @@ void OtherSceneUIBase::UpdateButtonLogic(size_t buttonIndex)
 	SpriteCollision collision;
 
 	// --- 1. クリック判定 ---
-	if (input_->TriggerKey(DIK_SPACE) || collision.IsMouseClicked(*sprites_[buttonIndex].sprite.get()))
+	if (input_->TriggerKey(DIK_SPACE) || collision.IsMouseClicked(*sprites_[buttonIndex].sprite.get()) || input_->IsTriggerButton(0, XINPUT_GAMEPAD_A))
 	{
 		isTriggered_ = true;
 	}

@@ -64,6 +64,7 @@ void TitleScene::CheckSceneTransition()
 {
 	if (titleSceneUI_->IsStart())
 	{
+		Cygnus::SoundManager::GetInstance()->Play("enter");
 		Cygnus::CollisionManager::GetInstance()->Clear();
 		TransitionTitle();
 	}
