@@ -56,10 +56,13 @@ void StageSelectScene::Initialize()
 	stateMachine_.ChangeState(SelectSceneState::FADE_IN);
 
 	GameDataManager::GetInstance()->SetTargetStage(0);
+	Cygnus::SoundManager::GetInstance()->Play("sandstorm", true, 0.5f);
 }
 
 void StageSelectScene::Finalize()
-{}
+{
+	Cygnus::SoundManager::GetInstance()->Stop("sandstorm");
+}
 
 void StageSelectScene::Update()
 {
