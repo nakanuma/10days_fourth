@@ -3,6 +3,7 @@
 // Engine
 #include <ImguiWrapper.h>
 #include <Input/Input.h>
+#include <SoundManager.h>
 
 // Application
 #include <src/Game/Path/PathManager.h>
@@ -108,7 +109,8 @@ void Carrier::OnCollision(Cygnus::Collider* other) {
 				// プレイヤーの歯車を消費させる
 				player->ConsumeGear(kRequiredGearCount);
 				// 列車に歯車を注入された際の処理
-				SupplyGear();
+				SupplyGear(); 
+				Cygnus::SoundManager::GetInstance()->Play("hameru");
 			}
 		}
 	}
@@ -120,12 +122,17 @@ void Carrier::MoveAlongPath(float deltaTime)
 	if (!isActive_ || isGoal_) return;
 
 	// 速度が完全に0なら計算しない
-	if (currentVelocityRate_ <= 0.0f && energyTimer_ <= 0.0f) return;
+	if (currentVelocityRate_ <= 0.0f && energyTimer_ <= 0.0f) 
+	{
+		Cygnus::SoundManager::GetInstance()->Stop("resshaugoku");
+		return;
+	}
 
 	// 全てのポイントを通過したらゴール済みにする
 	auto pathManager = PathManager::GetInstance();
 	if(targetIndex_ >= pathManager->GetPointCount()) {
 		isGoal_ = true;
+		Cygnus::SoundManager::GetInstance()->Play("fanfare");
 		return;
 	}
 
@@ -174,4 +181,6 @@ void Carrier::MoveAlongPath(float deltaTime)
 void Carrier::SupplyGear() {
 	energyTimer_ = kMaxEnergy;	// 動作時間を設定
 	isActive_ = true;	// 有効化
+	Cygnus::SoundManager::GetInstance()->Stop("resshaugoku");
+	Cygnus::SoundManager::GetInstance()->Play("resshaugoku", true);
 }

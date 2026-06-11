@@ -7,6 +7,7 @@
 #include <Collider/CollisionManager.h>
 #include <random>
 #include "ImguiWrapper.h"
+#include <SoundManager.h>
 
 void Sandstorm::Initialize(const Cygnus::Float3& translate) {
 	//開始位置
@@ -33,6 +34,7 @@ void Sandstorm::Initialize(const Cygnus::Float3& translate) {
 
 	collider_ = std::move(aabb);
 	Cygnus::CollisionManager::GetInstance()->Register(&*collider_);//コライダー削除
+	Cygnus::SoundManager::GetInstance()->Play("sandstorm", true, 0.5f);
 }
 
 void Sandstorm::Update() {
@@ -62,4 +64,5 @@ void Sandstorm::Debug() {
 
 void Sandstorm::Finalize() {
 	Cygnus::CollisionManager::GetInstance()->Unregister(&*collider_);//コライダー削除
+	Cygnus::SoundManager::GetInstance()->Stop("sandstorm");
 }

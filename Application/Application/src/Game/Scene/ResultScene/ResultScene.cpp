@@ -61,9 +61,9 @@ void ResultScene::Update()
 
 void ResultScene::CheckSceneTransition()
 {
-	// 描画後に行っていたシーンチェンジ判定
 	if (resultSceneUI_->IsNext())
 	{
+		Cygnus::SoundManager::GetInstance()->Play("enter");
 		TransitionResult();
 	}
 }
