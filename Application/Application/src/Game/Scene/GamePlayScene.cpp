@@ -28,6 +28,8 @@
 
 #include <src/Game/Sandstrom/SandstormManager.h>
 
+#include <src/Game/GameData/GameDataManager.h>
+
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
@@ -90,7 +92,27 @@ void GamePlayScene::Initialize() {
 
 	//ステージエディタ初期化
 	stageEditor_ = std::make_unique<StageEditor>();
-	stageEditor_->LoadJsonFile("resources/stageEditor/stage_5.json");//ステージジェイソンファイルを読み込む
+	if(GameDataManager::GetInstance()->GetTargetStage() == 0)
+	{
+		stageEditor_->LoadJsonFile("resources/stageEditor/stage_0.json");//ステージジェイソンファイルを読み込む
+	}
+	else if (GameDataManager::GetInstance()->GetTargetStage() == 1)
+	{
+		stageEditor_->LoadJsonFile("resources/stageEditor/stage_1.json");//ステージジェイソンファイルを読み込む
+	}
+	else if (GameDataManager::GetInstance()->GetTargetStage() == 2)
+	{
+		stageEditor_->LoadJsonFile("resources/stageEditor/stage_2.json");//ステージジェイソンファイルを読み込む
+	}
+	else if (GameDataManager::GetInstance()->GetTargetStage() == 3)
+	{
+		stageEditor_->LoadJsonFile("resources/stageEditor/stage_3.json");//ステージジェイソンファイルを読み込む
+	}
+	else if (GameDataManager::GetInstance()->GetTargetStage() == 5)
+	{
+		stageEditor_->LoadJsonFile("resources/stageEditor/stage_5.json");//ステージジェイソンファイルを読み込む
+	}
+
 	stageEditor_->SpitObjects(player_,sphinx_);// プレイヤー生成 + 初期化
 
 	//最初の線路に設置される
@@ -113,6 +135,7 @@ void GamePlayScene::Initialize() {
 void GamePlayScene::Finalize()
 {
 	Cygnus::SoundManager::GetInstance()->Stop("sandstorm");
+	Cygnus::SoundManager::GetInstance()->Stop("resshaugoku");
 }
 
 
@@ -336,7 +359,7 @@ void GamePlayScene::Draw() {
 
 	if (carrier_->IsGoal())
 	{
-		Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT");
+		Cygnus::SceneManager::GetInstance()->ChangeScene("SELECT");
 		Cygnus::CollisionManager::GetInstance()->Clear();
 	}
 
