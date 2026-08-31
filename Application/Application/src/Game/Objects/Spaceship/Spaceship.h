@@ -5,7 +5,7 @@
 #include <Collider/Collider.h>
 
 // =========================================================
-// 宇宙船
+// 宇宙船クラス
 // =========================================================
 class Spaceship : public Cygnus::ICollisionCallback
 {

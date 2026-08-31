@@ -24,6 +24,7 @@
     <ClCompile Include="src\Game\GameResourceLoader\GameResourceLoader.cpp" />
     <ClCompile Include="src\Game\Scene\GamePlayScene.cpp" />
     <ClCompile Include="src\Game\Scene\SceneFactory.cpp" />
+    <ClCompile Include="src\Game\Objects\Tether\Tether.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Objects\Spaceship\Spaceship.h" />
@@ -31,6 +32,7 @@
     <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h" />
     <ClInclude Include="src\Game\Scene\GamePlayScene.h" />
     <ClInclude Include="src\Game\Scene\SceneFactory.h" />
+    <ClInclude Include="src\Game\Objects\Tether\Tether.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
