@@ -1,13 +1,26 @@
 #pragma once
 
 // Engine
-#include <Object3D.h>
-#include <Collider/Collider.h>
+#include <MyMath.h>
+
+// 前方宣言
+class Spaceship;
+class Player;
+
+/// <summary>
+/// 命綱のノード構造体
+/// </summary>
+struct TetherNode
+{
+	Cygnus::Float3 position;
+	Cygnus::Float3 oldPosition;
+	bool isLocked = false;
+};
 
 // =========================================================
-// プレイヤークラス
+// 命綱クラス
 // =========================================================
-class Player : public Cygnus::ICollisionCallback
+class Tether
 {
 public:
 	// =========================================================
@@ -17,7 +30,9 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize();
+	/// <param name="spaceship"></param>
+	/// <param name="player"></param>
+	void Initialize(Spaceship* spaceship, Player* player);
 
 	/// <summary>
 	/// 更新処理
@@ -39,39 +54,39 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// 現在位置の取得
+	/// ノード一覧の取得
 	/// </summary>
 	/// <returns></returns>
-	const Cygnus::Float3& GetTranslate() { return object_->transform_.translate_; }
-
+	const std::vector<TetherNode>& GetNodes() const { return nodes_; }
+	 
 private:
 	// =========================================================
 	// Internal Methods
 	// =========================================================
 
 	/// <summary>
-	/// キー入力による移動処理
+	/// 距離拘束の計算
 	/// </summary>
-	void Move();
+	void ApplyConstraints();
 
 private:
 	// =========================================================
 	// Constants
 	// =========================================================
 
-	// コライダーの大きさ
-	static constexpr Cygnus::Float3 kColliderSize = { 1.0f, 2.0f, 1.0f };
-
-	// 移動速度
-	static constexpr float kMoveSpeed = 0.2f;
+	static constexpr size_t kNodeCount = 25; // ノードの個数
+	static constexpr float kSegmentLength = 0.8f; // 各節の自然長
+	static constexpr int kConstraintIterations = 5; // 拘束計算のループ回数（精度）
+	static constexpr float kDamping = 0.98f; // 減衰率（空気抵抗）
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	// オブジェクト
-	std::unique_ptr<Cygnus::Object3D> object_;
+	Spaceship* spaceship_ = nullptr;
+	Player* player_ = nullptr;
 
-	// コライダー
-	std::unique_ptr<Cygnus::Collider> collider_;
+	// ノード配列
+	std::vector<TetherNode> nodes_;
 };
+

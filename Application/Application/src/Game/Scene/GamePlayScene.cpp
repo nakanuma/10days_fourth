@@ -59,6 +59,10 @@ void GamePlayScene::Initialize() {
 	// 宇宙船生成 + 初期化
 	spaceship_ = std::make_unique<Spaceship>();
 	spaceship_->Initialize();
+
+	// 命綱生成 + 初期化
+	tether_ = std::make_unique<Tether>();
+	tether_->Initialize(spaceship_.get(), player_.get());
 }
 
 void GamePlayScene::Finalize() { }
@@ -77,6 +81,9 @@ void GamePlayScene::Update() {
 
 	// 宇宙船更新
 	spaceship_->Update();
+
+	// 命綱更新
+	tether_->Update();
 
 	///
 	///	共通更新処理
@@ -157,6 +164,9 @@ void GamePlayScene::Draw() {
 	// 宇宙船描画
 	spaceship_->Draw();
 
+	// 命綱描画
+	tether_->Draw();
+
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
 #pragma endregion
@@ -197,6 +207,12 @@ void GamePlayScene::Draw() {
 
 	// プレイヤーデバッグ表示
 	player_->Debug();
+
+	// 宇宙船デバッグ表示
+	spaceship_->Debug();
+
+	// 命綱デバッグ表示
+	tether_->Debug();
 
 	// コライダーデバッグ表示
 	Cygnus::CollisionManager::GetInstance()->Debug();
