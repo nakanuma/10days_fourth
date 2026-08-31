@@ -24,7 +24,7 @@ void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
 	// カメラのインスタンスを生成
-	camera_ = std::make_unique<Cygnus::Camera>(Cygnus::Float3{ 0.0f, 0.0f, -50.0f }, Cygnus::Float3{ 0.0f, 0.0f, 0.0f }, 0.45f);
+	camera_ = std::make_unique<Cygnus::Camera>(Cygnus::Float3{ 0.0f, -12.5f, -80.0f }, Cygnus::Float3{ 0.0f, 0.0f, 0.0f }, 0.45f);
 	Cygnus::Camera::Set(camera_.get()); // 現在のカメラをセット
 
 	// SpriteCommonの生成と初期化
@@ -55,6 +55,10 @@ void GamePlayScene::Initialize() {
 	// プレイヤー生成 + 初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
+
+	// 宇宙船生成 + 初期化
+	spaceship_ = std::make_unique<Spaceship>();
+	spaceship_->Initialize();
 }
 
 void GamePlayScene::Finalize() { }
@@ -70,6 +74,9 @@ void GamePlayScene::Update() {
 	
 	// プレイヤー更新
 	player_->Update();
+
+	// 宇宙船更新
+	spaceship_->Update();
 
 	///
 	///	共通更新処理
@@ -146,6 +153,9 @@ void GamePlayScene::Draw() {
 
 	// プレイヤー描画
 	player_->Draw();
+
+	// 宇宙船描画
+	spaceship_->Draw();
 
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();

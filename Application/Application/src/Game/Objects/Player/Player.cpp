@@ -9,6 +9,7 @@ void Player::Initialize() {
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Player");
+	object_->transform_.translate_ = {0.0f, -10.0f, 0.0f}; 
 
 	// コライダー生成
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
