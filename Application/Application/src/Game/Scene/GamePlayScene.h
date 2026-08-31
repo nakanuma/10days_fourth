@@ -17,10 +17,8 @@
 #include <SpriteCommon.h>
 #include <TextureManager.h>
 
-// ---------------------------------------------------------
-// Application Includes
-// ---------------------------------------------------------
-
+// Application
+#include <src/Game/Objects/Player/Player.h>
 
 // =========================================================
 // ゲームプレイシーンクラス
@@ -81,7 +79,7 @@ private:
 	Cygnus::LightManager* lightManager_ = nullptr;                 /* 各ライト管理クラス */
 
 	// ----- Objects -----
-	std::unique_ptr<Cygnus::Object3D> testObject_;	/* テスト用オブジェクト */
+	std::unique_ptr<Player> player_; /* プレイヤー */
 
 	// ----- Others -----
 	uint32_t shadowMapHandle_;                                     /* シャドウマップテクスチャ */

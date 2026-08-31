@@ -16,6 +16,7 @@
 // Engine
 #include <Engine/Scene/SceneManager.h>
 #include <CommandManager.h>
+#include <Collider/CollisionManager.h>
 
 // Application
 
@@ -23,7 +24,7 @@ void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
 	// カメラのインスタンスを生成
-	camera_ = std::make_unique<Cygnus::Camera>(Cygnus::Float3{ 0.0f, 15.0f, -40.0f }, Cygnus::Float3{ 0.3f, 0.0f, 0.0f }, 0.45f);
+	camera_ = std::make_unique<Cygnus::Camera>(Cygnus::Float3{ 0.0f, 0.0f, -50.0f }, Cygnus::Float3{ 0.0f, 0.0f, 0.0f }, 0.45f);
 	Cygnus::Camera::Set(camera_.get()); // 現在のカメラをセット
 
 	// SpriteCommonの生成と初期化
@@ -50,10 +51,10 @@ void GamePlayScene::Initialize() {
 	///
 	///	↓ ゲームシーン用
 	///
-	
-	// テスト用オブジェクト生成
-	testObject_ = std::make_unique<Cygnus::Object3D>();
-	testObject_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Cube"); // モデル設定
+
+	// プレイヤー生成 + 初期化
+	player_ = std::make_unique<Player>();
+	player_->Initialize();
 }
 
 void GamePlayScene::Finalize() { }
@@ -67,8 +68,15 @@ void GamePlayScene::Update() {
 	///	オブジェクト更新処理
 	/// 
 	
-	// テスト用オブジェクト更新
-	testObject_->UpdateMatrix();
+	// プレイヤー更新
+	player_->Update();
+
+	///
+	///	共通更新処理
+	/// 
+	
+	// コリジョンマネージャー更新
+	Cygnus::CollisionManager::GetInstance()->Update();
 }
 
 void GamePlayScene::Draw() {
@@ -136,8 +144,8 @@ void GamePlayScene::Draw() {
 	Cygnus::SkyBoxManager::GetInstance()->Draw();
 	// -----------------------------------------------
 
-	// テスト用オブジェクト描画
-	testObject_->Draw();
+	// プレイヤー描画
+	player_->Draw();
 
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
@@ -174,8 +182,14 @@ void GamePlayScene::Draw() {
 	/// =========================================================
 
 #ifdef _DEBUG
-	// デバッグ表示
+	// ゲームシーンデバッグ表示
 	Debug();
+
+	// プレイヤーデバッグ表示
+	player_->Debug();
+
+	// コライダーデバッグ表示
+	Cygnus::CollisionManager::GetInstance()->Debug();
 #endif
 
 	// ImGuiの内部コマンドを生成する
@@ -192,7 +206,8 @@ void GamePlayScene::Debug() {
 
 	ImGui::Text("fps:%.2f", ImGui::GetIO().Framerate);
 
-	ImGui::DragFloat3("testObject.translate", &testObject_->transform_.translate_.x, 0.1f);
+	ImGui::DragFloat3("camera.translate", &camera_->transform_.translate_.x, 0.01f);
+	ImGui::DragFloat3("camera.rotate", &camera_->transform_.rotate_.x, 0.01f);
 
 	ImGui::End();
 #endif
