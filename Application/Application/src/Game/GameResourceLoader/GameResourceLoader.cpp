@@ -50,6 +50,24 @@ void GameResourceLoader::LoadAllModelData() {
 		"Primitive/Cube/cube.obj",
 		"white.png"
 	);
+
+	// ---------------------------------------------------------
+	// ゲームオブジェクト
+	// ---------------------------------------------------------
+
+	// プレイヤー
+	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+		"Player",
+		"Player/player.obj",
+		"player.png"
+	);
+
+	// 宇宙船
+	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+		"Spaceship",
+		"Spaceship/spaceship.obj",
+		"spaceship.png"
+	);
 }
 
 void GameResourceLoader::RegisterAllParticleEffect() {
