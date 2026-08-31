@@ -19,6 +19,7 @@
 
 // Application
 #include <src/Game/Objects/Player/Player.h>
+#include <src/Game/Objects/Spaceship/Spaceship.h>
 
 // =========================================================
 // ゲームプレイシーンクラス
@@ -80,6 +81,7 @@ private:
 
 	// ----- Objects -----
 	std::unique_ptr<Player> player_; /* プレイヤー */
+	std::unique_ptr<Spaceship> spaceship_;	/* 宇宙船 */
 
 	// ----- Others -----
 	uint32_t shadowMapHandle_;                                     /* シャドウマップテクスチャ */
