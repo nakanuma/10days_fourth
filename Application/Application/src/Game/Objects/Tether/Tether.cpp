@@ -90,9 +90,29 @@ void Tether::Update() {
 }
 
 void Tether::Draw() {
-	// 隣り合うノード同士を線で描画
-	for(size_t i = 0; i < nodes_.size() - 1; ++i) {
-		Cygnus::LineDrawer::GetInstance()->RegisterLine(nodes_[i].position, nodes_[i + 1].position, {1.0f, 0.0f, 0.0f, 1.0f});
+	if (nodes_.size() < 2) return;
+
+	// 補間用の分割数
+	const int kSubdivisions = 4;
+
+	for (size_t i = 0; i < nodes_.size() - 1; ++i) {
+		// 制御点4点の取得
+		const auto& p1 = nodes_[i].position;
+		const auto& p2 = nodes_[i + 1].position;
+		const auto& p0 = (i == 0) ? p1 : nodes_[i - 1].position;
+		const auto& p3 = (i + 2 < nodes_.size()) ? nodes_[i + 2].position : p2;
+
+		Cygnus::Float3 prevPoint = p1;
+
+		// スプライン曲線で分割描画
+		for (int j = 1; j <= kSubdivisions; ++j) {
+			float t = static_cast<float>(j) / static_cast<float>(kSubdivisions);
+			Cygnus::Float3 currentPoint = Cygnus::Float3::CatmullRomInterplation(p0, p1, p2, p3, t);
+
+			// 曲線用ラインの登録
+			Cygnus::LineDrawer::GetInstance()->RegisterLine(prevPoint, currentPoint, {1.0f, 0.0f, 0.0f, 1.0f});
+			prevPoint = currentPoint;
+		}
 	}
 }
 
