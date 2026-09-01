@@ -57,6 +57,11 @@ public:
 	/// </summary>
 	void Debug();
 
+	/// <summary>
+	/// カメラの更新処理（プレイヤー位置に応じて画角を変える）
+	/// </summary>
+	void UpdateCamera();
+
 	// =========================================================
 	// Accessor
 	// =========================================================
@@ -80,6 +85,14 @@ private:
 	std::unique_ptr<Cygnus::SpriteCommon> spriteCommon_ = nullptr; /* スプライト共通処理 */
 	Cygnus::Input* input_ = nullptr;                               /* 入力管理クラス */
 	Cygnus::LightManager* lightManager_ = nullptr;                 /* 各ライト管理クラス */
+
+	// ----- Parameters -----
+	Cygnus::Float3 cameraTopPos_ = {0.0f, -12.5f, -80.0f}; // プレイヤーが最も上にいる時のカメラ位置
+	Cygnus::Float3 cameraBottomPos_ = {0.0f, -30.0f, -160.0f}; // プレイヤーが最も下にいる時のカメラ位置
+
+	float playerTopY_ = 0.0f; // 基準となるプレイヤー最上部Y座標
+	float playerBottomY_ = -60.0f; // 基準となるプレイヤー最下部Y座標
+	float cameraInterpolation_ = 0.1f; // カメラ移動の追従スピード
 
 	// ----- Objects -----
 	std::unique_ptr<Player> player_; /* プレイヤー */
