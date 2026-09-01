@@ -72,8 +72,9 @@ void Player::Move()
 	velocity_.z += accel.z;
 
 	// 無入力時の処理（漂い）
+	Cygnus::Float3 driftOffset = {0.0f, 0.0f, 0.0f};
 	if(!isInputting) {
-		Drift();
+		driftOffset = Drift();
 	}
 
 	// 減衰処理
@@ -90,12 +91,12 @@ void Player::Move()
 	}
 
 	// 座標への適用
-	object_->transform_.translate_.x += velocity_.x;
-	object_->transform_.translate_.y += velocity_.y;
-	object_->transform_.translate_.z += velocity_.z;
+	object_->transform_.translate_.x += velocity_.x + driftOffset.x;
+	object_->transform_.translate_.y += velocity_.y + driftOffset.y;
+	object_->transform_.translate_.z += velocity_.z + driftOffset.z;
 }
 
-void Player::Drift() {
+Cygnus::Float3 Player::Drift() {
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 
 	// 毎フレームタイマー加算
@@ -105,6 +106,6 @@ void Player::Drift() {
 	float driftX = std::sinf(driftTimer_) * std::cosf(driftTimer_ * 0.7f) * kDriftAmplitude;
 	float driftY = std::cosf(driftTimer_ * 1.3f) * std::sinf(driftTimer_ * 0.5f) * kDriftAmplitude;
 
-	velocity_.x += driftX;
-	velocity_.y += driftY;
+	// 移動量を返す
+	return {driftX, driftY, 0.0f};
 }

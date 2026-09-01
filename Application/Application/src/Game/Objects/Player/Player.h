@@ -55,9 +55,9 @@ private:
 	void Move();
 
 	/// <summary>
-	/// 無入力時の漂う動作処理
+	/// 無入力時の漂うオフセットを取得
 	/// </summary>
-	void Drift();
+	Cygnus::Float3 Drift();
 
 private:
 	// =========================================================
@@ -73,8 +73,8 @@ private:
 	static constexpr float kDamping = 0.985f; // 減衰率（1.0に近いほど止まりにくくなる）
 
 	// 漂いパラメーター
-	static constexpr float kDriftFrequency = 1.5f; // 漂う周期の速さ
-	static constexpr float kDriftAmplitude = 0.003f; // 漂う力の強さ
+	static constexpr float kDriftFrequency = 3.0f; // 漂う周期の速さ
+	static constexpr float kDriftAmplitude = 0.01f; // 漂う力の強さ
 
 	// =========================================================
 	// Member Variables
