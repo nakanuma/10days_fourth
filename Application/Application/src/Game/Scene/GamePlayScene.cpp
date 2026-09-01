@@ -63,6 +63,10 @@ void GamePlayScene::Initialize() {
 	// 命綱生成 + 初期化
 	tether_ = std::make_unique<Tether>();
 	tether_->Initialize(spaceship_.get(), player_.get());
+
+	// 飛翔物管理クラス生成 + 初期化
+	flyingObjectManager_ = std::make_unique<FlyingObjectManager>();
+	flyingObjectManager_->Initialize();
 }
 
 void GamePlayScene::Finalize() { }
@@ -78,12 +82,12 @@ void GamePlayScene::Update() {
 	
 	// プレイヤー更新
 	player_->Update();
-
 	// 宇宙船更新
 	spaceship_->Update();
-
 	// 命綱更新
 	tether_->Update();
+	// 飛翔物管理クラス更新
+	flyingObjectManager_->Update();
 
 	///
 	///	共通更新処理
@@ -160,12 +164,12 @@ void GamePlayScene::Draw() {
 
 	// プレイヤー描画
 	player_->Draw();
-
 	// 宇宙船描画
 	spaceship_->Draw();
-
 	// 命綱描画
 	tether_->Draw();
+	// 飛翔物管理クラス描画
+	flyingObjectManager_->Draw();
 
 	// -----------------------------------------------
 	postEffectManager_->EndMainScene();
@@ -207,12 +211,12 @@ void GamePlayScene::Draw() {
 
 	// プレイヤーデバッグ表示
 	player_->Debug();
-
 	// 宇宙船デバッグ表示
 	spaceship_->Debug();
-
 	// 命綱デバッグ表示
 	tether_->Debug();
+	// 飛翔物管理クラスデバッグ表示
+	flyingObjectManager_->Debug();
 
 	// コライダーデバッグ表示
 	Cygnus::CollisionManager::GetInstance()->Debug();
