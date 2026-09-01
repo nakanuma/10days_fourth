@@ -54,6 +54,11 @@ private:
 	/// </summary>
 	void Move();
 
+	/// <summary>
+	/// 無入力時の漂うオフセットを取得
+	/// </summary>
+	Cygnus::Float3 Drift();
+
 private:
 	// =========================================================
 	// Constants
@@ -62,8 +67,14 @@ private:
 	// コライダーの大きさ
 	static constexpr Cygnus::Float3 kColliderSize = { 1.0f, 2.0f, 1.0f };
 
-	// 移動速度
-	static constexpr float kMoveSpeed = 0.2f;
+	// 宇宙空間移動用のパラメーター
+	static constexpr float kAcceleration = 0.01f; // 加速度（入力時の増分）
+	static constexpr float kMaxSpeed = 0.25f; // 最高速度
+	static constexpr float kDamping = 0.985f; // 減衰率（1.0に近いほど止まりにくくなる）
+
+	// 漂いパラメーター
+	static constexpr float kDriftFrequency = 3.0f; // 漂う周期の速さ
+	static constexpr float kDriftAmplitude = 0.01f; // 漂う力の強さ
 
 	// =========================================================
 	// Member Variables
@@ -74,4 +85,10 @@ private:
 
 	// コライダー
 	std::unique_ptr<Cygnus::Collider> collider_;
+
+	// 速度ベクトル
+	Cygnus::Float3 velocity_ = {0.0f, 0.0f, 0.0f};
+
+	// 漂い計算用タイマー
+	float driftTimer_ = 0.0f;
 };
