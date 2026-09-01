@@ -42,6 +42,22 @@ void Tether::Initialize(Spaceship* spaceship, Player* player) {
 void Tether::Update() {
 	if (!spaceship_ || !player_) return;
 
+	// 宇宙船とプレイヤーの現在の直線距離を計算
+	Cygnus::Float3 startPos = spaceship_->GetTranslate();
+	Cygnus::Float3 endPos = player_->GetTranslate();
+	Cygnus::Float3 diff = {endPos.x - startPos.x, endPos.y - startPos.y, endPos.z - startPos.z};
+
+	float currentDistance = std::sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
+
+	// 距離に応じてセグメント長を動的計算（常にたわみをもたせるための処理）
+	float totalTargetLength = currentDistance * kSlackFactor;
+	currentSegmentLength_ = totalTargetLength / static_cast<float>(kNodeCount - 1);
+
+	// 近づきすぎた時にノード同士が重なって物理が壊れるのを防ぐ最小値ガード
+	if (currentSegmentLength_ < kMinSegmentLength) {
+		currentSegmentLength_ = kMinSegmentLength;
+	}
+
 	// 両端の位置に同期
 	nodes_.front().position = spaceship_->GetTranslate();
 	nodes_.back().position = player_->GetTranslate();
@@ -59,8 +75,8 @@ void Tether::Update() {
 
 		node.oldPosition = node.position;
 
-		// 外力（いまのところは保留）
-		Cygnus::Float3 gravity = { 0.0f, 0.0f, 0.0f };
+		// 少し下方向への重力を足す
+		Cygnus::Float3 gravity = { 0.0f, -0.001f, 0.0f };
 
 		node.position.x += velocity.x + gravity.x;
 		node.position.y += velocity.y + gravity.y;
@@ -141,7 +157,7 @@ void Tether::ApplyConstraints() {
 		if(distance < 0.0001f) continue;
 
 		// 自然長からのズレ量を算出
-		float difference = (distance - kSegmentLength) / distance;
+		float difference = (distance - currentSegmentLength_) / distance;
 
 		Cygnus::Float3 correction = {
 			delta.x * 0.5f * difference,
