@@ -83,11 +83,11 @@ private:
 	// Constants
 	// =========================================================
 
-	static constexpr size_t kNodeCount = 15; // ノードの個数
+	static constexpr size_t kNodeCount = 20; // ノードの個数
 	static constexpr float kSlackFactor = 1.15f; // たわみの倍率
 	static constexpr float kMinSegmentLength = 0.3f; // 近づきすぎたときの崩れ防止用最小長
 	static constexpr int kConstraintIterations = 5; // 拘束計算のループ回数（精度）
-	static constexpr float kDamping = 0.98f; // 減衰率（空気抵抗）
+	static constexpr float kDamping = 0.8f; // 減衰率（空気抵抗）
 
 	// =========================================================
 	// Member Variables

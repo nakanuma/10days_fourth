@@ -94,6 +94,20 @@ void Player::Move()
 	object_->transform_.translate_.x += velocity_.x + driftOffset.x;
 	object_->transform_.translate_.y += velocity_.y + driftOffset.y;
 	object_->transform_.translate_.z += velocity_.z + driftOffset.z;
+
+	// ˆÚ“®”ÍˆÍ§ŒÀ
+	float clampedX = std::clamp(object_->transform_.translate_.x, -kDefaultLimitX, kDefaultLimitX);
+	float clampedY = std::clamp(object_->transform_.translate_.y, kDefaultLimitMinY, kDefaultLimitMaxY);
+
+	if (clampedX != object_->transform_.translate_.x) {
+		velocity_.x = 0.0f;
+	}
+	if (clampedY != object_->transform_.translate_.y) {
+		velocity_.y = 0.0f;
+	}
+
+	object_->transform_.translate_.x = clampedX;
+	object_->transform_.translate_.y = clampedY;
 }
 
 Cygnus::Float3 Player::Drift() {

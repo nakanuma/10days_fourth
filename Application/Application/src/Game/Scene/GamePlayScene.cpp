@@ -92,6 +92,9 @@ void GamePlayScene::Update() {
 	// 命綱と飛翔物の衝突判定
 	tether_->CheckCollisionWithFlyingObjects(flyingObjectManager_.get());
 
+	// カメラの更新処理
+	UpdateCamera();
+
 	///
 	///	共通更新処理
 	/// 
@@ -244,4 +247,25 @@ void GamePlayScene::Debug() {
 
 	ImGui::End();
 #endif
+}
+
+void GamePlayScene::UpdateCamera() {
+	if (!camera_ || !player_) return;
+
+	// プレイヤーのY座標を取得
+	float playerY = player_->GetTranslate().y;
+
+	// プレイヤーのY座標から進行割合を計算
+	float t = 0.0f;
+	float rangeY = playerBottomY_ - playerTopY_;
+	if (std::abs(rangeY) > 0.0001f) {
+		t = (playerY - playerTopY_) / rangeY;
+	}
+
+	// 割合tに基づいて目標カメラ座標を線形補間で計算
+	Cygnus::Float3 targetCameraPos = Cygnus::Float3::Lerp(cameraTopPos_, cameraBottomPos_, t);
+
+	// 現在のカメラ位置から目標位置へ滑らかに追従移動
+	Cygnus::Float3 currentCameraPos = camera_->transform_.translate_;
+	camera_->transform_.translate_ = Cygnus::Float3::Lerp(currentCameraPos, targetCameraPos, cameraInterpolation_);
 }
