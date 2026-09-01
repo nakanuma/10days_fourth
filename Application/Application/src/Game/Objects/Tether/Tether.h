@@ -83,8 +83,9 @@ private:
 	// Constants
 	// =========================================================
 
-	static constexpr size_t kNodeCount = 20; // ノードの個数
-	static constexpr float kSegmentLength = 0.8f; // 各節の自然長
+	static constexpr size_t kNodeCount = 15; // ノードの個数
+	static constexpr float kSlackFactor = 1.15f; // たわみの倍率
+	static constexpr float kMinSegmentLength = 0.3f; // 近づきすぎたときの崩れ防止用最小長
 	static constexpr int kConstraintIterations = 5; // 拘束計算のループ回数（精度）
 	static constexpr float kDamping = 0.98f; // 減衰率（空気抵抗）
 
@@ -97,5 +98,8 @@ private:
 
 	// ノード配列
 	std::vector<TetherNode> nodes_;
+
+	// 動的に変化するセグメントの自然長
+	float currentSegmentLength_ = 0.8f;
 };
 
