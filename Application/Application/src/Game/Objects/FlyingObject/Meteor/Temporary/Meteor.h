@@ -27,5 +27,5 @@ private:
 	// 各パラメーター
 	static constexpr float kSpeed = 0.2f; // 移動速度
 	static constexpr float kRotationSpeed = 0.02f; // 回転速度
-	static constexpr Cygnus::Float3 kColliderSize = {2.0f, 2.0f, 2.0f}; // コライダーの大きさ
+	static constexpr float kHitRadius = 2.0f;      // コライダーの半径
 };

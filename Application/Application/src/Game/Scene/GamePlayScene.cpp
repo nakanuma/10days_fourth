@@ -89,6 +89,9 @@ void GamePlayScene::Update() {
 	// 飛翔物管理クラス更新
 	flyingObjectManager_->Update();
 
+	// 命綱と飛翔物の衝突判定
+	tether_->CheckCollisionWithFlyingObjects(flyingObjectManager_.get());
+
 	///
 	///	共通更新処理
 	/// 
