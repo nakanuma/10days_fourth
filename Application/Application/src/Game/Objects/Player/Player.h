@@ -75,6 +75,11 @@ private:
 	// •Y‚¢ƒpƒ‰ƒ[ƒ^[
 	static constexpr float kDriftFrequency = 3.0f; // •Y‚¤üŠú‚Ì‘¬‚³
 	static constexpr float kDriftAmplitude = 0.01f; // •Y‚¤—Í‚Ì‹­‚³
+	
+	// ˆÚ“®”ÍˆÍ‚Ì‰Šú’è”
+	static constexpr float kDefaultLimitMinY = -60.0f;
+	static constexpr float kDefaultLimitMaxY = 0.0f;
+	static constexpr float kDefaultLimitX = 25.0f;
 
 	// =========================================================
 	// Member Variables
