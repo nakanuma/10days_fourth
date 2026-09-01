@@ -68,6 +68,20 @@ void GameResourceLoader::LoadAllModelData() {
 		"Spaceship/spaceship.obj",
 		"spaceship.png"
 	);
+
+	// 隕石
+	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+		"Meteor", 
+		"Meteor/meteor.obj", 
+		"meteor.png"
+	);
+
+	// 修理パーツ
+	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+		"RepairPart", 
+		"RepairPart/repairpart.obj", 
+		"repairpart.png"
+	);
 }
 
 void GameResourceLoader::RegisterAllParticleEffect() {

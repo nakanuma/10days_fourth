@@ -74,7 +74,7 @@ private:
 	// Constants
 	// =========================================================
 
-	static constexpr size_t kNodeCount = 25; // ノードの個数
+	static constexpr size_t kNodeCount = 20; // ノードの個数
 	static constexpr float kSegmentLength = 0.8f; // 各節の自然長
 	static constexpr int kConstraintIterations = 5; // 拘束計算のループ回数（精度）
 	static constexpr float kDamping = 0.98f; // 減衰率（空気抵抗）

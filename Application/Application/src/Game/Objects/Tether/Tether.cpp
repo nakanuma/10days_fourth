@@ -75,7 +75,7 @@ void Tether::Update() {
 void Tether::Draw() {
 	// —×‚è‡‚¤ƒm[ƒh“¯m‚ğü‚Å•`‰æ
 	for(size_t i = 0; i < nodes_.size() - 1; ++i) {
-		Cygnus::LineDrawer::GetInstance()->RegisterLine(nodes_[i].position, nodes_[i + 1].position, {1.0f, 1.0f, 1.0f, 1.0f});
+		Cygnus::LineDrawer::GetInstance()->RegisterLine(nodes_[i].position, nodes_[i + 1].position, {1.0f, 0.0f, 0.0f, 1.0f});
 	}
 }
 

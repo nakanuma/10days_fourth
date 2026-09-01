@@ -36,6 +36,18 @@
     <ClCompile Include="src\Game\Objects\Tether\Tether.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\FlyingObjectManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\Base\FlyingObject.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\Temporary\Meteor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\Temporary\RepairPart.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h">
@@ -54,6 +66,18 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\Objects\Tether\Tether.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\FlyingObjectManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\Base\FlyingObject.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\Temporary\Meteor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\Temporary\RepairPart.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
