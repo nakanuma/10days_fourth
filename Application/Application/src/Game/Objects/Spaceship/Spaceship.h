@@ -46,11 +46,26 @@ public:
 
 private:
 	// =========================================================
+	// Internal Methods
+	// =========================================================
+
+	/// <summary>
+	/// 無入力時の漂うオフセットを取得
+	/// </summary>
+	void Drift();
+
+private:
+	// =========================================================
 	// Constants
 	// =========================================================
 
 	// コライダーの大きさ
 	static constexpr Cygnus::Float3 kColliderSize = { 6.0f, 3.0f, 3.0f };
+
+	// 漂いパラメーター
+	static constexpr float kDriftFrequency = 1.0f;  // 漂う周期の速さ
+	static constexpr float kDriftAmplitudeX = 0.5f; // X方向の揺れ幅
+	static constexpr float kDriftAmplitudeY = 0.3f; // Y軸方向の揺れ幅
 
 	// =========================================================
 	// Member Variables
@@ -61,5 +76,11 @@ private:
 
 	// コライダー
 	std::unique_ptr<Cygnus::Collider> collider_;
+
+	// 基準座標（初期位置）
+	Cygnus::Float3 basePosition_ = {0.0f, 0.0f, 0.0f};
+
+	// 漂い計算用タイマー
+	float driftTimer_ = 0.0f;
 };
 

@@ -3,6 +3,7 @@
 // Engine
 #include <ImguiWrapper.h>
 #include <LineDrawer.h>
+#include <Collider/CollisionMath.h>
 
 // Application
 #include <src/Game/Objects/Spaceship/Spaceship.h>
@@ -87,6 +88,41 @@ void Tether::Debug() {
 
 	ImGui::End();
 #endif
+}
+
+void Tether::CheckCollisionWithFlyingObjects(FlyingObjectManager* flyingObjectManager) { 
+	if (!flyingObjectManager) return; 
+
+	const auto& objects = flyingObjectManager->GetObjects();
+	
+	for (const auto& obj : objects) {
+		// 飛翔物の中心位置と判定半径を取得
+		Cygnus::Float3 objPos = obj->GetTranslate();
+		float hitRadius = obj->GetHitRadius();
+
+		// テザーの各線分と飛翔物の衝突チェック
+		for (size_t i = 0; i < nodes_.size() - 1; ++i) {
+			const auto& nodeA = nodes_[i].position;
+			const auto& nodeB = nodes_[i + 1].position;
+
+			// 衝突時の処理
+			if (Cygnus::CollisionMath::IsSegmentIntersectSphere(nodeA, nodeB, objPos, hitRadius)) {
+				// 飛翔物を消滅させる
+				obj->Destroy();
+
+				// 命中時の処理
+				if (obj->GetCategory() == ObjectCategory::Meteor) {
+				
+				}
+				if (obj->GetCategory() == ObjectCategory::RepairPart) {
+				
+				}
+
+				// 衝突したらこの飛翔物の判定は終了
+				break;
+			}
+		}
+	}
 }
 
 void Tether::ApplyConstraints() {

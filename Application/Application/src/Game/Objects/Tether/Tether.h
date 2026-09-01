@@ -3,6 +3,9 @@
 // Engine
 #include <MyMath.h>
 
+// Application
+#include <src/Game/Objects/FlyingObject/FlyingObjectManager.h>
+
 // 前方宣言
 class Spaceship;
 class Player;
@@ -48,6 +51,12 @@ public:
 	/// デバッグ表示
 	/// </summary>
 	void Debug();
+
+	/// <summary>
+	/// 飛翔物との判定を一括チェック
+	/// </summary>
+	/// <param name="flyingObjectManager"></param>
+	void CheckCollisionWithFlyingObjects(FlyingObjectManager* flyingObjectManager);
 
 	// =========================================================
 	// Accessor

@@ -20,13 +20,9 @@ void FlyingObject::Update() {
 	object_->transform_.rotate_.z += rotationSpeed_;
 
 	// Xが一定の距離に達したら自動で死亡
-	if (object_->transform_.translate_.x < kDespawnX) {
-		isDead_ = true;
-		// コライダーの登録解除
-		if (collider_) {
-			Cygnus::CollisionManager::GetInstance()->Unregister(collider_.get());
-		}
-	}
+	/*if (object_->transform_.translate_.x < kDespawnX) {
+		Destroy();
+	}*/
 
 	// コライダー更新
 	if (collider_) collider_->Update();
@@ -39,4 +35,13 @@ void FlyingObject::Draw() {
 
 	// オブジェクト描画
 	object_->Draw();
+}
+
+void FlyingObject::Destroy() {
+	// 死亡フラグを立てる
+	isDead_ = true;
+	// コライダーの登録解除
+	if (collider_) {
+		Cygnus::CollisionManager::GetInstance()->Unregister(collider_.get());
+	}
 }

@@ -10,6 +10,7 @@ void RepairPart::Initialize(const Cygnus::Float3& position) {
 	category_ = ObjectCategory::RepairPart;
 	speed_ = kSpeed;
 	rotationSpeed_ = kRotationSpeed;
+	hitRadius_ = kHitRadius;
 
 	// ƒ‚ƒfƒ‹Ý’è
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("RepairPart");
@@ -18,7 +19,7 @@ void RepairPart::Initialize(const Cygnus::Float3& position) {
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
 	aabb->SetTag("RepairPart");
 	aabb->SetFollowTarget(&object_->transform_.translate_);
-	aabb->SetSize(kColliderSize);
+	aabb->SetSize({hitRadius_, hitRadius_, hitRadius_});
 	aabb->SetOwner(this);
 
 	collider_ = std::move(aabb);

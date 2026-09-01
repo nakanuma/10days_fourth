@@ -55,6 +55,12 @@ public:
 	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; } 
 
 	/// <summary>
+	/// “–‚½‚è”»’è”¼Œa‚Ìæ“¾
+	/// </summary>
+	/// <returns></returns>
+	float GetHitRadius() const { return hitRadius_; }
+
+	/// <summary>
 	/// ‘å•ª—Ş‚Ìæ“¾
 	/// </summary>
 	/// <returns></returns>
@@ -69,7 +75,7 @@ public:
 	/// <summary>
 	/// Á–Å‚³‚¹‚é
 	/// </summary>
-	void Destroy() { isDead_ = true; }
+	void Destroy();
 
 protected:
 	// =========================================================
@@ -84,9 +90,11 @@ protected:
 	// ”òãÄ•¨‚Ì‘å•ª—Ş
 	ObjectCategory category_ = ObjectCategory::Meteor;
 	// ˆÚ“®‘¬“x
-	float speed_ = 0.1f;
+	float speed_ = 0.0f;
 	// ‰ñ“]‘¬“x
-	float rotationSpeed_ = 0.01f;
+	float rotationSpeed_ = 0.0f;
+	// “–‚½‚è”»’è”¼Œa
+	float hitRadius_ = 0.0f;
 	// €–Sƒtƒ‰ƒO
 	bool isDead_ = false;
 

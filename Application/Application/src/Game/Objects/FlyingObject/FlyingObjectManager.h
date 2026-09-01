@@ -40,6 +40,16 @@ public:
 		objects_.push_back(std::move(newObj));
 	}
 
+	// =========================================================
+	// Accessor
+	// =========================================================
+
+	/// <summary>
+	/// ”òãÄ•¨‚Ì”z—ñ‚ðŽæ“¾
+	/// </summary>
+	/// <returns></returns>
+	const std::vector<std::unique_ptr<FlyingObject>>& GetObjects() const { return objects_; }
+
 private:
 	// ”òãÄ•¨‚Ì”z—ñ
 	std::vector<std::unique_ptr<FlyingObject>> objects_;
