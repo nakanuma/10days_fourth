@@ -92,9 +92,9 @@ void GameResourceLoader::LoadAllModelData() {
 
 	// 修理パーツ（中品質）
 	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
-		"RepairPartMidium",
-		"RepairPartMidium/repairpartMidium.obj",
-		"repairpartMidium.png"
+		"RepairPartMedium",
+		"RepairPartMedium/repairpartMedium.obj",
+		"repairpartMedium.png"
 	);
 
 	// 修理パーツ（高品質）

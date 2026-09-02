@@ -1,9 +1,9 @@
-#include "RepairPartMidium.h"
+#include "RepairPartMedium.h"
 
 // Engine
 #include <Collider/CollisionManager.h>
 
-void RepairPartMidium::Initialize(const Cygnus::Float3& position, bool isRightToLeft) {
+void RepairPartMedium::Initialize(const Cygnus::Float3& position, bool isRightToLeft) {
 	FlyingObject::Initialize(position, isRightToLeft);
 
 	// 各パラメーター設定
@@ -13,11 +13,11 @@ void RepairPartMidium::Initialize(const Cygnus::Float3& position, bool isRightTo
 	hitRadius_ = kHitRadius;
 
 	// モデル設定
-	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("RepairPartMidium");
+	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("RepairPartMedium");
 
 	// コライダー生成
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
-	aabb->SetTag("RepairPartMidium");
+	aabb->SetTag("RepairPartMedium");
 	aabb->SetFollowTarget(&object_->transform_.translate_);
 	aabb->SetSize({ hitRadius_, hitRadius_, hitRadius_ });
 	aabb->SetOwner(this);

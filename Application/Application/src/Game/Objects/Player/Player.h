@@ -42,6 +42,12 @@ public:
 	/// </summary>
 	void StartRewind();
 
+	/// <summary>
+	/// 衝突時コールバック
+	/// </summary>
+	/// <param name="other"></param>
+	void OnCollision(Cygnus::Collider* other) override;
+
 	// =========================================================
 	// Accessor
 	// =========================================================
@@ -57,6 +63,14 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool IsRewinding() const { return isRewinding_; }
+
+	/// <summary>
+	/// 各修理パーツの取得数を取得
+	/// </summary>
+	/// <returns></returns>
+	int32_t GetRepairPartLowCount() const { return repairPartLowCount_; }
+	int32_t GetRepairPartMediumCount() const { return repairPartMediumCount_; }
+	int32_t GetRepairPartHighCount() const { return repairPartHighCount_; }
 
 private:
 	// =========================================================
@@ -133,4 +147,9 @@ private:
 	// 巻取り管理用
 	bool isRewinding_ = false; // 巻取り中フラグ
 	float autoRewindTimer_ = 0.0f; // 滞在時間カウント用タイマー
+
+	// 修理パーツ管理用
+	int32_t repairPartLowCount_ = 0;
+	int32_t repairPartMediumCount_ = 0;
+	int32_t repairPartHighCount_ = 0;
 };

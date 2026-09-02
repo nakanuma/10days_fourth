@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.cpp" />
-    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMidium\RepairPartMidium.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorLarge\MeteorLarge.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.cpp" />
@@ -35,7 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.h" />
-    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMidium\RepairPartMidium.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorLarge\MeteorLarge.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.h" />

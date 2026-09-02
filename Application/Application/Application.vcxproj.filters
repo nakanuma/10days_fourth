@@ -51,7 +51,7 @@
     <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMidium\RepairPartMidium.cpp">
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.cpp">
@@ -92,7 +92,7 @@
     <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMidium\RepairPartMidium.h">
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.h">

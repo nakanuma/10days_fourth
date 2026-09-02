@@ -9,6 +9,7 @@
 
 // Application
 #include <src/Game/Objects/Spaceship/Spaceship.h>
+#include <src/Game/Objects/FlyingObject/Base/FlyingObject.h>
 
 void Player::Initialize(Spaceship* spaceship) {
 	spaceship_ = spaceship;
@@ -61,8 +62,16 @@ void Player::Debug() {
 
 	ImGui::DragFloat3("translate", &object_->transform_.translate_.x, 0.01f);
 
+	ImGui::Separator();
+
 	ImGui::Checkbox("IsRewinding", &isRewinding_);
 	ImGui::Text("RewindTimer: %.2f", autoRewindTimer_);
+
+	ImGui::Separator();
+
+	ImGui::Text("RepairPartLow Count: %d", repairPartLowCount_);
+	ImGui::Text("RepairPartMidium Count: %d", repairPartMediumCount_);
+	ImGui::Text("RepairPartHigh Count: %d", repairPartHighCount_);
 
 	ImGui::End();
 #endif
@@ -73,6 +82,20 @@ void Player::StartRewind()
 	// 巻取りを実行する
 	if(!isRewinding_) {
 		isRewinding_ = true;
+	}
+}
+
+void Player::OnCollision(Cygnus::Collider* other)
+{
+	/* 各修理パーツとの衝突 */
+	if(other->GetTag() == "RepairPartLow") {
+		repairPartLowCount_++;
+	}
+	if(other->GetTag() == "RepairPartMedium") {
+		repairPartMediumCount_++;
+	}
+	if(other->GetTag() == "RepairPartHigh") {
+		repairPartHighCount_++;
 	}
 }
 

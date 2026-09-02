@@ -44,6 +44,12 @@ public:
 	/// </summary>
 	virtual void Draw();
 
+	/// <summary>
+	/// 衝突時コールバック
+	/// </summary>
+	/// <param name="other"></param>
+	virtual void OnCollision(Cygnus::Collider* other) override;
+
 	// =========================================================
 	// Accessor
 	// =========================================================
@@ -73,9 +79,14 @@ public:
 	bool IsDead() const { return isDead_; }
 
 	/// <summary>
-	/// 消滅させる
+	/// 死亡させる
 	/// </summary>
-	void Destroy();
+	void Dead() { isDead_ = true; }
+
+	/// <summary>
+	/// コライダーを破棄する
+	/// </summary>
+	void UnregisterCollider();
 
 protected:
 	// =========================================================
