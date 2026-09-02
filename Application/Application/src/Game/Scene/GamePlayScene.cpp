@@ -52,13 +52,13 @@ void GamePlayScene::Initialize() {
 	///	↓ ゲームシーン用
 	///
 
-	// プレイヤー生成 + 初期化
-	player_ = std::make_unique<Player>();
-	player_->Initialize();
-
 	// 宇宙船生成 + 初期化
 	spaceship_ = std::make_unique<Spaceship>();
 	spaceship_->Initialize();
+
+	// プレイヤー生成 + 初期化
+	player_ = std::make_unique<Player>();
+	player_->Initialize(spaceship_.get());
 
 	// 命綱生成 + 初期化
 	tether_ = std::make_unique<Tether>();
