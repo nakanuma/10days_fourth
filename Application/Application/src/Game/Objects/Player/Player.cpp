@@ -5,6 +5,7 @@
 #include <Input/Input.h>
 #include <ImguiWrapper.h>
 #include <TimeManager.h>
+#include <LineDrawer.h>
 
 // Application
 #include <src/Game/Objects/Spaceship/Spaceship.h>
@@ -49,6 +50,9 @@ void Player::Update() {
 void Player::Draw() {
 	// オブジェクト描画
 	object_->Draw();
+
+	// 移動制限エリアの描画
+	DrawAreaLimit();
 }
 
 void Player::Debug() {
@@ -203,4 +207,22 @@ void Player::ProcessRewind()
 
 	// 座標への適用
 	object_->transform_.translate_ += velocity_;
+}
+
+void Player::DrawAreaLimit()
+{
+	float z = object_->transform_.translate_.z;
+
+	Cygnus::Float3 topLeft = { -kDefaultLimitX, kDefaultLimitMaxY, z};
+	Cygnus::Float3 topRight = { kDefaultLimitX, kDefaultLimitMaxY, z };
+	Cygnus::Float3 bottomLeft = { -kDefaultLimitX, kDefaultLimitMinY, z };
+	Cygnus::Float3 bottomRight = { kDefaultLimitX, kDefaultLimitMinY, z };
+
+	Cygnus::Float4 lineColor = { 0.0f, 1.0f, 0.0f, 1.0f };
+
+	auto lineDrawer = Cygnus::LineDrawer::GetInstance();
+	lineDrawer->RegisterLine(topLeft, topRight, lineColor); // 上辺
+	lineDrawer->RegisterLine(topRight, bottomRight, lineColor); // 右辺
+	lineDrawer->RegisterLine(bottomRight, bottomLeft, lineColor); // 下辺
+	lineDrawer->RegisterLine(bottomLeft, topLeft, lineColor); // 左辺
 }

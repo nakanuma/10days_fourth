@@ -78,6 +78,11 @@ private:
 	/// </summary>
 	void ProcessRewind();
 
+	/// <summary>
+	/// ˆÚ“®§ŒÀƒGƒŠƒA‚Ì•`‰æ
+	/// </summary>
+	void DrawAreaLimit();
+
 private:
 	// =========================================================
 	// Constants
