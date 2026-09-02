@@ -4,9 +4,9 @@
 #include <src/Game/Objects/FlyingObject/Base/FlyingObject.h>
 
 // =========================================================
-// 隕石クラス（仮）
+// 隕石（大）
 // =========================================================
-class Meteor : public FlyingObject {
+class MeteorLarge : public FlyingObject {
 public:
 	// =========================================================
 	// Public Methods
@@ -25,7 +25,7 @@ private:
 	// =========================================================
 
 	// 各パラメーター
-	static constexpr float kSpeed = 0.2f; // 移動速度
+	static constexpr float kSpeed = 0.075f; // 移動速度
 	static constexpr float kRotationSpeed = 0.02f; // 回転速度
 	static constexpr float kHitRadius = 2.0f;      // コライダーの半径
 };

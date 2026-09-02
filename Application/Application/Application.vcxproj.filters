@@ -42,10 +42,19 @@
     <ClCompile Include="src\Game\Objects\FlyingObject\Base\FlyingObject.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\Temporary\Meteor.cpp">
+    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\Temporary\RepairPart.cpp">
+    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorLarge\MeteorLarge.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMidium\RepairPartMidium.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,10 +83,19 @@
     <ClInclude Include="src\Game\Objects\FlyingObject\Base\FlyingObject.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\Temporary\Meteor.h">
+    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\Temporary\RepairPart.h">
+    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorLarge\MeteorLarge.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMidium\RepairPartMidium.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

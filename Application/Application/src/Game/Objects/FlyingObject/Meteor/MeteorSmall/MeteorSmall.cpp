@@ -1,10 +1,10 @@
-#include "Meteor.h"
+#include "MeteorSmall.h"
 
 // Engine
 #include <Collider/CollisionManager.h>
 
-void Meteor::Initialize(const Cygnus::Float3& position) { 
-	FlyingObject::Initialize(position); 
+void MeteorSmall::Initialize(const Cygnus::Float3& position) {
+	FlyingObject::Initialize(position);
 
 	// 各パラメーター設定
 	category_ = ObjectCategory::Meteor;
@@ -13,13 +13,13 @@ void Meteor::Initialize(const Cygnus::Float3& position) {
 	hitRadius_ = kHitRadius;
 
 	// モデル設定
-	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Meteor");
+	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("MeteorSmall");
 
 	// コライダー生成
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
-	aabb->SetTag("Meteor");
+	aabb->SetTag("MeteorSmall");
 	aabb->SetFollowTarget(&object_->transform_.translate_);
-	aabb->SetSize({hitRadius_, hitRadius_, hitRadius_});
+	aabb->SetSize({ hitRadius_, hitRadius_, hitRadius_ });
 	aabb->SetOwner(this);
 
 	collider_ = std::move(aabb);

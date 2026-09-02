@@ -69,18 +69,39 @@ void GameResourceLoader::LoadAllModelData() {
 		"spaceship.png"
 	);
 
-	// 隕石
+	// 隕石（小）
 	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
-		"Meteor", 
-		"Meteor/meteor.obj", 
-		"meteor.png"
+		"MeteorSmall", 
+		"MeteorSmall/meteorSmall.obj", 
+		"meteorSmall.png"
 	);
 
-	// 修理パーツ
+	// 隕石（大）
 	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
-		"RepairPart", 
-		"RepairPart/repairpart.obj", 
-		"repairpart.png"
+		"MeteorLarge",
+		"MeteorLarge/meteorLarge.obj",
+		"meteorLarge.png"
+	);
+
+	// 修理パーツ（低品質）
+	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+		"RepairPartLow", 
+		"RepairPartLow/repairpartLow.obj", 
+		"repairpartLow.png"
+	);
+
+	// 修理パーツ（中品質）
+	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+		"RepairPartMidium",
+		"RepairPartMidium/repairpartMidium.obj",
+		"repairpartMidium.png"
+	);
+
+	// 修理パーツ（高品質）
+	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+		"RepairPartHigh",
+		"RepairPartHigh/repairpartHigh.obj",
+		"repairpartHigh.png"
 	);
 }
 

@@ -4,9 +4,9 @@
 #include <src/Game/Objects/FlyingObject/Base/FlyingObject.h>
 
 // =========================================================
-// 修理パーツクラス（仮）
+// 修理パーツ（高品質）
 // =========================================================
-class RepairPart : public FlyingObject {
+class RepairPartHigh : public FlyingObject {
 public:
 	// =========================================================
 	// Public Methods
@@ -27,5 +27,5 @@ private:
 	// 各パラメーター
 	static constexpr float kSpeed = 0.2f;                               // 移動速度
 	static constexpr float kRotationSpeed = 0.02f;                      // 回転速度
-	static constexpr float kHitRadius = 1.5f;                           // コライダーの半径
+	static constexpr float kHitRadius = 1.0f;                           // コライダーの半径
 };
