@@ -3,8 +3,8 @@
 // Engine
 #include <Collider/CollisionManager.h>
 
-void RepairPartHigh::Initialize(const Cygnus::Float3& position) {
-	FlyingObject::Initialize(position);
+void RepairPartHigh::Initialize(const Cygnus::Float3& position, bool isRightToLeft) {
+	FlyingObject::Initialize(position, isRightToLeft);
 
 	// 各パラメーター設定
 	category_ = ObjectCategory::RepairPart;

@@ -17,7 +17,7 @@ public:
 	/// </summary>
 	/// <param name="position"></param>
 	/// <param name="speed"></param>
-	void Initialize(const Cygnus::Float3& position) override;
+	void Initialize(const Cygnus::Float3& position, bool isRightToLeft = true) override;
 
 private:
 	// =========================================================
@@ -25,7 +25,7 @@ private:
 	// =========================================================
 
 	// 各パラメーター
-	static constexpr float kSpeed = 0.09f; // 移動速度
+	static constexpr float kSpeed = 0.06f; // 移動速度
 	static constexpr float kRotationSpeed = 0.02f; // 回転速度
 	static constexpr float kHitRadius = 1.0f;      // コライダーの半径
 };

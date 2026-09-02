@@ -3,8 +3,11 @@
 // Engine
 #include <Collider/CollisionManager.h>
 
-void FlyingObject::Initialize(const Cygnus::Float3& position) { 
+void FlyingObject::Initialize(const Cygnus::Float3& position, bool isRightToLeft) {
 	isDead_ = false;
+
+	// 移動方向の設定
+	directionX_ = isRightToLeft ? -1.0f : 1.0f;
 
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
@@ -15,14 +18,16 @@ void FlyingObject::Update() {
 	if (isDead_) return;
 
 	// 右から左への移動
-	object_->transform_.translate_.x -= speed_;
+	object_->transform_.translate_.x += speed_ * directionX_;
 	// 回転処理（仮）
 	object_->transform_.rotate_.z += rotationSpeed_;
 
-	// Xが一定の距離に達したら自動で死亡
-	/*if (object_->transform_.translate_.x < kDespawnX) {
+	// 画面外に達したら自動で削除
+	if(directionX_ < 0.0f && object_->transform_.translate_.x < -kDespawnX) { // 右から左へ移動している場合
 		Destroy();
-	}*/
+	} else if (directionX_ > 0.0f && object_->transform_.translate_.x > kDespawnX) { // 左から右へ移動している場合
+		Destroy();
+	}
 
 	// コライダー更新
 	if (collider_) collider_->Update();
