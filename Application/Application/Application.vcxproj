@@ -19,8 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\Temporary\RepairPart.cpp" />
-    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\Temporary\Meteor.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMidium\RepairPartMidium.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorLarge\MeteorLarge.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\Base\FlyingObject.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\FlyingObjectManager.cpp" />
     <ClCompile Include="src\Game\Objects\Spaceship\Spaceship.cpp" />
@@ -31,8 +34,11 @@
     <ClCompile Include="src\Game\Objects\Tether\Tether.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\Temporary\RepairPart.h" />
-    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\Temporary\Meteor.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMidium\RepairPartMidium.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorLarge\MeteorLarge.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\Base\FlyingObject.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\FlyingObjectManager.h" />
     <ClInclude Include="src\Game\Objects\Spaceship\Spaceship.h" />

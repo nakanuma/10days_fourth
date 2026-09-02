@@ -30,9 +30,9 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="position"></param>
-	/// <param name="speed"></param>
-	virtual void Initialize(const Cygnus::Float3& position);
+	/// <param name="position">位置</param>
+	/// <param name="isRightToLeft">true: 右から左へ, false: 左から右へ</param>
+	virtual void Initialize(const Cygnus::Float3& position, bool isRightToLeft = true);
 
 	/// <summary>
 	/// 更新処理
@@ -98,6 +98,9 @@ protected:
 	// 死亡フラグ
 	bool isDead_ = false;
 
+	// 左右の移動方向管理（-1.0f : 左方向, 1.0 : 右方向）
+	float directionX_ = -1.0f;
+
 	// 消滅境界線（仮）
-	static constexpr float kDespawnX = 0.0f;
+	static constexpr float kDespawnX = 50.0f;
 };

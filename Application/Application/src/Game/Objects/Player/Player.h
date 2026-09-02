@@ -4,6 +4,9 @@
 #include <Object3D.h>
 #include <Collider/Collider.h>
 
+// 前方宣言
+class Spaceship;
+
 // =========================================================
 // プレイヤークラス
 // =========================================================
@@ -17,7 +20,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize();
+	void Initialize(Spaceship* spaceship);
 
 	/// <summary>
 	/// 更新処理
@@ -34,6 +37,11 @@ public:
 	/// </summary>
 	void Debug();
 
+	/// <summary>
+	/// 命綱巻取りの実行
+	/// </summary>
+	void StartRewind();
+
 	// =========================================================
 	// Accessor
 	// =========================================================
@@ -43,6 +51,12 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	const Cygnus::Float3& GetTranslate() { return object_->transform_.translate_; }
+
+	/// <summary>
+	/// 巻取り状態の取得
+	/// </summary>
+	/// <returns></returns>
+	bool IsRewinding() const { return isRewinding_; }
 
 private:
 	// =========================================================
@@ -58,6 +72,11 @@ private:
 	/// 無入力時の漂うオフセットを取得
 	/// </summary>
 	Cygnus::Float3 Drift();
+
+	/// <summary>
+	/// 巻取り時処理
+	/// </summary>
+	void ProcessRewind();
 
 private:
 	// =========================================================
@@ -81,6 +100,12 @@ private:
 	static constexpr float kDefaultLimitMaxY = 0.0f;
 	static constexpr float kDefaultLimitX = 25.0f;
 
+	// 巻取り用パラメーター
+	static constexpr float kDefaultAutoRewindTime = 10.0f; // 自動巻き取りまでの限界時間（秒）
+	static constexpr float kDefaultRewindAccel = 0.08f; // 巻取り時の加速度
+	static constexpr float kDefaultRewindMaxSpeed = 0.75f; // 巻取り時の最高速度
+	static constexpr float kRewindStopDistance = 2.0f; // 宇宙船にこの距離まで近づいたら終了
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
@@ -91,9 +116,16 @@ private:
 	// コライダー
 	std::unique_ptr<Cygnus::Collider> collider_;
 
+	// 宇宙船へのポインタ
+	Spaceship* spaceship_ = nullptr; 
+
 	// 速度ベクトル
 	Cygnus::Float3 velocity_ = {0.0f, 0.0f, 0.0f};
 
 	// 漂い計算用タイマー
 	float driftTimer_ = 0.0f;
+
+	// 巻取り管理用
+	bool isRewinding_ = false; // 巻取り中フラグ
+	float autoRewindTimer_ = 0.0f; // 滞在時間カウント用タイマー
 };
