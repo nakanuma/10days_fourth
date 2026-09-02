@@ -5,9 +5,11 @@
 #include <Input/Input.h>
 #include <ImguiWrapper.h>
 #include <TimeManager.h>
+#include <LineDrawer.h>
 
 // Application
 #include <src/Game/Objects/Spaceship/Spaceship.h>
+#include <src/Game/Objects/FlyingObject/Base/FlyingObject.h>
 
 void Player::Initialize(Spaceship* spaceship) {
 	spaceship_ = spaceship;
@@ -49,6 +51,9 @@ void Player::Update() {
 void Player::Draw() {
 	// オブジェクト描画
 	object_->Draw();
+
+	// 移動制限エリアの描画
+	DrawAreaLimit();
 }
 
 void Player::Debug() {
@@ -57,8 +62,16 @@ void Player::Debug() {
 
 	ImGui::DragFloat3("translate", &object_->transform_.translate_.x, 0.01f);
 
+	ImGui::Separator();
+
 	ImGui::Checkbox("IsRewinding", &isRewinding_);
 	ImGui::Text("RewindTimer: %.2f", autoRewindTimer_);
+
+	ImGui::Separator();
+
+	ImGui::Text("RepairPartLow Count: %d", repairPartLowCount_);
+	ImGui::Text("RepairPartMidium Count: %d", repairPartMediumCount_);
+	ImGui::Text("RepairPartHigh Count: %d", repairPartHighCount_);
 
 	ImGui::End();
 #endif
@@ -69,6 +82,20 @@ void Player::StartRewind()
 	// 巻取りを実行する
 	if(!isRewinding_) {
 		isRewinding_ = true;
+	}
+}
+
+void Player::OnCollision(Cygnus::Collider* other)
+{
+	/* 各修理パーツとの衝突 */
+	if(other->GetTag() == "RepairPartLow") {
+		repairPartLowCount_++;
+	}
+	if(other->GetTag() == "RepairPartMedium") {
+		repairPartMediumCount_++;
+	}
+	if(other->GetTag() == "RepairPartHigh") {
+		repairPartHighCount_++;
 	}
 }
 
@@ -203,4 +230,22 @@ void Player::ProcessRewind()
 
 	// 座標への適用
 	object_->transform_.translate_ += velocity_;
+}
+
+void Player::DrawAreaLimit()
+{
+	float z = object_->transform_.translate_.z;
+
+	Cygnus::Float3 topLeft = { -kDefaultLimitX, kDefaultLimitMaxY, z};
+	Cygnus::Float3 topRight = { kDefaultLimitX, kDefaultLimitMaxY, z };
+	Cygnus::Float3 bottomLeft = { -kDefaultLimitX, kDefaultLimitMinY, z };
+	Cygnus::Float3 bottomRight = { kDefaultLimitX, kDefaultLimitMinY, z };
+
+	Cygnus::Float4 lineColor = { 0.0f, 1.0f, 0.0f, 1.0f };
+
+	auto lineDrawer = Cygnus::LineDrawer::GetInstance();
+	lineDrawer->RegisterLine(topLeft, topRight, lineColor); // 上辺
+	lineDrawer->RegisterLine(topRight, bottomRight, lineColor); // 右辺
+	lineDrawer->RegisterLine(bottomRight, bottomLeft, lineColor); // 下辺
+	lineDrawer->RegisterLine(bottomLeft, topLeft, lineColor); // 左辺
 }

@@ -24,9 +24,9 @@ void FlyingObject::Update() {
 
 	// 画面外に達したら自動で削除
 	if(directionX_ < 0.0f && object_->transform_.translate_.x < -kDespawnX) { // 右から左へ移動している場合
-		Destroy();
+		isDead_ = true;
 	} else if (directionX_ > 0.0f && object_->transform_.translate_.x > kDespawnX) { // 左から右へ移動している場合
-		Destroy();
+		isDead_ = true;
 	}
 
 	// コライダー更新
@@ -42,11 +42,18 @@ void FlyingObject::Draw() {
 	object_->Draw();
 }
 
-void FlyingObject::Destroy() {
-	// 死亡フラグを立てる
-	isDead_ = true;
-	// コライダーの登録解除
-	if (collider_) {
+void FlyingObject::OnCollision(Cygnus::Collider* other)
+{
+	// 衝突相手がプレイヤーの場合、死亡させる
+	if(other->GetTag() == "Player") {
+		isDead_ = true;
+	}
+}
+
+void FlyingObject::UnregisterCollider()
+{
+	if(collider_) {
 		Cygnus::CollisionManager::GetInstance()->Unregister(collider_.get());
+		collider_.reset();
 	}
 }

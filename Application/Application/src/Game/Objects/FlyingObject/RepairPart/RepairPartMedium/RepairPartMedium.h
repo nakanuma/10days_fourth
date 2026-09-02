@@ -6,7 +6,7 @@
 // =========================================================
 // 修理パーツ（中品質）
 // =========================================================
-class RepairPartMidium : public FlyingObject {
+class RepairPartMedium : public FlyingObject {
 public:
 	// =========================================================
 	// Public Methods

@@ -10,7 +10,7 @@
 #include <src/Game/Objects/FlyingObject/Meteor/MeteorLarge/MeteorLarge.h> // 隕石（大）
 
 #include <src/Game/Objects/FlyingObject/RepairPart/RepairPartLow/RepairPartLow.h> // 修理パーツ（低品質）
-#include <src/Game/Objects/FlyingObject/RepairPart/RepairPartMidium/RepairPartMidium.h> // 修理パーツ（中品質）
+#include <src/Game/Objects/FlyingObject/RepairPart/RepairPartMedium/RepairPartMedium.h> // 修理パーツ（中品質）
 #include <src/Game/Objects/FlyingObject/RepairPart/RepairpartHigh/RepairPartHigh.h> // 修理パーツ（高品質）
 
 void FlyingObjectManager::Initialize() {
@@ -27,9 +27,15 @@ void FlyingObjectManager::Update() {
 	}
 
 	// 画面外に出た or 破壊されたオブジェクトを自動削除
-	std::erase_if(objects_, [](const std::unique_ptr<FlyingObject>& obj) {
-		return obj->IsDead();
+	auto it = std::remove_if(objects_.begin(), objects_.end(), 
+		[](const std::unique_ptr<FlyingObject>& obj) {
+			if (obj->IsDead()) {
+				obj->UnregisterCollider();
+				return true;
+			}
+			return false;
 		});
+	objects_.erase(it, objects_.end());
 }
 
 void FlyingObjectManager::Draw() {
@@ -53,8 +59,8 @@ void FlyingObjectManager::Debug() {
 	if (ImGui::Button("Spawn : RepairPartLow")) {
 		Spawn<RepairPartLow>(Cygnus::Float3{ 25.0f, -10.0f, 0.0f });
 	}
-	if (ImGui::Button("Spawn : RepairPartMidium")) {
-		Spawn<RepairPartMidium>(Cygnus::Float3{ 25.0f, -10.0f, 0.0f });
+	if (ImGui::Button("Spawn : RepairPartMedium")) {
+		Spawn<RepairPartMedium>(Cygnus::Float3{ 25.0f, -10.0f, 0.0f });
 	}
 	if (ImGui::Button("Spawn : RepairPartHigh")) {
 		Spawn<RepairPartHigh>(Cygnus::Float3{ 25.0f, -10.0f, 0.0f });
@@ -109,7 +115,7 @@ void FlyingObjectManager::AutoSpawn() {
 		timerRepairMid_ = 0.0f;
 		bool isRightToLeft = true;
 		auto pos = GetRandomSpawnPos(rng->RandomValue(kMiddleLimitY, kUpperLimitY), isRightToLeft);
-		Spawn<RepairPartMidium>(pos, isRightToLeft);
+		Spawn<RepairPartMedium>(pos, isRightToLeft);
 	}
 
 	// 修理パーツ（高品質）

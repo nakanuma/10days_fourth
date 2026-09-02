@@ -144,7 +144,7 @@ void Tether::CheckCollisionWithFlyingObjects(FlyingObjectManager* flyingObjectMa
 			// Õ“ËŽž‚Ìˆ—
 			if (Cygnus::CollisionMath::IsSegmentIntersectSphere(nodeA, nodeB, objPos, hitRadius)) {
 				// ”òãÄ•¨‚ðÁ–Å‚³‚¹‚é
-				obj->Destroy();
+				obj->Dead();
 
 				// –½’†Žž‚Ìˆ—
 				if (obj->GetCategory() == ObjectCategory::Meteor) {
