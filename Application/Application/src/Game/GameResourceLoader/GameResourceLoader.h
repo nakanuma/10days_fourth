@@ -12,6 +12,8 @@
 #include <ParticleEffect/ParticleEffectManager.h>
 #include <ModelManager.h>
 
+#include <src/Game/Particles/ParticleStrage.h>
+
 // =========================================================
 // テクスチャやモデルなどのリソースを予め読み込んでおくクラス
 // =========================================================
@@ -41,14 +43,15 @@ private:
 	/// <summary>
 	/// パーティクル登録を行います。
 	/// </summary>
-	/// <typeparam name="ParticleClass">パーティクルクラス名</typeparam>
 	/// <param name="particleEffectName">呼び出し時パーティクルエフェクト名</param>
 	/// <param name="modelName">適用モデル名</param>
-	template <typename ParticleClass>
 	void RegisterParticle(const std::string& particleEffectName, const std::string& modelName) {
-		auto particle = std::make_unique<ParticleClass>(Cygnus::ModelManager::GetInstance()->GetModel(modelName));
+		auto particle = std::make_unique<Particle>(Cygnus::ModelManager::GetInstance()->GetModel(modelName));
+		particle->LoadJsonData(particleEffectName);	//新しく追加
+		ParticleStrage::GetInstance()->Regist(particleEffectName, particle.get());   //新しく追加
 		Cygnus::ParticleEffectManager::GetInstance()->Register(particleEffectName, std::move(particle));
 	}
+
 
 private:
 	/// <summary>

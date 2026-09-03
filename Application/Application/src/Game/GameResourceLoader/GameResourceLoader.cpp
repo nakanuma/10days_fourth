@@ -37,6 +37,13 @@ void GameResourceLoader::LoadAllModelData() {
 		"white.png"
 	);
 
+	// 黒い板
+	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+		"BlackPlane",
+		"Primitive/Plane/plane.obj",
+		"black.png"
+	);
+
 	// スフィア
 	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
 		"Sphere",
@@ -106,6 +113,8 @@ void GameResourceLoader::LoadAllModelData() {
 }
 
 void GameResourceLoader::RegisterAllParticleEffect() {
+	//テンプレ―ト
+	RegisterParticle("template", "Cube");
 
 }
 

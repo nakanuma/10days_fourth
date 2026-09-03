@@ -19,6 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Util\JsonUtil.cpp" />
+    <ClCompile Include="src\Game\Scene\ParticleEditorScene.cpp" />
+    <ClCompile Include="src\Game\Particles\Particle.cpp" />
+    <ClCompile Include="src\Game\Particles\ParticleEditorSystem.cpp" />
+    <ClCompile Include="src\Game\Particles\ParticleStrage.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.cpp" />
@@ -34,6 +39,11 @@
     <ClCompile Include="src\Game\Objects\Tether\Tether.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Util\JsonUtil.h" />
+    <ClInclude Include="src\Game\Scene\ParticleEditorScene.h" />
+    <ClInclude Include="src\Game\Particles\Particle.h" />
+    <ClInclude Include="src\Game\Particles\ParticleEditorSystem.h" />
+    <ClInclude Include="src\Game\Particles\ParticleStrage.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.h" />
