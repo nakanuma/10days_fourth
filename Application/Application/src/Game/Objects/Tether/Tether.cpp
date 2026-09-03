@@ -143,13 +143,14 @@ void Tether::CheckCollisionWithFlyingObjects(FlyingObjectManager* flyingObjectMa
 
 			// 衝突時の処理
 			if (Cygnus::CollisionMath::IsSegmentIntersectSphere(nodeA, nodeB, objPos, hitRadius)) {
-				// 飛翔物を消滅させる
-				obj->Dead();
-
-				// 命中時の処理
+				// 隕石との衝突時処理
 				if (obj->GetCategory() == ObjectCategory::Meteor) {
-				
+					// プレイヤーにダメージを与える
+					player_->ApplyDamage(1);
+					// 飛翔物を消滅させる
+					obj->Dead();
 				}
+				// 修理パーツとの衝突時処理
 				if (obj->GetCategory() == ObjectCategory::RepairPart) {
 				
 				}

@@ -59,6 +59,24 @@ public:
 	const Cygnus::Float3& GetTranslate() { return object_->transform_.translate_; }
 
 	/// <summary>
+	/// ダメージ処理
+	/// </summary>
+	/// <param name="damage"></param>
+	void ApplyDamage(int32_t damage = 1);
+
+	/// <summary>
+	/// 残りHPの取得
+	/// </summary>
+	/// <returns></returns>
+	int32_t GetHP() const { return hp_; }
+
+	/// <summary>
+	/// 死亡フラグ取得
+	/// </summary>
+	/// <returns></returns>
+	bool IsDead() const { return isDead_; }
+
+	/// <summary>
 	/// 巻取り状態の取得
 	/// </summary>
 	/// <returns></returns>
@@ -125,6 +143,9 @@ private:
 	static constexpr float kDefaultRewindMaxSpeed = 0.75f; // 巻取り時の最高速度
 	static constexpr float kRewindStopDistance = 2.0f; // 宇宙船にこの距離まで近づいたら終了
 
+	// その他パラメーター
+	static constexpr int32_t kMaxHP = 3; // 最大HP
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
@@ -152,4 +173,10 @@ private:
 	int32_t repairPartLowCount_ = 0;
 	int32_t repairPartMediumCount_ = 0;
 	int32_t repairPartHighCount_ = 0;
+
+	// 残りHP
+	int32_t hp_ = kMaxHP;
+
+	// 死亡フラグ
+	bool isDead_ = false;
 };

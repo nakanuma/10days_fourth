@@ -26,6 +26,9 @@ void Player::Initialize(Spaceship* spaceship) {
 	isRewinding_ = false;
 	autoRewindTimer_ = 0.0f;
 
+	hp_ = kMaxHP;
+	isDead_ = false;
+
 	// コライダー生成
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
 	aabb->SetTag("Player");
@@ -60,6 +63,11 @@ void Player::Debug() {
 #ifdef USE_IMGUI
 	ImGui::Begin("Player");
 
+	ImGui::Text("HP: %d / %d", hp_, kMaxHP);
+	ImGui::Checkbox("IsDead", &isDead_);
+
+	ImGui::Separator();
+
 	ImGui::DragFloat3("translate", &object_->transform_.translate_.x, 0.01f);
 
 	ImGui::Separator();
@@ -87,6 +95,13 @@ void Player::StartRewind()
 
 void Player::OnCollision(Cygnus::Collider* other)
 {
+	const std::string& tag = other->GetTag();
+
+	/* 隕石との衝突処理 */
+	if (tag == "MeteorSmall" || tag == "MeteorLarge") {
+		ApplyDamage(1); // ダメージを与える
+	}
+
 	/* 各修理パーツとの衝突 */
 	if(other->GetTag() == "RepairPartLow") {
 		repairPartLowCount_++;
@@ -96,6 +111,18 @@ void Player::OnCollision(Cygnus::Collider* other)
 	}
 	if(other->GetTag() == "RepairPartHigh") {
 		repairPartHighCount_++;
+	}
+}
+
+void Player::ApplyDamage(int32_t damage) {
+	if (isDead_) return;
+
+	hp_ -= damage;
+
+	// HPが0になれば死亡フラグを立てる
+	if (hp_ <= 0) {
+		hp_ = 0;
+		isDead_ = true;
 	}
 }
 
