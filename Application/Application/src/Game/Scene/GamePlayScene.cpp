@@ -52,6 +52,10 @@ void GamePlayScene::Initialize() {
 	///	↓ ゲームシーン用
 	///
 
+	// ポーズメニュー生成
+	pauseMenu_ = std::make_unique<PauseMenu>();
+	pauseMenu_->Initialize();
+
 	// 宇宙船生成 + 初期化
 	spaceship_ = std::make_unique<Spaceship>();
 	spaceship_->Initialize();
@@ -89,6 +93,13 @@ void GamePlayScene::Update() {
 			}, 
 			0.5f
 		);
+	}
+
+	// ポーズメニュー更新
+	pauseMenu_->Update();
+	// ポーズ中なら以降の更新をスキップ
+	if (pauseMenu_->IsPaused()) {
+		return;
 	}
 
 	///
@@ -226,6 +237,9 @@ void GamePlayScene::Draw() {
 	/// =========================================================
 	/// ↓ ここからスプライト描画
 	/// =========================================================
+
+	// ポーズメニュー描画
+	pauseMenu_->Draw();
 
 	// フェードトランジション描画
 	FadeTransition::GetInstance()->Draw();

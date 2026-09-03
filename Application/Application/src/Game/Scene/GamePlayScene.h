@@ -23,6 +23,7 @@
 #include <src/Game/Objects/Tether/Tether.h>
 #include <src/Game/Objects/FlyingObject/FlyingObjectManager.h>
 #include <src/Game/Util/Transition/FadeTransition.h>
+#include <src/Game/Scene/PauseMenu.h>
 
 // =========================================================
 // ゲームプレイシーンクラス
@@ -86,6 +87,9 @@ private:
 	std::unique_ptr<Cygnus::SpriteCommon> spriteCommon_ = nullptr; /* スプライト共通処理 */
 	Cygnus::Input* input_ = nullptr;                               /* 入力管理クラス */
 	Cygnus::LightManager* lightManager_ = nullptr;                 /* 各ライト管理クラス */
+
+	// ポーズメニュー
+	std::unique_ptr<PauseMenu> pauseMenu_ = nullptr;
 
 	// ----- Parameters -----
 	Cygnus::Float3 cameraTopPos_ = {0.0f, -12.5f, -80.0f}; // プレイヤーが最も上にいる時のカメラ位置
