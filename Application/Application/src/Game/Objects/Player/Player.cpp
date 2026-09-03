@@ -239,6 +239,15 @@ void Player::ProcessRewind()
 
 	// 宇宙船に到達したら巻取り終了
 	if(distance <= kRewindStopDistance) {
+		// 宇宙船に所持パーツを渡して自動修理を実行
+		spaceship_->Repair(repairPartLowCount_, repairPartMediumCount_, repairPartHighCount_);
+
+		// 所持している修理パーツを消費（リセット）
+		repairPartLowCount_ = 0;
+		repairPartMediumCount_ = 0;
+		repairPartHighCount_ = 0;
+
+		// 巻取り完了処理
 		isRewinding_ = false;
 		autoRewindTimer_ = 0.0f;
 		velocity_ = {0.0f, 0.0f, 0.0f};
