@@ -22,6 +22,7 @@
 #include <src/Game/Objects/Spaceship/Spaceship.h>
 #include <src/Game/Objects/Tether/Tether.h>
 #include <src/Game/Objects/FlyingObject/FlyingObjectManager.h>
+#include <src/Game/Util/Transition/FadeTransition.h>
 
 // =========================================================
 // ゲームプレイシーンクラス

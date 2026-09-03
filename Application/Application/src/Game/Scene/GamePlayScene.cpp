@@ -67,6 +67,9 @@ void GamePlayScene::Initialize() {
 	// 飛翔物管理クラス生成 + 初期化
 	flyingObjectManager_ = std::make_unique<FlyingObjectManager>();
 	flyingObjectManager_->Initialize();
+
+	// シーンの開始時にフェードインを実行
+	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
 }
 
 void GamePlayScene::Finalize() { }
@@ -75,6 +78,18 @@ void GamePlayScene::Update() {
 	Cygnus::LightManager::GetInstance()->ClearEmissiveLights(); // エミッシブライトをクリア
 	Cygnus::LightManager::GetInstance()->ClearAreaLights();     // エリアライトをクリア
 	Cygnus::SkyBoxManager::GetInstance()->Update(); // SkyBox更新
+
+	// ここにリザルトシーンへ移行する条件を記入（現在は仮でエンターキー入力）
+	if (Cygnus::Input::GetInstance()->TriggerKey(DIK_RETURN) && FadeTransition::GetInstance()->IsFinished()) {
+		FadeTransition::GetInstance()->StartFadeOut(
+			1.0f, 
+			[]() { 
+				Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT"); 
+				Cygnus::CollisionManager::GetInstance()->Clear();
+			}, 
+			0.5f
+		);
+	}
 
 	///
 	///	オブジェクト更新処理
@@ -94,6 +109,13 @@ void GamePlayScene::Update() {
 
 	// カメラの更新処理
 	UpdateCamera();
+
+	///
+	///	スプライト更新処理
+	///
+
+	// フェードトランジション更新
+	FadeTransition::GetInstance()->Update();
 
 	///
 	///	共通更新処理
@@ -205,7 +227,8 @@ void GamePlayScene::Draw() {
 	/// ↓ ここからスプライト描画
 	/// =========================================================
 
-
+	// フェードトランジション描画
+	FadeTransition::GetInstance()->Draw();
 
 	/// =========================================================
 	/// ↑ ここまでスプライト描画
@@ -239,6 +262,16 @@ void GamePlayScene::Draw() {
 void GamePlayScene::Debug() {
 #ifdef USE_IMGUI
 	ImGui::Begin("GamePlaySceneInfo");
+
+	if (ImGui::Button("TITLE")) {
+		Cygnus::SceneManager::GetInstance()->ChangeScene("TITLE");
+		Cygnus::CollisionManager::GetInstance()->Clear(); // シーン変更時にはコライダーのクリアが必須
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("RESULT")) {
+		Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT");
+		Cygnus::CollisionManager::GetInstance()->Clear(); // シーン変更時にはコライダーのクリアが必須
+	}
 
 	ImGui::Text("fps:%.2f", ImGui::GetIO().Framerate);
 

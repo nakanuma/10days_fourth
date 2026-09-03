@@ -11,6 +11,7 @@
 // ---------------------------------------------------------
 #include <ParticleEffect/ParticleEffectManager.h>
 #include <ModelManager.h>
+#include <SpriteCommon.h>
 
 // =========================================================
 // テクスチャやモデルなどのリソースを予め読み込んでおくクラス
@@ -65,4 +66,7 @@ private:
 	/// 全てのサウンドデータの読み込みを行います。
 	/// </summary>
 	void LoadAllSoundData();
+
+private:
+	std::unique_ptr<Cygnus::SpriteCommon> spriteCommon_ = nullptr; /* スプライト共通処理 */
 };
