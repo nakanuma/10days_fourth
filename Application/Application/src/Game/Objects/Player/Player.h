@@ -104,6 +104,18 @@ private:
 	void Move();
 
 	/// <summary>
+	/// キーボード用入力ベクトル
+	/// </summary>
+	/// <returns></returns>
+	Cygnus::Float3 GetKeyInput();
+
+	/// <summary>
+	/// ゲームパッド用入力ベクトル
+	/// </summary>
+	/// <returns></returns>
+	Cygnus::Float3 GetPadInput();
+
+	/// <summary>
 	/// 無入力時の漂うオフセットを取得
 	/// </summary>
 	Cygnus::Float3 Drift();
