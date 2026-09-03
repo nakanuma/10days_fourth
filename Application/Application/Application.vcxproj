@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Util\GameResult\GameResultManager.cpp" />
+    <ClCompile Include="src\Game\Scene\PauseMenu.cpp" />
+    <ClCompile Include="src\Game\Util\Transition\FadeTransition.cpp" />
+    <ClCompile Include="src\Game\Scene\ResultScene.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.cpp" />
@@ -33,8 +37,13 @@
     <ClCompile Include="src\Game\Scene\GamePlayScene.cpp" />
     <ClCompile Include="src\Game\Scene\SceneFactory.cpp" />
     <ClCompile Include="src\Game\Objects\Tether\Tether.cpp" />
+    <ClCompile Include="src\Game\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Util\GameResult\GameResultManager.h" />
+    <ClInclude Include="src\Game\Scene\PauseMenu.h" />
+    <ClInclude Include="src\Game\Util\Transition\FadeTransition.h" />
+    <ClInclude Include="src\Game\Scene\ResultScene.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.h" />
@@ -49,6 +58,7 @@
     <ClInclude Include="src\Game\Scene\GamePlayScene.h" />
     <ClInclude Include="src\Game\Scene\SceneFactory.h" />
     <ClInclude Include="src\Game\Objects\Tether\Tether.h" />
+    <ClInclude Include="src\Game\Scene\TitleScene.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

@@ -7,6 +7,7 @@
 #include <SoundManager.h>
 
 // Application
+#include <src/Game/Util/Transition/FadeTransition.h>
 
 GameResourceLoader* GameResourceLoader::GetInstance() {
 	static GameResourceLoader instance;
@@ -23,6 +24,12 @@ void GameResourceLoader::Initialize() {
 
 	// SkyBoxの初期化
 	Cygnus::SkyBoxManager::GetInstance()->Initialize("skybox.dds");
+
+	// SpriteCommonの生成 + 初期化
+	spriteCommon_ = std::make_unique<Cygnus::SpriteCommon>();
+	spriteCommon_->Initialize(Cygnus::DirectXBase::GetInstance());
+	// シーントランジション用フェードの初期化
+	FadeTransition::GetInstance()->Initialize(spriteCommon_.get());
 }
 
 void GameResourceLoader::LoadAllModelData() {
