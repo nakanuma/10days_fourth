@@ -144,7 +144,7 @@ private:
 	static constexpr float kRewindStopDistance = 2.0f; // 宇宙船にこの距離まで近づいたら終了
 
 	// その他パラメーター
-	static constexpr int32_t kMaxHP = 3; // 最大HP
+	static constexpr int32_t kMaxHP = 5; // 最大HP
 
 	// =========================================================
 	// Member Variables

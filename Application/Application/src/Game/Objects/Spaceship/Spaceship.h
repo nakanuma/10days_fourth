@@ -34,6 +34,14 @@ public:
 	/// </summary>
 	void Debug();
 
+	/// <summary>
+	/// 修理処理（パーツを受け取って耐久力を回復）
+	/// </summary>
+	/// <param name="Low"></param>
+	/// <param name="medium"></param>
+	/// <param name="high"></param>
+	void Repair(int32_t low, int32_t medium, int32_t high);
+
 	// =========================================================
 	// Accessor
 	// =========================================================
@@ -43,6 +51,24 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	const Cygnus::Float3& GetTranslate() { return object_->transform_.translate_; }
+
+	/// <summary>
+	/// 現在の耐久力取得
+	/// </summary>
+	/// <returns></returns>
+	float GetDurability() const { return durability_; }
+
+	/// <summary>
+	/// 最大耐久力取得
+	/// </summary>
+	/// <returns></returns>
+	float GetMaxDurability() const { return kMaxDurability; }
+
+	/// <summary>
+	/// 修理完了（クリア）判定
+	/// </summary>
+	/// <returns></returns>
+	bool IsFullyRepaired() const { return durability_ >= kMaxDurability; }
 
 private:
 	// =========================================================
@@ -67,6 +93,17 @@ private:
 	static constexpr float kDriftAmplitudeX = 0.5f; // X方向の揺れ幅
 	static constexpr float kDriftAmplitudeY = 0.3f; // Y軸方向の揺れ幅
 
+	// 耐久力パラメーター
+	static constexpr float kMaxDurability = 200.0f; // 最大耐久力
+
+	// 各パーツの基礎回復量
+	static constexpr float kRepairPointLow = 2.0f;
+	static constexpr float kRepairPointMedium = 4.0f;
+	static constexpr float kRepairPointHigh = 6.0f;
+
+	// まとめ持ちボーナス倍率（1個増えるごとの加算倍率）
+	static constexpr float kBonusMultiplierPerItem = 0.1f; // 例: 5個持って帰ると +40％（1.4倍）
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
@@ -82,5 +119,8 @@ private:
 
 	// 漂い計算用タイマー
 	float driftTimer_ = 0.0f;
+
+	// 耐久力（最初は0スタート）
+	float durability_ = 0.0f;
 };
 
