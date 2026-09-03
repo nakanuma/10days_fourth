@@ -80,7 +80,7 @@ private:
 	// ----- Parameters -----
 
 	// ----- Objects -----
-	std::unique_ptr<Cygnus::Object3D> testObject_ = nullptr; /* テスト用オブジェクト */
+	std::unique_ptr<Cygnus::Sprite> spriteTitle_; /* タイトルの仮画像（後で削除する） */
 
 	// ----- Others -----
 	uint32_t shadowMapHandle_;                                     /* シャドウマップテクスチャ */

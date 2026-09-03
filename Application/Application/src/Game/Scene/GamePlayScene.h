@@ -78,6 +78,8 @@ private:
 	// Constants
 	// =========================================================
 
+	const float kMaxGameTime = 100.0f; // ゲーム制限時間（秒）
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
@@ -90,6 +92,10 @@ private:
 
 	// ポーズメニュー
 	std::unique_ptr<PauseMenu> pauseMenu_ = nullptr;
+
+	// ゲーム進行用
+	float gameTimer_ = 0.0f; // ゲーム経過時間タイマー
+	bool isTransitionStarted_ = false; // シーン遷移開始フラグ
 
 	// ----- Parameters -----
 	Cygnus::Float3 cameraTopPos_ = {0.0f, -12.5f, -80.0f}; // プレイヤーが最も上にいる時のカメラ位置

@@ -52,9 +52,13 @@ void ResultScene::Initialize() {
 	///	↓ シーン用
 	///
 	
-	// テスト用オブジェクト生成
-	testObject_ = std::make_unique<Cygnus::Object3D>();
-	testObject_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Cube");
+	// ゲーム結果の取得
+	result_ = GameResultManager::GetResult();
+
+	// リザルトの仮画像生成
+	uint32_t textureTitle = Cygnus::TextureManager::Load("result_temp.png");
+	spriteResult_ = std::make_unique<Cygnus::Sprite>();
+	spriteResult_->Initialize(spriteCommon_.get(), textureTitle);
 
 	// シーンの開始時にフェードインを実行
 	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
@@ -67,8 +71,8 @@ void ResultScene::Update() {
 	Cygnus::LightManager::GetInstance()->ClearAreaLights();     // エリアライトをクリア
 	Cygnus::SkyBoxManager::GetInstance()->Update();             // SkyBox更新
 
-	// ここにタイトルシーンへ移行する条件を記入（現在は仮でエンターキー入力）
-	if (Cygnus::Input::GetInstance()->TriggerKey(DIK_RETURN) && FadeTransition::GetInstance()->IsFinished()) {
+	// ここにタイトルシーンへ移行する条件を記入（現在は仮でスペースキー入力）
+	if (Cygnus::Input::GetInstance()->TriggerKey(DIK_SPACE) && FadeTransition::GetInstance()->IsFinished()) {
 		FadeTransition::GetInstance()->StartFadeOut(
 			1.0f, 
 			[]() { Cygnus::SceneManager::GetInstance()->ChangeScene("TITLE"); }, 
@@ -80,8 +84,8 @@ void ResultScene::Update() {
 	///	オブジェクト更新処理
 	///
 
-	// テスト用オブジェクト更新
-	testObject_->UpdateMatrix();
+	// タイトルの仮画像更新
+	spriteResult_->Update();
 
 	///
 	///	スプライト更新処理
@@ -159,8 +163,6 @@ void ResultScene::Draw() {
 	Cygnus::SkyBoxManager::GetInstance()->Draw();
 	// -----------------------------------------------
 
-	// テスト用オブジェクト描画
-	testObject_->Draw();
 
 	// -----------------------------------------------
 	/*postEffectManager_->EndMainScene();*/
@@ -190,6 +192,9 @@ void ResultScene::Draw() {
 	/// ↓ ここからスプライト描画
 	/// =========================================================
 
+	// リザルトの仮画像描画
+	spriteResult_->Draw();
+
 	// フェードトランジション描画
 	FadeTransition::GetInstance()->Draw();
 
@@ -213,6 +218,14 @@ void ResultScene::Draw() {
 void ResultScene::Debug() {
 #ifdef USE_IMGUI
 	ImGui::Begin("ResultSceneInfo");
+
+	if (result_ == GameResult::Clear) {
+		ImGui::Text("GameClear");
+	} else if (result_ == GameResult::GameOver) {
+		ImGui::Text("GameOver");
+	} else {
+		ImGui::Text("None");
+	}
 
 	if (ImGui::Button("TITLE")) {
 		Cygnus::SceneManager::GetInstance()->ChangeScene("TITLE");

@@ -53,9 +53,10 @@ void TitleScene::Initialize() {
 	///	↓ シーン用
 	///
 
-	// テスト用オブジェクト生成
-	testObject_ = std::make_unique<Cygnus::Object3D>();
-	testObject_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Cube");
+	// タイトルの仮画像生成
+	uint32_t textureTitle = Cygnus::TextureManager::Load("title_temp.png");
+	spriteTitle_ = std::make_unique<Cygnus::Sprite>();
+	spriteTitle_->Initialize(spriteCommon_.get(), textureTitle);
 
 	// シーンの開始時にフェードインを実行
 	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
@@ -68,8 +69,8 @@ void TitleScene::Update() {
 	Cygnus::LightManager::GetInstance()->ClearAreaLights();     // エリアライトをクリア
 	Cygnus::SkyBoxManager::GetInstance()->Update();             // SkyBox更新
 
-	// ここにゲームシーンへ移行する条件を記入（現在は仮でエンターキー入力）
-	if (Cygnus::Input::GetInstance()->TriggerKey(DIK_RETURN) && FadeTransition::GetInstance()->IsFinished()) {
+	// ここにゲームシーンへ移行する条件を記入（現在は仮でスペースキー入力）
+	if (Cygnus::Input::GetInstance()->TriggerKey(DIK_SPACE) && FadeTransition::GetInstance()->IsFinished()) {
 		FadeTransition::GetInstance()->StartFadeOut(
 			1.0f, 
 			[]() {
@@ -83,8 +84,8 @@ void TitleScene::Update() {
 	///	オブジェクト更新処理
 	///
 
-	// テスト用オブジェクト更新
-	testObject_->UpdateMatrix();
+	// タイトルの仮画像更新
+	spriteTitle_->Update();
 
 	///
 	///	スプライト更新処理
@@ -162,8 +163,6 @@ void TitleScene::Draw() {
 	Cygnus::SkyBoxManager::GetInstance()->Draw();
 	// -----------------------------------------------
 
-	// テスト用オブジェクト描画
-	testObject_->Draw();
 
 	// -----------------------------------------------
 	/*postEffectManager_->EndMainScene();*/
@@ -192,6 +191,9 @@ void TitleScene::Draw() {
 	/// =========================================================
 	/// ↓ ここからスプライト描画
 	/// =========================================================
+
+	// タイトルの仮画像描画
+	spriteTitle_->Draw();
 
 	// フェードトランジション描画
 	FadeTransition::GetInstance()->Draw();

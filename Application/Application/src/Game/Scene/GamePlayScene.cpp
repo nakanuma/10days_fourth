@@ -19,6 +19,7 @@
 #include <Collider/CollisionManager.h>
 
 // Application
+#include <src/Game/Util/GameResult/GameResultManager.h>
 
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
@@ -52,6 +53,9 @@ void GamePlayScene::Initialize() {
 	///	↓ ゲームシーン用
 	///
 
+	gameTimer_ = 0.0f;
+	isTransitionStarted_ = false;
+
 	// ポーズメニュー生成
 	pauseMenu_ = std::make_unique<PauseMenu>();
 	pauseMenu_->Initialize();
@@ -83,23 +87,50 @@ void GamePlayScene::Update() {
 	Cygnus::LightManager::GetInstance()->ClearAreaLights();     // エリアライトをクリア
 	Cygnus::SkyBoxManager::GetInstance()->Update(); // SkyBox更新
 
-	// ここにリザルトシーンへ移行する条件を記入（現在は仮でエンターキー入力）
-	if (Cygnus::Input::GetInstance()->TriggerKey(DIK_RETURN) && FadeTransition::GetInstance()->IsFinished()) {
-		FadeTransition::GetInstance()->StartFadeOut(
-			1.0f, 
-			[]() { 
-				Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT"); 
-				Cygnus::CollisionManager::GetInstance()->Clear();
-			}, 
-			0.5f
-		);
-	}
-
 	// ポーズメニュー更新
 	pauseMenu_->Update();
 	// ポーズ中なら以降の更新をスキップ
 	if (pauseMenu_->IsPaused()) {
 		return;
+	}
+
+	///
+	/// シーン遷移条件
+	/// 
+
+	if (!isTransitionStarted_ && FadeTransition::GetInstance()->IsFinished()) {
+		/* ゲームクリア: 宇宙船の耐久度が完全回復した場合 */
+		if (spaceship_->IsFullyRepaired()) {
+			GameResultManager::SetResult(GameResult::Clear);
+			isTransitionStarted_ = true;
+		}
+		/* ゲームオーバー: プレイヤーのHPが0 */
+		else if (player_->IsDead()) {
+			GameResultManager::SetResult(GameResult::GameOver);
+			isTransitionStarted_ = true;
+		}
+		/* ゲームオーバー: 制限時間の経過 */
+		else if (gameTimer_ >= kMaxGameTime) {
+			GameResultManager::SetResult(GameResult::GameOver);
+			isTransitionStarted_ = true;
+		}
+
+		// 遷移条件を満たした場合にフェードアウト開始
+		if (isTransitionStarted_) {
+			FadeTransition::GetInstance()->StartFadeOut(
+				1.0f, 
+				[]() { 
+					Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT"); 
+					Cygnus::CollisionManager::GetInstance()->Clear();
+				}, 
+				0.5f
+			);
+		}
+	}
+
+	// ゲームの経過時間を更新
+	if (!isTransitionStarted_) {
+		gameTimer_ += Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 	}
 
 	///
@@ -286,6 +317,9 @@ void GamePlayScene::Debug() {
 		Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT");
 		Cygnus::CollisionManager::GetInstance()->Clear(); // シーン変更時にはコライダーのクリアが必須
 	}
+
+	ImGui::Separator();
+	ImGui::Text("GameTimer: %.2f / %.2f", gameTimer_, kMaxGameTime);
 
 	ImGui::Text("fps:%.2f", ImGui::GetIO().Framerate);
 

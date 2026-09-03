@@ -19,6 +19,7 @@
 
 // Application
 #include <src/Game/Util/Transition/FadeTransition.h>
+#include <src/Game/Util/GameResult/GameResultManager.h>
 
 // =========================================================
 // リザルトシーンクラス
@@ -78,10 +79,13 @@ private:
 	Cygnus::Input* input_ = nullptr;                               /* 入力管理クラス */
 	Cygnus::LightManager* lightManager_ = nullptr;                 /* 各ライト管理クラス */
 
+	// ゲーム結果受け取り用
+	GameResult result_ = GameResult::GameOver;
+
 	// ----- Parameters -----
 
 	// ----- Objects -----
-	std::unique_ptr<Cygnus::Object3D> testObject_ = nullptr; /* テスト用オブジェクト */
+	std::unique_ptr<Cygnus::Sprite> spriteResult_; /* リザルトの仮画像（後で削除する） */
 
 	// ----- Others -----
 	uint32_t shadowMapHandle_;                                     /* シャドウマップテクスチャ */
