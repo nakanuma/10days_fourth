@@ -11,7 +11,7 @@
 #include <src/Game/Objects/Spaceship/Spaceship.h>
 #include <src/Game/Objects/FlyingObject/Base/FlyingObject.h>
 
-void Player::Initialize(Spaceship* spaceship) {
+void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon) {
 	spaceship_ = spaceship;
 
 	// オブジェクト生成
@@ -38,6 +38,10 @@ void Player::Initialize(Spaceship* spaceship) {
 
 	collider_ = std::move(aabb);
 	Cygnus::CollisionManager::GetInstance()->Register(collider_.get());
+
+	// 所持パーツ数UI初期化
+	partsCountUI_ = std::make_unique<PartsCountUI>();
+	partsCountUI_->Initialize(spriteCommon);
 }
 
 void Player::Update() {
@@ -49,6 +53,9 @@ void Player::Update() {
 
 	// オブジェクト更新
 	object_->UpdateMatrix();
+
+	// 所持パーツ数UI更新
+	partsCountUI_->Update();
 }
 
 void Player::Draw() {
@@ -57,6 +64,11 @@ void Player::Draw() {
 
 	// 移動制限エリアの描画
 	DrawAreaLimit();
+}
+
+void Player::DrawUI() {
+	// 所持パーツ数UI描画
+	partsCountUI_->Draw();
 }
 
 void Player::Debug() {
@@ -105,12 +117,15 @@ void Player::OnCollision(Cygnus::Collider* other)
 	/* 各修理パーツとの衝突 */
 	if(other->GetTag() == "RepairPartLow") {
 		repairPartLowCount_++;
+		partsCountUI_->AddParts();
 	}
 	if(other->GetTag() == "RepairPartMedium") {
 		repairPartMediumCount_++;
+		partsCountUI_->AddParts();
 	}
 	if(other->GetTag() == "RepairPartHigh") {
 		repairPartHighCount_++;
+		partsCountUI_->AddParts();
 	}
 }
 

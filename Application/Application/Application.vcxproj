@@ -30,6 +30,7 @@
     <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\Base\FlyingObject.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\FlyingObjectManager.cpp" />
+    <ClCompile Include="PartsCountUI.cpp" />
     <ClCompile Include="src\Game\Objects\Spaceship\Spaceship.cpp" />
     <ClCompile Include="src\Game\Objects\Player\Player.cpp" />
     <ClCompile Include="src\Game\GameResourceLoader\GameResourceLoader.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\Base\FlyingObject.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\FlyingObjectManager.h" />
+    <ClInclude Include="PartsCountUI.h" />
     <ClInclude Include="src\Game\Objects\Spaceship\Spaceship.h" />
     <ClInclude Include="src\Game\Objects\Player\Player.h" />
     <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h" />

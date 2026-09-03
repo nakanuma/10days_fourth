@@ -66,7 +66,7 @@ void GamePlayScene::Initialize() {
 
 	// プレイヤー生成 + 初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(spaceship_.get());
+	player_->Initialize(spaceship_.get(),spriteCommon_.get());
 
 	// 命綱生成 + 初期化
 	tether_ = std::make_unique<Tether>();
@@ -274,6 +274,8 @@ void GamePlayScene::Draw() {
 
 	// フェードトランジション描画
 	FadeTransition::GetInstance()->Draw();
+
+	player_->DrawUI();
 
 	/// =========================================================
 	/// ↑ ここまでスプライト描画
