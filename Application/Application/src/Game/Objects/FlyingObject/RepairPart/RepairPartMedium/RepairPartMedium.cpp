@@ -11,6 +11,7 @@ void RepairPartMedium::Initialize(const Cygnus::Float3& position, bool isRightTo
 	speed_ = kSpeed;
 	rotationSpeed_ = kRotationSpeed;
 	hitRadius_ = kHitRadius;
+	subCategory_ = "repair";
 
 	// ƒ‚ƒfƒ‹Ý’è
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("RepairPartMedium");

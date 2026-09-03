@@ -58,7 +58,7 @@ public:
 	/// 位置の取得
 	/// </summary>
 	/// <returns></returns>
-	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; } 
+	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; }
 
 	/// <summary>
 	/// 当たり判定半径の取得
@@ -114,4 +114,9 @@ protected:
 
 	// 消滅境界線（仮）
 	static constexpr float kDespawnX = 50.0f;
+
+
+	// 飛翔物の細かい分類（パーティクル用）
+	std::string subCategory_ = "";
+
 };

@@ -11,6 +11,7 @@ void MeteorSmall::Initialize(const Cygnus::Float3& position, bool isRightToLeft)
 	speed_ = kSpeed;
 	rotationSpeed_ = kRotationSpeed;
 	hitRadius_ = kHitRadius;
+	subCategory_ = "meteor_small";
 
 	// ƒ‚ƒfƒ‹Ý’è
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("MeteorSmall");

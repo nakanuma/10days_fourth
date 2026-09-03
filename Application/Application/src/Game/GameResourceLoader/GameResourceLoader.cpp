@@ -115,7 +115,14 @@ void GameResourceLoader::LoadAllModelData() {
 void GameResourceLoader::RegisterAllParticleEffect() {
 	//テンプレ―ト
 	RegisterParticle("template", "Cube");
-
+	//プレイヤー移動時パーティクル
+	RegisterParticle("move_player", "Cube");
+	//大隕石移動時パーティクル
+	RegisterParticle("move_large_meteor", "Cube");
+	//小隕石移動時パーティクル
+	RegisterParticle("move_small_meteor", "Cube");
+	//修理パーツ移動時パーティクル
+	RegisterParticle("move_repair", "Cube");
 }
 
 void GameResourceLoader::LoadAllSoundData() {

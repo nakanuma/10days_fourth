@@ -101,6 +101,9 @@ void GamePlayScene::Update() {
 	
 	// コリジョンマネージャー更新
 	Cygnus::CollisionManager::GetInstance()->Update();
+
+	// パーティクルエフェクト管理クラス更新
+	Cygnus::ParticleEffectManager::GetInstance()->Update(Cygnus::TimeManager::GetInstance()->GetDeltaTime());
 }
 
 void GamePlayScene::Draw() {
