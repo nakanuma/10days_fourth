@@ -3,6 +3,7 @@
 // Engine
 #include <Object3D.h>
 #include <Collider/Collider.h>
+#include "PartsCountUI.h"
 
 // 前方宣言
 class Spaceship;
@@ -20,7 +21,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(Spaceship* spaceship);
+	void Initialize(Spaceship* spaceship,Cygnus::SpriteCommon* spriteCommon);
 
 	/// <summary>
 	/// 更新処理
@@ -31,6 +32,8 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw();
+
+	void DrawUI();
 
 	/// <summary>
 	/// デバッグ表示
@@ -179,4 +182,8 @@ private:
 
 	// 死亡フラグ
 	bool isDead_ = false;
+
+
+	std::unique_ptr<PartsCountUI> partsCountUI_;
+
 };
