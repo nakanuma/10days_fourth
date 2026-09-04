@@ -149,7 +149,7 @@ void Player::Move()
 	/* 巻取りトリガー判定 */
 	if(!isRewinding_) {
 		// タイマー更新（宇宙船より下にいる間）
-		if(object_->transform_.translate_.y < -1.0f) {
+		if(object_->transform_.translate_.y < -5.0f) {
 			autoRewindTimer_ += dt;
 			// 自動巻き取りの限界時間（酸素ゲージ）に達したら自動巻き取り開始
 			if(autoRewindTimer_ >= kDefaultAutoRewindTime) {
