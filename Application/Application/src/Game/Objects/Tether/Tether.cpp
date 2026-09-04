@@ -110,7 +110,7 @@ void Tether::Draw() {
 			Cygnus::Float3 currentPoint = Cygnus::Float3::CatmullRomInterplation(p0, p1, p2, p3, t);
 
 			// ‹Èü—pƒ‰ƒCƒ“‚Ì“o˜^
-			Cygnus::LineDrawer::GetInstance()->RegisterLine(prevPoint, currentPoint, {1.0f, 0.0f, 0.0f, 1.0f});
+			Cygnus::LineDrawer::GetInstance()->RegisterLine(prevPoint, currentPoint, {1.0f, 1.0f, 1.0f, 1.0f});
 			prevPoint = currentPoint;
 		}
 	}

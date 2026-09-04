@@ -21,7 +21,7 @@ public:
 	/// <summary>
 	/// ‰Šú‰»ˆ—
 	/// </summary>
-	void Initialize(Spaceship* spaceship,Cygnus::SpriteCommon* spriteCommon);
+	void Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon);
 
 	/// <summary>
 	/// XVˆ—

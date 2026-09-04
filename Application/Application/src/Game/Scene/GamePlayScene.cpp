@@ -63,7 +63,7 @@ void GamePlayScene::Initialize() {
 
 	// ポーズメニュー生成
 	pauseMenu_ = std::make_unique<PauseMenu>();
-	pauseMenu_->Initialize();
+	pauseMenu_->Initialize(spriteCommon_.get());
 
 	// 宇宙船生成 + 初期化
 	spaceship_ = std::make_unique<Spaceship>();
@@ -92,10 +92,13 @@ void GamePlayScene::Update() {
 	Cygnus::LightManager::GetInstance()->ClearAreaLights();     // エリアライトをクリア
 	Cygnus::SkyBoxManager::GetInstance()->Update(); // SkyBox更新
 
+	// フェードトランジション更新（ポーズの前で更新）
+	FadeTransition::GetInstance()->Update();
+
 	// ポーズメニュー更新
 	pauseMenu_->Update();
 	// ポーズ中なら以降の更新をスキップ
-	if (pauseMenu_->IsPaused()) {
+	if (pauseMenu_->IsPaused() || pauseMenu_->IsJustUnpaused()) { // ポーズ中のボタン押下による誤発火のため、解除された直後1フレームもゲームの更新をスキップ
 		return;
 	}
 
@@ -160,9 +163,6 @@ void GamePlayScene::Update() {
 	///
 	///	スプライト更新処理
 	///
-
-	// フェードトランジション更新
-	FadeTransition::GetInstance()->Update();
 
 	///
 	///	共通更新処理
@@ -274,13 +274,14 @@ void GamePlayScene::Draw() {
 	/// ↓ ここからスプライト描画
 	/// =========================================================
 
+	// プレイヤーUI描画
+	player_->DrawUI();
+
 	// ポーズメニュー描画
 	pauseMenu_->Draw();
 
 	// フェードトランジション描画
 	FadeTransition::GetInstance()->Draw();
-
-	player_->DrawUI();
 
 	/// =========================================================
 	/// ↑ ここまでスプライト描画

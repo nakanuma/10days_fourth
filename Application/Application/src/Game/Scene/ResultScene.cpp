@@ -17,6 +17,7 @@
 #include <Collider/CollisionManager.h>
 #include <CommandManager.h>
 #include <Engine/Scene/SceneManager.h>
+#include <Easing.h>
 
 // Application
 
@@ -134,8 +135,14 @@ void ResultScene::Initialize() {
 	spriteButtonA_->Initialize(spriteCommon_.get(), texButtonA);
 	spriteButtonA_->SetAnchorPoint({ 0.5f, 0.5f });
 	baseButtonASize_ = spriteButtonA_->GetSize();
-
-
+	// 初期位置設定（リトライボタン基準）
+	buttonACurrentPos_ = {
+		kRetryButtonInitPos.x + kButtonAOffsetRetry.x,
+		kRetryButtonInitPos.y + kButtonAOffsetRetry.y
+	};
+	buttonAStartPos_ = buttonACurrentPos_;
+	buttonATargetPos_ = buttonACurrentPos_;
+	buttonAMoveTimer_ = kButtonAMoveDuration;
 
 	// シーンの開始時にフェードインを実行
 	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
@@ -357,6 +364,9 @@ void ResultScene::ProcessMenuInput() {
 	// フェード未完了時 または 選択済みならスキップ
 	if (!FadeTransition::GetInstance()->IsFinished() || isSelected_) return;
 
+	// 旧メニュー保持
+	MenuIndex prevMenu = currentMenu_;
+
 	/* 上下移動入力判定 */
 	bool isUp = false;
 	bool isDown = false;
@@ -398,6 +408,25 @@ void ResultScene::ProcessMenuInput() {
 		currentMenu_ = MenuIndex::Retry;
 	}
 
+	// メニュー変更時にイージング初期化（追加）
+	if (prevMenu != currentMenu_) {
+		buttonAStartPos_ = buttonACurrentPos_;
+
+		if (currentMenu_ == MenuIndex::Retry) {
+			buttonATargetPos_ = {
+				kRetryButtonInitPos.x + kButtonAOffsetRetry.x,
+				kRetryButtonInitPos.y + kButtonAOffsetRetry.y
+			};
+		} else if (currentMenu_ == MenuIndex::ReturnTitle) {
+			buttonATargetPos_ = {
+				kReturnButtonInitPos.x + kButtonAOffsetReturn.x,
+				kReturnButtonInitPos.y + kButtonAOffsetReturn.y
+			};
+		}
+
+		buttonAMoveTimer_ = 0.0f;
+	}
+
 	/* 決定入力判定 */
 	bool isConfirm = input_->TriggerKey(DIK_SPACE) || input_->TriggerKey(DIK_RETURN) || input_->IsTriggerButton(0, XINPUT_GAMEPAD_A);
 
@@ -427,8 +456,10 @@ void ResultScene::ProcessMenuInput() {
 }
 
 void ResultScene::UpdateUI() {
+	float deltaTime = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+
 	// タイマー加算
-	uiAnimationTimer_ += Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+	uiAnimationTimer_ += deltaTime;
 
 	/* タイトルロゴの上下浮遊 */
 	float logoOffsetY = std::sinf(uiAnimationTimer_ * kTextFloatSpeed) * kTextFloatAmplitude;
@@ -452,24 +483,29 @@ void ResultScene::UpdateUI() {
 	spriteRetryButton_->SetSize({ baseRetryButtonSize_.x * retryRate, baseRetryButtonSize_.y * retryRate });
 	spriteReturnButton_->SetSize({ baseReturnButtonSize_.x * returnRate, baseReturnButtonSize_.y * returnRate });
 
-	// Aボタンアイコンを選択中ボタンの左側に配置
-	Cygnus::Float2 targetPos = {};
-	Cygnus::Float2 currentOffset = {};
+	// Aボタンのイージング移動
+	if (buttonAMoveTimer_ < kButtonAMoveDuration) {
+		buttonAMoveTimer_ += deltaTime;
+		if (buttonAMoveTimer_ > kButtonAMoveDuration) {
+			buttonAMoveTimer_ = kButtonAMoveDuration;
+		}
 
-	if (currentMenu_ == MenuIndex::Retry) {
-		targetPos = spriteRetryButton_->GetPosition();
-		currentOffset = kButtonAOffsetRetry;
-	} else if (currentMenu_ == MenuIndex::ReturnTitle) {
-		targetPos = spriteReturnButton_->GetPosition();
-		currentOffset = kButtonAOffsetReturn;
+		float t = buttonAMoveTimer_ / kButtonAMoveDuration;
+		float easedT = Cygnus::Easing::EaseOutExpo(t);
+
+		buttonACurrentPos_.x = buttonAStartPos_.x + (buttonATargetPos_.x - buttonAStartPos_.x) * easedT;
+		buttonACurrentPos_.y = buttonAStartPos_.y + (buttonATargetPos_.y - buttonAStartPos_.y) * easedT;
+	} else {
+		buttonACurrentPos_ = buttonATargetPos_;
 	}
-	// 少し跳ねる動き
+
+	// バウンド計算
 	float bounceOffsetY = -std::abs(std::sinf(uiAnimationTimer_ * kButtonABounceSpeed)) * kButtonABounceHeight;
 
-	// 選択中ボタンの左側にバウンドオフセットを加算して配置
+	// 最終位置のセット
 	spriteButtonA_->SetPosition({
-		targetPos.x + currentOffset.x,
-		targetPos.y + currentOffset.y + bounceOffsetY
+		buttonACurrentPos_.x,
+		buttonACurrentPos_.y + bounceOffsetY
 		});
 }
 

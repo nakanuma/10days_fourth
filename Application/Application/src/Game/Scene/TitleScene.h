@@ -99,9 +99,11 @@ private:
 	static constexpr float kLogoFloatSpeed = 2.5f; // 浮遊の速度
 
 	// Aボタン用
-	static constexpr Cygnus::Float2 kButtonAOffset = {-120.0f, 0.0f}; // 選択中ボタンから左に離すオフセット
+	static constexpr Cygnus::Float2 kButtonAOffsetStart = {-120.0f, 0.0f}; // 選択中ボタンから左に離すオフセット
+	static constexpr Cygnus::Float2 kButtonAOffsetExit = { -100.0f, 0.0f };
 	static constexpr float kButtonABounceHeight = 2.0f; // 跳ねる高さ
 	static constexpr float kButtonABounceSpeed = 6.0f; // バウンドの速度
+	static constexpr float kButtonAMoveDuration = 0.2f; // 移動完了にかかる時間
 
 	// プレイヤー用
 	static constexpr float kPlayerStartX = -25.0f; // 開始X位置
@@ -144,6 +146,12 @@ private:
 	Cygnus::Float2 baseButtonASize_ = {0.0f, 0.0f};
 
 	float uiAnimationTimer_ = 0.0f; /* UIアニメーション用タイマー */
+
+	// Aボタンの補完移動用変数
+	Cygnus::Float2 buttonAStartPos_{}; // 移動開始位置
+	Cygnus::Float2 buttonATargetPos_{}; // 移動目標位置
+	Cygnus::Float2 buttonACurrentPos_{}; // 現在位置
+	float buttonAMoveTimer_ = 0.0f; // 移動タイマー
 
 	// ----- Objects -----
 
