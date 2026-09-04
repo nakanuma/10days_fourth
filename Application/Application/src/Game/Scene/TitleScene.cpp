@@ -21,6 +21,7 @@
 
 // Application
 #include <src/Game/Util/Transition/FadeTransition.h>
+#include "ResultScene.h"
 
 void TitleScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
@@ -49,6 +50,11 @@ void TitleScene::Initialize() {
 	// ポストエフェクト管理
 	postEffectManager_ = std::make_unique<Cygnus::PostEffectManager>();
 	postEffectManager_->Initialize();
+
+	// SkyBoxのパラメーター設定
+	Cygnus::SkyBoxManager::GetInstance()->SetTranslate({ 0.0f, 0.0f, 1500.0f });
+	Cygnus::SkyBoxManager::GetInstance()->SetRotate({ 0.33f, 0.4f, 0.0f });
+	Cygnus::SkyBoxManager::GetInstance()->SetColor({ 0.9f, 0.6f, 1.0f, 1.0f });
 
 	///
 	///	↓ シーン用
@@ -263,6 +269,8 @@ void TitleScene::Draw() {
 #ifdef _DEBUG
 	// ゲームシーンデバッグ表示
 	Debug();
+
+	Cygnus::SkyBoxManager::GetInstance()->Debug();
 #endif
 
 	// ImGuiの内部コマンドを生成する
