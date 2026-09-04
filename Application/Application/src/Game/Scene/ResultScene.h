@@ -99,6 +99,7 @@ private:
 	static constexpr float kSelectedBaseRate = 1.15f; // 選択時の倍率
 	static constexpr float kPulseAmplitude = 0.05f; // 拡縮の振り幅
 	static constexpr float kPulseSpeed = 6.0f; // 拡縮アニメーションの速度
+	static constexpr float kButtonAMoveDuration = 0.2f; // 移動完了にかかる時間
 
 	// テキストロゴ用
 	static constexpr float kTextFloatAmplitude = 6.0f; // 上下の振幅
@@ -158,6 +159,12 @@ private:
 	// ゲームクリア時の宇宙船基準パラメーター保存用
 	Cygnus::Float3 spaceshipClearInitPos_ = {0.0f, 0.0f, 0.0f};
 	Cygnus::Float3 spaceshipClearInitRot_ = {0.0f, 0.0f, 0.0f};
+
+	// Aボタンの補間移動用変数
+	Cygnus::Float2 buttonAStartPos_{};  // 移動開始位置
+	Cygnus::Float2 buttonATargetPos_{}; // 移動目標位置
+	Cygnus::Float2 buttonACurrentPos_{}; // 現在位置
+	float buttonAMoveTimer_ = 0.0f;     // 移動タイマー
 
 	// ----- Objects -----
 

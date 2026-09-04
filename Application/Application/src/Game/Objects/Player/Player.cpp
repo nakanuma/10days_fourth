@@ -10,6 +10,7 @@
 // Application
 #include <src/Game/Objects/Spaceship/Spaceship.h>
 #include <src/Game/Objects/FlyingObject/Base/FlyingObject.h>
+#include <src/Game/Scene/PauseMenu.h>
 
 void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon) {
 	spaceship_ = spaceship;

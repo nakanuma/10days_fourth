@@ -18,6 +18,7 @@
 #include <CommandManager.h>
 #include <Engine/Scene/SceneManager.h>
 #include <MyMath.h>
+#include <Easing.h>
 
 // Application
 #include <src/Game/Util/Transition/FadeTransition.h>
@@ -106,6 +107,14 @@ void TitleScene::Initialize() {
 	spriteButtonA_->Initialize(spriteCommon_.get(), texButtonA);
 	spriteButtonA_->SetAnchorPoint({0.5f, 0.5f});
 	baseButtonASize_ = spriteButtonA_->GetSize();
+	// 初期ターゲット座標を設定
+	buttonACurrentPos_ = {
+		kStartButtonInitPos.x + kButtonAOffsetStart.x,
+		kStartButtonInitPos.y + kButtonAOffsetStart.y
+	};
+	buttonAStartPos_ = buttonACurrentPos_;
+	buttonATargetPos_ = buttonACurrentPos_;
+	buttonAMoveTimer_ = kButtonAMoveDuration;
 
 	// 初期スケールの適用
 	UpdateUI();
@@ -312,6 +321,9 @@ void TitleScene::ProcessMenuInput()
 	// フェード未完了時 または 選択済みならスキップ
 	if(!FadeTransition::GetInstance()->IsFinished() || isSelected_) return;
 
+	// 旧メニュー保持
+	MenuIndex prevMenu = currentMenu_;
+
 	/* 上下移動入力判定 */
 	bool isUp = false;
 	bool isDown = false;
@@ -353,6 +365,26 @@ void TitleScene::ProcessMenuInput()
 		currentMenu_ = MenuIndex::Start;
 	}
 
+	// メニューが変更された場合、Aボタンの補間移動を開始
+	if (prevMenu != currentMenu_) {
+		buttonAStartPos_ = buttonACurrentPos_; // 現在地を開始地点に
+
+		// 新しい目標座標を設定
+		if (currentMenu_ == MenuIndex::Start) {
+			buttonATargetPos_ = {
+				kStartButtonInitPos.x + kButtonAOffsetStart.x,
+				kStartButtonInitPos.y + kButtonAOffsetStart.y
+			};
+		} else if (currentMenu_ == MenuIndex::Exit) {
+			buttonATargetPos_ = {
+				kExitButtonInitPos.x + kButtonAOffsetExit.x,
+				kExitButtonInitPos.y + kButtonAOffsetExit.y
+			};
+		}
+
+		buttonAMoveTimer_ = 0.0f; // タイマーリセット
+	}
+
 	/* 決定入力判定 */
 	bool isConfirm = input_->TriggerKey(DIK_SPACE) || input_->TriggerKey(DIK_RETURN) || input_->IsTriggerButton(0, XINPUT_GAMEPAD_A);
 
@@ -383,8 +415,10 @@ void TitleScene::ProcessMenuInput()
 
 void TitleScene::UpdateUI()
 {
+	float deltaTime = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+
 	// タイマー加算
-	uiAnimationTimer_ += Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+	uiAnimationTimer_ += deltaTime;
 
 	/* タイトルロゴの上下浮遊 */
 	float logoOffsetY = std::sinf(uiAnimationTimer_ * kLogoFloatSpeed) * kLogoFloatAmplitude;
@@ -403,19 +437,33 @@ void TitleScene::UpdateUI()
 	spriteExitButton_->SetSize({baseExitButtonSize_.x * exitRate, baseExitButtonSize_.y * exitRate});
 
 	// Aボタンアイコンを選択中ボタンの左側に配置
-	Cygnus::Float2 targetPos = {};
-	if(currentMenu_ == MenuIndex::Start) {
-		targetPos = spriteStartButton_->GetPosition();
-	} else if (currentMenu_ == MenuIndex::Exit) {
-		targetPos = spriteExitButton_->GetPosition();
+	// Aボタンのイージング移動
+	if (buttonAMoveTimer_ < kButtonAMoveDuration) {
+		buttonAMoveTimer_ += deltaTime;
+		if (buttonAMoveTimer_ > kButtonAMoveDuration) {
+			buttonAMoveTimer_ = kButtonAMoveDuration;
+		}
+
+		// 進行度
+		float t = buttonAMoveTimer_ / kButtonAMoveDuration;
+
+		// イージング関数
+		float easedT = Cygnus::Easing::EaseOutExpo(t);
+
+		// 座標の補間
+		buttonACurrentPos_.x = buttonAStartPos_.x + (buttonATargetPos_.x - buttonAStartPos_.x) * easedT;
+		buttonACurrentPos_.y = buttonAStartPos_.y + (buttonATargetPos_.y - buttonAStartPos_.y) * easedT;
+	} else {
+		buttonACurrentPos_ = buttonATargetPos_;
 	}
+
 	// 少し跳ねる動き
 	float bounceOffsetY = -std::abs(std::sinf(uiAnimationTimer_ * kButtonABounceSpeed)) * kButtonABounceHeight;
 
 	// 選択中ボタンの左側にバウンドオフセットを加算して配置
 	spriteButtonA_->SetPosition({
-		targetPos.x + kButtonAOffset.x,
-		targetPos.y + kButtonAOffset.y + bounceOffsetY
+		buttonACurrentPos_.x,
+		buttonACurrentPos_.y + bounceOffsetY
 	});
 }
 
