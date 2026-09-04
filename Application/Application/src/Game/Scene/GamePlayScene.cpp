@@ -98,35 +98,35 @@ void GamePlayScene::Update() {
 	/// シーン遷移条件
 	/// 
 
-	if (!isTransitionStarted_ && FadeTransition::GetInstance()->IsFinished()) {
-		/* ゲームクリア: 宇宙船の耐久度が完全回復した場合 */
-		if (spaceship_->IsFullyRepaired()) {
-			GameResultManager::SetResult(GameResult::Clear);
-			isTransitionStarted_ = true;
-		}
-		/* ゲームオーバー: プレイヤーのHPが0 */
-		else if (player_->IsDead()) {
-			GameResultManager::SetResult(GameResult::GameOver);
-			isTransitionStarted_ = true;
-		}
-		/* ゲームオーバー: 制限時間の経過 */
-		else if (gameTimer_ >= kMaxGameTime) {
-			GameResultManager::SetResult(GameResult::GameOver);
-			isTransitionStarted_ = true;
-		}
+	//if (!isTransitionStarted_ && FadeTransition::GetInstance()->IsFinished()) {
+	//	/* ゲームクリア: 宇宙船の耐久度が完全回復した場合 */
+	//	if (spaceship_->IsFullyRepaired()) {
+	//		GameResultManager::SetResult(GameResult::Clear);
+	//		isTransitionStarted_ = true;
+	//	}
+	//	/* ゲームオーバー: プレイヤーのHPが0 */
+	//	else if (player_->IsDead()) {
+	//		GameResultManager::SetResult(GameResult::GameOver);
+	//		isTransitionStarted_ = true;
+	//	}
+	//	/* ゲームオーバー: 制限時間の経過 */
+	//	else if (gameTimer_ >= kMaxGameTime) {
+	//		GameResultManager::SetResult(GameResult::GameOver);
+	//		isTransitionStarted_ = true;
+	//	}
 
-		// 遷移条件を満たした場合にフェードアウト開始
-		if (isTransitionStarted_) {
-			FadeTransition::GetInstance()->StartFadeOut(
-				1.0f, 
-				[]() { 
-					Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT"); 
-					Cygnus::CollisionManager::GetInstance()->Clear();
-				}, 
-				0.5f
-			);
-		}
-	}
+	//	// 遷移条件を満たした場合にフェードアウト開始
+	//	if (isTransitionStarted_) {
+	//		FadeTransition::GetInstance()->StartFadeOut(
+	//			1.0f, 
+	//			[]() { 
+	//				Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT"); 
+	//				Cygnus::CollisionManager::GetInstance()->Clear();
+	//			}, 
+	//			0.5f
+	//		);
+	//	}
+	//}
 
 	// ゲームの経過時間を更新
 	if (!isTransitionStarted_) {
@@ -296,6 +296,8 @@ void GamePlayScene::Draw() {
 
 	// コライダーデバッグ表示
 	Cygnus::CollisionManager::GetInstance()->Debug();
+	// スカイボックスデバッグ表示
+	Cygnus::SkyBoxManager::GetInstance()->Debug();
 #endif
 
 	// ImGuiの内部コマンドを生成する
