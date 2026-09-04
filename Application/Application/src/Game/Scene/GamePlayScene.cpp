@@ -49,6 +49,11 @@ void GamePlayScene::Initialize() {
 	postEffectManager_ = std::make_unique<Cygnus::PostEffectManager>();
 	postEffectManager_->Initialize();
 
+	// SkyBoxのパラメーター設定
+	Cygnus::SkyBoxManager::GetInstance()->SetTranslate({ 0.0f, 0.0f, 1500.0f });
+	Cygnus::SkyBoxManager::GetInstance()->SetRotate({ 0.37f, 1.29f, 0.26f });
+	Cygnus::SkyBoxManager::GetInstance()->SetColor({ 0.5f, 0.3f, 1.0f, 1.0f });
+
 	///
 	///	↓ ゲームシーン用
 	///
@@ -98,35 +103,35 @@ void GamePlayScene::Update() {
 	/// シーン遷移条件
 	/// 
 
-	//if (!isTransitionStarted_ && FadeTransition::GetInstance()->IsFinished()) {
-	//	/* ゲームクリア: 宇宙船の耐久度が完全回復した場合 */
-	//	if (spaceship_->IsFullyRepaired()) {
-	//		GameResultManager::SetResult(GameResult::Clear);
-	//		isTransitionStarted_ = true;
-	//	}
-	//	/* ゲームオーバー: プレイヤーのHPが0 */
-	//	else if (player_->IsDead()) {
-	//		GameResultManager::SetResult(GameResult::GameOver);
-	//		isTransitionStarted_ = true;
-	//	}
-	//	/* ゲームオーバー: 制限時間の経過 */
-	//	else if (gameTimer_ >= kMaxGameTime) {
-	//		GameResultManager::SetResult(GameResult::GameOver);
-	//		isTransitionStarted_ = true;
-	//	}
+	if (!isTransitionStarted_ && FadeTransition::GetInstance()->IsFinished()) {
+		/* ゲームクリア: 宇宙船の耐久度が完全回復した場合 */
+		if (spaceship_->IsFullyRepaired()) {
+			GameResultManager::SetResult(GameResult::Clear);
+			isTransitionStarted_ = true;
+		}
+		/* ゲームオーバー: プレイヤーのHPが0 */
+		else if (player_->IsDead()) {
+			GameResultManager::SetResult(GameResult::GameOver);
+			isTransitionStarted_ = true;
+		}
+		/* ゲームオーバー: 制限時間の経過 */
+		else if (gameTimer_ >= kMaxGameTime) {
+			GameResultManager::SetResult(GameResult::GameOver);
+			isTransitionStarted_ = true;
+		}
 
-	//	// 遷移条件を満たした場合にフェードアウト開始
-	//	if (isTransitionStarted_) {
-	//		FadeTransition::GetInstance()->StartFadeOut(
-	//			1.0f, 
-	//			[]() { 
-	//				Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT"); 
-	//				Cygnus::CollisionManager::GetInstance()->Clear();
-	//			}, 
-	//			0.5f
-	//		);
-	//	}
-	//}
+		// 遷移条件を満たした場合にフェードアウト開始
+		if (isTransitionStarted_) {
+			FadeTransition::GetInstance()->StartFadeOut(
+				1.0f, 
+				[]() { 
+					Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT"); 
+					Cygnus::CollisionManager::GetInstance()->Clear();
+				}, 
+				0.5f
+			);
+		}
+	}
 
 	// ゲームの経過時間を更新
 	if (!isTransitionStarted_) {
