@@ -24,7 +24,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(Spaceship* spaceship,Cygnus::SpriteCommon* spriteCommon);
+	void Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon);
 
 	/// <summary>
 	/// 更新処理
@@ -105,6 +105,18 @@ private:
 	/// キー入力による移動処理
 	/// </summary>
 	void Move();
+
+	/// <summary>
+	/// キーボード用入力ベクトル
+	/// </summary>
+	/// <returns></returns>
+	Cygnus::Float3 GetKeyInput();
+
+	/// <summary>
+	/// ゲームパッド用入力ベクトル
+	/// </summary>
+	/// <returns></returns>
+	Cygnus::Float3 GetPadInput();
 
 	/// <summary>
 	/// 無入力時の漂うオフセットを取得

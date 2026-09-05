@@ -10,6 +10,7 @@
 // Application
 #include <src/Game/Objects/Spaceship/Spaceship.h>
 #include <src/Game/Objects/FlyingObject/Base/FlyingObject.h>
+#include <src/Game/Scene/PauseMenu.h>
 
 void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon) {
 	spaceship_ = spaceship;
@@ -157,10 +158,9 @@ void Player::Move()
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 
 	/* 巻取りトリガー判定 */
-
 	if(!isRewinding_) {
 		// タイマー更新（宇宙船より下にいる間）
-		if(object_->transform_.translate_.y < -1.0f) {
+		if(object_->transform_.translate_.y < -5.0f) {
 			autoRewindTimer_ += dt;
 			// 自動巻き取りの限界時間（酸素ゲージ）に達したら自動巻き取り開始
 			if(autoRewindTimer_ >= kDefaultAutoRewindTime) {
@@ -170,35 +170,38 @@ void Player::Move()
 			autoRewindTimer_ = 0.0f; // 上部にいる間はリセット
 		}
 
-		// ボタン入力での巻取り
-		if(input->TriggerKey(DIK_SPACE)) {
+		// 巻取り入力判定（キーボード: SPACE / コントローラー: Aボタン or RBボタン）
+		bool triggerKeyboard = input->TriggerKey(DIK_SPACE);
+		bool triggerPad = input->IsTriggerButton(0, XINPUT_GAMEPAD_A) || input->IsTriggerButton(0, XINPUT_GAMEPAD_RIGHT_SHOULDER);
+		if (triggerKeyboard || triggerPad) {
 			StartRewind();
 		}
 	}
 
 	/* 移動力の計算 */
-
-	// 入力に基づく加速度の計算
-	Cygnus::Float3 accel = { 0.0f, 0.0f, 0.0f };
-	bool isInputting = false;
-
 	if(isRewinding_) {
 		// 巻取り中の移動計算
 		ProcessRewind();
 	} else {
-		// 通常操作時の移動計算
-		if (input->PushKey(DIK_W)) { accel.y += kAcceleration; isInputting = true; }
-		if (input->PushKey(DIK_S)) { accel.y -= kAcceleration; isInputting = true; }
-		if (input->PushKey(DIK_A)) { accel.x -= kAcceleration; isInputting = true; }
-		if (input->PushKey(DIK_D)) { accel.x += kAcceleration; isInputting = true; }
+		// キーボードとゲームパッド双方の入力ベクトルを合算
+		Cygnus::Float3 inputVec = {0.0f, 0.0f, 0.0f};
+		inputVec += GetKeyInput();
+		inputVec += GetPadInput();
 
-		// 速度に加速度を加算
-		velocity_.x += accel.x;
-		velocity_.y += accel.y;
-		velocity_.z += accel.z;
+		bool isInputting = (Cygnus::Float3::Length(inputVec) > 0.01f);
+
+		// 入力がある場合は正規化して加速度を掛ける
+		if (isInputting) {
+			if (Cygnus::Float3::Length(inputVec) > 1.0f) {
+				inputVec = Cygnus::Float3::Normalize(inputVec);
+			}
+			// 速度に加速度を加算
+			velocity_.x += inputVec.x * kAcceleration;
+			velocity_.y += inputVec.y * kAcceleration;
+		}
 
 		// 無入力時の処理（漂い）
-		Cygnus::Float3 driftOffset = { 0.0f, 0.0f, 0.0f };
+		Cygnus::Float3 driftOffset = {0.0f, 0.0f, 0.0f};
 		if (!isInputting) {
 			driftOffset = Drift();
 		}
@@ -222,7 +225,7 @@ void Player::Move()
 		object_->transform_.translate_.z += velocity_.z + driftOffset.z;
 	}
 
-	// 移動範囲制限
+	/* 移動範囲制限 */
 	float clampedX = std::clamp(object_->transform_.translate_.x, -kDefaultLimitX, kDefaultLimitX);
 	float clampedY = std::clamp(object_->transform_.translate_.y, kDefaultLimitMinY, kDefaultLimitMaxY);
 
@@ -235,6 +238,34 @@ void Player::Move()
 
 	object_->transform_.translate_.x = clampedX;
 	object_->transform_.translate_.y = clampedY;
+}
+
+Cygnus::Float3 Player::GetKeyInput() { 
+	auto input = Cygnus::Input::GetInstance(); 
+	Cygnus::Float3 dir = {0.0f, 0.0f, 0.0f};
+
+	if (input->PushKey(DIK_W)) dir.y += 1.0f;
+	if (input->PushKey(DIK_S)) dir.y -= 1.0f;
+	if (input->PushKey(DIK_A)) dir.x -= 1.0f;
+	if (input->PushKey(DIK_D)) dir.x += 1.0f;
+
+	return dir;
+}
+
+Cygnus::Float3 Player::GetPadInput() { 
+	auto input = Cygnus::Input::GetInstance(); 
+	XINPUT_STATE state;
+
+	Cygnus::Float3 dir = {0.0f, 0.0f, 0.0f};
+
+	// コントローラー接続確認と状態取得
+	if (input->GetJoystickState(0, state)) {
+		// 左スティック入力
+		dir.x = state.Gamepad.sThumbLX / 32767.0f;
+		dir.y = state.Gamepad.sThumbLY / 32767.0f;
+	}
+
+	return dir;
 }
 
 Cygnus::Float3 Player::Drift() {

@@ -57,6 +57,19 @@
     <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\Scene\TitleScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Scene\ResultScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Util\Transition\FadeTransition.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Scene\PauseMenu.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Util\GameResult\GameResultManager.cpp">
     <ClCompile Include="PartsCountUI.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -104,6 +117,19 @@
     <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\Scene\TitleScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Scene\ResultScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Util\Transition\FadeTransition.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Scene\PauseMenu.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Util\GameResult\GameResultManager.h">
     <ClInclude Include="PartsCountUI.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
