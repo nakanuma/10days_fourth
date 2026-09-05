@@ -81,6 +81,10 @@ void GamePlayScene::Initialize() {
 	flyingObjectManager_ = std::make_unique<FlyingObjectManager>();
 	flyingObjectManager_->Initialize();
 
+	// ゲームUI作成
+	gameHUD_ = std::make_unique<GameHUD>();
+	gameHUD_->Initialize(spriteCommon_.get(), player_.get(), spaceship_.get());
+
 	// シーンの開始時にフェードインを実行
 	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
 }
@@ -153,6 +157,9 @@ void GamePlayScene::Update() {
 	tether_->Update();
 	// 飛翔物管理クラス更新
 	flyingObjectManager_->Update();
+	// ゲームUI更新
+	float remainingTime = kMaxGameTime - gameTimer_;
+	gameHUD_->Update(remainingTime);
 
 	// 命綱と飛翔物の衝突判定
 	tether_->CheckCollisionWithFlyingObjects(flyingObjectManager_.get());
@@ -277,6 +284,8 @@ void GamePlayScene::Draw() {
 	// プレイヤーUI描画
 	player_->DrawUI();
 
+	// ゲームUI描画
+	gameHUD_->Draw();
 	// ポーズメニュー描画
 	pauseMenu_->Draw();
 

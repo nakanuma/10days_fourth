@@ -24,6 +24,7 @@
 #include <src/Game/Objects/FlyingObject/FlyingObjectManager.h>
 #include <src/Game/Util/Transition/FadeTransition.h>
 #include <src/Game/Scene/PauseMenu.h>
+#include <src/Game/UI/GameHUD.h>
 
 // =========================================================
 // ゲームプレイシーンクラス
@@ -92,14 +93,16 @@ private:
 
 	// ポーズメニュー
 	std::unique_ptr<PauseMenu> pauseMenu_ = nullptr;
+	// ゲームUI
+	std::unique_ptr<GameHUD> gameHUD_ = nullptr;
 
 	// ゲーム進行用
 	float gameTimer_ = 0.0f; // ゲーム経過時間タイマー
 	bool isTransitionStarted_ = false; // シーン遷移開始フラグ
 
 	// ----- Parameters -----
-	Cygnus::Float3 cameraTopPos_ = {0.0f, -12.5f, -80.0f}; // プレイヤーが最も上にいる時のカメラ位置
-	Cygnus::Float3 cameraBottomPos_ = {0.0f, -30.0f, -160.0f}; // プレイヤーが最も下にいる時のカメラ位置
+	Cygnus::Float3 cameraTopPos_ = {0.0f, 5.0f, -90.0f}; // プレイヤーが最も上にいる時のカメラ位置
+	Cygnus::Float3 cameraBottomPos_ = {0.0f, -55.0f, -170.0f}; // プレイヤーが最も下にいる時のカメラ位置
 
 	float playerTopY_ = 0.0f; // 基準となるプレイヤー最上部Y座標
 	float playerBottomY_ = -60.0f; // 基準となるプレイヤー最下部Y座標

@@ -19,6 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\UI\Player\PlayerHPUI.cpp" />
+    <ClCompile Include="src\Game\UI\Player\PlayerOxygenUI.cpp" />
+    <ClCompile Include="src\Game\UI\Timer\GameTimerUI.cpp" />
+    <ClCompile Include="src\Game\UI\Guide\ControlGuideUI.cpp" />
+    <ClCompile Include="src\Game\UI\Indicator\DangerIndicatorUI.cpp" />
+    <ClCompile Include="src\Game\UI\Spaceship\SpaceshipDurabilityUI.cpp" />
+    <ClCompile Include="src\Game\UI\PartsUI\PartsInventoryUI.cpp" />
+    <ClCompile Include="src\Game\UI\GameHUD.cpp" />
     <ClCompile Include="O2TimeUI.cpp" />
     <ClCompile Include="src\Game\Util\GameResult\GameResultManager.cpp" />
     <ClCompile Include="src\Game\Scene\PauseMenu.cpp" />
@@ -39,8 +47,17 @@
     <ClCompile Include="src\Game\Scene\SceneFactory.cpp" />
     <ClCompile Include="src\Game\Objects\Tether\Tether.cpp" />
     <ClCompile Include="src\Game\Scene\TitleScene.cpp" />
+    <ClCompile Include="src\Game\Util\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\UI\Player\PlayerHPUI.h" />
+    <ClInclude Include="src\Game\UI\Player\PlayerOxygenUI.h" />
+    <ClInclude Include="src\Game\UI\Timer\GameTimerUI.h" />
+    <ClInclude Include="src\Game\UI\Guide\ControlGuideUI.h" />
+    <ClInclude Include="src\Game\UI\Indicator\DangerIndicatorUI.h" />
+    <ClInclude Include="src\Game\UI\Spaceship\SpaceshipDurabilityUI.h" />
+    <ClInclude Include="src\Game\UI\PartsUI\PartsInventoryUI.h" />
+    <ClInclude Include="src\Game\UI\GameHUD.h" />
     <ClInclude Include="O2TimeUI.h" />
     <ClInclude Include="src\Game\Util\GameResult\GameResultManager.h" />
     <ClInclude Include="src\Game\Scene\PauseMenu.h" />
@@ -61,6 +78,7 @@
     <ClInclude Include="src\Game\Scene\SceneFactory.h" />
     <ClInclude Include="src\Game\Objects\Tether\Tether.h" />
     <ClInclude Include="src\Game\Scene\TitleScene.h" />
+    <ClInclude Include="src\Game\Util\Utility.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

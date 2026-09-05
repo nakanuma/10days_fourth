@@ -62,7 +62,7 @@ public:
 	/// 現在位置の取得
 	/// </summary>
 	/// <returns></returns>
-	const Cygnus::Float3& GetTranslate() { return object_->transform_.translate_; }
+	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; }
 
 	/// <summary>
 	/// ダメージ処理
@@ -75,6 +75,24 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	int32_t GetHP() const { return hp_; }
+
+	/// <summary>
+	/// 最大HPの取得
+	/// </summary>
+	/// <returns></returns>
+	static constexpr int32_t GetMaxHP() { return kMaxHP; }
+
+	/// <summary>
+	/// 自動巻き取り（酸素消費）経過時間の取得
+	/// </summary>
+	/// <returns></returns>
+	float GetAutoRewindTimer() const { return autoRewindTimer_; }
+
+	/// <summary>
+	/// 酸素限界時間の取得
+	/// </summary>
+	/// <returns></returns>
+	static constexpr float GetMaxAutoRewindTime() { return kDefaultAutoRewindTime; }
 
 	/// <summary>
 	/// 死亡フラグ取得
@@ -153,7 +171,7 @@ private:
 	// 移動範囲の初期定数
 	static constexpr float kDefaultLimitMinY = -60.0f;
 	static constexpr float kDefaultLimitMaxY = 0.0f;
-	static constexpr float kDefaultLimitX = 25.0f;
+	static constexpr float kDefaultLimitX = 30.0f;
 
 	// 巻取り用パラメーター
 	static constexpr float kDefaultAutoRewindTime = 10.0f; // 自動巻き取りまでの限界時間（秒）

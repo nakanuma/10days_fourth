@@ -15,12 +15,12 @@
 void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon) {
 	spaceship_ = spaceship;
 
-	// ƒIƒuƒWƒFƒNƒg¶¬
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Player");
 	object_->transform_.translate_ = { 0.0f, -10.0f, 0.0f };
 
-	// Šeƒpƒ‰ƒ[ƒ^[‰Šú‰»
+	// å„ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼åˆæœŸåŒ–
 	velocity_ = { 0.0f, 0.0f, 0.0f };
 	driftTimer_ = 0.0f;
 
@@ -30,7 +30,7 @@ void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon
 	hp_ = kMaxHP;
 	isDead_ = false;
 
-	// ƒRƒ‰ƒCƒ_[¶¬
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ç”Ÿæˆ
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
 	aabb->SetTag("Player");
 	aabb->SetFollowTarget(&object_->transform_.translate_);
@@ -40,46 +40,50 @@ void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon
 	collider_ = std::move(aabb);
 	Cygnus::CollisionManager::GetInstance()->Register(collider_.get());
 
-	// Šƒp[ƒc”UI‰Šú‰»
+	// æ‰€æŒãƒ‘ãƒ¼ãƒ„æ•°UIåˆæœŸåŒ–
 	partsCountUI_ = std::make_unique<PartsCountUI>();
 	partsCountUI_->Initialize(spriteCommon);
 
-	// _‘fƒQ[ƒW‚ÌUI‰Šú‰»
+	// é…¸ç´ ã‚²ãƒ¼ã‚¸ã®UIåˆæœŸåŒ–
 	o2TimeUI_ = std::make_unique<O2TimeUI>();
 	o2TimeUI_->Initialize(spriteCommon);
 
 }
 
 void Player::Update() {
-	// ˆÚ“®ˆ—
+	// ç§»å‹•å‡¦ç†
 	Move();
 
-	// ƒRƒ‰ƒCƒ_[XV
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼æ›´æ–°
 	collider_->Update();
 
-	// ƒIƒuƒWƒFƒNƒgXV
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæ›´æ–°
 	object_->UpdateMatrix();
 
-	// Šƒp[ƒc”UIXV
+	// æ‰€æŒãƒ‘ãƒ¼ãƒ„æ•°UIæ›´æ–°
 	partsCountUI_->Update();
 
-	// _‘fƒQ[ƒW‚ÌUIXV
+	// é…¸ç´ ã‚²ãƒ¼ã‚¸ã®UIæ›´æ–°
 	o2TimeUI_->Update(autoRewindTimer_, kDefaultAutoRewindTime);
 }
 
 void Player::Draw() {
-	// ƒIƒuƒWƒFƒNƒg•`‰æ
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	object_->Draw();
 
-	// ˆÚ“®§ŒÀƒGƒŠƒA‚Ì•`‰æ
+	// ç§»å‹•åˆ¶é™ã‚¨ãƒªã‚¢ã®æç”»
 	DrawAreaLimit();
 }
 
 void Player::DrawUI() {
-	// Šƒp[ƒc”UI•`‰æ
+	// æ‰€æŒãƒ‘ãƒ¼ãƒ„æ•°UIæç”»
+
+	/*partsCountUI_->Draw();*/
+
 	partsCountUI_->Draw();
-	// _‘fƒQ[ƒW‚ÌUI•`‰æ
+	// é…¸ç´ ã‚²ãƒ¼ã‚¸ã®UIæç”»
 	o2TimeUI_->Draw();
+
 }
 
 void Player::Debug() {
@@ -110,7 +114,7 @@ void Player::Debug() {
 
 void Player::StartRewind()
 {
-	// Šªæ‚è‚ğÀs‚·‚é
+	// å·»å–ã‚Šã‚’å®Ÿè¡Œã™ã‚‹
 	if(!isRewinding_) {
 		isRewinding_ = true;
 	}
@@ -120,12 +124,12 @@ void Player::OnCollision(Cygnus::Collider* other)
 {
 	const std::string& tag = other->GetTag();
 
-	/* è¦Î‚Æ‚ÌÕ“Ëˆ— */
+	/* éš•çŸ³ã¨ã®è¡çªå‡¦ç† */
 	if (tag == "MeteorSmall" || tag == "MeteorLarge") {
-		ApplyDamage(1); // ƒ_ƒ[ƒW‚ğ—^‚¦‚é
+		ApplyDamage(1); // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹
 	}
 
-	/* ŠeC—ƒp[ƒc‚Æ‚ÌÕ“Ë */
+	/* å„ä¿®ç†ãƒ‘ãƒ¼ãƒ„ã¨ã®è¡çª */
 	if(other->GetTag() == "RepairPartLow") {
 		repairPartLowCount_++;
 		partsCountUI_->AddParts();
@@ -145,7 +149,7 @@ void Player::ApplyDamage(int32_t damage) {
 
 	hp_ -= damage;
 
-	// HP‚ª0‚É‚È‚ê‚Î€–Sƒtƒ‰ƒO‚ğ—§‚Ä‚é
+	// HPãŒ0ã«ãªã‚Œã°æ­»äº¡ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 	if (hp_ <= 0) {
 		hp_ = 0;
 		isDead_ = true;
@@ -157,20 +161,20 @@ void Player::Move()
 	auto input = Cygnus::Input::GetInstance();
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 
-	/* Šªæ‚èƒgƒŠƒK[”»’è */
+	/* å·»å–ã‚Šãƒˆãƒªã‚¬ãƒ¼åˆ¤å®š */
 	if(!isRewinding_) {
-		// ƒ^ƒCƒ}[XVi‰F’ˆ‘D‚æ‚è‰º‚É‚¢‚éŠÔj
+		// ã‚¿ã‚¤ãƒãƒ¼æ›´æ–°ï¼ˆå®‡å®™èˆ¹ã‚ˆã‚Šä¸‹ã«ã„ã‚‹é–“ï¼‰
 		if(object_->transform_.translate_.y < -5.0f) {
 			autoRewindTimer_ += dt;
-			// ©“®Šª‚«æ‚è‚ÌŒÀŠEŠÔi_‘fƒQ[ƒWj‚É’B‚µ‚½‚ç©“®Šª‚«æ‚èŠJn
+			// è‡ªå‹•å·»ãå–ã‚Šã®é™ç•Œæ™‚é–“ï¼ˆé…¸ç´ ã‚²ãƒ¼ã‚¸ï¼‰ã«é”ã—ãŸã‚‰è‡ªå‹•å·»ãå–ã‚Šé–‹å§‹
 			if(autoRewindTimer_ >= kDefaultAutoRewindTime) {
 				StartRewind();
 			}
 		} else {
-			autoRewindTimer_ = 0.0f; // ã•”‚É‚¢‚éŠÔ‚ÍƒŠƒZƒbƒg
+			autoRewindTimer_ = 0.0f; // ä¸Šéƒ¨ã«ã„ã‚‹é–“ã¯ãƒªã‚»ãƒƒãƒˆ
 		}
 
-		// Šªæ‚è“ü—Í”»’èiƒL[ƒ{[ƒh: SPACE / ƒRƒ“ƒgƒ[ƒ‰[: Aƒ{ƒ^ƒ“ or RBƒ{ƒ^ƒ“j
+		// å·»å–ã‚Šå…¥åŠ›åˆ¤å®šï¼ˆã‚­ãƒ¼ãƒœãƒ¼ãƒ‰: SPACE / ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼: Aãƒœã‚¿ãƒ³ or RBãƒœã‚¿ãƒ³ï¼‰
 		bool triggerKeyboard = input->TriggerKey(DIK_SPACE);
 		bool triggerPad = input->IsTriggerButton(0, XINPUT_GAMEPAD_A) || input->IsTriggerButton(0, XINPUT_GAMEPAD_RIGHT_SHOULDER);
 		if (triggerKeyboard || triggerPad) {
@@ -178,40 +182,40 @@ void Player::Move()
 		}
 	}
 
-	/* ˆÚ“®—Í‚ÌŒvZ */
+	/* ç§»å‹•åŠ›ã®è¨ˆç®— */
 	if(isRewinding_) {
-		// Šªæ‚è’†‚ÌˆÚ“®ŒvZ
+		// å·»å–ã‚Šä¸­ã®ç§»å‹•è¨ˆç®—
 		ProcessRewind();
 	} else {
-		// ƒL[ƒ{[ƒh‚ÆƒQ[ƒ€ƒpƒbƒh‘o•û‚Ì“ü—ÍƒxƒNƒgƒ‹‚ğ‡Z
+		// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã¨ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰åŒæ–¹ã®å…¥åŠ›ãƒ™ã‚¯ãƒˆãƒ«ã‚’åˆç®—
 		Cygnus::Float3 inputVec = {0.0f, 0.0f, 0.0f};
 		inputVec += GetKeyInput();
 		inputVec += GetPadInput();
 
 		bool isInputting = (Cygnus::Float3::Length(inputVec) > 0.01f);
 
-		// “ü—Í‚ª‚ ‚éê‡‚Í³‹K‰»‚µ‚Ä‰Á‘¬“x‚ğŠ|‚¯‚é
+		// å…¥åŠ›ãŒã‚ã‚‹å ´åˆã¯æ­£è¦åŒ–ã—ã¦åŠ é€Ÿåº¦ã‚’æ›ã‘ã‚‹
 		if (isInputting) {
 			if (Cygnus::Float3::Length(inputVec) > 1.0f) {
 				inputVec = Cygnus::Float3::Normalize(inputVec);
 			}
-			// ‘¬“x‚É‰Á‘¬“x‚ğ‰ÁZ
+			// é€Ÿåº¦ã«åŠ é€Ÿåº¦ã‚’åŠ ç®—
 			velocity_.x += inputVec.x * kAcceleration;
 			velocity_.y += inputVec.y * kAcceleration;
 		}
 
-		// –³“ü—Í‚Ìˆ—i•Y‚¢j
+		// ç„¡å…¥åŠ›æ™‚ã®å‡¦ç†ï¼ˆæ¼‚ã„ï¼‰
 		Cygnus::Float3 driftOffset = {0.0f, 0.0f, 0.0f};
 		if (!isInputting) {
 			driftOffset = Drift();
 		}
 
-		// Œ¸Šˆ—
+		// æ¸›è¡°å‡¦ç†
 		velocity_.x *= kDamping;
 		velocity_.y *= kDamping;
 		velocity_.z *= kDamping;
 
-		// Å‚‘¬“x‚Ì§ŒÀ
+		// æœ€é«˜é€Ÿåº¦ã®åˆ¶é™
 		float currentSpeed = std::sqrt(velocity_.x * velocity_.x + velocity_.y * velocity_.y + velocity_.z * velocity_.z);
 		if (currentSpeed > kMaxSpeed) {
 			velocity_.x = (velocity_.x / currentSpeed) * kMaxSpeed;
@@ -219,13 +223,13 @@ void Player::Move()
 			velocity_.z = (velocity_.z / currentSpeed) * kMaxSpeed;
 		}
 
-		// À•W‚Ö‚Ì“K—p
+		// åº§æ¨™ã¸ã®é©ç”¨
 		object_->transform_.translate_.x += velocity_.x + driftOffset.x;
 		object_->transform_.translate_.y += velocity_.y + driftOffset.y;
 		object_->transform_.translate_.z += velocity_.z + driftOffset.z;
 	}
 
-	/* ˆÚ“®”ÍˆÍ§ŒÀ */
+	/* ç§»å‹•ç¯„å›²åˆ¶é™ */
 	float clampedX = std::clamp(object_->transform_.translate_.x, -kDefaultLimitX, kDefaultLimitX);
 	float clampedY = std::clamp(object_->transform_.translate_.y, kDefaultLimitMinY, kDefaultLimitMaxY);
 
@@ -258,9 +262,9 @@ Cygnus::Float3 Player::GetPadInput() {
 
 	Cygnus::Float3 dir = {0.0f, 0.0f, 0.0f};
 
-	// ƒRƒ“ƒgƒ[ƒ‰[Ú‘±Šm”F‚Æó‘Ôæ“¾
+	// ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼æ¥ç¶šç¢ºèªã¨çŠ¶æ…‹å–å¾—
 	if (input->GetJoystickState(0, state)) {
-		// ¶ƒXƒeƒBƒbƒN“ü—Í
+		// å·¦ã‚¹ãƒ†ã‚£ãƒƒã‚¯å…¥åŠ›
 		dir.x = state.Gamepad.sThumbLX / 32767.0f;
 		dir.y = state.Gamepad.sThumbLY / 32767.0f;
 	}
@@ -271,14 +275,14 @@ Cygnus::Float3 Player::GetPadInput() {
 Cygnus::Float3 Player::Drift() {
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 
-	// –ˆƒtƒŒ[ƒ€ƒ^ƒCƒ}[‰ÁZ
+	// æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ã‚¿ã‚¤ãƒãƒ¼åŠ ç®—
 	driftTimer_ += dt * kDriftFrequency;
 
-	// X‚ÆY‚Å‚»‚ê‚¼‚êˆÙ‚È‚éüŠú‚É‚µ‚Ä•s‹K‘¥‚È•Y‚¢“®ì‚ğs‚¤
+	// Xã¨Yã§ãã‚Œãã‚Œç•°ãªã‚‹å‘¨æœŸã«ã—ã¦ä¸è¦å‰‡ãªæ¼‚ã„å‹•ä½œã‚’è¡Œã†
 	float driftX = std::sinf(driftTimer_) * std::cosf(driftTimer_ * 0.7f) * kDriftAmplitude;
 	float driftY = std::cosf(driftTimer_ * 1.3f) * std::sinf(driftTimer_ * 0.5f) * kDriftAmplitude;
 
-	// ˆÚ“®—Ê‚ğ•Ô‚·
+	// ç§»å‹•é‡ã‚’è¿”ã™
 	return {driftX, driftY, 0.0f};
 }
 
@@ -286,41 +290,41 @@ void Player::ProcessRewind()
 {
 	if(!spaceship_) return;
 
-	// ‰F’ˆ‘D‚Ö‚Ì•ûŒüƒxƒNƒgƒ‹‚ğZo
+	// å®‡å®™èˆ¹ã¸ã®æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç®—å‡º
 	Cygnus::Float3 targetPos = spaceship_->GetTranslate();
 	Cygnus::Float3 diff = {
 		targetPos - object_->transform_.translate_
 	};
 	float distance = std::sqrt(Cygnus::Float3::Length(diff));
 
-	// ‰F’ˆ‘D‚É“’B‚µ‚½‚çŠªæ‚èI—¹
+	// å®‡å®™èˆ¹ã«åˆ°é”ã—ãŸã‚‰å·»å–ã‚Šçµ‚äº†
 	if(distance <= kRewindStopDistance) {
-		// ‰F’ˆ‘D‚ÉŠƒp[ƒc‚ğ“n‚µ‚Ä©“®C—‚ğÀs
+		// å®‡å®™èˆ¹ã«æ‰€æŒãƒ‘ãƒ¼ãƒ„ã‚’æ¸¡ã—ã¦è‡ªå‹•ä¿®ç†ã‚’å®Ÿè¡Œ
 		spaceship_->Repair(repairPartLowCount_, repairPartMediumCount_, repairPartHighCount_);
 
-		// Š‚µ‚Ä‚¢‚éC—ƒp[ƒc‚ğÁ”ïiƒŠƒZƒbƒgj
+		// æ‰€æŒã—ã¦ã„ã‚‹ä¿®ç†ãƒ‘ãƒ¼ãƒ„ã‚’æ¶ˆè²»ï¼ˆãƒªã‚»ãƒƒãƒˆï¼‰
 		repairPartLowCount_ = 0;
 		repairPartMediumCount_ = 0;
 		repairPartHighCount_ = 0;
 
-		// Šªæ‚èŠ®—¹ˆ—
+		// å·»å–ã‚Šå®Œäº†å‡¦ç†
 		isRewinding_ = false;
 		autoRewindTimer_ = 0.0f;
 		velocity_ = {0.0f, 0.0f, 0.0f};
 		return;
 	}
 
-	// ‰F’ˆ‘D‚ÉŒü‚©‚¤‰Á‘¬“x‚ğ‘«‚·
+	// å®‡å®™èˆ¹ã«å‘ã‹ã†åŠ é€Ÿåº¦ã‚’è¶³ã™
 	Cygnus::Float3 dir = {diff.x / distance, diff.y / distance, diff.z / distance};
 	velocity_ += dir * kDefaultRewindAccel;
 
-	// Šªæ‚è’†‚ÌÅ‚‘¬“x§Œä
+	// å·»å–ã‚Šä¸­ã®æœ€é«˜é€Ÿåº¦åˆ¶å¾¡
 	float currentSpeed = std::sqrt(Cygnus::Float3::Length(velocity_));
 	if(currentSpeed > kDefaultRewindMaxSpeed) {
 		velocity_ = (velocity_ / currentSpeed) * kDefaultRewindMaxSpeed;
 	}
 
-	// À•W‚Ö‚Ì“K—p
+	// åº§æ¨™ã¸ã®é©ç”¨
 	object_->transform_.translate_ += velocity_;
 }
 
@@ -336,8 +340,8 @@ void Player::DrawAreaLimit()
 	Cygnus::Float4 lineColor = { 0.0f, 1.0f, 0.0f, 1.0f };
 
 	auto lineDrawer = Cygnus::LineDrawer::GetInstance();
-	lineDrawer->RegisterLine(topLeft, topRight, lineColor); // ã•Ó
-	lineDrawer->RegisterLine(topRight, bottomRight, lineColor); // ‰E•Ó
-	lineDrawer->RegisterLine(bottomRight, bottomLeft, lineColor); // ‰º•Ó
-	lineDrawer->RegisterLine(bottomLeft, topLeft, lineColor); // ¶•Ó
+	lineDrawer->RegisterLine(topLeft, topRight, lineColor); // ä¸Šè¾º
+	lineDrawer->RegisterLine(topRight, bottomRight, lineColor); // å³è¾º
+	lineDrawer->RegisterLine(bottomRight, bottomLeft, lineColor); // ä¸‹è¾º
+	lineDrawer->RegisterLine(bottomLeft, topLeft, lineColor); // å·¦è¾º
 }
