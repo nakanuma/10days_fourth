@@ -145,6 +145,11 @@ void Player::ApplyDamage(int32_t damage) {
 
 	hp_ -= damage;
 
+	// 被ダメージ時にシェイクのコールバックを呼ぶ
+	if(onDamageCallback_) {
+		onDamageCallback_(5.0f, 1.0f);
+	}
+
 	// HPが0になれば死亡フラグを立てる
 	if (hp_ <= 0) {
 		hp_ = 0;
