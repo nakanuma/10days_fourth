@@ -80,6 +80,18 @@ public:
 	static constexpr int32_t GetMaxHP() { return kMaxHP; }
 
 	/// <summary>
+	/// ©“®Šª‚«æ‚èi_‘fÁ”ïjŒo‰ßŠÔ‚Ìæ“¾
+	/// </summary>
+	/// <returns></returns>
+	float GetAutoRewindTimer() const { return autoRewindTimer_; }
+
+	/// <summary>
+	/// _‘fŒÀŠEŠÔ‚Ìæ“¾
+	/// </summary>
+	/// <returns></returns>
+	static constexpr float GetMaxAutoRewindTime() { return kDefaultAutoRewindTime; }
+
+	/// <summary>
 	/// €–Sƒtƒ‰ƒOæ“¾
 	/// </summary>
 	/// <returns></returns>

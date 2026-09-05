@@ -10,14 +10,20 @@ void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, const Player* playe
 	// プレイヤーのHPバーUI
 	playerHPUI_ = std::make_unique<PlayerHPUI>();
 	playerHPUI_->Initialize(spriteCommon, player);
+
+	// プレイヤーの残り酸素UI
+	playerOxygenUI_ = std::make_unique<PlayerOxygenUI>();
+	playerOxygenUI_->Initialize(spriteCommon, player);
 }
 
 void GameHUD::Update() {
 	partsInventoryUI_->Update();
 	playerHPUI_->Update();
+	playerOxygenUI_->Update();
 }
 
 void GameHUD::Draw() {
 	partsInventoryUI_->Draw();
 	playerHPUI_->Draw();
+	playerOxygenUI_->Draw();
 }

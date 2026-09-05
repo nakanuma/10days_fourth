@@ -6,7 +6,8 @@
 // Application
 #include <src/Game/UI/PartsUI/PartsInventoryUI.h> // プレイヤーのパーツ所持数UI
 #include <src/Game/UI/Player/PlayerHPUI.h> // プレイヤーのHPゲージUI
-
+#include <src/Game/UI/Player/PlayerOxygenUI.h> // プレイヤーの残り酸素UI
+ 
 // =========================================================
 // ゲーム中の全UIマネージャー
 // =========================================================
@@ -40,5 +41,6 @@ private:
 	/* 各UI */
 	std::unique_ptr<PartsInventoryUI> partsInventoryUI_; // プレイヤーのパーツ所持数UI
 	std::unique_ptr<PlayerHPUI> playerHPUI_; // プレイヤーのHPバーUI
+	std::unique_ptr<PlayerOxygenUI> playerOxygenUI_; // プレイヤーの残り酸素UI
 };
 
