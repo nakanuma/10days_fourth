@@ -16,8 +16,12 @@ void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, const Player* playe
 	playerOxygenUI_->Initialize(spriteCommon, player);
 
 	// ‰F’ˆ‘D‚Ì‘Ï‹v“xUI
-	spaceshipDurabilityUI_=  std::make_unique<SpaceshipDurabilityUI>();
+	spaceshipDurabilityUI_= std::make_unique<SpaceshipDurabilityUI>();
 	spaceshipDurabilityUI_->Initialize(spriteCommon, spaceship);
+
+	// ‘€ìUI
+	controlGuideUI_ = std::make_unique<ControlGuideUI>();
+	controlGuideUI_->Initialize(spriteCommon);
 }
 
 void GameHUD::Update() {
@@ -25,6 +29,7 @@ void GameHUD::Update() {
 	playerHPUI_->Update();
 	playerOxygenUI_->Update();
 	spaceshipDurabilityUI_->Update();
+	controlGuideUI_->Update();
 }
 
 void GameHUD::Draw() {
@@ -32,4 +37,5 @@ void GameHUD::Draw() {
 	playerHPUI_->Draw();
 	playerOxygenUI_->Draw();
 	spaceshipDurabilityUI_->Draw();
+	controlGuideUI_->Draw();
 }
