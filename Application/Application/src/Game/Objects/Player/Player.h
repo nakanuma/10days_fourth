@@ -150,7 +150,7 @@ private:
 	// 移動範囲の初期定数
 	static constexpr float kDefaultLimitMinY = -60.0f;
 	static constexpr float kDefaultLimitMaxY = 0.0f;
-	static constexpr float kDefaultLimitX = 25.0f;
+	static constexpr float kDefaultLimitX = 30.0f;
 
 	// 巻取り用パラメーター
 	static constexpr float kDefaultAutoRewindTime = 10.0f; // 自動巻き取りまでの限界時間（秒）

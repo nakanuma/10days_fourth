@@ -1,134 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{3af91203-2765-4be9-b18f-18c3cf0e6a43}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="src\Game\Util\GameResult\GameResultManager.cpp" />
+    <ClCompile Include="src\Game\Scene\PauseMenu.cpp" />
+    <ClCompile Include="src\Game\Util\Transition\FadeTransition.cpp" />
+    <ClCompile Include="src\Game\Scene\ResultScene.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorLarge\MeteorLarge.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\Base\FlyingObject.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\FlyingObjectManager.cpp" />
+    <ClCompile Include="PartsCountUI.cpp" />
+    <ClCompile Include="src\Game\Objects\Spaceship\Spaceship.cpp" />
+    <ClCompile Include="src\Game\Objects\Player\Player.cpp" />
+    <ClCompile Include="src\Game\GameResourceLoader\GameResourceLoader.cpp" />
+    <ClCompile Include="src\Game\Scene\GamePlayScene.cpp" />
+    <ClCompile Include="src\Game\Scene\SceneFactory.cpp" />
+    <ClCompile Include="src\Game\Objects\Tether\Tether.cpp" />
+    <ClCompile Include="src\Game\Scene\TitleScene.cpp" />
+    <ClCompile Include="src\Game\UI\GameHUD.cpp" />
+    <ClCompile Include="src\Game\UI\PartsUI\PartsInventoryUI.cpp" />
+    <ClCompile Include="src\Game\UI\Spaceship\SpaceshipDurabilityUI.cpp" />
+    <ClCompile Include="src\Game\UI\Indicator\DangerIndicatorUI.cpp" />
+    <ClCompile Include="src\Game\UI\Guide\ControlGuideUI.cpp" />
+    <ClCompile Include="src\Game\UI\Timer\GameTimerUI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Game\GameResourceLoader\GameResourceLoader.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Scene\GamePlayScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Scene\SceneFactory.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Objects\Player\Player.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Objects\Spaceship\Spaceship.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Objects\Tether\Tether.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Objects\FlyingObject\FlyingObjectManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Objects\FlyingObject\Base\FlyingObject.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorLarge\MeteorLarge.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Scene\TitleScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Scene\ResultScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Util\Transition\FadeTransition.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Scene\PauseMenu.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Util\GameResult\GameResultManager.cpp">
-    <ClCompile Include="PartsCountUI.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Scene\GamePlayScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Scene\SceneFactory.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Objects\Player\Player.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Objects\Spaceship\Spaceship.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Objects\Tether\Tether.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Objects\FlyingObject\FlyingObjectManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Objects\FlyingObject\Base\FlyingObject.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorLarge\MeteorLarge.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Scene\TitleScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Scene\ResultScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Util\Transition\FadeTransition.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Scene\PauseMenu.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Util\GameResult\GameResultManager.h">
-    <ClInclude Include="PartsCountUI.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
+    <ClInclude Include="src\Game\Util\GameResult\GameResultManager.h" />
+    <ClInclude Include="src\Game\Scene\PauseMenu.h" />
+    <ClInclude Include="src\Game\Util\Transition\FadeTransition.h" />
+    <ClInclude Include="src\Game\Scene\ResultScene.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorLarge\MeteorLarge.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\Base\FlyingObject.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\FlyingObjectManager.h" />
+    <ClInclude Include="PartsCountUI.h" />
+    <ClInclude Include="src\Game\Objects\Spaceship\Spaceship.h" />
+    <ClInclude Include="src\Game\Objects\Player\Player.h" />
+    <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h" />
+    <ClInclude Include="src\Game\Scene\GamePlayScene.h" />
+    <ClInclude Include="src\Game\Scene\SceneFactory.h" />
+    <ClInclude Include="src\Game\Objects\Tether\Tether.h" />
+    <ClInclude Include="src\Game\Scene\TitleScene.h" />
+    <ClInclude Include="src\Game\UI\GameHUD.h" />
+    <ClInclude Include="src\Game\UI\PartsUI\PartsInventoryUI.h" />
+    <ClInclude Include="src\Game\UI\Spaceship\SpaceshipDurabilityUI.h" />
+    <ClInclude Include="src\Game\UI\Indicator\DangerIndicatorUI.h" />
+    <ClInclude Include="src\Game\UI\Guide\ControlGuideUI.h" />
+    <ClInclude Include="src\Game\UI\Timer\GameTimerUI.h" />
   </ItemGroup>
 </Project>

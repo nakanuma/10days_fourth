@@ -69,7 +69,7 @@ void Player::Draw() {
 
 void Player::DrawUI() {
 	// ŠŽƒp[ƒc”UI•`‰æ
-	partsCountUI_->Draw();
+	/*partsCountUI_->Draw();*/
 }
 
 void Player::Debug() {
