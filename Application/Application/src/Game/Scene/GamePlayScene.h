@@ -60,11 +60,6 @@ public:
 	/// </summary>
 	void Debug();
 
-	/// <summary>
-	/// カメラの更新処理（プレイヤー位置に応じて画角を変える）
-	/// </summary>
-	void UpdateCamera();
-
 	// =========================================================
 	// Accessor
 	// =========================================================
@@ -73,6 +68,18 @@ private:
 	// =========================================================
 	// Internal Methods
 	// =========================================================
+
+	/// <summary>
+	/// カメラの更新処理（プレイヤー位置に応じて画角を変える）
+	/// </summary>
+	void UpdateCamera();
+
+	/// <summary>
+	/// カメラシェイクの開始（被弾時に呼び出す）
+	/// </summary>
+	/// <param name="intensity"></param>
+	/// <param name="duration"></param>
+	void StartCameraShake(float intensity = 1.0f, float duration = 0.3f);
 
 private:
 	// =========================================================
@@ -101,12 +108,23 @@ private:
 	bool isTransitionStarted_ = false; // シーン遷移開始フラグ
 
 	// ----- Parameters -----
-	Cygnus::Float3 cameraTopPos_ = {0.0f, 5.0f, -90.0f}; // プレイヤーが最も上にいる時のカメラ位置
-	Cygnus::Float3 cameraBottomPos_ = {0.0f, -55.0f, -170.0f}; // プレイヤーが最も下にいる時のカメラ位置
+	Cygnus::Float3 cameraTopPos_ = {0.0f, 7.5f, -90.0f}; // プレイヤーが最も上にいる時のカメラ位置
+	Cygnus::Float3 cameraBottomPos_ = {0.0f, -50.0f, -180.0f}; // プレイヤーが最も下にいる時のカメラ位置
 
 	float playerTopY_ = 0.0f; // 基準となるプレイヤー最上部Y座標
 	float playerBottomY_ = -60.0f; // 基準となるプレイヤー最下部Y座標
 	float cameraInterpolation_ = 0.1f; // カメラ移動の追従スピード
+
+	// 上下左右移動のパラメーター
+	float playerLimitX_ = 25.0f;
+	float playerLimitY_ = 30.0f;
+	Cygnus::Float2 maxCameraShift_ = {4.0f, 4.0f}; // カメラ移動の最大オフセット
+	Cygnus::Float2 maxCameraAngle_ = {0.00f, 0.08f}; // カメラ回転の最大角度
+
+	// カメラシェイク用
+	float shakeDuration_ = 0.0f; // 全体の揺れ指定時間
+	float shakeTimer_ = 0.0f;
+	float shakeIntensity_ = 0.0f;
 
 	// ----- Objects -----
 	std::unique_ptr<Player> player_; /* プレイヤー */

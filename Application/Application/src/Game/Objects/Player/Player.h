@@ -1,5 +1,8 @@
 #pragma once
 
+// C++
+#include <functional>
+
 // Engine
 #include <Object3D.h>
 #include <Collider/Collider.h>
@@ -114,6 +117,14 @@ public:
 	int32_t GetRepairPartMediumCount() const { return repairPartMediumCount_; }
 	int32_t GetRepairPartHighCount() const { return repairPartHighCount_; }
 
+	/// <summary>
+	/// シェイク発火用のコールバック設定関数
+	/// </summary>
+	/// <param name="callback"></param>
+	void SetOnDamageCallback(const std::function<void(float intensity, float duration)>& callback) {
+		onDamageCallback_ = callback;
+	}
+
 private:
 	// =========================================================
 	// Internal Methods
@@ -220,4 +231,6 @@ private:
 	std::unique_ptr<PartsCountUI> partsCountUI_;//パーツ数UI
 	std::unique_ptr<O2TimeUI> o2TimeUI_;//酸素UI
 
+	// その他
+	std::function<void(float intensity, float duration)> onDamageCallback_ = nullptr;
 };

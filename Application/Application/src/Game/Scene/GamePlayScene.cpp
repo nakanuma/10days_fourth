@@ -12,6 +12,7 @@
 
 // C++
 #include <numbers>
+#include <random>
 
 // Engine
 #include <Engine/Scene/SceneManager.h>
@@ -72,6 +73,9 @@ void GamePlayScene::Initialize() {
 	// プレイヤー生成 + 初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(spaceship_.get(),spriteCommon_.get());
+	player_->SetOnDamageCallback([this](float intensity, float duration){ // カメラシェイク発火の関数をセット
+			StartCameraShake(intensity, duration);
+		}); 
 
 	// 命綱生成 + 初期化
 	tether_ = std::make_unique<Tether>();
@@ -345,6 +349,10 @@ void GamePlayScene::Debug() {
 	ImGui::DragFloat3("camera.translate", &camera_->transform_.translate_.x, 0.01f);
 	ImGui::DragFloat3("camera.rotate", &camera_->transform_.rotate_.x, 0.01f);
 
+	if(ImGui::Button("Shake")) {
+		StartCameraShake(5.0f, 1.0f);
+	}
+
 	ImGui::End();
 #endif
 }
@@ -352,20 +360,73 @@ void GamePlayScene::Debug() {
 void GamePlayScene::UpdateCamera() {
 	if (!camera_ || !player_) return;
 
-	// プレイヤーのY座標を取得
-	float playerY = player_->GetTranslate().y;
+	float deltaTime = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+	Cygnus::Float3 playerPos = player_->GetTranslate();
 
-	// プレイヤーのY座標から進行割合を計算
-	float t = 0.0f;
+	/* 基準となる高さ（Y座標）に応じた引きカメラの位置計算 */
+	float tBaseY = 0.0f;
 	float rangeY = playerBottomY_ - playerTopY_;
-	if (std::abs(rangeY) > 0.0001f) {
-		t = (playerY - playerTopY_) / rangeY;
+	if(std::abs(rangeY) > 0.0001f) {
+		tBaseY = (std::clamp)((playerPos.y - playerTopY_) / rangeY, 0.0f, 1.0f);
+	}
+	Cygnus::Float3 baseCameraPos = Cygnus::Float3::Lerp(cameraTopPos_, cameraBottomPos_, tBaseY);
+
+	/* 上下左右への移動に伴うわずかなカメラシフト & 回転計算 */
+	// X軸の正規化割合
+	float tX = (std::clamp)(playerPos.x / playerLimitX_, -1.0f, 1.0f);
+
+	// Y軸の正規化割合
+	float tY = (std::clamp)(playerPos.y / playerLimitY_, -1.0f, 1.0f);
+
+	// 移動オフセット（右に行けば+X, 上に行けば+Y へわずかにカメラをずらす）
+	Cygnus::Float3 targetPosOffset = {
+		tX * maxCameraShift_.x,
+		tY * maxCameraShift_.y,
+		0.0f
+	};
+
+	// 回転角度
+	Cygnus::Float3 targetRotate = {
+		-tY * maxCameraAngle_.x,
+		tX * maxCameraAngle_.y,
+		0.0f
+	};
+
+	/* 被弾時のカメラシェイク（徐々に減衰） */
+	Cygnus::Float3 shakeOffset = {0.0f, 0.0f, 0.0f};
+
+	if(shakeTimer_ > 0.0f) {
+		shakeTimer_ -= deltaTime;
+
+		float decay = (std::clamp)(shakeTimer_ / shakeDuration_, 0.0f, 1.0f);
+		float currentIntensity = shakeIntensity_ * decay;
+
+		static std::random_device rd;
+		static std::mt19937 gen(rd());
+		std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
+
+		shakeOffset.x = dist(gen) * currentIntensity;
+		shakeOffset.y = dist(gen) * currentIntensity;
+
+		if(shakeTimer_ <= 0.0f) {
+			shakeTimer_ = 0.0f;
+		}
 	}
 
-	// 割合tに基づいて目標カメラ座標を線形補間で計算
-	Cygnus::Float3 targetCameraPos = Cygnus::Float3::Lerp(cameraTopPos_, cameraBottomPos_, t);
+	/* カメラ座標および角度の線形補間適用 */
+	Cygnus::Float3 finalTargetPos = {
+		baseCameraPos.x + targetPosOffset.x + shakeOffset.x,
+		baseCameraPos.y + targetPosOffset.y + shakeOffset.y,
+		baseCameraPos.z + targetPosOffset.z
+	};
 
-	// 現在のカメラ位置から目標位置へ滑らかに追従移動
-	Cygnus::Float3 currentCameraPos = camera_->transform_.translate_;
-	camera_->transform_.translate_ = Cygnus::Float3::Lerp(currentCameraPos, targetCameraPos, cameraInterpolation_);
+	// 計算結果をカメラに適用
+	camera_->transform_.translate_ = Cygnus::Float3::Lerp(camera_->transform_.translate_, finalTargetPos, cameraInterpolation_);
+	camera_->transform_.rotate_ = Cygnus::Float3::Lerp(camera_->transform_.rotate_, targetRotate, cameraInterpolation_);
+}
+
+void GamePlayScene::StartCameraShake(float intensity, float duration) {
+	shakeIntensity_ = intensity;
+	shakeDuration_ = duration;
+	shakeTimer_ = duration;
 }

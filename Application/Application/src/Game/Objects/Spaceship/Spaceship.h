@@ -94,7 +94,7 @@ private:
 	static constexpr float kDriftAmplitudeY = 0.3f; // Y軸方向の揺れ幅
 
 	// 耐久力パラメーター
-	static constexpr float kMaxDurability = 200.0f; // 最大耐久力
+	static constexpr float kMaxDurability = 150.0f; // 最大耐久力
 
 	// 各パーツの基礎回復量
 	static constexpr float kRepairPointLow = 2.0f;
