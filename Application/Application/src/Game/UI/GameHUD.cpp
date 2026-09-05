@@ -6,14 +6,18 @@ void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, const Player* playe
 	// プレイヤーのパーツ所持数UI
 	partsInventoryUI_ = std::make_unique<PartsInventoryUI>();
 	partsInventoryUI_->Initialize(spriteCommon, player);
+
+	// プレイヤーのHPバーUI
+	playerHPUI_ = std::make_unique<PlayerHPUI>();
+	playerHPUI_->Initialize(spriteCommon, player);
 }
 
 void GameHUD::Update() {
-	// プレイヤーのパーツ所持数UI更新
 	partsInventoryUI_->Update();
+	playerHPUI_->Update();
 }
 
 void GameHUD::Draw() {
-	// プレイヤーのパーツ所持数UI描画
 	partsInventoryUI_->Draw();
+	playerHPUI_->Draw();
 }

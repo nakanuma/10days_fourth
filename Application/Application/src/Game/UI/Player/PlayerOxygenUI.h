@@ -1,16 +1,9 @@
 #pragma once
 
-// Engine
-#include <SpriteCommon.h>
-
-// Application
-#include <src/Game/UI/PartsUI/PartsInventoryUI.h> // プレイヤーのパーツ所持数UI
-#include <src/Game/UI/Player/PlayerHPUI.h> // プレイヤーのHPゲージUI
-
 // =========================================================
-// ゲーム中の全UIマネージャー
+// プレイヤーの残り酸素UI
 // =========================================================
-class GameHUD
+class PlayerOxygenUI
 {
 public:
 	// =========================================================
@@ -18,9 +11,9 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// 初期化処理
+	/// 更新処理
 	/// </summary>
-	void Initialize(Cygnus::SpriteCommon* spriteCommon, const Player* player);
+	void Initialize();
 
 	/// <summary>
 	/// 更新処理
@@ -34,11 +27,17 @@ public:
 
 private:
 	// =========================================================
-	// Member Variables
+	// Internal Methods
 	// =========================================================
 
-	/* 各UI */
-	std::unique_ptr<PartsInventoryUI> partsInventoryUI_; // プレイヤーのパーツ所持数UI
-	std::unique_ptr<PlayerHPUI> playerHPUI_; // プレイヤーのHPバーUI
+private:
+	// =========================================================
+	// Constants
+	// =========================================================
+
+private:
+	// =========================================================
+	// Member Variables
+	// =========================================================
 };
 

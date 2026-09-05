@@ -59,7 +59,7 @@ public:
 	/// 現在位置の取得
 	/// </summary>
 	/// <returns></returns>
-	const Cygnus::Float3& GetTranslate() { return object_->transform_.translate_; }
+	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; }
 
 	/// <summary>
 	/// ダメージ処理
@@ -72,6 +72,12 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	int32_t GetHP() const { return hp_; }
+
+	/// <summary>
+	/// 最大HPの取得
+	/// </summary>
+	/// <returns></returns>
+	static constexpr int32_t GetMaxHP() { return kMaxHP; }
 
 	/// <summary>
 	/// 死亡フラグ取得

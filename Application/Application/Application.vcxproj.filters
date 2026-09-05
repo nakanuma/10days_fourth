@@ -26,6 +26,9 @@
     <ClCompile Include="src\Game\UI\Indicator\DangerIndicatorUI.cpp" />
     <ClCompile Include="src\Game\UI\Guide\ControlGuideUI.cpp" />
     <ClCompile Include="src\Game\UI\Timer\GameTimerUI.cpp" />
+    <ClCompile Include="src\Game\UI\Player\PlayerOxygenUI.cpp" />
+    <ClCompile Include="src\Game\Util\Utility.cpp" />
+    <ClCompile Include="src\Game\UI\Player\PlayerHPUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Util\GameResult\GameResultManager.h" />
@@ -53,5 +56,8 @@
     <ClInclude Include="src\Game\UI\Indicator\DangerIndicatorUI.h" />
     <ClInclude Include="src\Game\UI\Guide\ControlGuideUI.h" />
     <ClInclude Include="src\Game\UI\Timer\GameTimerUI.h" />
+    <ClInclude Include="src\Game\UI\Player\PlayerOxygenUI.h" />
+    <ClInclude Include="src\Game\Util\Utility.h" />
+    <ClInclude Include="src\Game\UI\Player\PlayerHPUI.h" />
   </ItemGroup>
 </Project>

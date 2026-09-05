@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\UI\Player\PlayerHPUI.cpp" />
+    <ClCompile Include="src\Game\UI\Player\PlayerOxygenUI.cpp" />
     <ClCompile Include="src\Game\UI\Timer\GameTimerUI.cpp" />
     <ClCompile Include="src\Game\UI\Guide\ControlGuideUI.cpp" />
     <ClCompile Include="src\Game\UI\Indicator\DangerIndicatorUI.cpp" />
@@ -44,8 +46,11 @@
     <ClCompile Include="src\Game\Scene\SceneFactory.cpp" />
     <ClCompile Include="src\Game\Objects\Tether\Tether.cpp" />
     <ClCompile Include="src\Game\Scene\TitleScene.cpp" />
+    <ClCompile Include="src\Game\Util\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\UI\Player\PlayerHPUI.h" />
+    <ClInclude Include="src\Game\UI\Player\PlayerOxygenUI.h" />
     <ClInclude Include="src\Game\UI\Timer\GameTimerUI.h" />
     <ClInclude Include="src\Game\UI\Guide\ControlGuideUI.h" />
     <ClInclude Include="src\Game\UI\Indicator\DangerIndicatorUI.h" />
@@ -71,6 +76,7 @@
     <ClInclude Include="src\Game\Scene\SceneFactory.h" />
     <ClInclude Include="src\Game\Objects\Tether\Tether.h" />
     <ClInclude Include="src\Game\Scene\TitleScene.h" />
+    <ClInclude Include="src\Game\Util\Utility.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
