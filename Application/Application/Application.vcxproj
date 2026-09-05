@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="O2TimeUI.cpp" />
     <ClCompile Include="src\Game\Util\GameResult\GameResultManager.cpp" />
     <ClCompile Include="src\Game\Scene\PauseMenu.cpp" />
     <ClCompile Include="src\Game\Util\Transition\FadeTransition.cpp" />
@@ -40,6 +41,7 @@
     <ClCompile Include="src\Game\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="O2TimeUI.h" />
     <ClInclude Include="src\Game\Util\GameResult\GameResultManager.h" />
     <ClInclude Include="src\Game\Scene\PauseMenu.h" />
     <ClInclude Include="src\Game\Util\Transition\FadeTransition.h" />
