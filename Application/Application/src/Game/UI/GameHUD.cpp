@@ -1,6 +1,6 @@
 #include "GameHUD.h"
 
-void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, const Player* player) {
+void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, const Player* player, const Spaceship* spaceship) {
 	/* 各UI生成+初期化 */
 	
 	// プレイヤーのパーツ所持数UI
@@ -14,16 +14,22 @@ void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, const Player* playe
 	// プレイヤーの残り酸素UI
 	playerOxygenUI_ = std::make_unique<PlayerOxygenUI>();
 	playerOxygenUI_->Initialize(spriteCommon, player);
+
+	// 宇宙船の耐久度UI
+	spaceshipDurabilityUI_=  std::make_unique<SpaceshipDurabilityUI>();
+	spaceshipDurabilityUI_->Initialize(spriteCommon, spaceship);
 }
 
 void GameHUD::Update() {
 	partsInventoryUI_->Update();
 	playerHPUI_->Update();
 	playerOxygenUI_->Update();
+	spaceshipDurabilityUI_->Update();
 }
 
 void GameHUD::Draw() {
 	partsInventoryUI_->Draw();
 	playerHPUI_->Draw();
 	playerOxygenUI_->Draw();
+	spaceshipDurabilityUI_->Draw();
 }

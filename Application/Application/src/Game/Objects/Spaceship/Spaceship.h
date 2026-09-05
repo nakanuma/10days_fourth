@@ -50,7 +50,7 @@ public:
 	/// Œ»İˆÊ’u‚Ìæ“¾
 	/// </summary>
 	/// <returns></returns>
-	const Cygnus::Float3& GetTranslate() { return object_->transform_.translate_; }
+	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; }
 
 	/// <summary>
 	/// Œ»İ‚Ì‘Ï‹v—Íæ“¾
