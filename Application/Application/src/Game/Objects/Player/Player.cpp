@@ -77,13 +77,9 @@ void Player::Draw() {
 
 void Player::DrawUI() {
 	// 所持パーツ数UI描画
-
 	/*partsCountUI_->Draw();*/
-
-	partsCountUI_->Draw();
 	// 酸素ゲージのUI描画
-	o2TimeUI_->Draw();
-
+	/*o2TimeUI_->Draw();*/
 }
 
 void Player::Debug() {
