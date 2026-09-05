@@ -3,7 +3,10 @@
 // Engine
 #include <Object3D.h>
 #include <Collider/Collider.h>
+
+// UI
 #include "PartsCountUI.h"
+#include "O2TimeUI.h"
 
 // 前方宣言
 class Spaceship;
@@ -213,7 +216,8 @@ private:
 	// 死亡フラグ
 	bool isDead_ = false;
 
-
-	std::unique_ptr<PartsCountUI> partsCountUI_;
+	// -- UI --
+	std::unique_ptr<PartsCountUI> partsCountUI_;//パーツ数UI
+	std::unique_ptr<O2TimeUI> o2TimeUI_;//酸素UI
 
 };
