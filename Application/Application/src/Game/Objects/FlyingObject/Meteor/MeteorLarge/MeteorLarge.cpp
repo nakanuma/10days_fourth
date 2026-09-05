@@ -2,6 +2,7 @@
 
 // Engine
 #include <Collider/CollisionManager.h>
+#include <RandomGenerator.h>
 
 void MeteorLarge::Initialize(const Cygnus::Float3& position, bool isRightToLeft) {
 	FlyingObject::Initialize(position, isRightToLeft);
@@ -9,7 +10,7 @@ void MeteorLarge::Initialize(const Cygnus::Float3& position, bool isRightToLeft)
 	// 各パラメーター設定
 	category_ = ObjectCategory::Meteor;
 	speed_ = kSpeed;
-	rotationSpeed_ = kRotationSpeed;
+	rotationSpeed_ = Cygnus::RandomGenerator::GetInstance()->RandomValue({-0.015f, -0.015f, -0.015f}, {0.015f, 0.015f, 0.015f});
 	hitRadius_ = kHitRadius;
 
 	// モデル設定
