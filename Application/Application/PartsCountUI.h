@@ -31,16 +31,16 @@ public:
 
 private:
 
-	static constexpr float kUISize_ = 96.0f;
-	static constexpr float kUISpace_ = 20.0f;
+	static constexpr float kUISize_ = 64.0f;//テクスチャ
+	static constexpr float kUISpace_ = 20.0f;//画面端の余白
 
-	static constexpr uint32_t kTenPlace_ = 10;
+	static constexpr uint32_t kTenPlace_ = 10;//十の位
 
 	uint32_t partsCounter_ = 0;
 	uint32_t prevPartsCount_ = 0;
 
-	std::unique_ptr<Cygnus::Sprite> spriteCountTenUI_;//カウント十の位
-	std::unique_ptr<Cygnus::Sprite> spriteCountOneUI_;//カウント一の位
+	std::unique_ptr<Cygnus::Sprite> spriteCountTenUI_;//カウント描画 十の位
+	std::unique_ptr<Cygnus::Sprite> spriteCountOneUI_;//カウント描画 一の位
 
 };
 
