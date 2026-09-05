@@ -7,6 +7,7 @@
 #include <MyMath.h>
 #include <Object3D.h>
 #include <Collider/Collider.h>
+#include <Engine/Util/TimeManager.h>
 
 /// <summary>
 /// 飛翔物の大分類
@@ -90,6 +91,14 @@ public:
 
 protected:
 	// =========================================================
+	// Constants
+	// =========================================================
+	 
+	// 漂い用パラメーター
+	static constexpr float kWaveFrequency = 2.0f; // 漂う速さ
+	static constexpr float kWaveAmplitude = 0.3f; // 漂う大きさ
+
+	// =========================================================
 	// Member Variables
 	// =========================================================
 
@@ -103,7 +112,7 @@ protected:
 	// 移動速度
 	float speed_ = 0.0f;
 	// 回転速度
-	float rotationSpeed_ = 0.0f;
+	Cygnus::Float3 rotationSpeed_ = {0.0f, 0.0f, 0.0f};
 	// 当たり判定半径
 	float hitRadius_ = 0.0f;
 	// 死亡フラグ
@@ -114,4 +123,9 @@ protected:
 
 	// 消滅境界線（仮）
 	static constexpr float kDespawnX = 50.0f;
+
+	// 漂い計算用変数
+	float basePositionY_ = 0.0f; // 基準となるY座標
+	float waveTimer_ = 0.0f; // 経過時間タイマー
+	float sinPhaseOffset_ = 0.0f; // 生成位置による波の位相のズレ
 };

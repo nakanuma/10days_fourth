@@ -190,6 +190,11 @@ private:
 	static constexpr float kDefaultRewindMaxSpeed = 0.75f; // 巻取り時の最高速度
 	static constexpr float kRewindStopDistance = 2.0f; // 宇宙船にこの距離まで近づいたら終了
 
+	// 回転制御用パラメーター
+	static constexpr float kMaxTiltZ = 0.35f; // 左右移動時の最大傾き角度
+	static constexpr float kMaxTiltX = 0.25f; // 上下移動時の最大前後の傾き
+	static constexpr float kRotateLerpRate = 0.08f; // 角度の追従速度
+
 	// その他パラメーター
 	static constexpr int32_t kMaxHP = 5; // 最大HP
 
