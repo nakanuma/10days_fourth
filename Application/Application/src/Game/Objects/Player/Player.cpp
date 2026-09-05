@@ -42,6 +42,11 @@ void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon
 	// 所持パーツ数UI初期化
 	partsCountUI_ = std::make_unique<PartsCountUI>();
 	partsCountUI_->Initialize(spriteCommon);
+
+	// 酸素ゲージのUI初期化
+	o2TimeUI_ = std::make_unique<O2TimeUI>();
+	o2TimeUI_->Initialize(spriteCommon);
+
 }
 
 void Player::Update() {
@@ -56,6 +61,9 @@ void Player::Update() {
 
 	// 所持パーツ数UI更新
 	partsCountUI_->Update();
+
+	// 酸素ゲージのUI更新
+	o2TimeUI_->Update(autoRewindTimer_, kDefaultAutoRewindTime);
 }
 
 void Player::Draw() {
@@ -69,6 +77,8 @@ void Player::Draw() {
 void Player::DrawUI() {
 	// 所持パーツ数UI描画
 	partsCountUI_->Draw();
+	// 酸素ゲージのUI描画
+	o2TimeUI_->Draw();
 }
 
 void Player::Debug() {
