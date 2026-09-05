@@ -9,6 +9,7 @@
 #include <src/Game/UI/Player/PlayerOxygenUI.h> // プレイヤーの残り酸素UI
 #include <src/Game/UI/Spaceship/SpaceshipDurabilityUI.h> // 宇宙船の耐久度UI
 #include <src/Game/UI/Guide/ControlGuideUI.h> // 操作UI
+#include <src/Game/UI/Timer/GameTimerUI.h> // 残り時間UI
  
 // =========================================================
 // ゲーム中の全UIマネージャー
@@ -28,7 +29,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	void Update(float remainingTime);
 
 	/// <summary>
 	/// 描画処理
@@ -46,5 +47,6 @@ private:
 	std::unique_ptr<PlayerOxygenUI> playerOxygenUI_; // プレイヤーの残り酸素UI
 	std::unique_ptr<SpaceshipDurabilityUI> spaceshipDurabilityUI_; // 宇宙船の耐久度UI
 	std::unique_ptr<ControlGuideUI> controlGuideUI_; // 操作UI
+	std::unique_ptr<GameTimerUI> gameTimerUI_; // 残り時間UI
 };
 

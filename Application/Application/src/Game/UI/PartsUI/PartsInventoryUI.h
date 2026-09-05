@@ -99,8 +99,8 @@ private:
 	static constexpr float kYPos = 650.0f;
 	static constexpr float kOffsetX = -25.0f; // アイコンの位置
 	static constexpr float kOffsetTimesX = 15.0f; // 「x」の位置
-	static constexpr float kOffsetTensX = 30.0f; // 十の位の位置
-	static constexpr float kOffsetOnesX = 45.0f; // 一の位の位置
+	static constexpr float kOffsetTensX = 32.5f; // 十の位の位置
+	static constexpr float kOffsetOnesX = 50.0f; // 一の位の位置
 	static constexpr float kOffsetNumbersY = 10.0f; // 文字郡のY軸オフセット
 
 	// 数字テクスチャの設定

@@ -22,14 +22,19 @@ void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, const Player* playe
 	// ‘€ìUI
 	controlGuideUI_ = std::make_unique<ControlGuideUI>();
 	controlGuideUI_->Initialize(spriteCommon);
+
+	// c‚èŠÔUI
+	gameTimerUI_ = std::make_unique<GameTimerUI>();
+	gameTimerUI_->Initialize(spriteCommon);
 }
 
-void GameHUD::Update() {
+void GameHUD::Update(float remainingTime) {
 	partsInventoryUI_->Update();
 	playerHPUI_->Update();
 	playerOxygenUI_->Update();
 	spaceshipDurabilityUI_->Update();
 	controlGuideUI_->Update();
+	gameTimerUI_->Update(remainingTime);
 }
 
 void GameHUD::Draw() {
@@ -38,4 +43,5 @@ void GameHUD::Draw() {
 	playerOxygenUI_->Draw();
 	spaceshipDurabilityUI_->Draw();
 	controlGuideUI_->Draw();
+	gameTimerUI_->Draw();
 }
