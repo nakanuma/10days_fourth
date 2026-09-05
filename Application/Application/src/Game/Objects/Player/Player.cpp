@@ -6,6 +6,7 @@
 #include <ImguiWrapper.h>
 #include <TimeManager.h>
 #include <LineDrawer.h>
+#include <Easing.h>
 
 // Application
 #include <src/Game/Objects/Spaceship/Spaceship.h>
@@ -243,6 +244,34 @@ void Player::Move()
 
 	object_->transform_.translate_.x = clampedX;
 	object_->transform_.translate_.y = clampedY;
+
+	/* 慣性回転処理 */
+	if(isRewinding_) {
+		// 巻取り中に進行方向を向かせる
+		if(Cygnus::Float3::Length(velocity_) > 0.01f) {
+			float targetAngleZ = std::atan2f(-velocity_.x, velocity_.y);
+			object_->transform_.rotate_.z = Cygnus::Easing::Lerp(object_->transform_.rotate_.z, targetAngleZ, kRotateLerpRate);
+		}
+	} else {
+		// Z軸
+		float ratioX = velocity_.x / kMaxSpeed;
+		float targetRotateZ = -ratioX * kMaxTiltZ;
+
+		// X軸
+		float ratioY = velocity_.y / kMaxSpeed;
+		float targetRotateX = ratioY * kMaxTiltX;
+
+		// Y軸
+		float targetRotateY = ratioX * 0.2f;
+
+		// 実際に適用
+		object_->transform_.rotate_ = 
+			Cygnus::Float3::Lerp(
+				object_->transform_.rotate_, 
+				{targetRotateX, targetRotateY, targetRotateZ}, 
+				kRotateLerpRate
+			);
+	}
 }
 
 Cygnus::Float3 Player::GetKeyInput() { 
