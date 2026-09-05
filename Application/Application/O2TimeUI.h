@@ -2,7 +2,7 @@
 #include "Sprite.h"
 
 /// <summary>
-/// 
+/// 酸素ゲージのUI
 /// </summary>
 class O2TimeUI {
 public:
@@ -16,7 +16,7 @@ public:
 	/// 更新処理
 	/// </summary>
 	/// <param name="nowTime">現在の時間</param>
-	/// <param name="maxTime">制限時間</param>
+	/// <param name="maxTime">強制まきが入る制限時間</param>
 	void Update(float nowTime, float maxTime);
 
 	/// <summary>
@@ -26,10 +26,11 @@ public:
 
 private:
 
-	static constexpr float kUIDefaultSize_ = 128.0f;
+	static constexpr float kUIDefaultSize_ = 128.0f;// o2テクスチャの元サイズ
+	static constexpr Cygnus::Float2 kUIPosition_ = { 20.0f,500.0f };// テクスチャ場所
 
-	std::unique_ptr<Cygnus::Sprite> o2Meter_;//酸素あり状態
-	std::unique_ptr<Cygnus::Sprite> o2Null_;//酸素が空状態
+	std::unique_ptr<Cygnus::Sprite> o2Max_;//酸素あり状態
+	std::unique_ptr<Cygnus::Sprite> o2Null_;//酸素が空っぽ状態
 
 };
 
