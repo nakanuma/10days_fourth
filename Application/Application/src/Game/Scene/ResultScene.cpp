@@ -86,6 +86,9 @@ void ResultScene::Initialize() {
 		objectPlayer_->SetParent(objectSpaceship_.get());
 		objectPlayer_->transform_.translate_ = {-0.910f, 0.44f, 0.0f};
 		objectPlayer_->transform_.rotate_ = {0.0f, 0.0f, -1.57f};
+
+		// BGM再生
+		Cygnus::SoundManager::GetInstance()->Play("bgm_gameclear", true, 0.5f);
 	} else {
 		// SkyBoxのパラメーター設定
 		Cygnus::SkyBoxManager::GetInstance()->SetTranslate({ 0.0f, 0.0f, 1500.0f });
@@ -95,6 +98,9 @@ void ResultScene::Initialize() {
 		playerGameOverInitPos_ = {0.0f, 0.0f, 0.0f};
 		objectPlayer_->transform_.translate_ = playerGameOverInitPos_;
 		objectPlayer_->transform_.rotate_ = {-1.18f, 0.72f, 0.0f};
+
+		// BGM再生
+		Cygnus::SoundManager::GetInstance()->Play("bgm_gameover", true, 0.5f);
 	}
 
 	/* スプライト生成 */
@@ -148,7 +154,13 @@ void ResultScene::Initialize() {
 	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
 }
 
-void ResultScene::Finalize() {}
+void ResultScene::Finalize() {
+	if (result_ == GameResult::Clear) {
+		Cygnus::SoundManager::GetInstance()->Stop("bgm_gameclear");
+	} else {
+		Cygnus::SoundManager::GetInstance()->Stop("bgm_gameover");
+	}
+}
 
 void ResultScene::Update() {
 	Cygnus::LightManager::GetInstance()->ClearEmissiveLights(); // エミッシブライトをクリア
@@ -411,6 +423,7 @@ void ResultScene::ProcessMenuInput() {
 	// メニュー変更時にイージング初期化（追加）
 	if (prevMenu != currentMenu_) {
 		buttonAStartPos_ = buttonACurrentPos_;
+		Cygnus::SoundManager::GetInstance()->Play("se_switch", false, 0.5f); // SE再生（切り替え）
 
 		if (currentMenu_ == MenuIndex::Retry) {
 			buttonATargetPos_ = {
@@ -432,6 +445,7 @@ void ResultScene::ProcessMenuInput() {
 
 	if (isConfirm) {
 		isSelected_ = true; // 重複実行を防止
+		Cygnus::SoundManager::GetInstance()->Play("se_decide", false, 0.5f); // SE再生（決定）
 
 		if (currentMenu_ == MenuIndex::Retry) {
 			// ゲームプレイシーンへ移行

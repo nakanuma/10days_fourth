@@ -56,7 +56,7 @@ private:
 	static constexpr Cygnus::Float4 kColorPrediction = {0.2f, 0.9f, 0.3f, 0.4f}; // 薄い緑色（回復予測）
 	static constexpr Cygnus::Float4 kColorForeground = { 0.2f, 0.9f, 0.3f, 1.0f }; // 黄緑色（修理耐久度）
 
-	static constexpr float kGaugeCatchupSpeed = 0.4f; // アニメーション追従スピード（小さくするほどゆっくり）
+	static constexpr float kGaugeCatchupSpeed = 0.2f; // アニメーション追従スピード（小さくするほどゆっくり）
 
 private:
 	// =========================================================

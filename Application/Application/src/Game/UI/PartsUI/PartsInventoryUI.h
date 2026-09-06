@@ -130,7 +130,7 @@ private:
 	static constexpr float kMaxScale = 1.3f; // Å‘åŠg‘å”{—¦
 
 	// ˜A‘±Á”ï‚ÌŠÔŠuŠÔ
-	static constexpr float kConsumeInterval = 0.1f;
+	static constexpr float kConsumeInterval = 0.125f;
 
 private:
 	// =========================================================

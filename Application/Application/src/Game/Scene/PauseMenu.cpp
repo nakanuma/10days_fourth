@@ -7,6 +7,7 @@
 #include <TimeManager.h>
 #include <Easing.h>
 #include <Collider/CollisionManager.h>
+#include <SoundManager.h>
 
 // Application
 #include <src/Game/Util/Transition/FadeTransition.h>
@@ -77,6 +78,7 @@ void PauseMenu::Update() {
 	// キーボード入力
 	if(input->TriggerKey(DIK_ESCAPE)) {
 		isTogglePause = true;
+		Cygnus::SoundManager::GetInstance()->Play("se_pause", false, 0.75f); // SE再生（ポーズ）
 	}
 
 	// コントローラー入力
@@ -84,6 +86,7 @@ void PauseMenu::Update() {
 	if(input->GetJoystickState(0, padState)) {
 		if(input->IsTriggerButton(0, XINPUT_GAMEPAD_START)) {
 			isTogglePause = true;
+			Cygnus::SoundManager::GetInstance()->Play("se_pause", false, 0.75f); // SE再生（ポーズ）
 		}
 	}
 
@@ -185,6 +188,7 @@ void PauseMenu::ProcessMenuInput() {
 	// メニューが変更された場合、Aボタンの補間移動を開始
 	if(prevMenu != currentMenu_) {
 		buttonAStartPos_ = buttonACurrentPos_; // 現在地を開始地点に
+		Cygnus::SoundManager::GetInstance()->Play("se_switch", false, 0.5f); // SE再生（切り替え）
 
 		// 新しい目標座標を設定
 		if(currentMenu_ == MenuIndex::Continue) {
@@ -209,8 +213,10 @@ void PauseMenu::ProcessMenuInput() {
 		if(currentMenu_ == MenuIndex::Continue) {
 			isPaused_ = false; // ポーズ解除 
 			isJustUnpaused_ = true; // つづけるを押して解除した瞬間もフラグを立てる
+			Cygnus::SoundManager::GetInstance()->Play("se_decide", false, 0.5f); // SE再生（決定）
 		} else if (currentMenu_ == MenuIndex::ReturnTitle) {
 			isSelected_ = true; // 多重入力防止
+			Cygnus::SoundManager::GetInstance()->Play("se_decide", false, 0.5f); // SE再生（決定）
 
 			// タイトルシーンへ移行
 			FadeTransition::GetInstance()->StartFadeOut(

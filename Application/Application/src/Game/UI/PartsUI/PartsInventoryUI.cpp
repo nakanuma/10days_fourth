@@ -4,6 +4,7 @@
 #include <TextureManager.h>
 #include <TimeManager.h>
 #include <Easing.h>
+#include <SoundManager.h>
 
 // Application
 #include <src/Game/Objects/Player/Player.h>
@@ -170,6 +171,11 @@ void PartsInventoryUI::UpdateSlot(PartSlot& slot, int32_t count){
 		// 初回以外でカウントが増減した場合のみアニメーション発火
 		if(slot.currentCount != -1) {
 			slot.popTimer = kPopDuration;
+
+			// パーツが消費された場合のみSE再生
+			if(count < slot.currentCount) {
+				Cygnus::SoundManager::GetInstance()->Play("se_consume", false, 0.75f); // SE再生（消費）
+			}
 		}
 		
 		slot.currentCount = count;

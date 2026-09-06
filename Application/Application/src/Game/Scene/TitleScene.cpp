@@ -118,9 +118,14 @@ void TitleScene::Initialize() {
 
 	// 初期スケールの適用
 	UpdateUI();
+
+	// BGM再生
+	Cygnus::SoundManager::GetInstance()->Play("bgm_title", true, 0.5f);
 }
 
-void TitleScene::Finalize() {}
+void TitleScene::Finalize() {
+	Cygnus::SoundManager::GetInstance()->Stop("bgm_title");
+}
 
 void TitleScene::Update() {
 	Cygnus::LightManager::GetInstance()->ClearEmissiveLights(); // エミッシブライトをクリア
@@ -368,6 +373,7 @@ void TitleScene::ProcessMenuInput()
 	// メニューが変更された場合、Aボタンの補間移動を開始
 	if (prevMenu != currentMenu_) {
 		buttonAStartPos_ = buttonACurrentPos_; // 現在地を開始地点に
+		Cygnus::SoundManager::GetInstance()->Play("se_switch", false, 0.5f); // SE再生（切り替え）
 
 		// 新しい目標座標を設定
 		if (currentMenu_ == MenuIndex::Start) {
@@ -390,6 +396,7 @@ void TitleScene::ProcessMenuInput()
 
 	if(isConfirm) {
 		isSelected_ = true; // 重複実行を防止
+		Cygnus::SoundManager::GetInstance()->Play("se_decide", false, 0.5f); // SE再生（決定）
 
 		if(currentMenu_ == MenuIndex::Start) {
 			// ゲームプレイシーンへ移行
