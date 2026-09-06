@@ -24,7 +24,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(Cygnus::SpriteCommon* spriteCommon, const Player* player, const Spaceship* spaceship);
+	void Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player, const Spaceship* spaceship);
 
 	/// <summary>
 	/// 更新処理
@@ -35,6 +35,23 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// パーツの連続消費アニメーションを発火
+	/// </summary>
+	void StartConsumingParts() {
+		if(partsInventoryUI_) {
+			partsInventoryUI_->StartConsuming();
+		}
+	}
+
+	/// <summary>
+	/// 消費中かどうか
+	/// </summary>
+	/// <returns></returns>
+	bool IsConsumingParts() const {
+		return partsInventoryUI_ ? partsInventoryUI_->IsConsuming() : false;
+	}
 
 private:
 	// =========================================================

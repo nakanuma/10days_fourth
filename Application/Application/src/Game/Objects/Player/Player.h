@@ -118,6 +118,14 @@ public:
 	int32_t GetRepairPartHighCount() const { return repairPartHighCount_; }
 
 	/// <summary>
+	/// 各修理パーツの数をセット
+	/// </summary>
+	/// <param name="count"></param>
+	void SetRepairPartLowCount(int32_t count) { repairPartLowCount_ = count; }
+	void SetRepairPartMediumCount(int32_t count) { repairPartMediumCount_ = count; }
+	void SetRepairPartHighCount(int32_t count) { repairPartHighCount_ = count; }
+
+	/// <summary>
 	/// シェイク発火用のコールバック設定関数
 	/// </summary>
 	/// <param name="callback"></param>
