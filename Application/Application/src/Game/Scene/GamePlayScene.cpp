@@ -153,8 +153,17 @@ void GamePlayScene::Update() {
 	///	オブジェクト更新処理
 	/// 
 	
+	bool wasRewinding = player_->IsRewinding(); // プレイヤーの巻取り状態を保持して更新
 	// プレイヤー更新
 	player_->Update();
+
+	// 巻取り完了時のUI発火
+	if(wasRewinding && !player_->IsRewinding()) {
+		if(gameHUD_) {
+			gameHUD_->StartConsumingParts();
+		}
+	}
+
 	// 宇宙船更新
 	spaceship_->Update();
 	// 命綱更新

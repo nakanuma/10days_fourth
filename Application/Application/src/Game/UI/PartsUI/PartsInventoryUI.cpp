@@ -8,7 +8,7 @@
 // Application
 #include <src/Game/Objects/Player/Player.h>
 
-void PartsInventoryUI::Initialize(Cygnus::SpriteCommon* spriteCommon, const Player* player) {
+void PartsInventoryUI::Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player) {
 	player_ = player;
 
 	/* 各スプライト生成+初期化 */
@@ -84,6 +84,49 @@ void PartsInventoryUI::Update() {
 
 	if(!player_) return;
 
+	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+
+	/* 連続消費処理の更新 */
+	if(isConsuming_) {
+		consumeTimer_ += dt;
+
+		if(consumeTimer_ >= kConsumeInterval) {
+			consumeTimer_ -= kConsumeInterval;
+
+			// 現在対象のパーツ数をプレイヤーから取得して1減らす
+			int32_t low = player_->GetRepairPartLowCount();
+			int32_t med = player_->GetRepairPartMediumCount();
+			int32_t high = player_->GetRepairPartHighCount();
+
+			if(currentConsumeIndex_ == PartType::Low) {
+				if(low > 0) {
+					player_->SetRepairPartLowCount(low - 1);
+				} else {
+					currentConsumeIndex_++; // 次のパーツ種へ
+				}
+			}
+
+			if(currentConsumeIndex_ == PartType::Medium) {
+				if(med > 0) {
+					player_->SetRepairPartMediumCount(med - 1);
+				} else {
+					currentConsumeIndex_++; // 次のパーツ種へ
+				}
+			}
+
+			if(currentConsumeIndex_ == PartType::High) {
+				if (high > 0) {
+					player_->SetRepairPartHighCount(high - 1);
+				} else {
+					// 全てのパーツを消費しきった
+					isConsuming_ = false;
+				}
+			}
+		}
+	}
+
+	/* 各スロットの描画+アニメーション更新 */
+
 	// 各パーツのリアルタイム所持数を取得
 	std::array<int32_t, PartType::Count> counts = {
 		player_->GetRepairPartLowCount(),
@@ -110,6 +153,13 @@ void PartsInventoryUI::Draw() {
 	}
 }
 
+void PartsInventoryUI::StartConsuming()
+{
+	isConsuming_ = true;
+	consumeTimer_ = 0.0f;
+	currentConsumeIndex_ = 0; // Lowパーツから順に減らす
+}
+
 void PartsInventoryUI::UpdateSlot(PartSlot& slot, int32_t count){
 	// 負の値にならないようクリップ
 	count = std::clamp(count, 0, 99);
@@ -117,8 +167,8 @@ void PartsInventoryUI::UpdateSlot(PartSlot& slot, int32_t count){
 
 	// 値の変更チェック
 	if(slot.currentCount != count) {
-		// 初回以外でカウントが増えた場合のみアニメーション発火
-		if(slot.currentCount != -1 && count > slot.currentCount) {
+		// 初回以外でカウントが増減した場合のみアニメーション発火
+		if(slot.currentCount != -1) {
 			slot.popTimer = kPopDuration;
 		}
 		

@@ -1,6 +1,6 @@
 #include "GameHUD.h"
 
-void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, const Player* player, const Spaceship* spaceship) {
+void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player, const Spaceship* spaceship) {
 	/* 各UI生成+初期化 */
 	
 	// プレイヤーのパーツ所持数UI

@@ -23,7 +23,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Initialize(Cygnus::SpriteCommon* spriteCommon, const Player* player);
+	void Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player);
 
 	/// <summary>
 	/// 更新処理
@@ -34,6 +34,17 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// パーツの連続消費を開始
+	/// </summary>
+	void StartConsuming();
+
+	/// <summary>
+	/// 消費中かどうか
+	/// </summary>
+	/// <returns></returns>
+	bool IsConsuming() const { return isConsuming_; }
 
 private:
 	// =========================================================
@@ -118,13 +129,16 @@ private:
 	static constexpr float kPopDuration = 0.2f; // アニメーション時間
 	static constexpr float kMaxScale = 1.3f; // 最大拡大倍率
 
+	// 連続消費の間隔時間
+	static constexpr float kConsumeInterval = 0.1f;
+
 private:
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
 	// プレイヤー参照
-	const Player* player_ = nullptr;
+	Player* player_ = nullptr;
 
 	// テクスチャハンドル
 	uint32_t texNumbers_ = 0;
@@ -134,5 +148,10 @@ private:
 
 	// 各品質のパーツスロット配列（低・中・高）
 	std::array<PartSlot, PartType::Count> slots_;
+
+	// 連続小費用パラメーター
+	bool isConsuming_ = false;
+	float consumeTimer_ = 0.0f;
+	int32_t currentConsumeIndex_ = 0; // 現在減らしているパーツの種類
 };
 
