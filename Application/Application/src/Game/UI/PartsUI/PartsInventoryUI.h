@@ -46,7 +46,14 @@ private:
 		std::unique_ptr<Cygnus::Sprite> timesSymbol; // 「x」テクスチャ
 		std::unique_ptr<Cygnus::Sprite> digitTens; // 十の位
 		std::unique_ptr<Cygnus::Sprite> digitOnes; // 一の位
+
+		// 元の描画サイズ保存用
+		Cygnus::Float2 iconBaseSize = {0.0f, 0.0f};
+		Cygnus::Float2 timesBaseSize = {0.0f, 0.0f};
+		Cygnus::Float2 digitBaseSize = {0.0f, 0.0f};
+
 		int32_t currentCount = -1; // 値変化検知用
+		float popTimer = 0.0f; // ポップアップアニメーション用タイマー
 	};
 
 	enum PartType {
@@ -106,6 +113,10 @@ private:
 	// 数字テクスチャの設定
 	static constexpr Cygnus::Float2 kDigitTextureSize = {64.0f, 64.0f}; // テクスチャ内の1文字のピクセルサイズ
 	static constexpr Cygnus::Float2 kDigitDisplaySize = {32.0f, 32.0f}; // 画面に描画するサイズ
+
+	// アニメーション用
+	static constexpr float kPopDuration = 0.2f; // アニメーション時間
+	static constexpr float kMaxScale = 1.3f; // 最大拡大倍率
 
 private:
 	// =========================================================

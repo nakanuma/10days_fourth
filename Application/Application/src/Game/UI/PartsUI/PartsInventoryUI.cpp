@@ -2,6 +2,8 @@
 
 // Engine
 #include <TextureManager.h>
+#include <TimeManager.h>
+#include <Easing.h>
 
 // Application
 #include <src/Game/Objects/Player/Player.h>
@@ -39,6 +41,7 @@ void PartsInventoryUI::Initialize(Cygnus::SpriteCommon* spriteCommon, const Play
 		slot.icon->Initialize(spriteCommon, texIcons[i]);
 		slot.icon->SetAnchorPoint(kAnchorPointCenter);
 		slot.icon->SetPosition({baseX + kOffsetX, kYPos});
+		slot.iconBaseSize = slot.icon->GetSize();
 
 		// 「x」記号
 		slot.timesSymbol = std::make_unique<Cygnus::Sprite>();
@@ -46,6 +49,7 @@ void PartsInventoryUI::Initialize(Cygnus::SpriteCommon* spriteCommon, const Play
 		slot.timesSymbol->SetAnchorPoint(kAnchorPointCenter);
 		slot.timesSymbol->SetPosition({baseX + kOffsetTimesX, kYPos + kOffsetNumbersY });
 		slot.timesSymbol->SetColor(kNumberColor);
+		slot.timesBaseSize = slot.timesSymbol->GetSize();
 
 		// 十の位の数字
 		slot.digitTens = std::make_unique<Cygnus::Sprite>();
@@ -65,8 +69,12 @@ void PartsInventoryUI::Initialize(Cygnus::SpriteCommon* spriteCommon, const Play
 		slot.digitOnes->SetTextureSize(kDigitTextureSize); // 切り出しサイズ
 		slot.digitOnes->SetColor(kNumberColor);
 
+		slot.digitBaseSize = kDigitDisplaySize;
+
 		// 初期値の設定（初回Updateで必ず描画更新するため）
 		slot.currentCount = -1;
+
+		slot.popTimer = 0.0f;
 	}
 }
 
@@ -105,9 +113,15 @@ void PartsInventoryUI::Draw() {
 void PartsInventoryUI::UpdateSlot(PartSlot& slot, int32_t count){
 	// 負の値にならないようクリップ
 	count = std::clamp(count, 0, 99);
+	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 
-	// 値に変更があった場合のみ数字のUVを再計算
+	// 値の変更チェック
 	if(slot.currentCount != count) {
+		// 初回以外でカウントが増えた場合のみアニメーション発火
+		if(slot.currentCount != -1 && count > slot.currentCount) {
+			slot.popTimer = kPopDuration;
+		}
+		
 		slot.currentCount = count;
 
 		int32_t tens = count / 10;
@@ -116,6 +130,26 @@ void PartsInventoryUI::UpdateSlot(PartSlot& slot, int32_t count){
 		SetDigitValue(slot.digitTens.get(), tens);
 		SetDigitValue(slot.digitOnes.get(), ones);
 	}
+
+	// イージングアニメーション
+	float currentScale = 1.0f;
+	if(slot.popTimer > 0.0f) {
+		slot.popTimer -= dt;
+		if(slot.popTimer < 0.0f) slot.popTimer = 0.0f;
+
+		// 進行度
+		float t = slot.popTimer / kPopDuration;
+		float easeFactor = std::sinf(t * Cygnus::PIf);
+
+		// 拡大スケールの算出
+		currentScale = 1.0f + (kMaxScale - 1.0f) * easeFactor;
+	}
+
+	// スケールを書くスプライトに適用
+	slot.icon->SetSize({slot.iconBaseSize.x * currentScale, slot.iconBaseSize.y * currentScale});
+	slot.timesSymbol->SetSize({slot.timesBaseSize.x * currentScale, slot.timesBaseSize.y * currentScale});
+	slot.digitTens->SetSize({slot.digitBaseSize.x * currentScale, slot.digitBaseSize.y * currentScale});
+	slot.digitOnes->SetSize({slot.digitBaseSize.x * currentScale, slot.digitBaseSize.y * currentScale});
 
 	// 各スプライトの更新
 	slot.icon->Update();
