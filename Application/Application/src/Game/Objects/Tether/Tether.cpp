@@ -4,6 +4,7 @@
 #include <ImguiWrapper.h>
 #include <LineDrawer.h>
 #include <Collider/CollisionMath.h>
+#include <SoundManager.h>
 
 // Application
 #include <src/Game/Objects/Spaceship/Spaceship.h>
@@ -147,6 +148,7 @@ void Tether::CheckCollisionWithFlyingObjects(FlyingObjectManager* flyingObjectMa
 				if (obj->GetCategory() == ObjectCategory::Meteor) {
 					// プレイヤーにダメージを与える
 					player_->ApplyDamage(1);
+					Cygnus::SoundManager::GetInstance()->Play("se_collide", false, 0.75f); // SE再生（衝突）
 					// 飛翔物を消滅させる
 					obj->Dead();
 				}

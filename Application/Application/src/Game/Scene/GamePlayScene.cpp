@@ -91,9 +91,14 @@ void GamePlayScene::Initialize() {
 
 	// シーンの開始時にフェードインを実行
 	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
+
+	// BGM再生
+	Cygnus::SoundManager::GetInstance()->Play("bgm_gameplay", true, 0.5f);
 }
 
-void GamePlayScene::Finalize() { }
+void GamePlayScene::Finalize() { 
+	Cygnus::SoundManager::GetInstance()->Stop("bgm_gameplay");
+}
 
 void GamePlayScene::Update() {
 	Cygnus::LightManager::GetInstance()->ClearEmissiveLights(); // エミッシブライトをクリア

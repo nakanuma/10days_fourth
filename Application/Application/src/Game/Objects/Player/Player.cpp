@@ -7,6 +7,7 @@
 #include <TimeManager.h>
 #include <LineDrawer.h>
 #include <Easing.h>
+#include <SoundManager.h>
 
 // Application
 #include <src/Game/Objects/Spaceship/Spaceship.h>
@@ -123,20 +124,24 @@ void Player::OnCollision(Cygnus::Collider* other)
 
 	/* 隕石との衝突処理 */
 	if (tag == "MeteorSmall" || tag == "MeteorLarge") {
+		Cygnus::SoundManager::GetInstance()->Play("se_collide", false, 0.75f); // SE再生（衝突）
 		ApplyDamage(1); // ダメージを与える
 	}
 
 	/* 各修理パーツとの衝突 */
 	if(other->GetTag() == "RepairPartLow") {
 		repairPartLowCount_++;
+		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
 	}
 	if(other->GetTag() == "RepairPartMedium") {
 		repairPartMediumCount_++;
+		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
 	}
 	if(other->GetTag() == "RepairPartHigh") {
 		repairPartHighCount_++;
+		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
 	}
 }
@@ -171,6 +176,7 @@ void Player::Move()
 			// 自動巻き取りの限界時間（酸素ゲージ）に達したら自動巻き取り開始
 			if(autoRewindTimer_ >= kDefaultAutoRewindTime) {
 				StartRewind();
+				Cygnus::SoundManager::GetInstance()->Play("se_return", false, 0.75f); // SE再生（帰還）
 			}
 		} else {
 			autoRewindTimer_ = 0.0f; // 上部にいる間はリセット
@@ -181,6 +187,7 @@ void Player::Move()
 		bool triggerPad = input->IsTriggerButton(0, XINPUT_GAMEPAD_A) || input->IsTriggerButton(0, XINPUT_GAMEPAD_RIGHT_SHOULDER);
 		if (triggerKeyboard || triggerPad) {
 			StartRewind();
+			Cygnus::SoundManager::GetInstance()->Play("se_return", false, 0.75f); // SE再生（帰還）
 		}
 	}
 

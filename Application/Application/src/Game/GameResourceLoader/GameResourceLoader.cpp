@@ -121,4 +121,19 @@ void GameResourceLoader::RegisterAllParticleEffect() {
 
 void GameResourceLoader::LoadAllSoundData() {
 	auto soundManager = Cygnus::SoundManager::GetInstance();
+
+	// bgm
+	soundManager->Load("resources/Sounds/bgm_title.wav", "bgm_title");
+	soundManager->Load("resources/Sounds/bgm_gameplay.wav", "bgm_gameplay");
+	soundManager->Load("resources/Sounds/bgm_gameclear.wav", "bgm_gameclear");
+	soundManager->Load("resources/Sounds/bgm_gameover.wav", "bgm_gameover");
+
+	// se
+	soundManager->Load("resources/Sounds/se_switch.wav", "se_switch");
+	soundManager->Load("resources/Sounds/se_decide.wav", "se_decide");
+	soundManager->Load("resources/Sounds/se_pickup.wav", "se_pickup");
+	soundManager->Load("resources/Sounds/se_consume.wav", "se_consume");
+	soundManager->Load("resources/Sounds/se_collide.wav", "se_collide");
+	soundManager->Load("resources/Sounds/se_return.wav", "se_return");
+	soundManager->Load("resources/Sounds/se_pause.wav", "se_pause");
 }
