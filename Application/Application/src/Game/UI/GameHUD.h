@@ -10,6 +10,7 @@
 #include <src/Game/UI/Spaceship/SpaceshipDurabilityUI.h> // 宇宙船の耐久度UI
 #include <src/Game/UI/Guide/ControlGuideUI.h> // 操作UI
 #include <src/Game/UI/Timer/GameTimerUI.h> // 残り時間UI
+#include <src/Game//UI/HealthChange/HealthChangeUI.h> // HP変化UI
  
 // =========================================================
 // ゲーム中の全UIマネージャー
@@ -53,6 +54,8 @@ public:
 		return partsInventoryUI_ ? partsInventoryUI_->IsConsuming() : false;
 	}
 
+
+
 private:
 	// =========================================================
 	// Member Variables
@@ -65,5 +68,6 @@ private:
 	std::unique_ptr<SpaceshipDurabilityUI> spaceshipDurabilityUI_; // 宇宙船の耐久度UI
 	std::unique_ptr<ControlGuideUI> controlGuideUI_; // 操作UI
 	std::unique_ptr<GameTimerUI> gameTimerUI_; // 残り時間UI
+	std::unique_ptr<HealthChangeUI> healthChangeUI_; // HP変化UI
 };
 
