@@ -99,6 +99,7 @@ void Player::OnCollision(Cygnus::Collider* other) {
 	/* 隕石との衝突処理 */
 	if (tag == "MeteorSmall" || tag == "MeteorLarge") {
 		ApplyDamage(1); // ダメージを与える
+
 	}
 
 	/* 各修理パーツとの衝突 */

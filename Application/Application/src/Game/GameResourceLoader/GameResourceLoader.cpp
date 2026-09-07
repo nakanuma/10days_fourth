@@ -123,6 +123,12 @@ void GameResourceLoader::RegisterAllParticleEffect() {
 	RegisterParticle("move_small_meteor", "Cube");
 	//修理パーツ移動時パーティクル
 	RegisterParticle("move_repair", "Cube");
+	//隕石衝突パーティクル1
+	RegisterParticle("hit_meteor1", "Cube");
+	//隕石衝突パーティクル2
+	RegisterParticle("hit_meteor2", "Cube");
+
+
 }
 
 void GameResourceLoader::LoadAllSoundData() {
