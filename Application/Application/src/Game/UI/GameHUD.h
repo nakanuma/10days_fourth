@@ -14,6 +14,7 @@
 #include <src/Game/UI/Guide/ControlGuideUI.h> // 操作UI
 #include <src/Game/UI/Timer/GameTimerUI.h> // 残り時間UI
 #include <src/Game/UI/PartsUI/ItemPopupUI.h> // 修理パーツポップアップUI
+#include <src/Game/UI/Player/DangerWarningUI.h> // 隕石接近危険マークUI
  
 // =========================================================
 // ゲーム中の全UIマネージャー
@@ -33,7 +34,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(float remainingTime);
+	void Update(float remainingTime, Tether* tether, FlyingObjectManager* flyingObjectManager);
 
 	/// <summary>
 	/// 描画処理
@@ -88,6 +89,7 @@ private:
 	// =========================================================
 
 	Cygnus::SpriteCommon* spriteCommon_ = nullptr;
+	Player* player_;
 
 	/* 各UI */
 	std::unique_ptr<PartsInventoryUI> partsInventoryUI_; // プレイヤーのパーツ所持数UI
@@ -96,6 +98,7 @@ private:
 	std::unique_ptr<SpaceshipDurabilityUI> spaceshipDurabilityUI_; // 宇宙船の耐久度UI
 	std::unique_ptr<ControlGuideUI> controlGuideUI_; // 操作UI
 	std::unique_ptr<GameTimerUI> gameTimerUI_; // 残り時間UI
+	std::unique_ptr<DangerWarningUI> dangerWarningUI_; // 隕石接近危険マークUI
 
 	/* 修理パーツポップアップUI管理 */
 	std::vector<std::unique_ptr<ItemPopupUI>> activePopups_; // プレイヤーの修理パーツ取得時ポップアップ

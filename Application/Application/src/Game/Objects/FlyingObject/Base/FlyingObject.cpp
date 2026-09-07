@@ -62,11 +62,11 @@ void FlyingObject::Update() {
 			0.0f
 		);
 	} else if(subCategory_ == "repair") {
-		Cygnus::ParticleEffectManager::GetInstance()->Emit("move_repair", object_->transform_.translate_,
+		/*Cygnus::ParticleEffectManager::GetInstance()->Emit("move_repair", object_->transform_.translate_,
 			1,
 			Cygnus::Float3(0, 0, 0),
 			0.0f
-		);
+		);*/
 	}
 
 	// コライダー更新
@@ -108,11 +108,11 @@ void FlyingObject::Dead()
 		);
 	}
 	else if (subCategory_ == "repair") {
-		Cygnus::ParticleEffectManager::GetInstance()->Emit("hit_repair", object_->transform_.translate_,
+		/*Cygnus::ParticleEffectManager::GetInstance()->Emit("hit_repair", object_->transform_.translate_,
 			10,
 			Cygnus::Float3(0, 0, 0),
 			0.0f
-		);
+		);*/
 	}
 }
 
