@@ -15,6 +15,7 @@
 void PauseMenu::Initialize(Cygnus::SpriteCommon* spriteCommon) {
 	// パラメーター初期化
 	isPaused_ = false; 
+	isUnpausing_ = false;
 	currentMenu_ = MenuIndex::Continue;
 	isStickMoved_ = false;
 	isSelected_ = false;
@@ -65,6 +66,7 @@ void PauseMenu::Initialize(Cygnus::SpriteCommon* spriteCommon) {
 	buttonAStartPos_ = buttonACurrentPos_;
 	buttonATargetPos_ = buttonACurrentPos_;
 	buttonAMoveTimer_ = kButtonAMoveDuration;
+	baseButtonASize_ = spriteButtonA_->GetSize();
 }
 
 void PauseMenu::Update() { 
@@ -94,10 +96,12 @@ void PauseMenu::Update() {
 	if(isTogglePause && FadeTransition::GetInstance()->IsFinished()) {
 		if(isPaused_) {
 			isPaused_ = false;
+			isUnpausing_ = false;
 			isJustUnpaused_ = false; // ポーズ解除フラグを立てる
 		} else {
 			isPaused_ = true;
 			isSelected_ = false; // ポーズを開いたときにフラグ初期化
+			isUnpausing_ = false;
 		}
 	}
 
@@ -210,9 +214,13 @@ void PauseMenu::ProcessMenuInput() {
 	bool isConfirm = input->TriggerKey(DIK_SPACE) || input->TriggerKey(DIK_RETURN) || input->IsTriggerButton(0, XINPUT_GAMEPAD_A);
 
 	if (isConfirm) {
+		// Aボタン押下アニメーション開始
+		isButtonAPressed_ = true;
+		buttonAPressTimer_ = 0.0f;
+
 		if(currentMenu_ == MenuIndex::Continue) {
-			isPaused_ = false; // ポーズ解除 
-			isJustUnpaused_ = true; // つづけるを押して解除した瞬間もフラグを立てる
+			isUnpausing_ = true; // 即座に解除せず、アニメーション待ちをする
+			isSelected_ = true; // 多重入力防止
 			Cygnus::SoundManager::GetInstance()->Play("se_decide", false, 0.5f); // SE再生（決定）
 		} else if (currentMenu_ == MenuIndex::ReturnTitle) {
 			isSelected_ = true; // 多重入力防止
@@ -273,4 +281,39 @@ void PauseMenu::UpdateUI() {
 		buttonACurrentPos_.x,
 		buttonACurrentPos_.y + bounceOffsetY
 		});
+
+	/* Aボタン押下（スケール&カラー）アニメーション計算 */
+	float scaleFactor = 1.0f;
+	Cygnus::Float4 currentColor = kButtonANormalColor;
+
+	if (isButtonAPressed_) {
+		buttonAPressTimer_ += deltaTime;
+
+		if (buttonAPressTimer_ >= kButtonAPressDuration) {
+			buttonAPressTimer_ = kButtonAPressDuration;
+
+			// アニメーション完了時、ポーズ解除待ち状態であればポーズを終える
+			if (isUnpausing_) {
+				isPaused_ = false;
+				isJustUnpaused_ = true;
+				isUnpausing_ = false;
+				isButtonAPressed_ = false;
+			}
+		}
+
+		// 進行度
+		float progress = buttonAPressTimer_ / kButtonAPressDuration;
+
+		// sin波でイージング
+		float pressFactor = std::sinf(progress * Cygnus::PIf);
+
+		// スケール計算
+		scaleFactor = 1.0f - pressFactor * (1.0f - KButtonAPressMinScale);
+
+		// カラー補間
+		currentColor = kButtonANormalColor + (kButtonAPressedColor - kButtonANormalColor) * pressFactor;
+	}
+	// 最終サイズとカラーの適用
+	spriteButtonA_->SetSize({baseButtonASize_.x * scaleFactor, baseButtonASize_.y * scaleFactor});
+	spriteButtonA_->SetColor(currentColor);
 }

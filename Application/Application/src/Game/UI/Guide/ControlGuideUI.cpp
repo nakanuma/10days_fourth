@@ -2,8 +2,16 @@
 
 // Engine
 #include <TextureManager.h>
+#include <TimeManager.h>
+#include <Input/Input.h>
 
 void ControlGuideUI::Initialize(Cygnus::SpriteCommon* spriteCommon) {
+	// タイマー初期化
+	pausePressTimer_ = 0.0f;
+	isPausePressed_ = false;
+	rbPressTimer_ = 0.0f;
+	isRbPressed_ = false;
+
 	// テクスチャのロード
 	uint32_t texMenuButton = Cygnus::TextureManager::Load("button_menu.png");
 	uint32_t texPauseText = Cygnus::TextureManager::Load("guide_pauseText.png");
@@ -65,6 +73,78 @@ void ControlGuideUI::Initialize(Cygnus::SpriteCommon* spriteCommon) {
 }
 
 void ControlGuideUI::Update() {
+	Cygnus::Input* input = Cygnus::Input::GetInstance();
+	float deltaTime = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+
+	/* 入力判定（押し下げトリガーの検知） */
+
+	// ポーズボタン（ESCAPE または コントローラー START）
+	bool isPauseTriggered = input->TriggerKey(DIK_ESCAPE);
+	// RBボタン（Eキー または コントローラー RB）
+	bool isRbTriggered = input->TriggerKey(DIK_E);
+
+	XINPUT_STATE padState;
+	if (input->GetJoystickState(0, padState)) {
+		if (input->IsTriggerButton(0, XINPUT_GAMEPAD_START)) {
+			isPauseTriggered = true;
+		}
+		if (input->IsTriggerButton(0, XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+			isRbTriggered = true;
+		}
+	}
+
+	if (isPauseTriggered) {
+		isPausePressed_ = true;
+		pausePressTimer_ = 0.0f;
+	}
+
+	if (isRbTriggered) {
+		isRbPressed_ = true;
+		rbPressTimer_ = 0.0f;
+	}
+
+	/* ポーズ（メニュー）ボタンのアニメーション計算 */
+	float menuScaleFactor = 1.0f;
+	Cygnus::Float4 menuColor = kButtonNormalColor;
+
+	if (isPausePressed_) {
+		pausePressTimer_ += deltaTime;
+		if (pausePressTimer_ >= kButtonPressDuration) {
+			pausePressTimer_ = kButtonPressDuration;
+			isPausePressed_ = false; // アニメーション終了
+		}
+
+		float progress = pausePressTimer_ / kButtonPressDuration;
+		float pressFactor = std::sinf(progress * Cygnus::PIf); // 0 -> 1 -> 0
+
+		menuScaleFactor = 1.0f - pressFactor * (1.0f - kButtonPressMinScale);
+		menuColor = kButtonNormalColor + (kButtonPressedColor - kButtonNormalColor) * pressFactor;
+	}
+
+	spriteMenuButton_->SetSize({kButtonSize.x * menuScaleFactor, kButtonSize.y * menuScaleFactor});
+	spriteMenuButton_->SetColor(menuColor);
+
+	/* RBボタンのアニメーション計算 */
+	float rbScaleFactor = 1.0f;
+	Cygnus::Float4 rbColor = kButtonNormalColor;
+
+	if (isRbPressed_) {
+		rbPressTimer_ += deltaTime;
+		if (rbPressTimer_ >= kButtonPressDuration) {
+			rbPressTimer_ = kButtonPressDuration;
+			isRbPressed_ = false; // アニメーション終了
+		}
+
+		float progress = rbPressTimer_ / kButtonPressDuration;
+		float pressFactor = std::sinf(progress * Cygnus::PIf); // 0 -> 1 -> 0
+
+		rbScaleFactor = 1.0f - pressFactor * (1.0f - kButtonPressMinScale);
+		rbColor = kButtonNormalColor + (kButtonPressedColor - kButtonNormalColor) * pressFactor;
+	}
+
+	spriteRb_->SetSize({kButtonSize.x * rbScaleFactor, kButtonSize.y * rbScaleFactor});
+	spriteRb_->SetColor(rbColor);
+
 	spriteMenuButton_->Update();
 	spritePauseText_->Update();
 
