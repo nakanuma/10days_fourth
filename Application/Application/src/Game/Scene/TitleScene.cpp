@@ -396,6 +396,11 @@ void TitleScene::ProcessMenuInput()
 
 	if(isConfirm) {
 		isSelected_ = true; // 重複実行を防止
+
+		// Aボタン押下アニメーション開始
+		isButtonAPressed_ = true;
+		buttonAPressTimer_ = 0.0f;
+
 		Cygnus::SoundManager::GetInstance()->Play("se_decide", false, 0.5f); // SE再生（決定）
 
 		if(currentMenu_ == MenuIndex::Start) {
@@ -472,6 +477,33 @@ void TitleScene::UpdateUI()
 		buttonACurrentPos_.x,
 		buttonACurrentPos_.y + bounceOffsetY
 	});
+
+	/* Aボタン押下（スケール&カラー）アニメーション計算 */
+	float scaleFactor = 1.0f;
+	Cygnus::Float4 currentColor = kButtonANormalColor;
+
+	if (isButtonAPressed_) {
+		buttonAPressTimer_ += deltaTime;
+
+		if (buttonAPressTimer_ >= kButtonAPressDuration) {
+			buttonAPressTimer_ = kButtonAPressDuration;
+		}
+
+		// 進行度
+		float progress = buttonAPressTimer_ / kButtonAPressDuration;
+
+		// sin波でイージング
+		float pressFactor = std::sinf(progress * Cygnus::PIf);
+
+		// スケール計算
+		scaleFactor = 1.0f - pressFactor * (1.0f - KButtonAPressMinScale);
+
+		// カラー補間
+		currentColor = kButtonANormalColor + (kButtonAPressedColor - kButtonANormalColor) * pressFactor;
+	}
+	// 最終サイズとカラーの適用
+	spriteButtonA_->SetSize({baseButtonASize_.x * scaleFactor, baseButtonASize_.y * scaleFactor});
+	spriteButtonA_->SetColor(currentColor);
 }
 
 void TitleScene::UpdatePlayerAnimation()
