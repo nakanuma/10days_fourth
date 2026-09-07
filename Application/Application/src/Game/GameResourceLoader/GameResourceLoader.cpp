@@ -153,6 +153,8 @@ void GameResourceLoader::RegisterAllParticleEffect() {
 	RegisterParticle("hit_meteor2", "Cube");
 	//修理パーツ衝突パーティクル
 	RegisterParticle("hit_repair", "Cube");
+	//酸素ゲージ減少時の冷や汗パーティクル
+	RegisterParticle("low_oxy", "Cube");
 
 
 }

@@ -37,6 +37,11 @@ private:
 	// Internal Methods
 	// =========================================================
 
+	/// <summary>
+	/// 点滅処理
+	/// </summary>
+	void UpdateBlink();
+
 private:
 	// =========================================================
 	// Constants
@@ -64,5 +69,9 @@ private:
 
 	std::unique_ptr<Cygnus::Sprite> spriteBackground_; // 背景（灰色）
 	std::unique_ptr<Cygnus::Sprite> spriteForeground_; // 前景（水色）
+
+	//点滅用タイマー
+	static constexpr float kBlinkInterval_ = 0.5f; // 点滅間隔（秒）
+	float blinkTimer_ = 0.0f;
 };
 

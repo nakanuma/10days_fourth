@@ -14,7 +14,7 @@ void O2TimeUI::Initialize(Cygnus::SpriteCommon* spriteCommon) {
 }
 
 void O2TimeUI::Update(float nowTime, float maxTime) {
-	
+
 	// Ž_‘fƒ[ƒ^‚ÌÝ’è
 	float downMeter = (kUIDefaultSize_ / maxTime) * (maxTime - nowTime);
 	o2Null_->SetTextureSize({ kUIDefaultSize_,kUIDefaultSize_- downMeter });
