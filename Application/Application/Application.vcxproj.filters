@@ -32,6 +32,7 @@
     <ClCompile Include="src\Game\Util\Utility.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\HeartItem\HeartItem.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\BombItem\BombItem.cpp" />
+    <ClCompile Include="src\Game\UI\PartsUI\ItemPopupUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\UI\Player\PlayerHPUI.h" />
@@ -65,6 +66,7 @@
     <ClInclude Include="src\Game\Util\Utility.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\HeartItem\HeartItem.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\BombItem\BombItem.h" />
+    <ClInclude Include="src\Game\UI\PartsUI\ItemPopupUI.h" />
     <ClCompile Include="src\Game\GameResourceLoader\GameResourceLoader.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>

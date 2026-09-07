@@ -11,6 +11,9 @@
 #include "PartsCountUI.h"
 #include "O2TimeUI.h"
 
+// Application
+#include <src/Game/UI/PartsUI/ItemPopupUI.h>
+
 // 前方宣言
 class Spaceship;
 
@@ -145,6 +148,13 @@ public:
 	/// <returns></returns>
 	bool IsTriggerBomb();
 
+	using OnPickupPartCallback = std::function<void(PartType type, const Cygnus::Float3& worldPos)>;
+	/// <summary>
+	/// 修理パーツポップアップUI用
+	/// </summary>
+	/// <param name="callback"></param>
+	void SetOnPickupPartCallback(OnPickupPartCallback callback) { onPickupPartCallback_ = callback; }
+
 private:
 	// =========================================================
 	// Internal Methods
@@ -261,4 +271,5 @@ private:
 
 	// その他
 	std::function<void(float intensity, float duration)> onDamageCallback_ = nullptr;
+	OnPickupPartCallback onPickupPartCallback_ = nullptr; 
 };
