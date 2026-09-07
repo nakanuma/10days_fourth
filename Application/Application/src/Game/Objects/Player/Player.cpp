@@ -14,6 +14,8 @@
 #include <src/Game/Objects/FlyingObject/Base/FlyingObject.h>
 #include <src/Game/Scene/PauseMenu.h>
 
+#include "src/Game/UI/Explain/ExplainUI.h"
+
 void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon) {
 	spaceship_ = spaceship;
 
@@ -144,6 +146,9 @@ void Player::OnCollision(Cygnus::Collider* other)
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
 	}
+
+	ActionJudgment::GetInstance()->AddAction(other->GetTag() == "RepairPartLow", 2);
+	ActionJudgment::GetInstance()->AddAction(other->GetTag() == "RepairPartHigh", 3);
 }
 
 void Player::ApplyDamage(int32_t damage) {
