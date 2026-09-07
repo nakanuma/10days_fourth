@@ -21,6 +21,7 @@
 
 // Application
 #include <src/Game/Util/GameResult/GameResultManager.h>
+#include <src/Game/Util/Utility.h>
 
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
@@ -88,6 +89,12 @@ void GamePlayScene::Initialize() {
 	// ゲームUI作成
 	gameHUD_ = std::make_unique<GameHUD>();
 	gameHUD_->Initialize(spriteCommon_.get(), player_.get(), spaceship_.get());
+	// プレイヤーのパーツ取得時ポップアップコールバックをセット
+	player_->SetOnPickupPartCallback([this](PartType type, const Cygnus::Float3& worldPos) { 
+		if (gameHUD_) {
+			gameHUD_->SpawnPlayerPopup(type, [this]() { return player_->GetTranslate(); });
+		}
+	});
 
 	// シーンの開始時にフェードインを実行
 	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
@@ -164,6 +171,19 @@ void GamePlayScene::Update() {
 
 	// 巻取り完了時のUI発火
 	if(wasRewinding && !player_->IsRewinding()) {
+		// 所持している全パーツの納品用ポップアップをキューへ追加
+		if (player_->GetRepairPartLowCount() > 0) {
+			gameHUD_->QueueSpaceshipDeposit(PartType::Low, player_->GetRepairPartLowCount());
+		}
+		if (player_->GetRepairPartMediumCount() > 0) {
+			gameHUD_->QueueSpaceshipDeposit(PartType::Medium, player_->GetRepairPartMediumCount());
+		}
+		if (player_->GetRepairPartHighCount() > 0) {
+			gameHUD_->QueueSpaceshipDeposit(PartType::High, player_->GetRepairPartHighCount());
+		}
+
+
+		// インベントリのパーツ連続消費
 		if(gameHUD_) {
 			gameHUD_->StartConsumingParts();
 		}
@@ -329,6 +349,8 @@ void GamePlayScene::Draw() {
 	tether_->Debug();
 	// 飛翔物管理クラスデバッグ表示
 	flyingObjectManager_->Debug();
+	// GameHUD
+	gameHUD_->Debug();
 
 	// コライダーデバッグ表示
 	Cygnus::CollisionManager::GetInstance()->Debug();

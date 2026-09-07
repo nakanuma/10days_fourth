@@ -1,5 +1,8 @@
 #pragma once
 
+// C++
+#include <queue>
+
 // Engine
 #include <SpriteCommon.h>
 
@@ -10,6 +13,7 @@
 #include <src/Game/UI/Spaceship/SpaceshipDurabilityUI.h> // 宇宙船の耐久度UI
 #include <src/Game/UI/Guide/ControlGuideUI.h> // 操作UI
 #include <src/Game/UI/Timer/GameTimerUI.h> // 残り時間UI
+#include <src/Game/UI/PartsUI/ItemPopupUI.h> // 修理パーツポップアップUI
  
 // =========================================================
 // ゲーム中の全UIマネージャー
@@ -37,6 +41,11 @@ public:
 	void Draw();
 
 	/// <summary>
+	/// デバッグ用
+	/// </summary>
+	void Debug();
+
+	/// <summary>
 	/// パーツの連続消費アニメーションを発火
 	/// </summary>
 	void StartConsumingParts() {
@@ -53,10 +62,32 @@ public:
 		return partsInventoryUI_ ? partsInventoryUI_->IsConsuming() : false;
 	}
 
+	/// <summary>
+	/// プレイヤー頭上に1つ生成
+	/// </summary>
+	/// <param name="type"></param>
+	/// <param name="playerScreenPos"></param>
+	void SpawnPlayerPopup(PartType type, std::function<Cygnus::Float3()> targetPosFunc);
+
+	/// <summary>
+	/// 宇宙船へ納品
+	/// </summary>
+	/// <param name="type"></param>
+	/// <param name="count"></param>
+	void QueueSpaceshipDeposit(PartType type, int count);
+
 private:
+	// =========================================================
+	// Constants
+	// =========================================================
+
+	static constexpr float kDepositInterval = 0.08f; // 連続表示の間隔
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
+
+	Cygnus::SpriteCommon* spriteCommon_ = nullptr;
 
 	/* 各UI */
 	std::unique_ptr<PartsInventoryUI> partsInventoryUI_; // プレイヤーのパーツ所持数UI
@@ -65,5 +96,10 @@ private:
 	std::unique_ptr<SpaceshipDurabilityUI> spaceshipDurabilityUI_; // 宇宙船の耐久度UI
 	std::unique_ptr<ControlGuideUI> controlGuideUI_; // 操作UI
 	std::unique_ptr<GameTimerUI> gameTimerUI_; // 残り時間UI
+
+	/* 修理パーツポップアップUI管理 */
+	std::vector<std::unique_ptr<ItemPopupUI>> activePopups_; // プレイヤーの修理パーツ取得時ポップアップ
+	std::queue<PartType> depositQueue_; // 宇宙船納品用のポップアップ
+	float depositTimer_ = 0.0f;
 };
 

@@ -5,7 +5,7 @@
 #include <SpriteCommon.h>
 
 // 前方宣言
-class Spaceship;
+#include <src/Game/Objects/Spaceship/Spaceship.h>
 
 // =========================================================
 // 宇宙船の耐久度ゲージUI
@@ -31,6 +31,16 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw();
+
+	// =========================================================
+	// Accessor
+	// =========================================================
+
+	/// <summary>
+	/// 宇宙船の位置を取得
+	/// </summary>
+	/// <returns></returns>
+	const Cygnus::Float3& GetSpaceshipTranslate() const { return spaceship_->GetTranslate(); }
 
 private:
 	// =========================================================

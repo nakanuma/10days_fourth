@@ -135,16 +135,19 @@ void Player::OnCollision(Cygnus::Collider* other)
 		repairPartLowCount_++;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
+		if (onPickupPartCallback_) onPickupPartCallback_(PartType::Low, object_->transform_.translate_);
 	}
 	if(other->GetTag() == "RepairPartMedium") {
 		repairPartMediumCount_++;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
+		if (onPickupPartCallback_) onPickupPartCallback_(PartType::Medium, object_->transform_.translate_);
 	}
 	if(other->GetTag() == "RepairPartHigh") {
 		repairPartHighCount_++;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
+		if (onPickupPartCallback_) onPickupPartCallback_(PartType::High, object_->transform_.translate_);
 	}
 
 	/* ハート（回復アイテム）との衝突 */

@@ -5,7 +5,6 @@
 #include <TimeManager.h>
 
 // Application
-#include <src/Game/Objects/Spaceship/Spaceship.h>
 #include <src/Game/Util/Utility.h>
 
 void SpaceshipDurabilityUI::Initialize(Cygnus::SpriteCommon* spriteCommon, const Spaceship* spaceship) {
