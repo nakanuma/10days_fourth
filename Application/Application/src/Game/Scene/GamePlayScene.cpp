@@ -200,7 +200,7 @@ void GamePlayScene::Update() {
 	}
 	// ゲームUI更新
 	float remainingTime = kMaxGameTime - gameTimer_;
-	gameHUD_->Update(remainingTime);
+	gameHUD_->Update(remainingTime, tether_.get(), flyingObjectManager_.get());
 
 	// 命綱と飛翔物の衝突判定
 	tether_->CheckCollisionWithFlyingObjects(flyingObjectManager_.get());

@@ -6,6 +6,7 @@
 
 void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player, const Spaceship* spaceship) {
 	spriteCommon_ = spriteCommon;
+	player_ = player;
 
 	/* 各UI生成+初期化 */
 	
@@ -32,9 +33,13 @@ void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player, con
 	// 残り時間UI
 	gameTimerUI_ = std::make_unique<GameTimerUI>();
 	gameTimerUI_->Initialize(spriteCommon_);
+
+	// 危険マークUI
+	dangerWarningUI_ = std::make_unique<DangerWarningUI>();
+	dangerWarningUI_->Initialize(spriteCommon_);
 }
 
-void GameHUD::Update(float remainingTime) {
+void GameHUD::Update(float remainingTime, Tether* tether, FlyingObjectManager* flyingObjectManager) {
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 
 	/* 修理パーツポップアップUI更新 */
@@ -69,6 +74,7 @@ void GameHUD::Update(float remainingTime) {
 	spaceshipDurabilityUI_->Update();
 	controlGuideUI_->Update();
 	gameTimerUI_->Update(remainingTime);
+	dangerWarningUI_->Update(player_, tether, flyingObjectManager);
 }
 
 void GameHUD::Draw() {
@@ -79,6 +85,7 @@ void GameHUD::Draw() {
 	spaceshipDurabilityUI_->Draw();
 	controlGuideUI_->Draw();
 	gameTimerUI_->Draw();
+	dangerWarningUI_->Draw();
 
 	// ポップアップの描画
 	for (auto& popup : activePopups_) {

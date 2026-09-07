@@ -309,11 +309,11 @@ void Player::Move() {
 	}
 
 	// 移動時パーティクル生成
-	Cygnus::ParticleEffectManager::GetInstance()->Emit("move_player", object_->transform_.translate_,
+	/*Cygnus::ParticleEffectManager::GetInstance()->Emit("move_player", object_->transform_.translate_,
 		1,
 		Cygnus::Float3(0, 0, 0),
 		0.0f
-	);
+	);*/
 
 }
 
