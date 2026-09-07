@@ -4,6 +4,7 @@
 #include <vector>
 
 // Engine
+#include <Float2.h>
 #include <Sprite.h>
 #include <SpriteCommon.h>
 
@@ -44,6 +45,11 @@ private:
 	/// <param name="digit"></param>
 	void SetDigitValue(Cygnus::Sprite* sprite, int32_t digit);
 
+	/// <summary>
+	/// カウントダウンの処理
+	/// </summary>
+	void Countdown(float time);
+
 private:
 	// =========================================================
 	// Constants
@@ -69,6 +75,9 @@ private:
 	// テクスチャ設定
 	static constexpr Cygnus::Float2 kDigitTextureSize = { 64.0f, 64.0f }; // テクスチャ内1文字のピクセルサイズ
 
+	// カウントダウン用スプライトの表示サイズ
+	static constexpr Cygnus::Float2 kCdTextureSize = { 720.0f,720.0f };
+
 private:
 	// =========================================================
 	// Member Variables
@@ -76,6 +85,7 @@ private:
 
 	// テクスチャハンドル
 	uint32_t texNumbers_ = 0;
+	uint32_t texCountdown_ = 0;
 
 	// スプライト
 	std::unique_ptr<Cygnus::Sprite> spriteClockIcon_;
@@ -84,8 +94,10 @@ private:
 	std::unique_ptr<Cygnus::Sprite> spriteDigitOnes_;     // 一の位
 	std::unique_ptr<Cygnus::Sprite> spriteDot_;           // ドット「.」
 	std::unique_ptr<Cygnus::Sprite> spriteDigitDecimal_;  // 小数第一位
+	std::unique_ptr<Cygnus::Sprite> spriteCountdown_; // カウントダウン数字
 
 	// キャッシュ用（直前の数値と変わった場合のみ更新）
 	int32_t currentDisplayValue_ = -1;
+
 };
 
