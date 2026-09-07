@@ -175,6 +175,9 @@ void GamePlayScene::Update() {
 	tether_->Update();
 	// 飛翔物管理クラス更新
 	flyingObjectManager_->Update();
+	if (player_->IsTriggerBomb()) { // プレイヤーが爆弾アイテムを取得したら一括隕石破壊
+		flyingObjectManager_->DestroyAllMeteorsSequential();
+	}
 	// ゲームUI更新
 	float remainingTime = kMaxGameTime - gameTimer_;
 	gameHUD_->Update(remainingTime);

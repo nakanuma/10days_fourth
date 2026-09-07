@@ -15,6 +15,8 @@
 enum class ObjectCategory {
 	Meteor,     // 隕石
 	RepairPart, // 修理パーツ
+	HeartItem, // ハート（回復）
+	BombItem, // 爆弾（全隕石破壊）
 };
 
 // =========================================================

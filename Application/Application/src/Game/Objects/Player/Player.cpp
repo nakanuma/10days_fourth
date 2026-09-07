@@ -32,6 +32,8 @@ void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon
 	hp_ = kMaxHP;
 	isDead_ = false;
 
+	isTriggerBomb_ = false;
+
 	// コライダー生成
 	auto aabb = std::make_unique<Cygnus::AABBCollider>();
 	aabb->SetTag("Player");
@@ -144,6 +146,18 @@ void Player::OnCollision(Cygnus::Collider* other)
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
 	}
+
+	/* ハート（回復アイテム）との衝突 */
+	if (tag == "HeartItem") {
+		Heal(1); // 1回復
+		//Cygnus::SoundManager::GetInstance()->Play("", false, 0.75f);
+	}
+
+	/* 爆弾アイテムとの衝突 */
+	if (tag == "BombItem") {
+		isTriggerBomb_ = true; // 爆弾取得フラグを立てる
+		//Cygnus::SoundManager::GetInstance()->Play("", false, 0.75f);
+	}
 }
 
 void Player::ApplyDamage(int32_t damage) {
@@ -163,8 +177,18 @@ void Player::ApplyDamage(int32_t damage) {
 	}
 }
 
-void Player::Move()
-{
+void Player::Heal(int32_t amount) {
+	if (isDead_) return;
+	hp_ = (std::min)(hp_ + amount, kMaxHP);
+}
+
+bool Player::IsTriggerBomb() { 
+	bool trigger = isTriggerBomb_;
+	isTriggerBomb_ = false; // 消費してリセット
+	return trigger;
+}
+
+void Player::Move() {
 	auto input = Cygnus::Input::GetInstance();
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 

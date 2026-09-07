@@ -13,13 +13,37 @@
 #include <src/Game/Objects/FlyingObject/RepairPart/RepairPartMedium/RepairPartMedium.h> // 修理パーツ（中品質）
 #include <src/Game/Objects/FlyingObject/RepairPart/RepairpartHigh/RepairPartHigh.h> // 修理パーツ（高品質）
 
+#include <src/Game/Objects/FlyingObject/HeartItem/HeartItem.h> // ハート（回復）
+#include <src/Game/Objects/FlyingObject/BombItem/BombItem.h> // 爆弾（隕石全破壊）
+
 void FlyingObjectManager::Initialize() {
 	objects_.clear();
+	while (!destroyQueue_.empty()) destroyQueue_.pop();
+	destroyTimer_ = 0.0f;
 }
 
 void FlyingObjectManager::Update() {
+	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+
 	// 自動スポーン処理
 	AutoSpawn();
+
+	/* 隕石の連続破壊処理 */
+	if (!destroyQueue_.empty()) {
+		destroyTimer_ += dt;
+		while (destroyTimer_ >= kDestroyInterval && !destroyQueue_.empty()) {
+			destroyTimer_ -= kDestroyInterval;
+
+			FlyingObject* target = destroyQueue_.front();
+			destroyQueue_.pop();
+
+			// まだ生きている場合のみ破壊を実行
+			if (target && !target->IsDead()) {
+				target->Dead();
+				// Cygnus::SoundManager::GetInstance()->Play("", false, 0.75f);
+			}
+		}
+	}
 
 	// オブジェクト更新
 	for (auto& obj : objects_) {
@@ -68,6 +92,16 @@ void FlyingObjectManager::Debug() {
 
 	ImGui::End();
 #endif
+}
+
+void FlyingObjectManager::DestroyAllMeteorsSequential() {
+	// 現在存在するオブジェクトの中から隕石だけを抽出してキューに追加
+	for (auto& obj : objects_) {
+		if (!obj->IsDead() && obj->GetCategory() == ObjectCategory::Meteor) {
+			destroyQueue_.push(obj.get());
+		}
+	}
+	destroyTimer_ = 0.0f;
 }
 
 void FlyingObjectManager::AutoSpawn() {
@@ -125,5 +159,23 @@ void FlyingObjectManager::AutoSpawn() {
 		bool isRightToLeft = true;
 		auto pos = GetRandomSpawnPos(rng->RandomValue(kSpawnMinY, kMiddleLimitY), isRightToLeft);
 		Spawn<RepairPartHigh>(pos, isRightToLeft);
+	}
+
+	// ハート（回復）
+	timerHeartItem_ += dt;
+	if (timerHeartItem_ >= kIntervalHeartItem) {
+		timerHeartItem_ = 0.0f;
+		bool isRightToLeft = true;
+		auto pos = GetRandomSpawnPos(rng->RandomValue(kMiddleLimitY, kUpperLimitY), isRightToLeft); // 中品質パーツと同じ高さ
+		Spawn<HeartItem>(pos, isRightToLeft);
+	}
+
+	// 爆弾（隕石全破壊）
+	timerBombItem_ += dt;
+	if (timerBombItem_ >= kIntervalBombItem) {
+		timerBombItem_ = 0.0f;
+		bool isRightToLeft = true;
+		auto pos = GetRandomSpawnPos(rng->RandomValue(kSpawnMinY, kMiddleLimitY), isRightToLeft); // 高品質パーツと同じ高さ
+		Spawn<BombItem>(pos, isRightToLeft);
 	}
 }

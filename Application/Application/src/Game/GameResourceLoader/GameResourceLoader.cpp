@@ -113,6 +113,20 @@ void GameResourceLoader::LoadAllModelData() {
 		"RepairPartHigh/repairpartHigh.obj",
 		"repairpartHigh.png"
 	);
+
+	// ハート（回復）
+	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+		"HeartItem", 
+		"HeartItem/heartItem.obj", 
+		"heartItem.png"
+	);
+
+	// 爆弾（隕石全破壊）
+	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+		"BombItem", 
+		"BombItem/bombItem.obj", 
+		"bombItem.png"
+	);
 }
 
 void GameResourceLoader::RegisterAllParticleEffect() {
