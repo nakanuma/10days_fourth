@@ -8,6 +8,7 @@
 #include <LineDrawer.h>
 #include <Easing.h>
 #include <SoundManager.h>
+#include <ParticleEffect/ParticleEffectManager.h>
 
 // Application
 #include <src/Game/Objects/Spaceship/Spaceship.h>
@@ -112,38 +113,37 @@ void Player::Debug() {
 #endif
 }
 
-void Player::StartRewind()
-{
+void Player::StartRewind() {
 	// 巻取りを実行する
-	if(!isRewinding_) {
+	if (!isRewinding_) {
 		isRewinding_ = true;
 	}
 }
 
-void Player::OnCollision(Cygnus::Collider* other)
-{
+void Player::OnCollision(Cygnus::Collider* other) {
 	const std::string& tag = other->GetTag();
 
 	/* 隕石との衝突処理 */
 	if (tag == "MeteorSmall" || tag == "MeteorLarge") {
 		Cygnus::SoundManager::GetInstance()->Play("se_collide", false, 0.75f); // SE再生（衝突）
 		ApplyDamage(1); // ダメージを与える
+
 	}
 
 	/* 各修理パーツとの衝突 */
-	if(other->GetTag() == "RepairPartLow") {
+	if (other->GetTag() == "RepairPartLow") {
 		repairPartLowCount_++;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
 		if (onPickupPartCallback_) onPickupPartCallback_(PartType::Low, object_->transform_.translate_);
 	}
-	if(other->GetTag() == "RepairPartMedium") {
+	if (other->GetTag() == "RepairPartMedium") {
 		repairPartMediumCount_++;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
 		if (onPickupPartCallback_) onPickupPartCallback_(PartType::Medium, object_->transform_.translate_);
 	}
-	if(other->GetTag() == "RepairPartHigh") {
+	if (other->GetTag() == "RepairPartHigh") {
 		repairPartHighCount_++;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
@@ -201,11 +201,12 @@ void Player::Move() {
 		if(object_->transform_.translate_.y < -5.0f) {
 			autoRewindTimer_ += dt;
 			// 自動巻き取りの限界時間（酸素ゲージ）に達したら自動巻き取り開始
-			if(autoRewindTimer_ >= kDefaultAutoRewindTime) {
+			if (autoRewindTimer_ >= kDefaultAutoRewindTime) {
 				StartRewind();
 				Cygnus::SoundManager::GetInstance()->Play("se_return", false, 0.75f); // SE再生（帰還）
 			}
-		} else {
+		}
+		else {
 			autoRewindTimer_ = 0.0f; // 上部にいる間はリセット
 		}
 
@@ -306,6 +307,14 @@ void Player::Move() {
 				kRotateLerpRate
 			);
 	}
+
+	// 移動時パーティクル生成
+	Cygnus::ParticleEffectManager::GetInstance()->Emit("move_player", object_->transform_.translate_,
+		1,
+		Cygnus::Float3(0, 0, 0),
+		0.0f
+	);
+
 }
 
 Cygnus::Float3 Player::GetKeyInput() { 
@@ -347,12 +356,11 @@ Cygnus::Float3 Player::Drift() {
 	float driftY = std::cosf(driftTimer_ * 1.3f) * std::sinf(driftTimer_ * 0.5f) * kDriftAmplitude;
 
 	// 移動量を返す
-	return {driftX, driftY, 0.0f};
+	return { driftX, driftY, 0.0f };
 }
 
-void Player::ProcessRewind()
-{
-	if(!spaceship_) return;
+void Player::ProcessRewind() {
+	if (!spaceship_) return;
 
 	// 宇宙船への方向ベクトルを算出
 	Cygnus::Float3 targetPos = spaceship_->GetTranslate();
@@ -369,17 +377,17 @@ void Player::ProcessRewind()
 		// 巻取り完了処理
 		isRewinding_ = false;
 		autoRewindTimer_ = 0.0f;
-		velocity_ = {0.0f, 0.0f, 0.0f};
+		velocity_ = { 0.0f, 0.0f, 0.0f };
 		return;
 	}
 
 	// 宇宙船に向かう加速度を足す
-	Cygnus::Float3 dir = {diff.x / distance, diff.y / distance, diff.z / distance};
+	Cygnus::Float3 dir = { diff.x / distance, diff.y / distance, diff.z / distance };
 	velocity_ += dir * kDefaultRewindAccel;
 
 	// 巻取り中の最高速度制御
 	float currentSpeed = std::sqrt(Cygnus::Float3::Length(velocity_));
-	if(currentSpeed > kDefaultRewindMaxSpeed) {
+	if (currentSpeed > kDefaultRewindMaxSpeed) {
 		velocity_ = (velocity_ / currentSpeed) * kDefaultRewindMaxSpeed;
 	}
 
@@ -387,11 +395,10 @@ void Player::ProcessRewind()
 	object_->transform_.translate_ += velocity_;
 }
 
-void Player::DrawAreaLimit()
-{
+void Player::DrawAreaLimit() {
 	float z = object_->transform_.translate_.z;
 
-	Cygnus::Float3 topLeft = { -kDefaultLimitX, kDefaultLimitMaxY, z};
+	Cygnus::Float3 topLeft = { -kDefaultLimitX, kDefaultLimitMaxY, z };
 	Cygnus::Float3 topRight = { kDefaultLimitX, kDefaultLimitMaxY, z };
 	Cygnus::Float3 bottomLeft = { -kDefaultLimitX, kDefaultLimitMinY, z };
 	Cygnus::Float3 bottomRight = { kDefaultLimitX, kDefaultLimitMinY, z };

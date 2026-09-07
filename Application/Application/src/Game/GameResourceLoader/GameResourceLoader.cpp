@@ -47,6 +47,13 @@ void GameResourceLoader::LoadAllModelData() {
 		"white.png"
 	);
 
+	// 黒い板
+	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
+		"BlackPlane",
+		"Primitive/Plane/plane.obj",
+		"black.png"
+	);
+
 	// スフィア
 	Cygnus::ModelManager::GetInstance()->LoadAndRegisterModel(
 		"Sphere",
@@ -130,6 +137,23 @@ void GameResourceLoader::LoadAllModelData() {
 }
 
 void GameResourceLoader::RegisterAllParticleEffect() {
+	//テンプレ―ト
+	RegisterParticle("template", "Cube");
+	//プレイヤー移動時パーティクル
+	RegisterParticle("move_player", "Cube");
+	//大隕石移動時パーティクル
+	RegisterParticle("move_large_meteor", "Cube");
+	//小隕石移動時パーティクル
+	RegisterParticle("move_small_meteor", "Cube");
+	//修理パーツ移動時パーティクル
+	RegisterParticle("move_repair", "Cube");
+	//隕石衝突パーティクル1
+	RegisterParticle("hit_meteor1", "Cube");
+	//隕石衝突パーティクル2
+	RegisterParticle("hit_meteor2", "Cube");
+	//修理パーツ衝突パーティクル
+	RegisterParticle("hit_repair", "Cube");
+
 
 }
 
