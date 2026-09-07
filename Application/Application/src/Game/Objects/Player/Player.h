@@ -74,6 +74,12 @@ public:
 	void ApplyDamage(int32_t damage = 1);
 
 	/// <summary>
+	/// 回復処理
+	/// </summary>
+	/// <param name="amount"></param>
+	void Heal(int32_t amount = 1);
+
+	/// <summary>
 	/// 残りHPの取得
 	/// </summary>
 	/// <returns></returns>
@@ -132,6 +138,12 @@ public:
 	void SetOnDamageCallback(const std::function<void(float intensity, float duration)>& callback) {
 		onDamageCallback_ = callback;
 	}
+
+	/// <summary>
+	/// 爆弾取得トリガーの取得
+	/// </summary>
+	/// <returns></returns>
+	bool IsTriggerBomb();
 
 private:
 	// =========================================================
@@ -239,6 +251,9 @@ private:
 
 	// 死亡フラグ
 	bool isDead_ = false;
+
+	// 爆弾取得トリガーフラグ
+	bool isTriggerBomb_ = false;
 
 	// -- UI --
 	std::unique_ptr<PartsCountUI> partsCountUI_;//パーツ数UI

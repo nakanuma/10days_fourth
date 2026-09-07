@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Objects\FlyingObject\BombItem\BombItem.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\HeartItem\HeartItem.cpp" />
     <ClCompile Include="src\Game\UI\Player\PlayerHPUI.cpp" />
     <ClCompile Include="src\Game\UI\Player\PlayerOxygenUI.cpp" />
     <ClCompile Include="src\Game\UI\Timer\GameTimerUI.cpp" />
@@ -50,6 +52,8 @@
     <ClCompile Include="src\Game\Util\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Objects\FlyingObject\BombItem\BombItem.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\HeartItem\HeartItem.h" />
     <ClInclude Include="src\Game\UI\Player\PlayerHPUI.h" />
     <ClInclude Include="src\Game\UI\Player\PlayerOxygenUI.h" />
     <ClInclude Include="src\Game\UI\Timer\GameTimerUI.h" />
