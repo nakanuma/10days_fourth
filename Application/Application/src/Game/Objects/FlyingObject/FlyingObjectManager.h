@@ -1,5 +1,8 @@
 #pragma once
 
+// C++
+#include <queue>
+
 // Application
 #include <src/Game/Objects/FlyingObject/Base/FlyingObject.h>
 
@@ -39,6 +42,11 @@ public:
 		newObj->Initialize(position, isRightToLeft);
 		objects_.push_back(std::move(newObj));
 	}
+
+	/// <summary>
+	/// 画面内の全隕石を時間差で連続破壊する
+	/// </summary>
+	void DestroyAllMeteorsSequential();
 
 	// =========================================================
 	// Accessor
@@ -82,6 +90,11 @@ private:
 	static constexpr float kIntervalRepairLow = 3.0f;
 	static constexpr float kIntervalRepairMid = 4.0f;
 	static constexpr float kIntervalRepairHigh = 5.0f;
+	static constexpr float kIntervalHeartItem = 15.0f;
+	static constexpr float kIntervalBombItem = 30.0f;
+
+	// 連続破壊用の設定
+	static constexpr float kDestroyInterval = 0.02f; // 破壊間隔（秒）
 
 	// =========================================================
 	// Member Variables
@@ -96,4 +109,10 @@ private:
 	float timerRepairLow_ = 0.0f;
 	float timerRepairMid_ = 0.0f;
 	float timerRepairHigh_ = 0.0f;
+	float timerHeartItem_ = 0.0f;
+	float timerBombItem_ = 0.0f;
+
+	// 連続破壊管理用
+	std::queue<FlyingObject*> destroyQueue_; // 破壊待ちリスト
+	float destroyTimer_ = 0.0f; // タイマー
 };

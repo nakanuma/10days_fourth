@@ -1,8 +1,15 @@
 #pragma once
 
+// C++
+#include <functional>
+
 // Engine
 #include <Object3D.h>
 #include <Collider/Collider.h>
+
+// UI
+#include "PartsCountUI.h"
+#include "O2TimeUI.h"
 
 // 前方宣言
 class Spaceship;
@@ -20,7 +27,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(Spaceship* spaceship);
+	void Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon);
 
 	/// <summary>
 	/// 更新処理
@@ -31,6 +38,8 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw();
+
+	void DrawUI();
 
 	/// <summary>
 	/// デバッグ表示
@@ -56,7 +65,7 @@ public:
 	/// 現在位置の取得
 	/// </summary>
 	/// <returns></returns>
-	const Cygnus::Float3& GetTranslate() { return object_->transform_.translate_; }
+	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; }
 
 	/// <summary>
 	/// ダメージ処理
@@ -65,10 +74,34 @@ public:
 	void ApplyDamage(int32_t damage = 1);
 
 	/// <summary>
+	/// 回復処理
+	/// </summary>
+	/// <param name="amount"></param>
+	void Heal(int32_t amount = 1);
+
+	/// <summary>
 	/// 残りHPの取得
 	/// </summary>
 	/// <returns></returns>
 	int32_t GetHP() const { return hp_; }
+
+	/// <summary>
+	/// 最大HPの取得
+	/// </summary>
+	/// <returns></returns>
+	static constexpr int32_t GetMaxHP() { return kMaxHP; }
+
+	/// <summary>
+	/// 自動巻き取り（酸素消費）経過時間の取得
+	/// </summary>
+	/// <returns></returns>
+	float GetAutoRewindTimer() const { return autoRewindTimer_; }
+
+	/// <summary>
+	/// 酸素限界時間の取得
+	/// </summary>
+	/// <returns></returns>
+	static constexpr float GetMaxAutoRewindTime() { return kDefaultAutoRewindTime; }
 
 	/// <summary>
 	/// 死亡フラグ取得
@@ -90,6 +123,28 @@ public:
 	int32_t GetRepairPartMediumCount() const { return repairPartMediumCount_; }
 	int32_t GetRepairPartHighCount() const { return repairPartHighCount_; }
 
+	/// <summary>
+	/// 各修理パーツの数をセット
+	/// </summary>
+	/// <param name="count"></param>
+	void SetRepairPartLowCount(int32_t count) { repairPartLowCount_ = count; }
+	void SetRepairPartMediumCount(int32_t count) { repairPartMediumCount_ = count; }
+	void SetRepairPartHighCount(int32_t count) { repairPartHighCount_ = count; }
+
+	/// <summary>
+	/// シェイク発火用のコールバック設定関数
+	/// </summary>
+	/// <param name="callback"></param>
+	void SetOnDamageCallback(const std::function<void(float intensity, float duration)>& callback) {
+		onDamageCallback_ = callback;
+	}
+
+	/// <summary>
+	/// 爆弾取得トリガーの取得
+	/// </summary>
+	/// <returns></returns>
+	bool IsTriggerBomb();
+
 private:
 	// =========================================================
 	// Internal Methods
@@ -99,6 +154,18 @@ private:
 	/// キー入力による移動処理
 	/// </summary>
 	void Move();
+
+	/// <summary>
+	/// キーボード用入力ベクトル
+	/// </summary>
+	/// <returns></returns>
+	Cygnus::Float3 GetKeyInput();
+
+	/// <summary>
+	/// ゲームパッド用入力ベクトル
+	/// </summary>
+	/// <returns></returns>
+	Cygnus::Float3 GetPadInput();
 
 	/// <summary>
 	/// 無入力時の漂うオフセットを取得
@@ -135,7 +202,7 @@ private:
 	// 移動範囲の初期定数
 	static constexpr float kDefaultLimitMinY = -60.0f;
 	static constexpr float kDefaultLimitMaxY = 0.0f;
-	static constexpr float kDefaultLimitX = 25.0f;
+	static constexpr float kDefaultLimitX = 30.0f;
 
 	// 巻取り用パラメーター
 	static constexpr float kDefaultAutoRewindTime = 10.0f; // 自動巻き取りまでの限界時間（秒）
@@ -143,8 +210,13 @@ private:
 	static constexpr float kDefaultRewindMaxSpeed = 0.75f; // 巻取り時の最高速度
 	static constexpr float kRewindStopDistance = 2.0f; // 宇宙船にこの距離まで近づいたら終了
 
+	// 回転制御用パラメーター
+	static constexpr float kMaxTiltZ = 0.35f; // 左右移動時の最大傾き角度
+	static constexpr float kMaxTiltX = 0.25f; // 上下移動時の最大前後の傾き
+	static constexpr float kRotateLerpRate = 0.08f; // 角度の追従速度
+
 	// その他パラメーター
-	static constexpr int32_t kMaxHP = 3; // 最大HP
+	static constexpr int32_t kMaxHP = 5; // 最大HP
 
 	// =========================================================
 	// Member Variables
@@ -179,4 +251,14 @@ private:
 
 	// 死亡フラグ
 	bool isDead_ = false;
+
+	// 爆弾取得トリガーフラグ
+	bool isTriggerBomb_ = false;
+
+	// -- UI --
+	std::unique_ptr<PartsCountUI> partsCountUI_;//パーツ数UI
+	std::unique_ptr<O2TimeUI> o2TimeUI_;//酸素UI
+
+	// その他
+	std::function<void(float intensity, float duration)> onDamageCallback_ = nullptr;
 };

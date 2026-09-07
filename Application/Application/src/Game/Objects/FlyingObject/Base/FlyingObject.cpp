@@ -2,6 +2,7 @@
 
 // Engine
 #include <Collider/CollisionManager.h>
+#include <RandomGenerator.h>
 #include <ParticleEffect/ParticleEffectManager.h>
 
 void FlyingObject::Initialize(const Cygnus::Float3& position, bool isRightToLeft) {
@@ -10,9 +11,18 @@ void FlyingObject::Initialize(const Cygnus::Float3& position, bool isRightToLeft
 	// 移動方向の設定
 	directionX_ = isRightToLeft ? -1.0f : 1.0f;
 
+	// 基準Y座標と位相オフセットの初期化
+	basePositionY_ = position.y;
+	waveTimer_ = 0.0f;
+	sinPhaseOffset_ = position.x * 0.1f; // 出現X座標から少し位相をずらす
+
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->transform_.translate_ = position;
+
+	// 初期の回転角度をランダムに設定
+	auto random = Cygnus::RandomGenerator::GetInstance();
+	object_->transform_.rotate_ = random->RandomValue({0.0f, 0.0f, 0.0f}, {6.28f, 6.28f, 6.28f});
 }
 
 void FlyingObject::Update() {
@@ -20,8 +30,16 @@ void FlyingObject::Update() {
 
 	// 右から左への移動
 	object_->transform_.translate_.x += speed_ * directionX_;
+
+	// 漂い計算
+	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+	waveTimer_ += dt * kWaveFrequency;
+
+	// 基準Y座標に対してsinのオフセットを加算
+	object_->transform_.translate_.y = basePositionY_ + std::sinf(waveTimer_ + sinPhaseOffset_) * kWaveAmplitude;
+
 	// 回転処理（仮）
-	object_->transform_.rotate_.z += rotationSpeed_;
+	object_->transform_.rotate_ += rotationSpeed_;
 
 	// 画面外に達したら自動で削除
 	if(directionX_ < 0.0f && object_->transform_.translate_.x < -kDespawnX) { // 右から左へ移動している場合

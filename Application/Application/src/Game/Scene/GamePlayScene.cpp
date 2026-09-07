@@ -12,6 +12,7 @@
 
 // C++
 #include <numbers>
+#include <random>
 
 // Engine
 #include <Engine/Scene/SceneManager.h>
@@ -19,6 +20,7 @@
 #include <Collider/CollisionManager.h>
 
 // Application
+#include <src/Game/Util/GameResult/GameResultManager.h>
 
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
@@ -48,9 +50,21 @@ void GamePlayScene::Initialize() {
 	postEffectManager_ = std::make_unique<Cygnus::PostEffectManager>();
 	postEffectManager_->Initialize();
 
+	// SkyBoxのパラメーター設定
+	Cygnus::SkyBoxManager::GetInstance()->SetTranslate({ 0.0f, 0.0f, 1500.0f });
+	Cygnus::SkyBoxManager::GetInstance()->SetRotate({ 0.37f, 1.29f, 0.26f });
+	Cygnus::SkyBoxManager::GetInstance()->SetColor({ 0.5f, 0.3f, 1.0f, 1.0f });
+
 	///
 	///	↓ ゲームシーン用
 	///
+
+	gameTimer_ = 0.0f;
+	isTransitionStarted_ = false;
+
+	// ポーズメニュー生成
+	pauseMenu_ = std::make_unique<PauseMenu>();
+	pauseMenu_->Initialize(spriteCommon_.get());
 
 	// 宇宙船生成 + 初期化
 	spaceship_ = std::make_unique<Spaceship>();
@@ -58,7 +72,10 @@ void GamePlayScene::Initialize() {
 
 	// プレイヤー生成 + 初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(spaceship_.get());
+	player_->Initialize(spaceship_.get(),spriteCommon_.get());
+	player_->SetOnDamageCallback([this](float intensity, float duration){ // カメラシェイク発火の関数をセット
+			StartCameraShake(intensity, duration);
+		}); 
 
 	// 命綱生成 + 初期化
 	tether_ = std::make_unique<Tether>();
@@ -67,33 +84,113 @@ void GamePlayScene::Initialize() {
 	// 飛翔物管理クラス生成 + 初期化
 	flyingObjectManager_ = std::make_unique<FlyingObjectManager>();
 	flyingObjectManager_->Initialize();
+
+	// ゲームUI作成
+	gameHUD_ = std::make_unique<GameHUD>();
+	gameHUD_->Initialize(spriteCommon_.get(), player_.get(), spaceship_.get());
+
+	// シーンの開始時にフェードインを実行
+	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
+
+	// BGM再生
+	Cygnus::SoundManager::GetInstance()->Play("bgm_gameplay", true, 0.5f);
 }
 
-void GamePlayScene::Finalize() { }
+void GamePlayScene::Finalize() { 
+	Cygnus::SoundManager::GetInstance()->Stop("bgm_gameplay");
+}
 
 void GamePlayScene::Update() {
 	Cygnus::LightManager::GetInstance()->ClearEmissiveLights(); // エミッシブライトをクリア
 	Cygnus::LightManager::GetInstance()->ClearAreaLights();     // エリアライトをクリア
 	Cygnus::SkyBoxManager::GetInstance()->Update(); // SkyBox更新
 
+	// フェードトランジション更新（ポーズの前で更新）
+	FadeTransition::GetInstance()->Update();
+
+	// ポーズメニュー更新
+	pauseMenu_->Update();
+	// ポーズ中なら以降の更新をスキップ
+	if (pauseMenu_->IsPaused() || pauseMenu_->IsJustUnpaused()) { // ポーズ中のボタン押下による誤発火のため、解除された直後1フレームもゲームの更新をスキップ
+		return;
+	}
+
+	///
+	/// シーン遷移条件
+	/// 
+
+	if (!isTransitionStarted_ && FadeTransition::GetInstance()->IsFinished()) {
+		/* ゲームクリア: 宇宙船の耐久度が完全回復した場合 */
+		if (spaceship_->IsFullyRepaired()) {
+			GameResultManager::SetResult(GameResult::Clear);
+			isTransitionStarted_ = true;
+		}
+		/* ゲームオーバー: プレイヤーのHPが0 */
+		else if (player_->IsDead()) {
+			GameResultManager::SetResult(GameResult::GameOver);
+			isTransitionStarted_ = true;
+		}
+		/* ゲームオーバー: 制限時間の経過 */
+		else if (gameTimer_ >= kMaxGameTime) {
+			GameResultManager::SetResult(GameResult::GameOver);
+			isTransitionStarted_ = true;
+		}
+
+		// 遷移条件を満たした場合にフェードアウト開始
+		if (isTransitionStarted_) {
+			FadeTransition::GetInstance()->StartFadeOut(
+				1.0f, 
+				[]() { 
+					Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT"); 
+					Cygnus::CollisionManager::GetInstance()->Clear();
+				}, 
+				0.5f
+			);
+		}
+	}
+
+	// ゲームの経過時間を更新
+	if (!isTransitionStarted_) {
+		gameTimer_ += Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+	}
+
 	///
 	///	オブジェクト更新処理
 	/// 
 	
+	bool wasRewinding = player_->IsRewinding(); // プレイヤーの巻取り状態を保持して更新
 	// プレイヤー更新
 	player_->Update();
+
+	// 巻取り完了時のUI発火
+	if(wasRewinding && !player_->IsRewinding()) {
+		if(gameHUD_) {
+			gameHUD_->StartConsumingParts();
+		}
+	}
+
 	// 宇宙船更新
 	spaceship_->Update();
 	// 命綱更新
 	tether_->Update();
 	// 飛翔物管理クラス更新
 	flyingObjectManager_->Update();
+	if (player_->IsTriggerBomb()) { // プレイヤーが爆弾アイテムを取得したら一括隕石破壊
+		flyingObjectManager_->DestroyAllMeteorsSequential();
+	}
+	// ゲームUI更新
+	float remainingTime = kMaxGameTime - gameTimer_;
+	gameHUD_->Update(remainingTime);
 
 	// 命綱と飛翔物の衝突判定
 	tether_->CheckCollisionWithFlyingObjects(flyingObjectManager_.get());
 
 	// カメラの更新処理
 	UpdateCamera();
+
+	///
+	///	スプライト更新処理
+	///
 
 	///
 	///	共通更新処理
@@ -208,7 +305,16 @@ void GamePlayScene::Draw() {
 	/// ↓ ここからスプライト描画
 	/// =========================================================
 
+	// プレイヤーUI描画
+	player_->DrawUI();
 
+	// ゲームUI描画
+	gameHUD_->Draw();
+	// ポーズメニュー描画
+	pauseMenu_->Draw();
+
+	// フェードトランジション描画
+	FadeTransition::GetInstance()->Draw();
 
 	/// =========================================================
 	/// ↑ ここまでスプライト描画
@@ -229,6 +335,8 @@ void GamePlayScene::Draw() {
 
 	// コライダーデバッグ表示
 	Cygnus::CollisionManager::GetInstance()->Debug();
+	// スカイボックスデバッグ表示
+	Cygnus::SkyBoxManager::GetInstance()->Debug();
 #endif
 
 	// ImGuiの内部コマンドを生成する
@@ -243,10 +351,27 @@ void GamePlayScene::Debug() {
 #ifdef USE_IMGUI
 	ImGui::Begin("GamePlaySceneInfo");
 
+	if (ImGui::Button("TITLE")) {
+		Cygnus::SceneManager::GetInstance()->ChangeScene("TITLE");
+		Cygnus::CollisionManager::GetInstance()->Clear(); // シーン変更時にはコライダーのクリアが必須
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("RESULT")) {
+		Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT");
+		Cygnus::CollisionManager::GetInstance()->Clear(); // シーン変更時にはコライダーのクリアが必須
+	}
+
+	ImGui::Separator();
+	ImGui::Text("GameTimer: %.2f / %.2f", gameTimer_, kMaxGameTime);
+
 	ImGui::Text("fps:%.2f", ImGui::GetIO().Framerate);
 
 	ImGui::DragFloat3("camera.translate", &camera_->transform_.translate_.x, 0.01f);
 	ImGui::DragFloat3("camera.rotate", &camera_->transform_.rotate_.x, 0.01f);
+
+	if(ImGui::Button("Shake")) {
+		StartCameraShake(5.0f, 1.0f);
+	}
 
 	ImGui::End();
 #endif
@@ -255,20 +380,73 @@ void GamePlayScene::Debug() {
 void GamePlayScene::UpdateCamera() {
 	if (!camera_ || !player_) return;
 
-	// プレイヤーのY座標を取得
-	float playerY = player_->GetTranslate().y;
+	float deltaTime = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+	Cygnus::Float3 playerPos = player_->GetTranslate();
 
-	// プレイヤーのY座標から進行割合を計算
-	float t = 0.0f;
+	/* 基準となる高さ（Y座標）に応じた引きカメラの位置計算 */
+	float tBaseY = 0.0f;
 	float rangeY = playerBottomY_ - playerTopY_;
-	if (std::abs(rangeY) > 0.0001f) {
-		t = (playerY - playerTopY_) / rangeY;
+	if(std::abs(rangeY) > 0.0001f) {
+		tBaseY = (std::clamp)((playerPos.y - playerTopY_) / rangeY, 0.0f, 1.0f);
+	}
+	Cygnus::Float3 baseCameraPos = Cygnus::Float3::Lerp(cameraTopPos_, cameraBottomPos_, tBaseY);
+
+	/* 上下左右への移動に伴うわずかなカメラシフト & 回転計算 */
+	// X軸の正規化割合
+	float tX = (std::clamp)(playerPos.x / playerLimitX_, -1.0f, 1.0f);
+
+	// Y軸の正規化割合
+	float tY = (std::clamp)(playerPos.y / playerLimitY_, -1.0f, 1.0f);
+
+	// 移動オフセット（右に行けば+X, 上に行けば+Y へわずかにカメラをずらす）
+	Cygnus::Float3 targetPosOffset = {
+		tX * maxCameraShift_.x,
+		tY * maxCameraShift_.y,
+		0.0f
+	};
+
+	// 回転角度
+	Cygnus::Float3 targetRotate = {
+		-tY * maxCameraAngle_.x,
+		tX * maxCameraAngle_.y,
+		0.0f
+	};
+
+	/* 被弾時のカメラシェイク（徐々に減衰） */
+	Cygnus::Float3 shakeOffset = {0.0f, 0.0f, 0.0f};
+
+	if(shakeTimer_ > 0.0f) {
+		shakeTimer_ -= deltaTime;
+
+		float decay = (std::clamp)(shakeTimer_ / shakeDuration_, 0.0f, 1.0f);
+		float currentIntensity = shakeIntensity_ * decay;
+
+		static std::random_device rd;
+		static std::mt19937 gen(rd());
+		std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
+
+		shakeOffset.x = dist(gen) * currentIntensity;
+		shakeOffset.y = dist(gen) * currentIntensity;
+
+		if(shakeTimer_ <= 0.0f) {
+			shakeTimer_ = 0.0f;
+		}
 	}
 
-	// 割合tに基づいて目標カメラ座標を線形補間で計算
-	Cygnus::Float3 targetCameraPos = Cygnus::Float3::Lerp(cameraTopPos_, cameraBottomPos_, t);
+	/* カメラ座標および角度の線形補間適用 */
+	Cygnus::Float3 finalTargetPos = {
+		baseCameraPos.x + targetPosOffset.x + shakeOffset.x,
+		baseCameraPos.y + targetPosOffset.y + shakeOffset.y,
+		baseCameraPos.z + targetPosOffset.z
+	};
 
-	// 現在のカメラ位置から目標位置へ滑らかに追従移動
-	Cygnus::Float3 currentCameraPos = camera_->transform_.translate_;
-	camera_->transform_.translate_ = Cygnus::Float3::Lerp(currentCameraPos, targetCameraPos, cameraInterpolation_);
+	// 計算結果をカメラに適用
+	camera_->transform_.translate_ = Cygnus::Float3::Lerp(camera_->transform_.translate_, finalTargetPos, cameraInterpolation_);
+	camera_->transform_.rotate_ = Cygnus::Float3::Lerp(camera_->transform_.rotate_, targetRotate, cameraInterpolation_);
+}
+
+void GamePlayScene::StartCameraShake(float intensity, float duration) {
+	shakeIntensity_ = intensity;
+	shakeDuration_ = duration;
+	shakeTimer_ = duration;
 }

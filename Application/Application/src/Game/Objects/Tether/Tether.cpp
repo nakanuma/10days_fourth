@@ -4,6 +4,7 @@
 #include <ImguiWrapper.h>
 #include <LineDrawer.h>
 #include <Collider/CollisionMath.h>
+#include <SoundManager.h>
 #include <ParticleEffect/ParticleEffectManager.h>
 
 // Application
@@ -111,7 +112,7 @@ void Tether::Draw() {
 			Cygnus::Float3 currentPoint = Cygnus::Float3::CatmullRomInterplation(p0, p1, p2, p3, t);
 
 			// 曲線用ラインの登録
-			Cygnus::LineDrawer::GetInstance()->RegisterLine(prevPoint, currentPoint, {1.0f, 0.0f, 0.0f, 1.0f});
+			Cygnus::LineDrawer::GetInstance()->RegisterLine(prevPoint, currentPoint, {1.0f, 1.0f, 1.0f, 1.0f});
 			prevPoint = currentPoint;
 		}
 	}
@@ -148,6 +149,7 @@ void Tether::CheckCollisionWithFlyingObjects(FlyingObjectManager* flyingObjectMa
 				if (obj->GetCategory() == ObjectCategory::Meteor) {
 					// プレイヤーにダメージを与える
 					player_->ApplyDamage(1);
+					Cygnus::SoundManager::GetInstance()->Play("se_collide", false, 0.75f); // SE再生（衝突）
 					// 飛翔物を消滅させる
 					obj->Dead();
 					//パーティクルを発生させる
