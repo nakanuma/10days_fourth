@@ -151,6 +151,8 @@ void GameResourceLoader::RegisterAllParticleEffect() {
 	RegisterParticle("hit_meteor1", "Cube");
 	//隕石衝突パーティクル2
 	RegisterParticle("hit_meteor2", "Cube");
+	//修理パーツ衝突パーティクル
+	RegisterParticle("hit_repair", "Cube");
 
 
 }

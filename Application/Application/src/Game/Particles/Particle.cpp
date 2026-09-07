@@ -98,6 +98,16 @@ void Particle::LoadJsonData(const std::string& fileName) {
 		j["maxRotationSpeed"][1],
 		j["maxRotationSpeed"][2]
 	};
+	constantsData_.minScaleSpeed = {
+		j["minScaleSpeed"][0],
+		j["minScaleSpeed"][1],
+		j["minScaleSpeed"][2]
+	};
+	constantsData_.maxScaleSpeed = {
+		j["maxScaleSpeed"][0],
+		j["maxScaleSpeed"][1],
+		j["maxScaleSpeed"][2]
+	};
 	constantsData_.minAccerelation = {
 		j["minAccerelation"][0],
 		j["minAccerelation"][1],

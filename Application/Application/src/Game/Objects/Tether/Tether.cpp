@@ -5,7 +5,6 @@
 #include <LineDrawer.h>
 #include <Collider/CollisionMath.h>
 #include <SoundManager.h>
-#include <ParticleEffect/ParticleEffectManager.h>
 
 // Application
 #include <src/Game/Objects/Spaceship/Spaceship.h>
@@ -152,19 +151,6 @@ void Tether::CheckCollisionWithFlyingObjects(FlyingObjectManager* flyingObjectMa
 					Cygnus::SoundManager::GetInstance()->Play("se_collide", false, 0.75f); // SE再生（衝突）
 					// 飛翔物を消滅させる
 					obj->Dead();
-					//パーティクルを発生させる
-					Cygnus::ParticleEffectManager::GetInstance()->Emit("hit_meteor1", obj->GetTranslate(),
-						15,
-						Cygnus::Float3(0, 0, 0),
-						0.0f
-					);
-					Cygnus::ParticleEffectManager::GetInstance()->Emit("hit_meteor2", obj->GetTranslate(),
-						30,
-						Cygnus::Float3(0, 0, 0),
-						0.0f
-					);
-					
-
 				}
 				// 修理パーツとの衝突時処理
 				if (obj->GetCategory() == ObjectCategory::RepairPart) {

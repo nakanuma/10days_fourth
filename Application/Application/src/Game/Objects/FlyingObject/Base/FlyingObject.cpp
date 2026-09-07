@@ -86,24 +86,33 @@ void FlyingObject::OnCollision(Cygnus::Collider* other)
 {
 	// 衝突相手がプレイヤーの場合、死亡させる
 	if(other->GetTag() == "Player") {
-		isDead_ = true;
+		Dead();
+	}
+}
 
-		//分類ごとに衝突パーティクルを生成
-		if(subCategory_ == "meteor_large"|| subCategory_ == "meteor_small") {
-			Cygnus::ParticleEffectManager::GetInstance()->Emit("hit_meteor1", object_->transform_.translate_,
-				15,
-				Cygnus::Float3(0, 0, 0),
-				0.0f
-			);
-			Cygnus::ParticleEffectManager::GetInstance()->Emit("hit_meteor2", object_->transform_.translate_,
-				30,
-				Cygnus::Float3(0, 0, 0),
-				0.0f
-			);
-		} else if(subCategory_ == "repair") {
-			
-		}
+void FlyingObject::Dead()
+{
+	isDead_ = true;
 
+	//分類ごとに衝突パーティクルを生成
+	if (subCategory_ == "meteor_large" || subCategory_ == "meteor_small") {
+		Cygnus::ParticleEffectManager::GetInstance()->Emit("hit_meteor1", object_->transform_.translate_,
+			15,
+			Cygnus::Float3(0, 0, 0),
+			0.0f
+		);
+		Cygnus::ParticleEffectManager::GetInstance()->Emit("hit_meteor2", object_->transform_.translate_,
+			25,
+			Cygnus::Float3(0, 0, 0),
+			0.0f
+		);
+	}
+	else if (subCategory_ == "repair") {
+		Cygnus::ParticleEffectManager::GetInstance()->Emit("hit_repair", object_->transform_.translate_,
+			10,
+			Cygnus::Float3(0, 0, 0),
+			0.0f
+		);
 	}
 }
 

@@ -307,6 +307,16 @@ void ParticleEditorSystem::Debug() {
 					constantsData.maxRotationSpeed.y,
 					constantsData.maxRotationSpeed.z
 				};
+				jsonData["minScaleSpeed"] = {
+					constantsData.minScaleSpeed.x,
+					constantsData.minScaleSpeed.y,
+					constantsData.minScaleSpeed.z
+				};
+				jsonData["maxScaleSpeed"] = {
+					constantsData.maxScaleSpeed.x,
+					constantsData.maxScaleSpeed.y,
+					constantsData.maxScaleSpeed.z
+				};
 				jsonData["minAccerelation"] = {
 					constantsData.minAccerelation.x,
 					constantsData.minAccerelation.y,

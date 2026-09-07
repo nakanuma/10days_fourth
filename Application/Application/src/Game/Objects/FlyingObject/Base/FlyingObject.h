@@ -84,7 +84,7 @@ public:
 	/// <summary>
 	/// 死亡させる
 	/// </summary>
-	void Dead() { isDead_ = true; }
+	void Dead();
 
 	/// <summary>
 	/// コライダーを破棄する
