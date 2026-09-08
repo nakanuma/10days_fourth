@@ -4,9 +4,10 @@
 #include <TimeManager.h>
 #include <ImguiWrapper.h>
 
-void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player, const Spaceship* spaceship) {
+void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player, Spaceship* spaceship) {
 	spriteCommon_ = spriteCommon;
 	player_ = player;
+	spaceship_ = spaceship;
 
 	/* ŠeUI¶¬+‰Šú‰» */
 	
@@ -72,6 +73,9 @@ void GameHUD::Update(float remainingTime, Tether* tether, FlyingObjectManager* f
 	playerHPUI_->Update();
 	playerOxygenUI_->Update();
 	spaceshipDurabilityUI_->Update();
+	if(spaceship_ && spaceshipDurabilityUI_) {
+		spaceship_->SetIsRepairing(spaceshipDurabilityUI_->IsGaugeCatchingUp());
+	}
 	controlGuideUI_->Update();
 	gameTimerUI_->Update(remainingTime);
 	dangerWarningUI_->Update(player_, tether, flyingObjectManager);

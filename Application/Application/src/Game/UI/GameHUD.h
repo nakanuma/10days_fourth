@@ -29,7 +29,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player, const Spaceship* spaceship);
+	void Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player, Spaceship* spaceship);
 
 	/// <summary>
 	/// 更新処理
@@ -90,6 +90,7 @@ private:
 
 	Cygnus::SpriteCommon* spriteCommon_ = nullptr;
 	Player* player_;
+	Spaceship* spaceship_;
 
 	/* 各UI */
 	std::unique_ptr<PartsInventoryUI> partsInventoryUI_; // プレイヤーのパーツ所持数UI

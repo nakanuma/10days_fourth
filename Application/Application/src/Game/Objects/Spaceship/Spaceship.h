@@ -70,6 +70,12 @@ public:
 	/// <returns></returns>
 	bool IsFullyRepaired() const { return durability_ >= kMaxDurability; }
 
+	/// <summary>
+	/// UI側のゲージ追従状態に合わせてアニメーションフラグを更新
+	/// </summary>
+	/// <param name="isRepairing"></param>
+	void SetIsRepairing(bool isRepairing) { isRepairing_ = isRepairing; }
+
 private:
 	// =========================================================
 	// Internal Methods
@@ -79,6 +85,11 @@ private:
 	/// 無入力時の漂うオフセットを取得
 	/// </summary>
 	void Drift();
+
+	/// <summary>
+	/// 修理中の縦横拡縮アニメーション
+	/// </summary>
+	void UpdateRepairAnimation();
 
 private:
 	// =========================================================
@@ -104,6 +115,11 @@ private:
 	// まとめ持ちボーナス倍率（1個増えるごとの加算倍率）
 	static constexpr float kBonusMultiplierPerItem = 0.1f; // 例: 5個持って帰ると +40％（1.4倍）
 
+	// アニメーション用
+	static constexpr float kRepairAnimSpeed = 15.0f; // 拡縮の速さ
+	static constexpr float kRepairAnimScaleX = 0.15f; // 横方向の触れ幅
+	static constexpr float kRepairAnimScaleY = 0.15f; // 縦方向の振れ幅
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
@@ -122,5 +138,9 @@ private:
 
 	// 耐久力（最初は0スタート）
 	float durability_ = 0.0f;
+
+	// アニメーション用
+	bool isRepairing_ = false; // UI上で修理中かどうか
+	float repairAnimTimer_ = 0.0f; // アニメーション用タイマー
 };
 
