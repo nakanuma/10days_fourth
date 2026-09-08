@@ -3,6 +3,7 @@
 #include <src/Game/Scene/TitleScene.h>
 #include <src/Game/Scene/GamePlayScene.h>
 #include <src/Game/Scene/ResultScene.h>
+#include <src/Game/Scene/TutorialScene.h>
 #include <src/Game/Scene/ParticleEditorScene.h>
 
 SceneFactory* SceneFactory::GetInstance() {
@@ -15,7 +16,13 @@ std::unique_ptr<Cygnus::BaseScene> SceneFactory::CreateScene(const std::string& 
 		auto newScene = std::make_unique<TitleScene>();
 		newScene->Initialize();
 		return newScene;
-	} else if (sceneName == "GAMEPLAY") {
+	}
+	else if (sceneName == "TUTORIAL") {
+		auto newScene = std::make_unique<TutorialScene>();
+		newScene->Initialize();
+		return newScene;
+	}
+	else if (sceneName == "GAMEPLAY") {
 		auto newScene = std::make_unique<GamePlayScene>();
 		newScene->Initialize();
 		return newScene;

@@ -413,7 +413,7 @@ void TitleScene::ProcessMenuInput()
 			FadeTransition::GetInstance()->StartFadeOut(
 				1.0f,
 				[]() {
-					Cygnus::SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+					Cygnus::SceneManager::GetInstance()->ChangeScene("TUTORIAL");
 				},
 				0.5f
 			);

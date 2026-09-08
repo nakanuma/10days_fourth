@@ -30,6 +30,8 @@
     <ClCompile Include="src\Game\Objects\Tether\Tether.cpp" />
     <ClCompile Include="src\Game\Scene\TitleScene.cpp" />
     <ClCompile Include="src\Game\Util\Utility.cpp" />
+    <ClCompile Include="src\Game\Scene\TutorialScene.cpp" />
+    <ClCompile Include="src\Game\UI\Explain\ExplainUI.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\HeartItem\HeartItem.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\BombItem\BombItem.cpp" />
     <ClCompile Include="src\Game\UI\PartsUI\ItemPopupUI.cpp" />
@@ -70,6 +72,8 @@
     <ClInclude Include="src\Game\Objects\Tether\Tether.h" />
     <ClInclude Include="src\Game\Scene\TitleScene.h" />
     <ClInclude Include="src\Game\Util\Utility.h" />
+    <ClInclude Include="src\Game\Scene\TutorialScene.h" />
+    <ClInclude Include="src\Game\UI\Explain\ExplainUI.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\HeartItem\HeartItem.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\BombItem\BombItem.h" />
     <ClInclude Include="src\Game\UI\PartsUI\ItemPopupUI.h" />
