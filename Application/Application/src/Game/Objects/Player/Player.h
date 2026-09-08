@@ -13,6 +13,7 @@
 
 // 前方宣言
 class Spaceship;
+class GameHUD;
 
 // =========================================================
 // プレイヤークラス
@@ -145,6 +146,12 @@ public:
 	/// <returns></returns>
 	bool IsTriggerBomb();
 
+	/// <summary>
+	/// ゲームHUDの設定
+	/// </summary>
+	/// <param name="gameHUD"></param>
+	void SetGameHUD(GameHUD* gameHUD) { gameHUD_ = gameHUD; }
+
 private:
 	// =========================================================
 	// Internal Methods
@@ -258,6 +265,8 @@ private:
 	// -- UI --
 	std::unique_ptr<PartsCountUI> partsCountUI_;//パーツ数UI
 	std::unique_ptr<O2TimeUI> o2TimeUI_;//酸素UI
+
+	GameHUD* gameHUD_ = nullptr; // ゲームHUD
 
 	// その他
 	std::function<void(float intensity, float duration)> onDamageCallback_ = nullptr;

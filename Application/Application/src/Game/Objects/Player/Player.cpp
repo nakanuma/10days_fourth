@@ -14,6 +14,7 @@
 #include <src/Game/Objects/Spaceship/Spaceship.h>
 #include <src/Game/Objects/FlyingObject/Base/FlyingObject.h>
 #include <src/Game/Scene/PauseMenu.h>
+#include <src/Game/UI/GameHUD.h>
 
 void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon) {
 	spaceship_ = spaceship;
@@ -127,7 +128,6 @@ void Player::OnCollision(Cygnus::Collider* other) {
 	if (tag == "MeteorSmall" || tag == "MeteorLarge") {
 		Cygnus::SoundManager::GetInstance()->Play("se_collide", false, 0.75f); // SE再生（衝突）
 		ApplyDamage(1); // ダメージを与える
-
 	}
 
 	/* 各修理パーツとの衝突 */
@@ -135,22 +135,26 @@ void Player::OnCollision(Cygnus::Collider* other) {
 		repairPartLowCount_++;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
+		gameHUD_->GetValueChangeUI()->RegistDigitValue(object_->transform_.translate_, 1, { 1,1,0,1 });
 	}
 	if (other->GetTag() == "RepairPartMedium") {
 		repairPartMediumCount_++;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
+		gameHUD_->GetValueChangeUI()->RegistDigitValue(object_->transform_.translate_, 1, { 0,0,1,1 });
 	}
 	if (other->GetTag() == "RepairPartHigh") {
 		repairPartHighCount_++;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
+		gameHUD_->GetValueChangeUI()->RegistDigitValue(object_->transform_.translate_, 1, { 1,0,1,1 });
 	}
 
 	/* ハート（回復アイテム）との衝突 */
 	if (tag == "HeartItem") {
 		Heal(1); // 1回復
 		//Cygnus::SoundManager::GetInstance()->Play("", false, 0.75f);
+		gameHUD_->GetValueChangeUI()->RegistDigitValue(object_->transform_.translate_, 1, { 1,0,0,1 }); // HP変動UIをつける
 	}
 
 	/* 爆弾アイテムとの衝突 */
@@ -165,8 +169,11 @@ void Player::ApplyDamage(int32_t damage) {
 
 	hp_ -= damage;
 
+	//ダメージ数を表記
+	gameHUD_->GetValueChangeUI()->RegistDigitValue(object_->transform_.translate_, -damage, { 1,0,0,1 });
+
 	// 被ダメージ時にシェイクのコールバックを呼ぶ
-	if(onDamageCallback_) {
+	if (onDamageCallback_) {
 		onDamageCallback_(5.0f, 1.0f);
 	}
 
@@ -182,7 +189,7 @@ void Player::Heal(int32_t amount) {
 	hp_ = (std::min)(hp_ + amount, kMaxHP);
 }
 
-bool Player::IsTriggerBomb() { 
+bool Player::IsTriggerBomb() {
 	bool trigger = isTriggerBomb_;
 	isTriggerBomb_ = false; // 消費してリセット
 	return trigger;
@@ -193,9 +200,9 @@ void Player::Move() {
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 
 	/* 巻取りトリガー判定 */
-	if(!isRewinding_) {
+	if (!isRewinding_) {
 		// タイマー更新（宇宙船より下にいる間）
-		if(object_->transform_.translate_.y < -5.0f) {
+		if (object_->transform_.translate_.y < -5.0f) {
 			autoRewindTimer_ += dt;
 			// 自動巻き取りの限界時間（酸素ゲージ）に達したら自動巻き取り開始
 			if (autoRewindTimer_ >= kDefaultAutoRewindTime) {
@@ -217,12 +224,13 @@ void Player::Move() {
 	}
 
 	/* 移動力の計算 */
-	if(isRewinding_) {
+	if (isRewinding_) {
 		// 巻取り中の移動計算
 		ProcessRewind();
-	} else {
+	}
+	else {
 		// キーボードとゲームパッド双方の入力ベクトルを合算
-		Cygnus::Float3 inputVec = {0.0f, 0.0f, 0.0f};
+		Cygnus::Float3 inputVec = { 0.0f, 0.0f, 0.0f };
 		inputVec += GetKeyInput();
 		inputVec += GetPadInput();
 
@@ -239,7 +247,7 @@ void Player::Move() {
 		}
 
 		// 無入力時の処理（漂い）
-		Cygnus::Float3 driftOffset = {0.0f, 0.0f, 0.0f};
+		Cygnus::Float3 driftOffset = { 0.0f, 0.0f, 0.0f };
 		if (!isInputting) {
 			driftOffset = Drift();
 		}
@@ -278,13 +286,14 @@ void Player::Move() {
 	object_->transform_.translate_.y = clampedY;
 
 	/* 慣性回転処理 */
-	if(isRewinding_) {
+	if (isRewinding_) {
 		// 巻取り中に進行方向を向かせる
-		if(Cygnus::Float3::Length(velocity_) > 0.01f) {
+		if (Cygnus::Float3::Length(velocity_) > 0.01f) {
 			float targetAngleZ = std::atan2f(-velocity_.x, velocity_.y);
 			object_->transform_.rotate_.z = Cygnus::Easing::Lerp(object_->transform_.rotate_.z, targetAngleZ, kRotateLerpRate);
 		}
-	} else {
+	}
+	else {
 		// Z軸
 		float ratioX = velocity_.x / kMaxSpeed;
 		float targetRotateZ = -ratioX * kMaxTiltZ;
@@ -297,10 +306,10 @@ void Player::Move() {
 		float targetRotateY = ratioX * 0.2f;
 
 		// 実際に適用
-		object_->transform_.rotate_ = 
+		object_->transform_.rotate_ =
 			Cygnus::Float3::Lerp(
-				object_->transform_.rotate_, 
-				{targetRotateX, targetRotateY, targetRotateZ}, 
+				object_->transform_.rotate_,
+				{ targetRotateX, targetRotateY, targetRotateZ },
 				kRotateLerpRate
 			);
 	}
@@ -314,9 +323,9 @@ void Player::Move() {
 
 }
 
-Cygnus::Float3 Player::GetKeyInput() { 
-	auto input = Cygnus::Input::GetInstance(); 
-	Cygnus::Float3 dir = {0.0f, 0.0f, 0.0f};
+Cygnus::Float3 Player::GetKeyInput() {
+	auto input = Cygnus::Input::GetInstance();
+	Cygnus::Float3 dir = { 0.0f, 0.0f, 0.0f };
 
 	if (input->PushKey(DIK_W)) dir.y += 1.0f;
 	if (input->PushKey(DIK_S)) dir.y -= 1.0f;
@@ -326,11 +335,11 @@ Cygnus::Float3 Player::GetKeyInput() {
 	return dir;
 }
 
-Cygnus::Float3 Player::GetPadInput() { 
-	auto input = Cygnus::Input::GetInstance(); 
+Cygnus::Float3 Player::GetPadInput() {
+	auto input = Cygnus::Input::GetInstance();
 	XINPUT_STATE state;
 
-	Cygnus::Float3 dir = {0.0f, 0.0f, 0.0f};
+	Cygnus::Float3 dir = { 0.0f, 0.0f, 0.0f };
 
 	// コントローラー接続確認と状態取得
 	if (input->GetJoystickState(0, state)) {
@@ -367,7 +376,7 @@ void Player::ProcessRewind() {
 	float distance = std::sqrt(Cygnus::Float3::Length(diff));
 
 	// 宇宙船に到達したら巻取り終了
-	if(distance <= kRewindStopDistance) {
+	if (distance <= kRewindStopDistance) {
 		// 宇宙船に所持パーツを渡して自動修理を実行
 		spaceship_->Repair(repairPartLowCount_, repairPartMediumCount_, repairPartHighCount_);
 

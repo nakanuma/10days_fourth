@@ -89,6 +89,10 @@ void GamePlayScene::Initialize() {
 	gameHUD_ = std::make_unique<GameHUD>();
 	gameHUD_->Initialize(spriteCommon_.get(), player_.get(), spaceship_.get());
 
+	//インスタンスのセット
+	player_->SetGameHUD(gameHUD_.get());
+	spaceship_->SetGameHUD(gameHUD_.get());
+
 	// シーンの開始時にフェードインを実行
 	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
 

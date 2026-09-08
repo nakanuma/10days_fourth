@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Game\UI\HealthChange\HealthChangeUI.cpp" />
+    <ClCompile Include="src\Game\UI\ValueChange\ValueChangeUI.cpp" />
     <ClCompile Include="src\Game\UI\ScoreChange\ScoreChangeUI.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\BombItem\BombItem.cpp" />
     <ClCompile Include="src\Game\Objects\FlyingObject\HeartItem\HeartItem.cpp" />
@@ -59,7 +59,7 @@
     <ClCompile Include="src\Game\Util\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Game\UI\HealthChange\HealthChangeUI.h" />
+    <ClInclude Include="src\Game\UI\ValueChange\ValueChangeUI.h" />
     <ClInclude Include="src\Game\UI\ScoreChange\ScoreChangeUI.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\BombItem\BombItem.h" />
     <ClInclude Include="src\Game\Objects\FlyingObject\HeartItem\HeartItem.h" />

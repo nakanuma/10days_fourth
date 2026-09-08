@@ -28,8 +28,8 @@ void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player, con
 	gameTimerUI_->Initialize(spriteCommon);
 
 	// HP•Ï‰»UI
-	healthChangeUI_ = std::make_unique<HealthChangeUI>();
-	healthChangeUI_->Initialize(spriteCommon);
+	valueChangeUI_ = std::make_unique<ValueChangeUI>();
+	valueChangeUI_->Initialize(spriteCommon);
 
 }
 
@@ -40,7 +40,7 @@ void GameHUD::Update(float remainingTime) {
 	spaceshipDurabilityUI_->Update();
 	controlGuideUI_->Update();
 	gameTimerUI_->Update(remainingTime);
-	healthChangeUI_->Update();
+	valueChangeUI_->Update();
 }
 
 void GameHUD::Draw() {
@@ -50,5 +50,5 @@ void GameHUD::Draw() {
 	spaceshipDurabilityUI_->Draw();
 	controlGuideUI_->Draw();
 	gameTimerUI_->Draw();
-	healthChangeUI_->Draw();
+	valueChangeUI_->Draw();
 }

@@ -4,6 +4,8 @@
 #include <Object3D.h>
 #include <Collider/Collider.h>
 
+class GameHUD;
+
 // =========================================================
 // 宇宙船クラス
 // =========================================================
@@ -70,6 +72,13 @@ public:
 	/// <returns></returns>
 	bool IsFullyRepaired() const { return durability_ >= kMaxDurability; }
 
+	/// <summary>
+	/// ゲームHUDの設定
+	/// </summary>
+	/// <param name="gameHUD"></param>
+	void SetGameHUD(GameHUD* gameHUD) { gameHUD_ = gameHUD; }
+
+
 private:
 	// =========================================================
 	// Internal Methods
@@ -122,5 +131,8 @@ private:
 
 	// 耐久力（最初は0スタート）
 	float durability_ = 0.0f;
+
+	//ゲームHUD
+	GameHUD* gameHUD_ = nullptr;
 };
 

@@ -5,21 +5,24 @@
 
 // Engine
 #include <Float2.h>
+#include <Float4.h>
 #include <Sprite.h>
 #include <SpriteCommon.h>
 
 // 数字UI一塊の構造体
 struct DigitUI {
-	std::unique_ptr<Cygnus::Sprite> spriteNumber_;
+	std::unique_ptr<Cygnus::Sprite> spriteNumber_One_;
+	std::unique_ptr<Cygnus::Sprite> spriteNumber_Ten_;
 	std::unique_ptr<Cygnus::Sprite> spritePlus_;
 	std::unique_ptr<Cygnus::Sprite> spriteMinus_;
 	float timer;
+	Cygnus::Float4 color;
 };
 
 // =========================================================
 // 体力変動数字UI
 // =========================================================
-class HealthChangeUI {
+class ValueChangeUI {
 public:
 	// =========================================================
 	// Public Methods
@@ -45,7 +48,7 @@ public:
 	/// </summary>
 	/// <param name="subjectPos">対象の座標</param>
 	/// <param name="value">出力したい値</param>
-	void RegistDigitValue(Cygnus::Float3 subjectPos,int value);
+	void RegistDigitValue(Cygnus::Float3 subjectPos,int value,Cygnus::Float4 color);
 
 private:
 	// =========================================================
@@ -63,7 +66,7 @@ private:
 	// =========================================================
 
 	static constexpr float displayDuration = 1.0f; // 表示時間（秒）
-	static constexpr float upwardSpeed = 50.0f; // 上昇速度（ピクセル/秒）
+	static constexpr float upwardSpeed = -75.0f; // 上昇速度（ピクセル/秒）
 
 
 

@@ -1,6 +1,9 @@
 #include "Spaceship.h"
 #define NOMINMAX
 
+//Application
+#include <src/Game/UI/GameHUD.h>
+
 // Engine
 #include <Collider/CollisionManager.h>
 #include <ImguiWrapper.h>
@@ -97,6 +100,11 @@ void Spaceship::Repair(int32_t low, int32_t medium, int32_t high) {
 	// 最終回復量の適用
 	float actualRepair = baseRepair * multiplier;
 	durability_ = std::min(kMaxDurability, durability_ + actualRepair);
+
+	// 加算値のUI表示
+	Cygnus::Float3 uiPosition = object_->transform_.translate_ + Cygnus::Float3{ 0.0f, 5.0f, 0.0f }; // UI表示位置を調整
+	gameHUD_->GetValueChangeUI()->RegistDigitValue(uiPosition, static_cast<int>(actualRepair), { 0.0f, 1.0f, 0.0f, 1.0f });
+
 }
 
 void Spaceship::Drift() {
