@@ -228,6 +228,15 @@ private:
 	// その他パラメーター
 	static constexpr int32_t kMaxHP = 5; // 最大HP
 
+	// 拡縮アニメーション用
+	static constexpr float kPickupAnimDuration = 0.3f; // アニメーションにかかる時間
+	static constexpr float kPickupMinScale = 0.8f; // 縮小時の最小スケール倍率
+
+	// 被弾時色変更アニメーション用
+	static constexpr float kDamageFlashInDuration = 0.25f; // 0->1に伸びる時間
+	static constexpr float kDamageFlashHoldDuration = 0.1f; // 1で待機する時間
+	static constexpr float kDamageFlashOutDuration = 0.75f; // 1->0に戻る時間
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
@@ -272,4 +281,7 @@ private:
 	// その他
 	std::function<void(float intensity, float duration)> onDamageCallback_ = nullptr;
 	OnPickupPartCallback onPickupPartCallback_ = nullptr; 
+
+	float pickupAnimTimer_ = 0.0f; // 取得アニメーション用タイマー
+	float damageFlashTimer_ = 0.0f; // 演出タイマー
 };

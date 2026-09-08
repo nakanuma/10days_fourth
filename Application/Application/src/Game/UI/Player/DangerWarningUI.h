@@ -57,9 +57,9 @@ private:
 
 	// アニメーション用定数
 	static constexpr float kMinAlpha = 0.0f;
-	static constexpr float kMaxAlpha = 0.5f;
+	static constexpr float kMaxAlpha = 0.4f;
 	static constexpr float kFadeDuration = 0.3f; // フェードにかかる時間（秒）
-	static constexpr float kBlinkSpeed = 8.0f; // 点滅速度（値が大きいほど高速）
+	static constexpr float kBlinkSpeed = 5.0f; // 点滅速度（値が大きいほど高速）
 
 	// =========================================================
 	// Member Variables

@@ -17,7 +17,7 @@ void Tether::Initialize(Spaceship* spaceship, Player* player) {
 	nodes_.clear();
 	nodes_.resize(kNodeCount);
 
-	Cygnus::Float3 startPos = spaceship_->GetTranslate();
+	Cygnus::Float3 startPos = spaceship_->GetTranslate() + yOffset_;
 	Cygnus::Float3 endPos = player_->GetTranslate();
 
 	// 宇宙船からプレイヤーの位置まで等間隔にノードを配置
@@ -44,9 +44,9 @@ void Tether::Update() {
 	if (!spaceship_ || !player_) return;
 
 	// 宇宙船とプレイヤーの現在の直線距離を計算
-	Cygnus::Float3 startPos = spaceship_->GetTranslate();
+	Cygnus::Float3 startPos = spaceship_->GetTranslate() + yOffset_;
 	Cygnus::Float3 endPos = player_->GetTranslate();
-	Cygnus::Float3 diff = {endPos.x - startPos.x, endPos.y - startPos.y, endPos.z - startPos.z};
+	Cygnus::Float3 diff = { endPos.x - startPos.x, endPos.y - startPos.y, endPos.z - startPos.z };
 
 	float currentDistance = std::sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
 
@@ -60,7 +60,7 @@ void Tether::Update() {
 	}
 
 	// 両端の位置に同期
-	nodes_.front().position = spaceship_->GetTranslate();
+	nodes_.front().position = spaceship_->GetTranslate() + yOffset_;
 	nodes_.back().position = player_->GetTranslate();
 
 	// 各ノードのベレ物理更新
@@ -95,6 +95,8 @@ void Tether::Draw() {
 
 	// 補間用の分割数
 	const int kSubdivisions = 4;
+	// 線の太さ
+	const float kTetherThickness = 0.3f;
 
 	for (size_t i = 0; i < nodes_.size() - 1; ++i) {
 		// 制御点4点の取得
@@ -111,7 +113,13 @@ void Tether::Draw() {
 			Cygnus::Float3 currentPoint = Cygnus::Float3::CatmullRomInterplation(p0, p1, p2, p3, t);
 
 			// 曲線用ラインの登録
-			Cygnus::LineDrawer::GetInstance()->RegisterLine(prevPoint, currentPoint, {1.0f, 1.0f, 1.0f, 1.0f});
+			Cygnus::LineDrawer::GetInstance()->RegisterTracer(
+				prevPoint,
+				currentPoint,
+				kTetherThickness,
+				{ 1.0f, 1.0f, 1.0f, 1.0f },
+				{ 1.0f, 1.0f, 1.0f, 1.0f }
+			);
 			prevPoint = currentPoint;
 		}
 	}
@@ -127,11 +135,11 @@ void Tether::Debug() {
 #endif
 }
 
-void Tether::CheckCollisionWithFlyingObjects(FlyingObjectManager* flyingObjectManager) { 
-	if (!flyingObjectManager) return; 
+void Tether::CheckCollisionWithFlyingObjects(FlyingObjectManager* flyingObjectManager) {
+	if (!flyingObjectManager) return;
 
 	const auto& objects = flyingObjectManager->GetObjects();
-	
+
 	for (const auto& obj : objects) {
 		// 飛翔物の中心位置と判定半径を取得
 		Cygnus::Float3 objPos = obj->GetTranslate();
@@ -154,7 +162,7 @@ void Tether::CheckCollisionWithFlyingObjects(FlyingObjectManager* flyingObjectMa
 				}
 				// 修理パーツとの衝突時処理
 				if (obj->GetCategory() == ObjectCategory::RepairPart) {
-				
+
 				}
 
 				// 衝突したらこの飛翔物の判定は終了
@@ -165,7 +173,7 @@ void Tether::CheckCollisionWithFlyingObjects(FlyingObjectManager* flyingObjectMa
 }
 
 void Tether::ApplyConstraints() {
-	for(size_t i = 0; i < nodes_.size() - 1; ++i) {
+	for (size_t i = 0; i < nodes_.size() - 1; ++i) {
 		TetherNode& nodeA = nodes_[i];
 		TetherNode& nodeB = nodes_[i + 1];
 
@@ -177,7 +185,7 @@ void Tether::ApplyConstraints() {
 		};
 
 		float distance = std::sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
-		if(distance < 0.0001f) continue;
+		if (distance < 0.0001f) continue;
 
 		// 自然長からのズレ量を算出
 		float difference = (distance - currentSegmentLength_) / distance;
@@ -189,7 +197,7 @@ void Tether::ApplyConstraints() {
 		};
 
 		// 移動制限
-		if(!nodeA.isLocked && !nodeB.isLocked) {
+		if (!nodeA.isLocked && !nodeB.isLocked) {
 			nodeA.position += correction;
 			nodeB.position -= correction;
 		} else if (!nodeA.isLocked) {

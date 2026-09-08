@@ -51,6 +51,7 @@ void TitleScene::Initialize() {
 	// ポストエフェクト管理
 	postEffectManager_ = std::make_unique<Cygnus::PostEffectManager>();
 	postEffectManager_->Initialize();
+	postEffectManager_->SetEffectType(Cygnus::PSOType::Vignette);
 
 	// SkyBoxのパラメーター設定
 	Cygnus::SkyBoxManager::GetInstance()->SetTranslate({ 0.0f, 0.0f, 1500.0f });
@@ -227,7 +228,7 @@ void TitleScene::Draw() {
 	/// =========================================================
 
 #pragma region メインシーンの3Dオブジェクトのレンダリングを開始
-	/*postEffectManager_->BeginMainScene();*/
+	postEffectManager_->BeginMainScene();
 
 	// スカイボックス描画
 	Cygnus::SkyBoxManager::GetInstance()->Draw();
@@ -237,11 +238,11 @@ void TitleScene::Draw() {
 	objectPlayer_->Draw();
 
 	// -----------------------------------------------
-	/*postEffectManager_->EndMainScene();*/
+	postEffectManager_->EndMainScene();
 #pragma endregion
 
 #pragma region バックバッファへの直接描画
-	/*postEffectManager_->RestoreBackBuffer(true);*/
+	postEffectManager_->RestoreBackBuffer(true);
 	// -----------------------------------------------
 
 	// パーティクルエフェクト描画
@@ -250,7 +251,7 @@ void TitleScene::Draw() {
 	Cygnus::LineDrawer::GetInstance()->Draw();
 
 	// -----------------------------------------------
-	/*postEffectManager_->RestoreDepthBufferState();*/
+	postEffectManager_->RestoreDepthBufferState();
 #pragma endregion
 
 	/// =========================================================

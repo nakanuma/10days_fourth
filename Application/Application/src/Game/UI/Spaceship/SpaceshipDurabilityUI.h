@@ -42,6 +42,15 @@ public:
 	/// <returns></returns>
 	const Cygnus::Float3& GetSpaceshipTranslate() const { return spaceship_->GetTranslate(); }
 
+	/// <summary>
+	/// UI上でゲージが追従中（修理演出中）かどうかを取得
+	/// </summary>
+	/// <returns></returns>
+	bool IsGaugeCatchingUp() const {
+		if(!spaceship_) return false;
+		return (spaceship_->GetDurability() - displayDurability_) > 0.01f;
+	}
+
 private:
 	// =========================================================
 	// Internal Methods
