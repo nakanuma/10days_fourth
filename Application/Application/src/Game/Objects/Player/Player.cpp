@@ -403,11 +403,52 @@ void Player::DrawAreaLimit() {
 	Cygnus::Float3 bottomLeft = { -kDefaultLimitX, kDefaultLimitMinY, z };
 	Cygnus::Float3 bottomRight = { kDefaultLimitX, kDefaultLimitMinY, z };
 
-	Cygnus::Float4 lineColor = { 0.0f, 1.0f, 0.0f, 1.0f };
+	const Cygnus::Float4 lineColor = { 0.0f, 1.0f, 0.0f, 1.0f };
+	const float thickness = 0.3f; // 点線の太さ
 
-	auto lineDrawer = Cygnus::LineDrawer::GetInstance();
-	lineDrawer->RegisterLine(topLeft, topRight, lineColor); // 上辺
-	lineDrawer->RegisterLine(topRight, bottomRight, lineColor); // 右辺
-	lineDrawer->RegisterLine(bottomRight, bottomLeft, lineColor); // 下辺
-	lineDrawer->RegisterLine(bottomLeft, topLeft, lineColor); // 左辺
+	// 点線を描画するヘルパー関数
+	auto DrawDashedLine = [&](const Cygnus::Float3& start, const Cygnus::Float3& end, float dashLength, float gapLength) {
+		Cygnus::Float3 dir = end - start;	
+		float totalLength = std::sqrt(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
+		if (totalLength <= 0.0001f) return;
+
+		// 方向の正規化
+		Cygnus::Float3 normDir = {dir.x / totalLength, dir.y / totalLength, dir.z / totalLength};
+
+		float currentDist = 0.0f;
+		auto lineDrawer = Cygnus::LineDrawer::GetInstance();
+
+		while(currentDist < totalLength) {
+			float segStartDist = currentDist;
+			float segEndDist = (std::min)(currentDist + dashLength, totalLength);
+
+			 Cygnus::Float3 p1 = {
+				start.x + normDir.x * segStartDist,
+				start.y + normDir.y * segStartDist,
+				start.z + normDir.z * segStartDist
+			 };
+
+			 Cygnus::Float3 p2 = {
+				start.x + normDir.x * segEndDist,
+				start.y + normDir.y * segEndDist,
+				start.z + normDir.z * segEndDist
+			 };
+			 
+			 // 線の登録
+			 lineDrawer->RegisterTracer(p1, p2, thickness, lineColor, lineColor);
+
+			 // 次の描画位置へ移動
+			 currentDist += (dashLength + gapLength);
+		}
+	};
+
+	// 点線の長さと間隔の設定
+	const float kDashLength = 1.0f; // 描画する長さ
+	const float kGapLength = 0.5f; // 空白の長さ
+
+	// 外枠4辺の描画
+	DrawDashedLine(topLeft, topRight, kDashLength, kGapLength); // 上
+	DrawDashedLine(topRight, bottomRight, kDashLength, kGapLength); // 右
+	DrawDashedLine(bottomRight, bottomLeft, kDashLength, kGapLength); // 下
+	DrawDashedLine(bottomLeft, topLeft, kDashLength, kGapLength); // 左
 }

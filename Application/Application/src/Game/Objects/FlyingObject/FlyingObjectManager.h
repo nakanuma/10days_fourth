@@ -94,7 +94,7 @@ private:
 	static constexpr float kIntervalBombItem = 30.0f;
 
 	// ˜A‘±”j‰ó—p‚Ìİ’è
-	static constexpr float kDestroyInterval = 0.02f; // ”j‰óŠÔŠui•bj
+	static constexpr float kDestroyInterval = 0.05f; // ”j‰óŠÔŠui•bj
 
 	// =========================================================
 	// Member Variables
