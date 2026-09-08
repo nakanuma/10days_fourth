@@ -60,6 +60,9 @@ private:
 
 private:
 
+	const float kMaxGameTime = 100.0f; // ゲーム制限時間（秒）
+	float gameTimer_ = 0.0f; // ゲーム経過時間タイマー
+
 	// -- システム --
 	std::unique_ptr<Cygnus::Camera> camera_ = nullptr;
 	std::unique_ptr<Cygnus::SpriteCommon> spriteCommon_ = nullptr;
@@ -99,6 +102,8 @@ private:
 	uint32_t shadowMapHandle_;                                     /* シャドウマップテクスチャ */
 	std::unique_ptr<Cygnus::PostEffectManager> postEffectManager_; /* ポストエフェクト管理クラス */
 
+	// ゲームUI
+	std::unique_ptr<GameHUD> gameHUD_ = nullptr;
 	std::unique_ptr<ExplainUI> explainUI_;
 
 };
