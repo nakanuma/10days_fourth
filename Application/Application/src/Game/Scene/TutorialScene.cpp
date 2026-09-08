@@ -104,14 +104,15 @@ void TutorialScene::Update() {
 	if (isSkipTutorial_ || explainUI_->IsFinish()) { return; }
 
 	// -- スキップボタン
-	if (input_->TriggerKey(DIK_TAB)) {
+	if (input_->TriggerKey(DIK_TAB) || input_->IsTriggerButton(0, XINPUT_GAMEPAD_START)) {
 		isSkipTutorial_ = true;
 	}
 
+	//プレイヤー更新
 	player_->Update();
-
+	//宇宙船更新
 	spaceship_->Update();
-
+	//命綱更新
 	tether_->Update();
 
 	flyingObjectManager_->Update();//心地が双
@@ -122,8 +123,8 @@ void TutorialScene::Update() {
 	// カメラの更新処理
 	UpdateCamera();
 
-
-	explainUI_->Update();
+	//説明UIの更新
+	explainUI_->Update(player_.get());
 
 	// コリジョンマネージャー更新
 	Cygnus::CollisionManager::GetInstance()->Update();

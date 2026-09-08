@@ -133,6 +133,12 @@ public:
 		onDamageCallback_ = callback;
 	}
 
+	/// <summary>
+	/// 動いた(キー、Lスティックを触った)フラグ
+	/// </summary>
+	/// <returns></returns>
+	bool IsMoving();
+
 private:
 	// =========================================================
 	// Internal Methods

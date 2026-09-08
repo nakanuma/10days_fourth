@@ -10,16 +10,28 @@
 #include <src/Game/UI/Guide/ControlGuideUI.h> // 操作UI
 #include <src/Game/UI/Timer/GameTimerUI.h> // 残り時間UI
 
+#include <src/Game/Objects/Player/Player.h>
+
 /// <summary>
 /// ゲーム説明UI(チュートリアルで使用)
 /// </summary>
 class ExplainUI {
 public:
-
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="spriteCommon"></param>
+	/// <param name="player"></param>
 	void Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player);
 
-	void Update();
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update(Player* player);
 
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw();
 
 	/// <summary>
@@ -32,13 +44,21 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool IsFinish() {
-		return time_ >= kExplainFinishTime_;
+		return autoReadTime_ >= kExplainFinishTime_;
 	}
 
 private:
 
-	static constexpr Cygnus::Float2 kDescriptionTextureSize_ = { 960.0f, 48.0f };
+	bool isMovingTimeMax(bool isMove);
 
+	static constexpr Cygnus::Float2 kDescriptionTextureSize_ = { 960.0f, 48.0f };
+	static constexpr float kMaxMoveTime_ = 4.0f;
+	static constexpr float kO2TimeExplainTime_ = 5.0f;
+	static constexpr float kMeteorExplainTime_ = 10.0f;
+	static constexpr float kExplainFinishTime_ = 15.0f;
+
+	static constexpr Cygnus::Float2 kSkipPosition_ = { 20.0f,668.0f };
+	static constexpr Cygnus::Float2 kSkipSize_ = { 240.0f,32.0f };
 
 	/* 各UI */
 	std::unique_ptr<PartsInventoryUI> partsInventoryUI_; // プレイヤーのパーツ所持数UI
@@ -46,16 +66,15 @@ private:
 	std::unique_ptr<PlayerOxygenUI> playerOxygenUI_; // プレイヤーの残り酸素UI
 	std::unique_ptr<ControlGuideUI> controlGuideUI_; // 操作UI
 
+
+	// チュートリアルのみのUI
+	std::unique_ptr<Cygnus::Sprite> skipUI_;
+
 	std::unique_ptr<Cygnus::Sprite> descriptionUI_;
-	Cygnus::Float2 position_ = {};
 	Cygnus::Float2 textureLT_ = { 0.0f,0.0f };
 
-	float time_ = 0.0f;
-
-	static constexpr float kO2TimeExplainTime_ = 5.0f;
-	static constexpr float kMeteorExplainTime_ = 10.0f;
-	static constexpr float kExplainFinishTime_ = 15.0f;
-
+	float movingTime_ = 0.0f;
+	float autoReadTime_ = 0.0f;
 };
 
 /// <summary>
@@ -72,7 +91,7 @@ public:
 	/// <summary>
 	/// 行動判定の取得
 	/// </summary>
-	void AddAction(bool isFlag, int32_t order) {
+	void IsAction(bool isFlag, int32_t order) {
 		// 配列方に
 		int32_t num = order - 1;
 		if (numbers_ > num) {

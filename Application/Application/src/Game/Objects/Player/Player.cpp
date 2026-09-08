@@ -147,8 +147,8 @@ void Player::OnCollision(Cygnus::Collider* other)
 		partsCountUI_->AddParts();
 	}
 
-	ActionJudgment::GetInstance()->AddAction(other->GetTag() == "RepairPartLow", 2);
-	ActionJudgment::GetInstance()->AddAction(other->GetTag() == "RepairPartHigh", 3);
+	ActionJudgment::GetInstance()->IsAction(other->GetTag() == "RepairPartLow", 2);// 説明 パーツを取る
+	ActionJudgment::GetInstance()->IsAction(other->GetTag() == "RepairPartHigh", 3);// 説明 深いパーツを取る
 }
 
 void Player::ApplyDamage(int32_t damage) {
@@ -312,6 +312,27 @@ Cygnus::Float3 Player::GetPadInput() {
 	}
 
 	return dir;
+}
+
+bool Player::IsMoving() {
+	auto input = Cygnus::Input::GetInstance();
+	if (input->PushKey(DIK_W) || input->PushKey(DIK_A) || input->PushKey(DIK_S) || input->PushKey(DIK_D)) {
+		return true;
+	}
+
+	XINPUT_STATE state;
+	if (input->GetJoystickState(0, state)) {
+		float x, y;
+		x = state.Gamepad.sThumbLX / 32767.0f;
+		y = state.Gamepad.sThumbLY / 32767.0f;
+		// 左スティック入力
+		if (x <= -0.1f || x >= 0.1f ||
+			y <= -0.1f || y >= 0.1f) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 Cygnus::Float3 Player::Drift() {
