@@ -164,6 +164,7 @@ void GameResourceLoader::LoadAllSoundData() {
 
 	// bgm
 	soundManager->Load("resources/Sounds/bgm_title.wav", "bgm_title");
+	soundManager->Load("resources/Sounds/bgm_gameplay.wav", "bgm_tutorial"); // ゲーム用をチュートリアル用としても扱う（BGM停止対策）
 	soundManager->Load("resources/Sounds/bgm_gameplay.wav", "bgm_gameplay");
 	soundManager->Load("resources/Sounds/bgm_gameclear.wav", "bgm_gameclear");
 	soundManager->Load("resources/Sounds/bgm_gameover.wav", "bgm_gameover");
@@ -176,4 +177,5 @@ void GameResourceLoader::LoadAllSoundData() {
 	soundManager->Load("resources/Sounds/se_collide.wav", "se_collide");
 	soundManager->Load("resources/Sounds/se_return.wav", "se_return");
 	soundManager->Load("resources/Sounds/se_pause.wav", "se_pause");
+	soundManager->Load("resources/Sounds/se_explosion.wav", "se_explosion");
 }

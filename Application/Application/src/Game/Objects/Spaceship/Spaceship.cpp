@@ -8,6 +8,7 @@
 #include <Collider/CollisionManager.h>
 #include <ImguiWrapper.h>
 #include <TimeManager.h>
+#include <Easing.h>
 
 void Spaceship::Initialize() {
 	// オブジェクト生成
@@ -38,6 +39,9 @@ void Spaceship::Initialize() {
 void Spaceship::Update() {
 	// 漂い処理の更新
 	Drift();
+
+	// 修理アニメーション更新
+	UpdateRepairAnimation();
 
 	// コライダー更新
 	collider_->Update();
@@ -121,4 +125,26 @@ void Spaceship::Drift() {
 	object_->transform_.translate_.x = basePosition_.x + offsetX;
 	object_->transform_.translate_.y = basePosition_.y + offsetY;
 	object_->transform_.translate_.z = basePosition_.z;
+}
+
+void Spaceship::UpdateRepairAnimation()
+{
+	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+
+	if(isRepairing_) {
+		// 修理中
+		repairAnimTimer_ += dt * kRepairAnimSpeed;
+
+		float scaleX = 1.0f + std::sinf(repairAnimTimer_) * kRepairAnimScaleX;
+		float scaleY = 1.0f + std::cosf(repairAnimTimer_) * kRepairAnimScaleY;
+
+		object_->transform_.scale_ = {scaleX, scaleY, 1.0f};
+	} else {
+		// 修理完了時
+		repairAnimTimer_ = 0.0f;
+
+		object_->transform_.scale_.x = Cygnus::Easing::Lerp(object_->transform_.scale_.x, 1.0f, 0.2f);
+		object_->transform_.scale_.y = Cygnus::Easing::Lerp(object_->transform_.scale_.y, 1.0f, 0.2f);
+		object_->transform_.scale_.z = Cygnus::Easing::Lerp(object_->transform_.scale_.z, 1.0f, 0.2f);
+	}
 }

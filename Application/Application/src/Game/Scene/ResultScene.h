@@ -111,6 +111,11 @@ private:
 	static constexpr float kButtonABounceHeight = 2.0f; // 跳ねる高さ
 	static constexpr float kButtonABounceSpeed = 6.0f; // バウンドの速度
 
+	static constexpr float kButtonAPressDuration = 0.15f;                            // プレス演出全体の長さ（秒）
+	static constexpr float KButtonAPressMinScale = 0.85f;                            // 押下時の最小スケール倍率
+	static constexpr Cygnus::Float4 kButtonANormalColor = {1.0f, 1.0f, 1.0f, 1.0f};  // 通常カラー
+	static constexpr Cygnus::Float4 kButtonAPressedColor = {0.6f, 0.6f, 0.6f, 1.0f}; // 押下時カラー
+
 	// プレイヤー（ゲームオーバー用）
 	static constexpr float kPlayerFloatYAmplitude = 0.5f; // 上限の振幅
 	static constexpr float kPlayerFloatYSpeed = 1.2f; // 漂うスピード
@@ -165,6 +170,10 @@ private:
 	Cygnus::Float2 buttonATargetPos_{}; // 移動目標位置
 	Cygnus::Float2 buttonACurrentPos_{}; // 現在位置
 	float buttonAMoveTimer_ = 0.0f;     // 移動タイマー
+
+	// Aボタンアニメーション
+	float buttonAPressTimer_ = 0.0f; /* 押下アニメーションタイマー */
+	bool isButtonAPressed_ = false;  /* 押下アニメーション発生中フラグ */
 
 	// ----- Objects -----
 

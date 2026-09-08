@@ -51,11 +51,14 @@ void TitleScene::Initialize() {
 	// ポストエフェクト管理
 	postEffectManager_ = std::make_unique<Cygnus::PostEffectManager>();
 	postEffectManager_->Initialize();
+	postEffectManager_->SetEffectType(Cygnus::PSOType::Vignette);
 
 	// SkyBoxのパラメーター設定
 	Cygnus::SkyBoxManager::GetInstance()->SetTranslate({ 0.0f, 0.0f, 1500.0f });
 	Cygnus::SkyBoxManager::GetInstance()->SetRotate({ 0.33f, 0.4f, 0.0f });
 	Cygnus::SkyBoxManager::GetInstance()->SetColor({ 0.9f, 0.6f, 1.0f, 1.0f });
+
+	Cygnus::ParticleEffectManager::GetInstance()->Clear();
 
 	///
 	///	↓ シーン用
@@ -170,6 +173,8 @@ void TitleScene::Update() {
 
 	// コリジョンマネージャー更新
 	Cygnus::CollisionManager::GetInstance()->Update();
+	// パーティクルエフェクト管理クラス更新
+	Cygnus::ParticleEffectManager::GetInstance()->Update(Cygnus::TimeManager::GetInstance()->GetDeltaTime());
 }
 
 void TitleScene::Draw() {
@@ -227,7 +232,7 @@ void TitleScene::Draw() {
 	/// =========================================================
 
 #pragma region メインシーンの3Dオブジェクトのレンダリングを開始
-	/*postEffectManager_->BeginMainScene();*/
+	postEffectManager_->BeginMainScene();
 
 	// スカイボックス描画
 	Cygnus::SkyBoxManager::GetInstance()->Draw();
@@ -237,11 +242,11 @@ void TitleScene::Draw() {
 	objectPlayer_->Draw();
 
 	// -----------------------------------------------
-	/*postEffectManager_->EndMainScene();*/
+	postEffectManager_->EndMainScene();
 #pragma endregion
 
 #pragma region バックバッファへの直接描画
-	/*postEffectManager_->RestoreBackBuffer(true);*/
+	postEffectManager_->RestoreBackBuffer(true);
 	// -----------------------------------------------
 
 	// パーティクルエフェクト描画
@@ -250,7 +255,7 @@ void TitleScene::Draw() {
 	Cygnus::LineDrawer::GetInstance()->Draw();
 
 	// -----------------------------------------------
-	/*postEffectManager_->RestoreDepthBufferState();*/
+	postEffectManager_->RestoreDepthBufferState();
 #pragma endregion
 
 	/// =========================================================
@@ -396,6 +401,11 @@ void TitleScene::ProcessMenuInput()
 
 	if(isConfirm) {
 		isSelected_ = true; // 重複実行を防止
+
+		// Aボタン押下アニメーション開始
+		isButtonAPressed_ = true;
+		buttonAPressTimer_ = 0.0f;
+
 		Cygnus::SoundManager::GetInstance()->Play("se_decide", false, 0.5f); // SE再生（決定）
 
 		if(currentMenu_ == MenuIndex::Start) {
@@ -403,7 +413,7 @@ void TitleScene::ProcessMenuInput()
 			FadeTransition::GetInstance()->StartFadeOut(
 				1.0f,
 				[]() {
-					Cygnus::SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+					Cygnus::SceneManager::GetInstance()->ChangeScene("TUTORIAL");
 				},
 				0.5f
 			);
@@ -472,6 +482,33 @@ void TitleScene::UpdateUI()
 		buttonACurrentPos_.x,
 		buttonACurrentPos_.y + bounceOffsetY
 	});
+
+	/* Aボタン押下（スケール&カラー）アニメーション計算 */
+	float scaleFactor = 1.0f;
+	Cygnus::Float4 currentColor = kButtonANormalColor;
+
+	if (isButtonAPressed_) {
+		buttonAPressTimer_ += deltaTime;
+
+		if (buttonAPressTimer_ >= kButtonAPressDuration) {
+			buttonAPressTimer_ = kButtonAPressDuration;
+		}
+
+		// 進行度
+		float progress = buttonAPressTimer_ / kButtonAPressDuration;
+
+		// sin波でイージング
+		float pressFactor = std::sinf(progress * Cygnus::PIf);
+
+		// スケール計算
+		scaleFactor = 1.0f - pressFactor * (1.0f - KButtonAPressMinScale);
+
+		// カラー補間
+		currentColor = kButtonANormalColor + (kButtonAPressedColor - kButtonANormalColor) * pressFactor;
+	}
+	// 最終サイズとカラーの適用
+	spriteButtonA_->SetSize({baseButtonASize_.x * scaleFactor, baseButtonASize_.y * scaleFactor});
+	spriteButtonA_->SetColor(currentColor);
 }
 
 void TitleScene::UpdatePlayerAnimation()

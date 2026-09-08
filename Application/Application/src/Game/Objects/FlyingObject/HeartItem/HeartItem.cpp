@@ -7,10 +7,12 @@
 void HeartItem::Initialize(const Cygnus::Float3& position, bool isRightToLeft) {
 	FlyingObject::Initialize(position, isRightToLeft);
 
+	object_->transform_.rotate_ = {0.0f, 0.0f, 0.0f}; // 回転リセット
+
 	// 各パラメーター設定
 	category_ = ObjectCategory::HeartItem;
 	speed_ = kSpeed;
-	rotationSpeed_ = Cygnus::RandomGenerator::GetInstance()->RandomValue({-0.015f, -0.015f, -0.015f}, {0.015f, 0.015f, 0.015f});
+	rotationSpeed_ = Cygnus::RandomGenerator::GetInstance()->RandomValue({0.0f, -0.015f, 0.0f }, { 0.0f, 0.015f, 0.0f });
 	hitRadius_ = kHitRadius;
 
 	// モデル設定
