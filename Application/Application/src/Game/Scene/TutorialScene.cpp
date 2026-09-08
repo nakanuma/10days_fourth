@@ -36,12 +36,14 @@ void TutorialScene::Initialize() {
 	// ポストエフェクト管理
 	postEffectManager_ = std::make_unique<Cygnus::PostEffectManager>();
 	postEffectManager_->Initialize();
-
+	postEffectManager_->SetEffectType(Cygnus::PSOType::Vignette);
 
 	// SkyBoxのパラメーター設定
 	Cygnus::SkyBoxManager::GetInstance()->SetTranslate({ 0.0f, 0.0f, 1500.0f });
 	Cygnus::SkyBoxManager::GetInstance()->SetRotate({ 0.37f, 1.29f, 0.26f });
 	Cygnus::SkyBoxManager::GetInstance()->SetColor({ 0.5f, 0.3f, 1.0f, 1.0f });
+
+	Cygnus::ParticleEffectManager::GetInstance()->Clear();
 
 	//スペースシップ
 	spaceship_ = std::make_unique<Spaceship>();
@@ -68,14 +70,14 @@ void TutorialScene::Initialize() {
 	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
 
 	// BGM再生
-	Cygnus::SoundManager::GetInstance()->Play("bgm_gameplay", true, 0.5f);
+	Cygnus::SoundManager::GetInstance()->Play("bgm_tutorial", true, 0.5f);
 
 	explainUI_ = std::make_unique<ExplainUI>();
 	explainUI_->Initialize(spriteCommon_.get(),player_.get());
 }
 
 void TutorialScene::Finalize() {
-	Cygnus::SoundManager::GetInstance()->Stop("bgm_gameplay");
+	Cygnus::SoundManager::GetInstance()->Stop("bgm_tutorial");
 }
 
 void TutorialScene::Update() {
@@ -116,6 +118,9 @@ void TutorialScene::Update() {
 	tether_->Update();
 
 	flyingObjectManager_->Update();//心地が双
+	if (player_->IsTriggerBomb()) { // プレイヤーが爆弾アイテムを取得したら一括隕石破壊
+		flyingObjectManager_->DestroyAllMeteorsSequential();
+	}
 
 	// 命綱と飛翔物の衝突判定
 	tether_->CheckCollisionWithFlyingObjects(flyingObjectManager_.get());
@@ -128,6 +133,9 @@ void TutorialScene::Update() {
 
 	// コリジョンマネージャー更新
 	Cygnus::CollisionManager::GetInstance()->Update();
+
+	// パーティクルエフェクト管理クラス更新
+	Cygnus::ParticleEffectManager::GetInstance()->Update(Cygnus::TimeManager::GetInstance()->GetDeltaTime());
 }
 
 void TutorialScene::Draw() {

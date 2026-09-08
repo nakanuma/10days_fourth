@@ -162,6 +162,7 @@ void GameResourceLoader::LoadAllSoundData() {
 
 	// bgm
 	soundManager->Load("resources/Sounds/bgm_title.wav", "bgm_title");
+	soundManager->Load("resources/Sounds/bgm_gameplay.wav", "bgm_tutorial"); // ゲーム用をチュートリアル用としても扱う（BGM停止対策）
 	soundManager->Load("resources/Sounds/bgm_gameplay.wav", "bgm_gameplay");
 	soundManager->Load("resources/Sounds/bgm_gameclear.wav", "bgm_gameclear");
 	soundManager->Load("resources/Sounds/bgm_gameover.wav", "bgm_gameover");
