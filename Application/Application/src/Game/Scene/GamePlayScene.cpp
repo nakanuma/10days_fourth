@@ -57,6 +57,8 @@ void GamePlayScene::Initialize() {
 	Cygnus::SkyBoxManager::GetInstance()->SetRotate({ 0.37f, 1.29f, 0.26f });
 	Cygnus::SkyBoxManager::GetInstance()->SetColor({ 0.5f, 0.3f, 1.0f, 1.0f });
 
+	Cygnus::ParticleEffectManager::GetInstance()->Clear();
+
 	///
 	///	↓ ゲームシーン用
 	///
@@ -86,6 +88,9 @@ void GamePlayScene::Initialize() {
 	// 飛翔物管理クラス生成 + 初期化
 	flyingObjectManager_ = std::make_unique<FlyingObjectManager>();
 	flyingObjectManager_->Initialize();
+	flyingObjectManager_->SetOnDestroyMeteorCallback([this](){
+		StartCameraShake(4.0f, 0.25f);	
+	});
 
 	// ゲームUI作成
 	gameHUD_ = std::make_unique<GameHUD>();

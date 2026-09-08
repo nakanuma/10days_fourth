@@ -174,4 +174,5 @@ void GameResourceLoader::LoadAllSoundData() {
 	soundManager->Load("resources/Sounds/se_collide.wav", "se_collide");
 	soundManager->Load("resources/Sounds/se_return.wav", "se_return");
 	soundManager->Load("resources/Sounds/se_pause.wav", "se_pause");
+	soundManager->Load("resources/Sounds/se_explosion.wav", "se_explosion");
 }

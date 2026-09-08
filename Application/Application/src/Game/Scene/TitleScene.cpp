@@ -58,6 +58,8 @@ void TitleScene::Initialize() {
 	Cygnus::SkyBoxManager::GetInstance()->SetRotate({ 0.33f, 0.4f, 0.0f });
 	Cygnus::SkyBoxManager::GetInstance()->SetColor({ 0.9f, 0.6f, 1.0f, 1.0f });
 
+	Cygnus::ParticleEffectManager::GetInstance()->Clear();
+
 	///
 	///	↓ シーン用
 	///
@@ -171,6 +173,8 @@ void TitleScene::Update() {
 
 	// コリジョンマネージャー更新
 	Cygnus::CollisionManager::GetInstance()->Update();
+	// パーティクルエフェクト管理クラス更新
+	Cygnus::ParticleEffectManager::GetInstance()->Update(Cygnus::TimeManager::GetInstance()->GetDeltaTime());
 }
 
 void TitleScene::Draw() {

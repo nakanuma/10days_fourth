@@ -235,7 +235,7 @@ private:
 	// 被弾時色変更アニメーション用
 	static constexpr float kDamageFlashInDuration = 0.25f; // 0->1に伸びる時間
 	static constexpr float kDamageFlashHoldDuration = 0.1f; // 1で待機する時間
-	static constexpr float kDamageFlashOutDuration = 0.75f; // 1->0に戻る時間
+	static constexpr float kDamageFlashOutDuration = 1.0f; // 1->0に戻る時間
 
 	// =========================================================
 	// Member Variables

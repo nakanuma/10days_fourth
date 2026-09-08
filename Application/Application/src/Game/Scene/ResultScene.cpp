@@ -50,6 +50,8 @@ void ResultScene::Initialize() {
 	postEffectManager_->Initialize();
 	postEffectManager_->SetEffectType(Cygnus::PSOType::Vignette);
 
+	Cygnus::ParticleEffectManager::GetInstance()->Clear();
+
 	///
 	///	↓ シーン用
 	///
@@ -208,6 +210,8 @@ void ResultScene::Update() {
 
 	// コリジョンマネージャー更新
 	Cygnus::CollisionManager::GetInstance()->Update();
+	// パーティクルエフェクト管理クラス更新
+	Cygnus::ParticleEffectManager::GetInstance()->Update(Cygnus::TimeManager::GetInstance()->GetDeltaTime());
 }
 
 void ResultScene::Draw() {

@@ -48,6 +48,16 @@ public:
 	/// </summary>
 	void DestroyAllMeteorsSequential();
 
+
+	using OndestroyMeteorCallback = std::function<void()>;
+	/// <summary>
+	/// 一括破壊時のコールバックを設定
+	/// </summary>
+	/// <param name="callback"></param>
+	void SetOnDestroyMeteorCallback(OndestroyMeteorCallback callback) {
+		onDestroyMeteorCallback_ = callback;
+	}
+
 	// =========================================================
 	// Accessor
 	// =========================================================
@@ -115,4 +125,6 @@ private:
 	// 連続破壊管理用
 	std::queue<FlyingObject*> destroyQueue_; // 破壊待ちリスト
 	float destroyTimer_ = 0.0f; // タイマー
+
+	OndestroyMeteorCallback onDestroyMeteorCallback_ = nullptr;
 };

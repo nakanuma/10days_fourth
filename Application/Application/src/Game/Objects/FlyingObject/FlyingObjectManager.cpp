@@ -4,6 +4,7 @@
 #include <ImguiWrapper.h>
 #include <TimeManager.h>
 #include <RandomGenerator.h>
+#include <SoundManager.h>
 
 // Application
 #include <src/Game/Objects/FlyingObject/Meteor/MeteorSmall/MeteorSmall.h> // 隕石（小）
@@ -40,7 +41,13 @@ void FlyingObjectManager::Update() {
 			// まだ生きている場合のみ破壊を実行
 			if (target && !target->IsDead()) {
 				target->Dead();
-				// Cygnus::SoundManager::GetInstance()->Play("", false, 0.75f);
+
+				Cygnus::SoundManager::GetInstance()->Play("se_explosion", false, 0.5f); // SE再生（爆発）
+
+				// カメラシェイク用コールバック発火
+				if(onDestroyMeteorCallback_) {
+					onDestroyMeteorCallback_();
+				}
 			}
 		}
 	}

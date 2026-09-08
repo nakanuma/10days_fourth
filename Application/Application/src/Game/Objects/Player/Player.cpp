@@ -21,7 +21,7 @@ void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon
 	// オブジェクト生成
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Player");
-	object_->transform_.translate_ = { 0.0f, -10.0f, 0.0f };
+	object_->transform_.translate_ = { 0.0f, -4.0f, 0.0f };
 	object_->materialCB_.data_->emissiveColor = {1.0f, 0.0f, 0.0f};
 
 	// 各パラメーター初期化
@@ -80,7 +80,7 @@ void Player::Update() {
 		// 1->0
 		} else {
 			float outProgress = (elapsedTime - kDamageFlashInDuration - kDamageFlashHoldDuration) / kDamageFlashOutDuration;
-			intensity = Cygnus::Easing::Lerp(1.0f, 0.0f, Cygnus::Easing::EaseInExpo(outProgress));
+			intensity = Cygnus::Easing::Lerp(1.0f, 0.0f, Cygnus::Easing::EaseOutQuad(outProgress));
 		}
 
 		object_->materialCB_.data_->emissiveIntensity = intensity;
@@ -212,14 +212,14 @@ void Player::OnCollision(Cygnus::Collider* other) {
 	if (tag == "HeartItem") {
 		Heal(1); // 1回復
 		pickupAnimTimer_ = kPickupAnimDuration;
-		//Cygnus::SoundManager::GetInstance()->Play("", false, 0.75f);
+		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 	}
 
 	/* 爆弾アイテムとの衝突 */
 	if (tag == "BombItem") {
 		isTriggerBomb_ = true; // 爆弾取得フラグを立てる
 		pickupAnimTimer_ = kPickupAnimDuration;
-		//Cygnus::SoundManager::GetInstance()->Play("", false, 0.75f);
+		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 	}
 }
 
@@ -233,7 +233,7 @@ void Player::ApplyDamage(int32_t damage) {
 
 	// 被ダメージ時にシェイクのコールバックを呼ぶ
 	if(onDamageCallback_) {
-		onDamageCallback_(5.0f, 1.0f);
+		onDamageCallback_(5.5f, 1.2f);
 	}
 
 	// HPが0になれば死亡フラグを立てる
