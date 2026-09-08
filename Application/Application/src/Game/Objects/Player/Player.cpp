@@ -22,7 +22,7 @@ void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Player");
 	object_->transform_.translate_ = { 0.0f, -10.0f, 0.0f };
-	object_->materialCB_.data_->emissiveIntensity = 1.0f;
+	object_->materialCB_.data_->emissiveColor = {1.0f, 0.0f, 0.0f};
 
 	// 各パラメーター初期化
 	velocity_ = { 0.0f, 0.0f, 0.0f };
@@ -57,8 +57,38 @@ void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon
 }
 
 void Player::Update() {
-	/* アイテム取得時拡縮アニメーション */
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+
+	/* 被弾時の点滅 */
+	if(damageFlashTimer_ > 0.0f) {
+		damageFlashTimer_ -= dt;
+		if(damageFlashTimer_ < 0.0f) {
+			damageFlashTimer_ = 0.0f;
+		}
+
+		// 経過時間
+		float elapsedTime = (kDamageFlashInDuration + kDamageFlashInDuration + kDamageFlashOutDuration) - damageFlashTimer_;
+		float intensity = 0.0;
+
+		// 0->1
+		if(elapsedTime < kDamageFlashInDuration) {
+			float t = elapsedTime / kDamageFlashInDuration;
+			intensity = Cygnus::Easing::EaseOutExpo(t);
+		// 待機
+		} else if (elapsedTime < (kDamageFlashInDuration + kDamageFlashHoldDuration)) {
+			intensity = 1.0f;
+		// 1->0
+		} else {
+			float outProgress = (elapsedTime - kDamageFlashInDuration - kDamageFlashHoldDuration) / kDamageFlashOutDuration;
+			intensity = Cygnus::Easing::Lerp(1.0f, 0.0f, Cygnus::Easing::EaseInExpo(outProgress));
+		}
+
+		object_->materialCB_.data_->emissiveIntensity = intensity;
+	} else {
+		object_->materialCB_.data_->emissiveIntensity = 0.0f;
+	}
+
+	/* アイテム取得時拡縮アニメーション */
 	if(pickupAnimTimer_ > 0.0f) {
 		pickupAnimTimer_ -= dt;
 		if(pickupAnimTimer_ < 0.0f) {
@@ -197,6 +227,9 @@ void Player::ApplyDamage(int32_t damage) {
 	if (isDead_) return;
 
 	hp_ -= damage;
+
+	// 被弾フラッシュ開始
+	damageFlashTimer_ = kDamageFlashInDuration + kDamageFlashInDuration + kDamageFlashOutDuration;
 
 	// 被ダメージ時にシェイクのコールバックを呼ぶ
 	if(onDamageCallback_) {
