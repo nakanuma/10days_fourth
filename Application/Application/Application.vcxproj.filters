@@ -32,6 +32,15 @@
     <ClCompile Include="src\Game\Util\Utility.cpp" />
     <ClCompile Include="src\Game\Scene\TutorialScene.cpp" />
     <ClCompile Include="src\Game\UI\Explain\ExplainUI.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\HeartItem\HeartItem.cpp" />
+    <ClCompile Include="src\Game\Objects\FlyingObject\BombItem\BombItem.cpp" />
+    <ClCompile Include="src\Game\UI\PartsUI\ItemPopupUI.cpp" />
+    <ClCompile Include="src\Util\JsonUtil.cpp" />
+    <ClCompile Include="src\Game\Scene\ParticleEditorScene.cpp" />
+    <ClCompile Include="src\Game\Particles\Particle.cpp" />
+    <ClCompile Include="src\Game\Particles\ParticleEditorSystem.cpp" />
+    <ClCompile Include="src\Game\Particles\ParticleStrage.cpp" />
+    <ClCompile Include="src\Game\UI\Player\DangerWarningUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\UI\Player\PlayerHPUI.h" />
@@ -65,5 +74,94 @@
     <ClInclude Include="src\Game\Util\Utility.h" />
     <ClInclude Include="src\Game\Scene\TutorialScene.h" />
     <ClInclude Include="src\Game\UI\Explain\ExplainUI.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\HeartItem\HeartItem.h" />
+    <ClInclude Include="src\Game\Objects\FlyingObject\BombItem\BombItem.h" />
+    <ClInclude Include="src\Game\UI\PartsUI\ItemPopupUI.h" />
+    <ClCompile Include="src\Game\GameResourceLoader\GameResourceLoader.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Scene\GamePlayScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Scene\SceneFactory.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\Player\Player.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\Spaceship\Spaceship.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\Tether\Tether.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\FlyingObjectManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\Base\FlyingObject.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\Meteor\MeteorLarge\MeteorLarge.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClInclude Include="src\Util\JsonUtil.h" />
+    <ClInclude Include="src\Game\Scene\ParticleEditorScene.h" />
+    <ClInclude Include="src\Game\Particles\Particle.h" />
+    <ClInclude Include="src\Game\Particles\ParticleEditorSystem.h" />
+    <ClInclude Include="src\Game\Particles\ParticleStrage.h" />
+    <ClInclude Include="src\Game\UI\Player\DangerWarningUI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Scene\GamePlayScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Scene\SceneFactory.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\Player\Player.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\Spaceship\Spaceship.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\Tether\Tether.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\FlyingObjectManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\Base\FlyingObject.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorSmall\MeteorSmall.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\Meteor\MeteorLarge\MeteorLarge.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartLow\RepairPartLow.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairPartMedium\RepairPartMedium.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Objects\FlyingObject\RepairPart\RepairpartHigh\RepairPartHigh.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

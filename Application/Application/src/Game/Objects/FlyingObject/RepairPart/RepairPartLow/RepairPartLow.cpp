@@ -12,6 +12,7 @@ void RepairPartLow::Initialize(const Cygnus::Float3& position, bool isRightToLef
 	speed_ = kSpeed;
 	rotationSpeed_ = Cygnus::RandomGenerator::GetInstance()->RandomValue({ -0.015f, -0.015f, -0.015f }, { 0.015f, 0.015f, 0.015f });
 	hitRadius_ = kHitRadius;
+	subCategory_ = "repair";
 
 	// ƒ‚ƒfƒ‹Ý’è
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("RepairPartLow");

@@ -11,11 +11,14 @@
 #include "PartsCountUI.h"
 #include "O2TimeUI.h"
 
-// ‘O•ûéŒ¾
+// Application
+#include <src/Game/UI/PartsUI/ItemPopupUI.h>
+
+// å‰æ–¹å®£è¨€
 class Spaceship;
 
 // =========================================================
-// ƒvƒŒƒCƒ„[ƒNƒ‰ƒX
+// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¯ãƒ©ã‚¹
 // =========================================================
 class Player : public Cygnus::ICollisionCallback
 {
@@ -25,34 +28,34 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// ‰Šú‰»ˆ—
+	/// åˆæœŸåŒ–å‡¦ç†
 	/// </summary>
 	void Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon);
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
 	void DrawUI();
 
 	/// <summary>
-	/// ƒfƒoƒbƒO•\¦
+	/// ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
 	/// </summary>
 	void Debug();
 
 	/// <summary>
-	/// –½jŠªæ‚è‚ÌÀs
+	/// å‘½ç¶±å·»å–ã‚Šã®å®Ÿè¡Œ
 	/// </summary>
 	void StartRewind();
 
 	/// <summary>
-	/// Õ“ËƒR[ƒ‹ƒoƒbƒN
+	/// è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 	/// </summary>
 	/// <param name="other"></param>
 	void OnCollision(Cygnus::Collider* other) override;
@@ -62,55 +65,61 @@ public:
 	// =========================================================
 
 	/// <summary>
-	/// Œ»İˆÊ’u‚Ìæ“¾
+	/// ç¾åœ¨ä½ç½®ã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; }
 
 	/// <summary>
-	/// ƒ_ƒ[ƒWˆ—
+	/// ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†
 	/// </summary>
 	/// <param name="damage"></param>
 	void ApplyDamage(int32_t damage = 1);
 
 	/// <summary>
-	/// c‚èHP‚Ìæ“¾
+	/// å›å¾©å‡¦ç†
+	/// </summary>
+	/// <param name="amount"></param>
+	void Heal(int32_t amount = 1);
+
+	/// <summary>
+	/// æ®‹ã‚ŠHPã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	int32_t GetHP() const { return hp_; }
 
 	/// <summary>
-	/// Å‘åHP‚Ìæ“¾
+	/// æœ€å¤§HPã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	static constexpr int32_t GetMaxHP() { return kMaxHP; }
 
 	/// <summary>
-	/// ©“®Šª‚«æ‚èi_‘fÁ”ïjŒo‰ßŠÔ‚Ìæ“¾
+	/// è‡ªå‹•å·»ãå–ã‚Šï¼ˆé…¸ç´ æ¶ˆè²»ï¼‰çµŒéæ™‚é–“ã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	float GetAutoRewindTimer() const { return autoRewindTimer_; }
 
 	/// <summary>
-	/// _‘fŒÀŠEŠÔ‚Ìæ“¾
+	/// é…¸ç´ é™ç•Œæ™‚é–“ã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	static constexpr float GetMaxAutoRewindTime() { return kDefaultAutoRewindTime; }
 
 	/// <summary>
-	/// €–Sƒtƒ‰ƒOæ“¾
+	/// æ­»äº¡ãƒ•ãƒ©ã‚°å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	bool IsDead() const { return isDead_; }
 
 	/// <summary>
-	/// Šªæ‚èó‘Ô‚Ìæ“¾
+	/// å·»å–ã‚ŠçŠ¶æ…‹ã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	bool IsRewinding() const { return isRewinding_; }
 
 	/// <summary>
-	/// ŠeC—ƒp[ƒc‚Ìæ“¾”‚ğæ“¾
+	/// å„ä¿®ç†ãƒ‘ãƒ¼ãƒ„ã®å–å¾—æ•°ã‚’å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	int32_t GetRepairPartLowCount() const { return repairPartLowCount_; }
@@ -118,7 +127,7 @@ public:
 	int32_t GetRepairPartHighCount() const { return repairPartHighCount_; }
 
 	/// <summary>
-	/// ŠeC—ƒp[ƒc‚Ì”‚ğƒZƒbƒg
+	/// å„ä¿®ç†ãƒ‘ãƒ¼ãƒ„ã®æ•°ã‚’ã‚»ãƒƒãƒˆ
 	/// </summary>
 	/// <param name="count"></param>
 	void SetRepairPartLowCount(int32_t count) { repairPartLowCount_ = count; }
@@ -126,7 +135,7 @@ public:
 	void SetRepairPartHighCount(int32_t count) { repairPartHighCount_ = count; }
 
 	/// <summary>
-	/// ƒVƒFƒCƒN”­‰Î—p‚ÌƒR[ƒ‹ƒoƒbƒNİ’èŠÖ”
+	/// ã‚·ã‚§ã‚¤ã‚¯ç™ºç«ç”¨ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯è¨­å®šé–¢æ•°
 	/// </summary>
 	/// <param name="callback"></param>
 	void SetOnDamageCallback(const std::function<void(float intensity, float duration)>& callback) {
@@ -134,10 +143,21 @@ public:
 	}
 
 	/// <summary>
-	/// “®‚¢‚½(ƒL[ALƒXƒeƒBƒbƒN‚ğG‚Á‚½)ƒtƒ‰ƒO
+	/// å‹•ã„ãŸ(ã‚­ãƒ¼ã€Lã‚¹ãƒ†ã‚£ãƒƒã‚¯ã‚’è§¦ã£ãŸ)ãƒ•ãƒ©ã‚°
 	/// </summary>
 	/// <returns></returns>
 	bool IsMoving();
+	/// çˆ†å¼¾å–å¾—ãƒˆãƒªã‚¬ãƒ¼ã®å–å¾—
+	/// </summary>
+	/// <returns></returns>
+	bool IsTriggerBomb();
+
+	using OnPickupPartCallback = std::function<void(PartType type, const Cygnus::Float3& worldPos)>;
+	/// <summary>
+	/// ä¿®ç†ãƒ‘ãƒ¼ãƒ„ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—UIç”¨
+	/// </summary>
+	/// <param name="callback"></param>
+	void SetOnPickupPartCallback(OnPickupPartCallback callback) { onPickupPartCallback_ = callback; }
 
 private:
 	// =========================================================
@@ -145,34 +165,34 @@ private:
 	// =========================================================
 
 	/// <summary>
-	/// ƒL[“ü—Í‚É‚æ‚éˆÚ“®ˆ—
+	/// ã‚­ãƒ¼å…¥åŠ›ã«ã‚ˆã‚‹ç§»å‹•å‡¦ç†
 	/// </summary>
 	void Move();
 
 	/// <summary>
-	/// ƒL[ƒ{[ƒh—p“ü—ÍƒxƒNƒgƒ‹
+	/// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ç”¨å…¥åŠ›ãƒ™ã‚¯ãƒˆãƒ«
 	/// </summary>
 	/// <returns></returns>
 	Cygnus::Float3 GetKeyInput();
 
 	/// <summary>
-	/// ƒQ[ƒ€ƒpƒbƒh—p“ü—ÍƒxƒNƒgƒ‹
+	/// ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰ç”¨å…¥åŠ›ãƒ™ã‚¯ãƒˆãƒ«
 	/// </summary>
 	/// <returns></returns>
 	Cygnus::Float3 GetPadInput();
 
 	/// <summary>
-	/// –³“ü—Í‚Ì•Y‚¤ƒIƒtƒZƒbƒg‚ğæ“¾
+	/// ç„¡å…¥åŠ›æ™‚ã®æ¼‚ã†ã‚ªãƒ•ã‚»ãƒƒãƒˆã‚’å–å¾—
 	/// </summary>
 	Cygnus::Float3 Drift();
 
 	/// <summary>
-	/// Šªæ‚èˆ—
+	/// å·»å–ã‚Šæ™‚å‡¦ç†
 	/// </summary>
 	void ProcessRewind();
 
 	/// <summary>
-	/// ˆÚ“®§ŒÀƒGƒŠƒA‚Ì•`‰æ
+	/// ç§»å‹•åˆ¶é™ã‚¨ãƒªã‚¢ã®æç”»
 	/// </summary>
 	void DrawAreaLimit();
 
@@ -181,75 +201,91 @@ private:
 	// Constants
 	// =========================================================
 
-	// ƒRƒ‰ƒCƒ_[‚Ì‘å‚«‚³
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®å¤§ãã•
 	static constexpr Cygnus::Float3 kColliderSize = { 1.0f, 2.0f, 1.0f };
 
-	// ‰F’ˆ‹óŠÔˆÚ“®—p‚Ìƒpƒ‰ƒ[ƒ^[
-	static constexpr float kAcceleration = 0.01f; // ‰Á‘¬“xi“ü—Í‚Ì‘•ªj
-	static constexpr float kMaxSpeed = 0.25f; // Å‚‘¬“x
-	static constexpr float kDamping = 0.985f; // Œ¸Š—¦i1.0‚É‹ß‚¢‚Ù‚Ç~‚Ü‚è‚É‚­‚­‚È‚éj
+	// å®‡å®™ç©ºé–“ç§»å‹•ç”¨ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
+	static constexpr float kAcceleration = 0.01f; // åŠ é€Ÿåº¦ï¼ˆå…¥åŠ›æ™‚ã®å¢—åˆ†ï¼‰
+	static constexpr float kMaxSpeed = 0.25f; // æœ€é«˜é€Ÿåº¦
+	static constexpr float kDamping = 0.985f; // æ¸›è¡°ç‡ï¼ˆ1.0ã«è¿‘ã„ã»ã©æ­¢ã¾ã‚Šã«ãããªã‚‹ï¼‰
 
-	// •Y‚¢ƒpƒ‰ƒ[ƒ^[
-	static constexpr float kDriftFrequency = 3.0f; // •Y‚¤üŠú‚Ì‘¬‚³
-	static constexpr float kDriftAmplitude = 0.01f; // •Y‚¤—Í‚Ì‹­‚³
+	// æ¼‚ã„ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
+	static constexpr float kDriftFrequency = 3.0f; // æ¼‚ã†å‘¨æœŸã®é€Ÿã•
+	static constexpr float kDriftAmplitude = 0.01f; // æ¼‚ã†åŠ›ã®å¼·ã•
 	
-	// ˆÚ“®”ÍˆÍ‚Ì‰Šú’è”
+	// ç§»å‹•ç¯„å›²ã®åˆæœŸå®šæ•°
 	static constexpr float kDefaultLimitMinY = -60.0f;
 	static constexpr float kDefaultLimitMaxY = 0.0f;
 	static constexpr float kDefaultLimitX = 30.0f;
 
-	// Šªæ‚è—pƒpƒ‰ƒ[ƒ^[
-	static constexpr float kDefaultAutoRewindTime = 10.0f; // ©“®Šª‚«æ‚è‚Ü‚Å‚ÌŒÀŠEŠÔi•bj
-	static constexpr float kDefaultRewindAccel = 0.08f; // Šªæ‚è‚Ì‰Á‘¬“x
-	static constexpr float kDefaultRewindMaxSpeed = 0.75f; // Šªæ‚è‚ÌÅ‚‘¬“x
-	static constexpr float kRewindStopDistance = 2.0f; // ‰F’ˆ‘D‚É‚±‚Ì‹——£‚Ü‚Å‹ß‚Ã‚¢‚½‚çI—¹
+	// å·»å–ã‚Šç”¨ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
+	static constexpr float kDefaultAutoRewindTime = 10.0f; // è‡ªå‹•å·»ãå–ã‚Šã¾ã§ã®é™ç•Œæ™‚é–“ï¼ˆç§’ï¼‰
+	static constexpr float kDefaultRewindAccel = 0.08f; // å·»å–ã‚Šæ™‚ã®åŠ é€Ÿåº¦
+	static constexpr float kDefaultRewindMaxSpeed = 0.75f; // å·»å–ã‚Šæ™‚ã®æœ€é«˜é€Ÿåº¦
+	static constexpr float kRewindStopDistance = 2.0f; // å®‡å®™èˆ¹ã«ã“ã®è·é›¢ã¾ã§è¿‘ã¥ã„ãŸã‚‰çµ‚äº†
 
-	// ‰ñ“]§Œä—pƒpƒ‰ƒ[ƒ^[
-	static constexpr float kMaxTiltZ = 0.35f; // ¶‰EˆÚ“®‚ÌÅ‘åŒX‚«Šp“x
-	static constexpr float kMaxTiltX = 0.25f; // ã‰ºˆÚ“®‚ÌÅ‘å‘OŒã‚ÌŒX‚«
-	static constexpr float kRotateLerpRate = 0.08f; // Šp“x‚Ì’Ç]‘¬“x
+	// å›è»¢åˆ¶å¾¡ç”¨ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
+	static constexpr float kMaxTiltZ = 0.35f; // å·¦å³ç§»å‹•æ™‚ã®æœ€å¤§å‚¾ãè§’åº¦
+	static constexpr float kMaxTiltX = 0.25f; // ä¸Šä¸‹ç§»å‹•æ™‚ã®æœ€å¤§å‰å¾Œã®å‚¾ã
+	static constexpr float kRotateLerpRate = 0.08f; // è§’åº¦ã®è¿½å¾“é€Ÿåº¦
 
-	// ‚»‚Ì‘¼ƒpƒ‰ƒ[ƒ^[
-	static constexpr int32_t kMaxHP = 5; // Å‘åHP
+	// ãã®ä»–ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼
+	static constexpr int32_t kMaxHP = 5; // æœ€å¤§HP
+
+	// æ‹¡ç¸®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç”¨
+	static constexpr float kPickupAnimDuration = 0.3f; // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã«ã‹ã‹ã‚‹æ™‚é–“
+	static constexpr float kPickupMinScale = 0.8f; // ç¸®å°æ™‚ã®æœ€å°ã‚¹ã‚±ãƒ¼ãƒ«å€ç‡
+
+	// è¢«å¼¾æ™‚è‰²å¤‰æ›´ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç”¨
+	static constexpr float kDamageFlashInDuration = 0.25f; // 0->1ã«ä¼¸ã³ã‚‹æ™‚é–“
+	static constexpr float kDamageFlashHoldDuration = 0.1f; // 1ã§å¾…æ©Ÿã™ã‚‹æ™‚é–“
+	static constexpr float kDamageFlashOutDuration = 1.0f; // 1->0ã«æˆ»ã‚‹æ™‚é–“
 
 	// =========================================================
 	// Member Variables
 	// =========================================================
 
-	// ƒIƒuƒWƒFƒNƒg
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	std::unique_ptr<Cygnus::Object3D> object_;
 
-	// ƒRƒ‰ƒCƒ_[
+	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 	std::unique_ptr<Cygnus::Collider> collider_;
 
-	// ‰F’ˆ‘D‚Ö‚Ìƒ|ƒCƒ“ƒ^
+	// å®‡å®™èˆ¹ã¸ã®ãƒã‚¤ãƒ³ã‚¿
 	Spaceship* spaceship_ = nullptr; 
 
-	// ‘¬“xƒxƒNƒgƒ‹
+	// é€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«
 	Cygnus::Float3 velocity_ = {0.0f, 0.0f, 0.0f};
 
-	// •Y‚¢ŒvZ—pƒ^ƒCƒ}[
+	// æ¼‚ã„è¨ˆç®—ç”¨ã‚¿ã‚¤ãƒãƒ¼
 	float driftTimer_ = 0.0f;
 
-	// Šªæ‚èŠÇ——p
-	bool isRewinding_ = false; // Šªæ‚è’†ƒtƒ‰ƒO
-	float autoRewindTimer_ = 0.0f; // ‘ØİŠÔƒJƒEƒ“ƒg—pƒ^ƒCƒ}[
+	// å·»å–ã‚Šç®¡ç†ç”¨
+	bool isRewinding_ = false; // å·»å–ã‚Šä¸­ãƒ•ãƒ©ã‚°
+	float autoRewindTimer_ = 0.0f; // æ»åœ¨æ™‚é–“ã‚«ã‚¦ãƒ³ãƒˆç”¨ã‚¿ã‚¤ãƒãƒ¼
 
-	// C—ƒp[ƒcŠÇ——p
+	// ä¿®ç†ãƒ‘ãƒ¼ãƒ„ç®¡ç†ç”¨
 	int32_t repairPartLowCount_ = 0;
 	int32_t repairPartMediumCount_ = 0;
 	int32_t repairPartHighCount_ = 0;
 
-	// c‚èHP
+	// æ®‹ã‚ŠHP
 	int32_t hp_ = kMaxHP;
 
-	// €–Sƒtƒ‰ƒO
+	// æ­»äº¡ãƒ•ãƒ©ã‚°
 	bool isDead_ = false;
 
-	// -- UI --
-	std::unique_ptr<PartsCountUI> partsCountUI_;//ƒp[ƒc”UI
-	std::unique_ptr<O2TimeUI> o2TimeUI_;//_‘fUI
+	// çˆ†å¼¾å–å¾—ãƒˆãƒªã‚¬ãƒ¼ãƒ•ãƒ©ã‚°
+	bool isTriggerBomb_ = false;
 
-	// ‚»‚Ì‘¼
+	// -- UI --
+	std::unique_ptr<PartsCountUI> partsCountUI_;//ãƒ‘ãƒ¼ãƒ„æ•°UI
+	std::unique_ptr<O2TimeUI> o2TimeUI_;//é…¸ç´ UI
+
+	// ãã®ä»–
 	std::function<void(float intensity, float duration)> onDamageCallback_ = nullptr;
+	OnPickupPartCallback onPickupPartCallback_ = nullptr; 
+
+	float pickupAnimTimer_ = 0.0f; // å–å¾—ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç”¨ã‚¿ã‚¤ãƒãƒ¼
+	float damageFlashTimer_ = 0.0f; // æ¼”å‡ºã‚¿ã‚¤ãƒãƒ¼
 };

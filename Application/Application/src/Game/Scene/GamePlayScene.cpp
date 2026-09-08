@@ -21,6 +21,7 @@
 
 // Application
 #include <src/Game/Util/GameResult/GameResultManager.h>
+#include <src/Game/Util/Utility.h>
 
 void GamePlayScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
@@ -49,11 +50,14 @@ void GamePlayScene::Initialize() {
 	// ポストエフェクト管理
 	postEffectManager_ = std::make_unique<Cygnus::PostEffectManager>();
 	postEffectManager_->Initialize();
+	postEffectManager_->SetEffectType(Cygnus::PSOType::Vignette);
 
 	// SkyBoxのパラメーター設定
 	Cygnus::SkyBoxManager::GetInstance()->SetTranslate({ 0.0f, 0.0f, 1500.0f });
 	Cygnus::SkyBoxManager::GetInstance()->SetRotate({ 0.37f, 1.29f, 0.26f });
 	Cygnus::SkyBoxManager::GetInstance()->SetColor({ 0.5f, 0.3f, 1.0f, 1.0f });
+
+	Cygnus::ParticleEffectManager::GetInstance()->Clear();
 
 	///
 	///	↓ ゲームシーン用
@@ -84,10 +88,19 @@ void GamePlayScene::Initialize() {
 	// 飛翔物管理クラス生成 + 初期化
 	flyingObjectManager_ = std::make_unique<FlyingObjectManager>();
 	flyingObjectManager_->Initialize();
+	flyingObjectManager_->SetOnDestroyMeteorCallback([this](){
+		StartCameraShake(4.0f, 0.25f);	
+	});
 
 	// ゲームUI作成
 	gameHUD_ = std::make_unique<GameHUD>();
 	gameHUD_->Initialize(spriteCommon_.get(), player_.get(), spaceship_.get());
+	// プレイヤーのパーツ取得時ポップアップコールバックをセット
+	player_->SetOnPickupPartCallback([this](PartType type, const Cygnus::Float3& worldPos) { 
+		if (gameHUD_) {
+			gameHUD_->SpawnPlayerPopup(type, [this]() { return player_->GetTranslate(); });
+		}
+	});
 
 	// シーンの開始時にフェードインを実行
 	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
@@ -164,6 +177,19 @@ void GamePlayScene::Update() {
 
 	// 巻取り完了時のUI発火
 	if(wasRewinding && !player_->IsRewinding()) {
+		// 所持している全パーツの納品用ポップアップをキューへ追加
+		if (player_->GetRepairPartLowCount() > 0) {
+			gameHUD_->QueueSpaceshipDeposit(PartType::Low, player_->GetRepairPartLowCount());
+		}
+		if (player_->GetRepairPartMediumCount() > 0) {
+			gameHUD_->QueueSpaceshipDeposit(PartType::Medium, player_->GetRepairPartMediumCount());
+		}
+		if (player_->GetRepairPartHighCount() > 0) {
+			gameHUD_->QueueSpaceshipDeposit(PartType::High, player_->GetRepairPartHighCount());
+		}
+
+
+		// インベントリのパーツ連続消費
 		if(gameHUD_) {
 			gameHUD_->StartConsumingParts();
 		}
@@ -175,9 +201,12 @@ void GamePlayScene::Update() {
 	tether_->Update();
 	// 飛翔物管理クラス更新
 	flyingObjectManager_->Update();
+	if (player_->IsTriggerBomb()) { // プレイヤーが爆弾アイテムを取得したら一括隕石破壊
+		flyingObjectManager_->DestroyAllMeteorsSequential();
+	}
 	// ゲームUI更新
 	float remainingTime = kMaxGameTime - gameTimer_;
-	gameHUD_->Update(remainingTime);
+	gameHUD_->Update(remainingTime, tether_.get(), flyingObjectManager_.get());
 
 	// 命綱と飛翔物の衝突判定
 	tether_->CheckCollisionWithFlyingObjects(flyingObjectManager_.get());
@@ -195,6 +224,9 @@ void GamePlayScene::Update() {
 	
 	// コリジョンマネージャー更新
 	Cygnus::CollisionManager::GetInstance()->Update();
+
+	// パーティクルエフェクト管理クラス更新
+	Cygnus::ParticleEffectManager::GetInstance()->Update(Cygnus::TimeManager::GetInstance()->GetDeltaTime());
 }
 
 void GamePlayScene::Draw() {
@@ -326,6 +358,8 @@ void GamePlayScene::Draw() {
 	tether_->Debug();
 	// 飛翔物管理クラスデバッグ表示
 	flyingObjectManager_->Debug();
+	// GameHUD
+	gameHUD_->Debug();
 
 	// コライダーデバッグ表示
 	Cygnus::CollisionManager::GetInstance()->Debug();

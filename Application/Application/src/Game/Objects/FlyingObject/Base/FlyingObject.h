@@ -15,6 +15,8 @@
 enum class ObjectCategory {
 	Meteor,     // 隕石
 	RepairPart, // 修理パーツ
+	HeartItem, // ハート（回復）
+	BombItem, // 爆弾（全隕石破壊）
 };
 
 // =========================================================
@@ -59,7 +61,7 @@ public:
 	/// 位置の取得
 	/// </summary>
 	/// <returns></returns>
-	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; } 
+	const Cygnus::Float3& GetTranslate() const { return object_->transform_.translate_; }
 
 	/// <summary>
 	/// 当たり判定半径の取得
@@ -82,7 +84,7 @@ public:
 	/// <summary>
 	/// 死亡させる
 	/// </summary>
-	void Dead() { isDead_ = true; }
+	void Dead();
 
 	/// <summary>
 	/// コライダーを破棄する
@@ -128,4 +130,8 @@ protected:
 	float basePositionY_ = 0.0f; // 基準となるY座標
 	float waveTimer_ = 0.0f; // 経過時間タイマー
 	float sinPhaseOffset_ = 0.0f; // 生成位置による波の位相のズレ
+
+	// 飛翔物の細かい分類（パーティクル用）
+	std::string subCategory_ = "";
+
 };

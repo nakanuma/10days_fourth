@@ -4,6 +4,7 @@
 #include <src/Game/Scene/GamePlayScene.h>
 #include <src/Game/Scene/ResultScene.h>
 #include <src/Game/Scene/TutorialScene.h>
+#include <src/Game/Scene/ParticleEditorScene.h>
 
 SceneFactory* SceneFactory::GetInstance() {
 	static SceneFactory instance;
@@ -27,6 +28,13 @@ std::unique_ptr<Cygnus::BaseScene> SceneFactory::CreateScene(const std::string& 
 		return newScene;
 	} else if (sceneName == "RESULT") {
 		auto newScene = std::make_unique<ResultScene>();
+		newScene->Initialize();
+		return newScene;
+	}
+	// ※パーティクルエディターシーン
+	else if(sceneName == "PARTICLEEDITOR") {
+		// パーティクルエディターシーンの生成と初期化処理を行う
+		auto newScene = std::make_unique<ParticleEditorScene>();
 		newScene->Initialize();
 		return newScene;
 	}

@@ -101,5 +101,7 @@ private:
 
 	// 動的に変化するセグメントの自然長
 	float currentSegmentLength_ = 0.8f;
+
+	Cygnus::Float3 yOffset_ = {0.0f, -0.8f, 0.0f};
 };
 

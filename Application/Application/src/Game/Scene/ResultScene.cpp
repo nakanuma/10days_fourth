@@ -48,6 +48,9 @@ void ResultScene::Initialize() {
 	// ポストエフェクト管理
 	postEffectManager_ = std::make_unique<Cygnus::PostEffectManager>();
 	postEffectManager_->Initialize();
+	postEffectManager_->SetEffectType(Cygnus::PSOType::Vignette);
+
+	Cygnus::ParticleEffectManager::GetInstance()->Clear();
 
 	///
 	///	↓ シーン用
@@ -207,6 +210,8 @@ void ResultScene::Update() {
 
 	// コリジョンマネージャー更新
 	Cygnus::CollisionManager::GetInstance()->Update();
+	// パーティクルエフェクト管理クラス更新
+	Cygnus::ParticleEffectManager::GetInstance()->Update(Cygnus::TimeManager::GetInstance()->GetDeltaTime());
 }
 
 void ResultScene::Draw() {
@@ -264,7 +269,7 @@ void ResultScene::Draw() {
 	/// =========================================================
 
 #pragma region メインシーンの3Dオブジェクトのレンダリングを開始
-	/*postEffectManager_->BeginMainScene();*/
+	postEffectManager_->BeginMainScene();
 
 	// スカイボックス描画
 	Cygnus::SkyBoxManager::GetInstance()->Draw();
@@ -276,11 +281,11 @@ void ResultScene::Draw() {
 	objectSpaceship_->Draw();
 
 	// -----------------------------------------------
-	/*postEffectManager_->EndMainScene();*/
+	postEffectManager_->EndMainScene();
 #pragma endregion
 
 #pragma region バックバッファへの直接描画
-	/*postEffectManager_->RestoreBackBuffer(true);*/
+	postEffectManager_->RestoreBackBuffer(true);
 	// -----------------------------------------------
 
 	// パーティクルエフェクト描画
@@ -289,7 +294,7 @@ void ResultScene::Draw() {
 	Cygnus::LineDrawer::GetInstance()->Draw();
 
 	// -----------------------------------------------
-	/*postEffectManager_->RestoreDepthBufferState();*/
+	postEffectManager_->RestoreDepthBufferState();
 #pragma endregion
 
 	/// =========================================================
@@ -445,6 +450,11 @@ void ResultScene::ProcessMenuInput() {
 
 	if (isConfirm) {
 		isSelected_ = true; // 重複実行を防止
+
+		// Aボタン押下アニメーション開始
+		isButtonAPressed_ = true;
+		buttonAPressTimer_ = 0.0f;
+
 		Cygnus::SoundManager::GetInstance()->Play("se_decide", false, 0.5f); // SE再生（決定）
 
 		if (currentMenu_ == MenuIndex::Retry) {
@@ -521,6 +531,33 @@ void ResultScene::UpdateUI() {
 		buttonACurrentPos_.x,
 		buttonACurrentPos_.y + bounceOffsetY
 		});
+
+	/* Aボタン押下（スケール&カラー）アニメーション計算 */
+	float scaleFactor = 1.0f;
+	Cygnus::Float4 currentColor = kButtonANormalColor;
+
+	if (isButtonAPressed_) {
+		buttonAPressTimer_ += deltaTime;
+
+		if (buttonAPressTimer_ >= kButtonAPressDuration) {
+			buttonAPressTimer_ = kButtonAPressDuration;
+		}
+
+		// 進行度
+		float progress = buttonAPressTimer_ / kButtonAPressDuration;
+
+		// sin波でイージング
+		float pressFactor = std::sinf(progress * Cygnus::PIf);
+
+		// スケール計算
+		scaleFactor = 1.0f - pressFactor * (1.0f - KButtonAPressMinScale);
+
+		// カラー補間
+		currentColor = kButtonANormalColor + (kButtonAPressedColor - kButtonANormalColor) * pressFactor;
+	}
+	// 最終サイズとカラーの適用
+	spriteButtonA_->SetSize({baseButtonASize_.x * scaleFactor, baseButtonASize_.y * scaleFactor});
+	spriteButtonA_->SetColor(currentColor);
 }
 
 void ResultScene::UpdateGameClear() {
