@@ -48,6 +48,7 @@ void ResultScene::Initialize() {
 	// ポストエフェクト管理
 	postEffectManager_ = std::make_unique<Cygnus::PostEffectManager>();
 	postEffectManager_->Initialize();
+	postEffectManager_->SetEffectType(Cygnus::PSOType::Vignette);
 
 	///
 	///	↓ シーン用
@@ -264,7 +265,7 @@ void ResultScene::Draw() {
 	/// =========================================================
 
 #pragma region メインシーンの3Dオブジェクトのレンダリングを開始
-	/*postEffectManager_->BeginMainScene();*/
+	postEffectManager_->BeginMainScene();
 
 	// スカイボックス描画
 	Cygnus::SkyBoxManager::GetInstance()->Draw();
@@ -276,11 +277,11 @@ void ResultScene::Draw() {
 	objectSpaceship_->Draw();
 
 	// -----------------------------------------------
-	/*postEffectManager_->EndMainScene();*/
+	postEffectManager_->EndMainScene();
 #pragma endregion
 
 #pragma region バックバッファへの直接描画
-	/*postEffectManager_->RestoreBackBuffer(true);*/
+	postEffectManager_->RestoreBackBuffer(true);
 	// -----------------------------------------------
 
 	// パーティクルエフェクト描画
@@ -289,7 +290,7 @@ void ResultScene::Draw() {
 	Cygnus::LineDrawer::GetInstance()->Draw();
 
 	// -----------------------------------------------
-	/*postEffectManager_->RestoreDepthBufferState();*/
+	postEffectManager_->RestoreDepthBufferState();
 #pragma endregion
 
 	/// =========================================================
