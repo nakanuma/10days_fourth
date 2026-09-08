@@ -60,13 +60,6 @@ private:
 	static constexpr Cygnus::Float2 kSkipPosition_ = { 20.0f,668.0f };
 	static constexpr Cygnus::Float2 kSkipSize_ = { 240.0f,32.0f };
 
-	/* 各UI */
-	std::unique_ptr<PartsInventoryUI> partsInventoryUI_; // プレイヤーのパーツ所持数UI
-	std::unique_ptr<PlayerHPUI> playerHPUI_; // プレイヤーのHPバーUI
-	std::unique_ptr<PlayerOxygenUI> playerOxygenUI_; // プレイヤーの残り酸素UI
-	std::unique_ptr<ControlGuideUI> controlGuideUI_; // 操作UI
-
-
 	// チュートリアルのみのUI
 	std::unique_ptr<Cygnus::Sprite> skipUI_;
 

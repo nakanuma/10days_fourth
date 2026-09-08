@@ -42,6 +42,8 @@ void TutorialScene::Initialize() {
 	Cygnus::SkyBoxManager::GetInstance()->SetTranslate({ 0.0f, 0.0f, 1500.0f });
 	Cygnus::SkyBoxManager::GetInstance()->SetRotate({ 0.37f, 1.29f, 0.26f });
 	Cygnus::SkyBoxManager::GetInstance()->SetColor({ 0.5f, 0.3f, 1.0f, 1.0f });
+	
+	Cygnus::ParticleEffectManager::GetInstance()->Clear();
 
 	//スペースシップ
 	spaceship_ = std::make_unique<Spaceship>();
@@ -62,6 +64,9 @@ void TutorialScene::Initialize() {
 	// 飛行物体クラス
 	flyingObjectManager_ = std::make_unique<FlyingObjectManager>();
 	flyingObjectManager_->Initialize();
+	flyingObjectManager_->SetOnDestroyMeteorCallback([this]() {
+		StartCameraShake(4.0f, 0.25f);
+	});
 
 
 	// シーンの開始時にフェードインを実行
@@ -69,6 +74,16 @@ void TutorialScene::Initialize() {
 
 	// BGM再生
 	Cygnus::SoundManager::GetInstance()->Play("bgm_gameplay", true, 0.5f);
+
+	// ゲームUI作成
+	gameHUD_ = std::make_unique<GameHUD>();
+	gameHUD_->Initialize(spriteCommon_.get(), player_.get(), spaceship_.get());
+	// プレイヤーのパーツ取得時ポップアップコールバックをセット
+	player_->SetOnPickupPartCallback([this](PartType type, const Cygnus::Float3& worldPos) {
+		if (gameHUD_) {
+			gameHUD_->SpawnPlayerPopup(type, [this]() { return player_->GetTranslate(); });
+		}
+	});
 
 	explainUI_ = std::make_unique<ExplainUI>();
 	explainUI_->Initialize(spriteCommon_.get(),player_.get());
@@ -116,6 +131,9 @@ void TutorialScene::Update() {
 	tether_->Update();
 
 	flyingObjectManager_->Update();//心地が双
+	if (player_->IsTriggerBomb()) { // プレイヤーが爆弾アイテムを取得したら一括隕石破壊
+		flyingObjectManager_->DestroyAllMeteorsSequential();
+	}
 
 	// 命綱と飛翔物の衝突判定
 	tether_->CheckCollisionWithFlyingObjects(flyingObjectManager_.get());
@@ -123,11 +141,18 @@ void TutorialScene::Update() {
 	// カメラの更新処理
 	UpdateCamera();
 
+	// ゲームUI更新
+	float remainingTime = kMaxGameTime - gameTimer_;
+	gameHUD_->Update(remainingTime, tether_.get(), flyingObjectManager_.get());
+
 	//説明UIの更新
 	explainUI_->Update(player_.get());
 
 	// コリジョンマネージャー更新
 	Cygnus::CollisionManager::GetInstance()->Update();
+
+	// パーティクルエフェクト管理クラス更新
+	Cygnus::ParticleEffectManager::GetInstance()->Update(Cygnus::TimeManager::GetInstance()->GetDeltaTime());
 }
 
 void TutorialScene::Draw() {
@@ -235,7 +260,7 @@ void TutorialScene::Draw() {
 	// プレイヤーUI描画
 	player_->DrawUI();
 
-
+	gameHUD_->Draw();
 	explainUI_->Draw();
 
 	// フェードトランジション描画
