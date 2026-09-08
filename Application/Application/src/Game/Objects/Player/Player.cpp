@@ -22,6 +22,7 @@ void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon
 	object_ = std::make_unique<Cygnus::Object3D>();
 	object_->model_ = &Cygnus::ModelManager::GetInstance()->GetModel("Player");
 	object_->transform_.translate_ = { 0.0f, -10.0f, 0.0f };
+	object_->materialCB_.data_->emissiveIntensity = 1.0f;
 
 	// 各パラメーター初期化
 	velocity_ = { 0.0f, 0.0f, 0.0f };
@@ -56,6 +57,24 @@ void Player::Initialize(Spaceship* spaceship, Cygnus::SpriteCommon* spriteCommon
 }
 
 void Player::Update() {
+	/* アイテム取得時拡縮アニメーション */
+	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+	if(pickupAnimTimer_ > 0.0f) {
+		pickupAnimTimer_ -= dt;
+		if(pickupAnimTimer_ < 0.0f) {
+			pickupAnimTimer_ = 0.0f;
+		}
+	}
+	float targetScale = 1.0f;
+	if(pickupAnimTimer_ > 0.0f) {
+		// 進行度
+		float progress = 1.0f - (pickupAnimTimer_ / kPickupAnimDuration);
+		float scaleOffset = std::sinf(progress * Cygnus::PIf) * (1.0f - kPickupMinScale);
+		targetScale = 1.0f - scaleOffset;
+	}
+	// オブジェクトのスケールに適用
+	object_->transform_.scale_ = {targetScale, targetScale, targetScale};
+
 	// 移動処理
 	Move();
 
@@ -109,6 +128,12 @@ void Player::Debug() {
 	ImGui::Text("RepairPartMidium Count: %d", repairPartMediumCount_);
 	ImGui::Text("RepairPartHigh Count: %d", repairPartHighCount_);
 
+	ImGui::Separator();
+
+	ImGui::DragFloat("EmissiveIntensity", &object_->materialCB_.data_->emissiveIntensity);
+
+	ImGui::ColorPicker4("EmissiveColor", &object_->materialCB_.data_->emissiveColor.x);
+
 	ImGui::End();
 #endif
 }
@@ -127,24 +152,27 @@ void Player::OnCollision(Cygnus::Collider* other) {
 	if (tag == "MeteorSmall" || tag == "MeteorLarge") {
 		Cygnus::SoundManager::GetInstance()->Play("se_collide", false, 0.75f); // SE再生（衝突）
 		ApplyDamage(1); // ダメージを与える
-
+		pickupAnimTimer_ = kPickupAnimDuration;
 	}
 
 	/* 各修理パーツとの衝突 */
 	if (other->GetTag() == "RepairPartLow") {
 		repairPartLowCount_++;
+		pickupAnimTimer_ = kPickupAnimDuration;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
 		if (onPickupPartCallback_) onPickupPartCallback_(PartType::Low, object_->transform_.translate_);
 	}
 	if (other->GetTag() == "RepairPartMedium") {
 		repairPartMediumCount_++;
+		pickupAnimTimer_ = kPickupAnimDuration;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
 		if (onPickupPartCallback_) onPickupPartCallback_(PartType::Medium, object_->transform_.translate_);
 	}
 	if (other->GetTag() == "RepairPartHigh") {
 		repairPartHighCount_++;
+		pickupAnimTimer_ = kPickupAnimDuration;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
 		if (onPickupPartCallback_) onPickupPartCallback_(PartType::High, object_->transform_.translate_);
@@ -153,12 +181,14 @@ void Player::OnCollision(Cygnus::Collider* other) {
 	/* ハート（回復アイテム）との衝突 */
 	if (tag == "HeartItem") {
 		Heal(1); // 1回復
+		pickupAnimTimer_ = kPickupAnimDuration;
 		//Cygnus::SoundManager::GetInstance()->Play("", false, 0.75f);
 	}
 
 	/* 爆弾アイテムとの衝突 */
 	if (tag == "BombItem") {
 		isTriggerBomb_ = true; // 爆弾取得フラグを立てる
+		pickupAnimTimer_ = kPickupAnimDuration;
 		//Cygnus::SoundManager::GetInstance()->Play("", false, 0.75f);
 	}
 }

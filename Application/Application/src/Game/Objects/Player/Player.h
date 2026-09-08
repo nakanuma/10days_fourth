@@ -228,6 +228,10 @@ private:
 	// その他パラメーター
 	static constexpr int32_t kMaxHP = 5; // 最大HP
 
+	// 拡縮アニメーション用
+	static constexpr float kPickupAnimDuration = 0.3f; // アニメーションにかかる時間
+	static constexpr float kPickupMinScale = 0.8f; // 縮小時の最小スケール倍率
+
 	// =========================================================
 	// Member Variables
 	// =========================================================
@@ -272,4 +276,6 @@ private:
 	// その他
 	std::function<void(float intensity, float duration)> onDamageCallback_ = nullptr;
 	OnPickupPartCallback onPickupPartCallback_ = nullptr; 
+
+	float pickupAnimTimer_ = 0.0f; // 取得アニメーション用タイマー
 };
