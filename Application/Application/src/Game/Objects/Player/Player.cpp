@@ -194,7 +194,6 @@ void Player::OnCollision(Cygnus::Collider* other) {
 		pickupAnimTimer_ = kPickupAnimDuration;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
-		gameHUD_->GetValueChangeUI()->RegistDigitValue(object_->transform_.translate_, 1, { 1,1,0,1 });
 		if (onPickupPartCallback_) onPickupPartCallback_(PartType::Low, object_->transform_.translate_);
 	}
 	if (other->GetTag() == "RepairPartMedium") {
@@ -202,7 +201,6 @@ void Player::OnCollision(Cygnus::Collider* other) {
 		pickupAnimTimer_ = kPickupAnimDuration;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
-		gameHUD_->GetValueChangeUI()->RegistDigitValue(object_->transform_.translate_, 1, { 0,0,1,1 });
 		if (onPickupPartCallback_) onPickupPartCallback_(PartType::Medium, object_->transform_.translate_);
 	}
 	if (other->GetTag() == "RepairPartHigh") {
@@ -210,7 +208,6 @@ void Player::OnCollision(Cygnus::Collider* other) {
 		pickupAnimTimer_ = kPickupAnimDuration;
 		Cygnus::SoundManager::GetInstance()->Play("se_pickup", false, 0.75f); // SE再生（取得）
 		partsCountUI_->AddParts();
-		gameHUD_->GetValueChangeUI()->RegistDigitValue(object_->transform_.translate_, 1, { 1,0,1,1 });
 		if (onPickupPartCallback_) onPickupPartCallback_(PartType::High, object_->transform_.translate_);
 	}
 
