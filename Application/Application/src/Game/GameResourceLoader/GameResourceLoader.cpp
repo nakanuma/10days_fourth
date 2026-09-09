@@ -165,6 +165,7 @@ void GameResourceLoader::LoadAllSoundData() {
 	soundManager->Load("resources/Sounds/bgm_gameplay.wav", "bgm_gameplay");
 	soundManager->Load("resources/Sounds/bgm_gameclear.wav", "bgm_gameclear");
 	soundManager->Load("resources/Sounds/bgm_gameover.wav", "bgm_gameover");
+	soundManager->Load("resources/Sounds/bgm_tutorial.wav", "bgm_tutorial");
 
 	// se
 	soundManager->Load("resources/Sounds/se_switch.wav", "se_switch");

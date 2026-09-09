@@ -200,7 +200,7 @@ void GamePlayScene::Update() {
 	// 命綱更新
 	tether_->Update();
 	// 飛翔物管理クラス更新
-	flyingObjectManager_->Update();
+	flyingObjectManager_->Update(true);
 	if (player_->IsTriggerBomb()) { // プレイヤーが爆弾アイテムを取得したら一括隕石破壊
 		flyingObjectManager_->DestroyAllMeteorsSequential();
 	}

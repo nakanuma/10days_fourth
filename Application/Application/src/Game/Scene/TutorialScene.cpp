@@ -9,6 +9,14 @@
 #include <LineDrawer.h>
 #include <random>
 
+#include <src/Game/Objects/FlyingObject/RepairPart/RepairPartLow/RepairPartLow.h>
+#include <src/Game/Objects/FlyingObject/RepairPart/RepairPartHigh/RepairPartHigh.h>
+#include <src/Game/Objects/FlyingObject/RepairPart/RepairPartMedium/RepairPartMedium.h>
+#include <src/Game/Objects/FlyingObject/Meteor/MeteorLarge/MeteorLarge.h>
+#include <src/Game/Objects/FlyingObject/Meteor/MeteorSmall/MeteorSmall.h>
+#include <src/Game/Objects/FlyingObject/HeartItem/HeartItem.h>
+#include <src/Game/Objects/FlyingObject/BombItem/BombItem.h>
+
 void TutorialScene::Initialize() {
 	Cygnus::DirectXBase* dxBase = Cygnus::DirectXBase::GetInstance();
 
@@ -73,7 +81,7 @@ void TutorialScene::Initialize() {
 	FadeTransition::GetInstance()->StartFadeIn(1.0f, 0.5f);
 
 	// BGM再生
-	Cygnus::SoundManager::GetInstance()->Play("bgm_gameplay", true, 0.5f);
+	Cygnus::SoundManager::GetInstance()->Play("bgm_tutorial", true, 0.5f);
 
 	// ゲームUI作成
 	gameHUD_ = std::make_unique<GameHUD>();
@@ -90,7 +98,7 @@ void TutorialScene::Initialize() {
 }
 
 void TutorialScene::Finalize() {
-	Cygnus::SoundManager::GetInstance()->Stop("bgm_gameplay");
+	Cygnus::SoundManager::GetInstance()->Stop("bgm_tutorial");
 }
 
 void TutorialScene::Update() {
@@ -123,17 +131,41 @@ void TutorialScene::Update() {
 		isSkipTutorial_ = true;
 	}
 
+	bool wasRewinding = player_->IsRewinding(); // プレイヤーの巻取り状態を保持して更新
 	//プレイヤー更新
 	player_->Update();
+
+	// 巻取り完了時のUI発火
+	if (wasRewinding && !player_->IsRewinding()) {
+		// 所持している全パーツの納品用ポップアップをキューへ追加
+		if (player_->GetRepairPartLowCount() > 0) {
+			gameHUD_->QueueSpaceshipDeposit(PartType::Low, player_->GetRepairPartLowCount());
+		}
+		if (player_->GetRepairPartMediumCount() > 0) {
+			gameHUD_->QueueSpaceshipDeposit(PartType::Medium, player_->GetRepairPartMediumCount());
+		}
+		if (player_->GetRepairPartHighCount() > 0) {
+			gameHUD_->QueueSpaceshipDeposit(PartType::High, player_->GetRepairPartHighCount());
+		}
+
+
+		// インベントリのパーツ連続消費
+		if (gameHUD_) {
+			gameHUD_->StartConsumingParts();
+		}
+	}
+
 	//宇宙船更新
 	spaceship_->Update();
 	//命綱更新
 	tether_->Update();
 
-	flyingObjectManager_->Update();//心地が双
+	flyingObjectManager_->Update(false);
 	if (player_->IsTriggerBomb()) { // プレイヤーが爆弾アイテムを取得したら一括隕石破壊
 		flyingObjectManager_->DestroyAllMeteorsSequential();
 	}
+
+	AddFlyObject();
 
 	// 命綱と飛翔物の衝突判定
 	tether_->CheckCollisionWithFlyingObjects(flyingObjectManager_.get());
@@ -374,7 +406,31 @@ void TutorialScene::StartCameraShake(float intensity, float duration) {
 }
 
 
+void TutorialScene::AddFlyObject() {
+	spawnTime_ += Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+	if (spawnTime_ >= kSpawnMaxTime_) {
+		spawnTime_ = 0.0f;
+	}
+	else {
+		return;//時間になるまでスポーンさせない
+	}
+	// 常にスポーン
+	flyingObjectManager_->SpawnRepairPartLow();
 
+	//説明3(黄色パーツを取ったら)スポーンする
+	if (ActionJudgment::GetInstance()->NowExplain() >= 3) {
+		flyingObjectManager_->SpawnRepairPartMedium();
+		flyingObjectManager_->SpawnRepairPartHigh();
+	}
+
+	//説明4(紫パーツを取ったら)スポーンする
+	if (ActionJudgment::GetInstance()->NowExplain() >= 4) {
+		flyingObjectManager_->SpawnMeteorSmall();
+		flyingObjectManager_->SpawnMeteorLarge();
+		flyingObjectManager_->SpawnHeartItem();
+		flyingObjectManager_->SpawnBombItem();
+	}
+}
 
 
 

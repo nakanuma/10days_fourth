@@ -5,6 +5,7 @@
 
 // Application
 #include <src/Game/Objects/FlyingObject/Base/FlyingObject.h>
+#include <RandomGenerator.h>
 
 // =========================================================
 // 飛翔物の管理クラス
@@ -19,7 +20,8 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	/// <param name="isAutoSpawn">自動生成(あり true : なし false)</param>
+	void Update(bool isAutoSpawn);
 	
 	/// <summary>
 	/// 描画処理
@@ -68,6 +70,37 @@ public:
 	/// <returns></returns>
 	const std::vector<std::unique_ptr<FlyingObject>>& GetObjects() const { return objects_; }
 
+	/// <summary>
+	/// 隕石(小)を生成
+	/// </summary>
+	void SpawnMeteorSmall();
+	/// <summary>
+	/// 隕石(大)を生成
+	/// </summary>
+	void SpawnMeteorLarge();
+	/// <summary>
+	/// パーツ(低)を生成
+	/// </summary>
+	void SpawnRepairPartLow();
+	/// <summary>
+	/// パーツ(中)を生成
+	/// </summary>
+	void SpawnRepairPartMedium();
+	/// <summary>
+	/// パーツ(高)を生成
+	/// </summary>
+	void SpawnRepairPartHigh();
+	/// <summary>
+	/// アイテム(ハート)を生成
+	/// 回復
+	/// </summary>
+	void SpawnHeartItem();
+	/// <summary>
+	/// アイテム(爆弾)を生成
+	/// 隕石全て破壊
+	/// </summary>
+	void SpawnBombItem();
+
 private:
 	// =========================================================
 	// Internal Methods
@@ -77,6 +110,10 @@ private:
 	/// 自動スポーン処理
 	/// </summary>
 	void AutoSpawn();
+
+	// スポーン方向と初期位置を決定するラムダ関数
+	const Cygnus::Float3 GetRandomSpawnPos(float spawnY, bool& outIsRightToLeft);
+
 
 private:
 	// =========================================================
@@ -127,4 +164,6 @@ private:
 	float destroyTimer_ = 0.0f; // タイマー
 
 	OndestroyMeteorCallback onDestroyMeteorCallback_ = nullptr;
+
+	Cygnus::RandomGenerator* rng = nullptr;
 };
