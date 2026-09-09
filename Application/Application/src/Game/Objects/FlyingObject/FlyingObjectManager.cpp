@@ -96,6 +96,9 @@ void FlyingObjectManager::Debug() {
 	if (ImGui::Button("Spawn : RepairPartHigh")) {
 		Spawn<RepairPartHigh>(Cygnus::Float3{ 25.0f, -10.0f, 0.0f });
 	}
+	if (ImGui::Button("Spawn : BombItem")) {
+		Spawn<BombItem>(Cygnus::Float3{kSpawnX, -50.0f, 0.0f});
+	}
 
 	ImGui::End();
 #endif

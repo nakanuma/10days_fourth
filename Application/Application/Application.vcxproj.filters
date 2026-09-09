@@ -43,6 +43,7 @@
     <ClCompile Include="src\Game\UI\Player\DangerWarningUI.cpp" />
     <ClCompile Include="src\Game\UI\ValueChange\ValueChangeUI.cpp" />
     <ClCompile Include="src\Game\UI\ScoreChange\ScoreChangeUI.cpp" />
+    <ClCompile Include="src\Game\UI\Indicator\BombTrackerUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\UI\Player\PlayerHPUI.h" />
@@ -126,6 +127,7 @@
     <ClInclude Include="src\Game\UI\Player\DangerWarningUI.h" />
     <ClInclude Include="src\Game\UI\ValueChange\ValueChangeUI.h" />
     <ClInclude Include="src\Game\UI\ScoreChange\ScoreChangeUI.h" />
+    <ClInclude Include="src\Game\UI\Indicator\BombTrackerUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\GameResourceLoader\GameResourceLoader.h">

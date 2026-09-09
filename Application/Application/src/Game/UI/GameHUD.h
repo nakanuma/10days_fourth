@@ -16,6 +16,7 @@
 #include <src/Game/UI/PartsUI/ItemPopupUI.h> // 修理パーツポップアップUI
 #include <src/Game/UI/Player/DangerWarningUI.h> // 隕石接近危険マークUI
 #include <src/Game//UI/ValueChange/ValueChangeUI.h> // HP変化UI
+#include <src/Game/UI/Indicator/BombTrackerUI.h> // 爆弾位置UI
  
 // =========================================================
 // ゲーム中の全UIマネージャー
@@ -112,6 +113,7 @@ private:
 	std::unique_ptr<GameTimerUI> gameTimerUI_; // 残り時間UI
 	std::unique_ptr<DangerWarningUI> dangerWarningUI_; // 隕石接近危険マークUI
 	std::unique_ptr<ValueChangeUI> valueChangeUI_; // 値変化UI
+	std::unique_ptr<BombTrackerUI> bombTrackerUI_; // 爆弾位置UI
 
 	/* 修理パーツポップアップUI管理 */
 	std::vector<std::unique_ptr<ItemPopupUI>> activePopups_; // プレイヤーの修理パーツ取得時ポップアップ

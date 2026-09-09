@@ -42,6 +42,10 @@ void GameHUD::Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player, Spa
 	// HP変化UI
 	valueChangeUI_ = std::make_unique<ValueChangeUI>();
 	valueChangeUI_->Initialize(spriteCommon);
+
+	// 爆弾位置UI
+	bombTrackerUI_ = std::make_unique<BombTrackerUI>();
+	bombTrackerUI_->Initialize(spriteCommon);
 }
 
 void GameHUD::Update(float remainingTime, Tether* tether, FlyingObjectManager* flyingObjectManager) {
@@ -84,6 +88,7 @@ void GameHUD::Update(float remainingTime, Tether* tether, FlyingObjectManager* f
 	gameTimerUI_->Update(remainingTime);
 	dangerWarningUI_->Update(player_, tether, flyingObjectManager);
 	valueChangeUI_->Update();
+	bombTrackerUI_->Update(flyingObjectManager);
 }
 
 void GameHUD::Draw() {
@@ -96,6 +101,7 @@ void GameHUD::Draw() {
 	gameTimerUI_->Draw();
 	dangerWarningUI_->Draw();
 	valueChangeUI_->Draw();
+	bombTrackerUI_->Draw();
 
 	// ポップアップの描画
 	for (auto& popup : activePopups_) {
