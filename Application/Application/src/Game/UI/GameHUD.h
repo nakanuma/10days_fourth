@@ -87,8 +87,6 @@ public:
 		return valueChangeUI_.get();
 	}
 
-
-
 private:
 	// =========================================================
 	// Constants
