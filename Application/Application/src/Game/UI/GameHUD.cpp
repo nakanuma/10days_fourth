@@ -97,7 +97,7 @@ void GameHUD::Draw(bool isTutorial) {
 	playerHPUI_->Draw();
 	playerOxygenUI_->Draw();
 	spaceshipDurabilityUI_->Draw();
-	controlGuideUI_->Draw();
+	controlGuideUI_->Draw(isTutorial);
 	if (!isTutorial) { // チュートリアル中は非表示
 		gameTimerUI_->Draw();
 	}

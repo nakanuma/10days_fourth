@@ -27,7 +27,7 @@ public:
 	/// <summary>
 	/// •`‰æˆ—
 	/// </summary>
-	void Draw();
+	void Draw(bool isTutorial);
 
 private:
 	// =========================================================

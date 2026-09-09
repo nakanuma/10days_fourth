@@ -154,10 +154,12 @@ void ControlGuideUI::Update() {
 	spriteReturnText_->Update();
 }
 
-void ControlGuideUI::Draw() {
+void ControlGuideUI::Draw(bool isTutorial) {
 	// ¶ãUI‚Ì•`‰æ
-	spriteMenuButton_->Draw();
-	spritePauseText_->Draw();
+	if (!isTutorial) {
+		spriteMenuButton_->Draw();
+		spritePauseText_->Draw();
+	}
 
 	// ‰E‰ºUI‚Ì•`‰æ
 	spriteStick_->Draw();
