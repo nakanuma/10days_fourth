@@ -76,10 +76,10 @@ void GamePlayScene::Initialize() {
 
 	// プレイヤー生成 + 初期化
 	player_ = std::make_unique<Player>();
-	player_->Initialize(spaceship_.get(),spriteCommon_.get());
-	player_->SetOnDamageCallback([this](float intensity, float duration){ // カメラシェイク発火の関数をセット
-			StartCameraShake(intensity, duration);
-		}); 
+	player_->Initialize(spaceship_.get(), spriteCommon_.get());
+	player_->SetOnDamageCallback([this](float intensity, float duration) { // カメラシェイク発火の関数をセット
+		StartCameraShake(intensity, duration);
+		});
 
 	// 命綱生成 + 初期化
 	tether_ = std::make_unique<Tether>();
@@ -88,22 +88,23 @@ void GamePlayScene::Initialize() {
 	// 飛翔物管理クラス生成 + 初期化
 	flyingObjectManager_ = std::make_unique<FlyingObjectManager>();
 	flyingObjectManager_->Initialize();
-	flyingObjectManager_->SetOnDestroyMeteorCallback([this](){
-		StartCameraShake(4.0f, 0.25f);	
-	});
+	flyingObjectManager_->SetOnDestroyMeteorCallback([this]() {
+		StartCameraShake(4.0f, 0.25f);
+		});
 
 	// ゲームUI作成
 	gameHUD_ = std::make_unique<GameHUD>();
 	gameHUD_->Initialize(spriteCommon_.get(), player_.get(), spaceship_.get());
 	// プレイヤーのパーツ取得時ポップアップコールバックをセット
-	player_->SetOnPickupPartCallback([this](PartType type, const Cygnus::Float3& worldPos) { 
+	player_->SetOnPickupPartCallback([this](PartType type, const Cygnus::Float3& worldPos) {
 		if (gameHUD_) {
 			gameHUD_->SpawnPlayerPopup(type, [this]() { return player_->GetTranslate(); });
 		}
-	});
+		});
 
 	startCountdownUI_ = std::make_unique<StartCountdownUI>();
 	startCountdownUI_->Initialize(spriteCommon_.get());
+	startCountdownUI_->StartCountdown();
 
 	//インスタンスのセット
 	player_->SetGameHUD(gameHUD_.get());
@@ -114,9 +115,15 @@ void GamePlayScene::Initialize() {
 
 	// BGM再生
 	Cygnus::SoundManager::GetInstance()->Play("bgm_gameplay", true, 0.5f);
+
+
+	//最低限の更新（カウントダウン時に描画されない状態を防ぐため）
+	player_->Update();
+	spaceship_->Update();
+	gameHUD_->Update(0.0f, tether_.get(), flyingObjectManager_.get());
 }
 
-void GamePlayScene::Finalize() { 
+void GamePlayScene::Finalize() {
 	Cygnus::SoundManager::GetInstance()->Stop("bgm_gameplay");
 }
 
@@ -166,11 +173,11 @@ void GamePlayScene::Update() {
 		// 遷移条件を満たした場合にフェードアウト開始
 		if (isTransitionStarted_) {
 			FadeTransition::GetInstance()->StartFadeOut(
-				1.0f, 
-				[]() { 
-					Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT"); 
+				1.0f,
+				[]() {
+					Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT");
 					Cygnus::CollisionManager::GetInstance()->Clear();
-				}, 
+				},
 				0.5f
 			);
 		}
@@ -184,13 +191,13 @@ void GamePlayScene::Update() {
 	///
 	///	オブジェクト更新処理
 	/// 
-	
+
 	bool wasRewinding = player_->IsRewinding(); // プレイヤーの巻取り状態を保持して更新
 	// プレイヤー更新
 	player_->Update();
 
 	// 巻取り完了時のUI発火
-	if(wasRewinding && !player_->IsRewinding()) {
+	if (wasRewinding && !player_->IsRewinding()) {
 		// 所持している全パーツの納品用ポップアップをキューへ追加
 		if (player_->GetRepairPartLowCount() > 0) {
 			gameHUD_->QueueSpaceshipDeposit(PartType::Low, player_->GetRepairPartLowCount());
@@ -204,7 +211,7 @@ void GamePlayScene::Update() {
 
 
 		// インベントリのパーツ連続消費
-		if(gameHUD_) {
+		if (gameHUD_) {
 			gameHUD_->StartConsumingParts();
 		}
 	}
@@ -235,7 +242,7 @@ void GamePlayScene::Update() {
 	///
 	///	共通更新処理
 	/// 
-	
+
 	// コリジョンマネージャー更新
 	Cygnus::CollisionManager::GetInstance()->Update();
 
@@ -413,7 +420,7 @@ void GamePlayScene::Debug() {
 	ImGui::DragFloat3("camera.translate", &camera_->transform_.translate_.x, 0.01f);
 	ImGui::DragFloat3("camera.rotate", &camera_->transform_.rotate_.x, 0.01f);
 
-	if(ImGui::Button("Shake")) {
+	if (ImGui::Button("Shake")) {
 		StartCameraShake(5.0f, 1.0f);
 	}
 
@@ -430,7 +437,7 @@ void GamePlayScene::UpdateCamera() {
 	/* 基準となる高さ（Y座標）に応じた引きカメラの位置計算 */
 	float tBaseY = 0.0f;
 	float rangeY = playerBottomY_ - playerTopY_;
-	if(std::abs(rangeY) > 0.0001f) {
+	if (std::abs(rangeY) > 0.0001f) {
 		tBaseY = (std::clamp)((playerPos.y - playerTopY_) / rangeY, 0.0f, 1.0f);
 	}
 	Cygnus::Float3 baseCameraPos = Cygnus::Float3::Lerp(cameraTopPos_, cameraBottomPos_, tBaseY);
@@ -457,9 +464,9 @@ void GamePlayScene::UpdateCamera() {
 	};
 
 	/* 被弾時のカメラシェイク（徐々に減衰） */
-	Cygnus::Float3 shakeOffset = {0.0f, 0.0f, 0.0f};
+	Cygnus::Float3 shakeOffset = { 0.0f, 0.0f, 0.0f };
 
-	if(shakeTimer_ > 0.0f) {
+	if (shakeTimer_ > 0.0f) {
 		shakeTimer_ -= deltaTime;
 
 		float decay = (std::clamp)(shakeTimer_ / shakeDuration_, 0.0f, 1.0f);
@@ -472,7 +479,7 @@ void GamePlayScene::UpdateCamera() {
 		shakeOffset.x = dist(gen) * currentIntensity;
 		shakeOffset.y = dist(gen) * currentIntensity;
 
-		if(shakeTimer_ <= 0.0f) {
+		if (shakeTimer_ <= 0.0f) {
 			shakeTimer_ = 0.0f;
 		}
 	}

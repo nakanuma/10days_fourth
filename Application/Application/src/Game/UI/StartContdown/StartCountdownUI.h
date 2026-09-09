@@ -43,11 +43,11 @@ private:
 	bool isStarted_ = false;
 	//タイマー
 	float countdownTimer_ = 0.0f;
-	float countdownDuration_ = 3.0f; // カウントダウンの総時間（秒）
+	float countdownDuration_ = 3.5f; // カウントダウンの総時間（秒）
 	float startAppearTimer_ = 0.0f;
-	float startAppearTime_ = 0.5f;
+	float startAppearTime_ = 0.3f;
 	float startDisappearTimer_ = 0.0f;
-	float startDisappearTime_ = 0.5f;
+	float startDisappearTime_ = 1.0f;
 
 };
 

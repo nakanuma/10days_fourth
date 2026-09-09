@@ -36,6 +36,21 @@ void StartCountdownUI::Update() {
 		// タイマーを減少
 		countdownTimer_ -= Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 
+		float timer = countdownTimer_ - (int)countdownTimer_;
+
+		float t = timer / 1.0f; // 0.0f ~ 1.0f の範囲に正規化
+
+		//テクスチャの位置
+		spriteCountdown_->SetTextureLeftTop({ ((int)countdownTimer_ + 1) * 64.0f ,0.0f });
+
+		//サイズ
+		float size = Cygnus::Easing::EaseInSine(t) * 720.0f;
+		spriteCountdown_->SetSize({ size,size });
+
+		//色
+		Cygnus::Float4 color = { 1,1,1,1 };
+		spriteCountdown_->SetColor(color);
+
 		//タイマーが時間を迎えたら
 		if (countdownTimer_ < 0.0f) {
 			isCdStart_ = false;
@@ -48,39 +63,12 @@ void StartCountdownUI::Update() {
 			spriteStart_->SetPosition({ 1280.0f + 640.0f,360.0f });
 		}
 
-		float timer = countdownTimer_ - (int)countdownTimer_;
-
-		float t = timer / 1.0f; // 0.0f ~ 1.0f の範囲に正規化
-
-		//テクスチャの位置
-		spriteCountdown_->SetTextureLeftTop({ ((int)countdownTimer_ + 1) * 64.0f ,0.0f });
-
-		//サイズ
-		float size = Cygnus::Easing::EaseInSine(t) * 720.0f;
-		spriteCountdown_->SetSize({ size,size });
-
-		//回転
-		float rotation = Cygnus::Easing::EaseInSine(t) * 3.0f * Cygnus::PIf;
-		spriteCountdown_->SetRotation(rotation);
-
-		//色
-		Cygnus::Float4 color = { 1,1,1,1 };
-		spriteCountdown_->SetColor(color);
 	}
 
 	//STARTスプライトスライド更新
 	if (isSlide_) {
 		//タイマーを減少
 		startAppearTimer_ -= Cygnus::TimeManager::GetInstance()->GetDeltaTime();
-
-		//タイマーが時間を迎えたら
-		if (startAppearTimer_ < 0.0f) {
-			isSlide_ = false;
-			isDisappear_ = true;
-			startAppearTimer_ = 0.0f;
-			startDisappearTimer_ = startDisappearTime_;
-			spriteStart_->SetPosition({ 640.0f,360.0f });
-		}
 
 		float t = startAppearTimer_ / startAppearTime_;
 
@@ -90,6 +78,15 @@ void StartCountdownUI::Update() {
 
 		//色
 		spriteStart_->SetColor({ 1,1,1,1 });
+
+		//タイマーが時間を迎えたら
+		if (startAppearTimer_ < 0.0f) {
+			isSlide_ = false;
+			isDisappear_ = true;
+			startAppearTimer_ = 0.0f;
+			startDisappearTimer_ = startDisappearTime_;
+			spriteStart_->SetPosition({ 640.0f,360.0f });
+		}
 
 	}
 
@@ -109,11 +106,12 @@ void StartCountdownUI::Update() {
 
 		//位置ランダムにシェイク
 		auto randGen = Cygnus::RandomGenerator::GetInstance();
-		Cygnus::Float2 shakeValue = { randGen->RandomValue(0.0f,2.0f),randGen->RandomValue(0.0f,2.0f) };
+		Cygnus::Float2 shakeValue = { 640.0f + randGen->RandomValue(0.0f,3.0f),360.0f + randGen->RandomValue(0.0f,3.0f) };
 		spriteStart_->SetPosition(shakeValue);
 
 		//色
 		float alpha = Cygnus::Easing::EaseInSine(t);
+		spriteStart_->SetColor({ 1,1,1,alpha });
 
 	}
 
