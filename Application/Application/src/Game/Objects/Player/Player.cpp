@@ -227,7 +227,7 @@ void Player::OnCollision(Cygnus::Collider* other) {
 	}
 
 	ActionJudgment::GetInstance()->IsAction(other->GetTag() == "RepairPartLow", 2);// 説明 パーツを取る
-	ActionJudgment::GetInstance()->IsAction(other->GetTag() == "RepairPartHigh", 3);// 説明 深いパーツを取る
+	ActionJudgment::GetInstance()->IsAction(other->GetTag() == "RepairPartHigh", 4);// 説明 深いパーツを取る
 }
 
 void Player::ApplyDamage(int32_t damage) {

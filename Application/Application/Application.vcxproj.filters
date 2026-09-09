@@ -42,6 +42,8 @@
     <ClCompile Include="src\Game\Particles\ParticleStrage.cpp" />
     <ClCompile Include="src\Game\UI\Player\DangerWarningUI.cpp" />
     <ClCompile Include="src\Game\UI\ValueChange\ValueChangeUI.cpp" />
+    <ClCompile Include="src\Game\UI\ScoreChange\ScoreChangeUI.cpp" />
+    <ClCompile Include="src\Game\UI\Indicator\BombTrackerUI.cpp" />
     <ClCompile Include="src\Game\UI\StartContdown\StartCountdownUI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +127,8 @@
     <ClInclude Include="src\Game\Particles\ParticleStrage.h" />
     <ClInclude Include="src\Game\UI\Player\DangerWarningUI.h" />
     <ClInclude Include="src\Game\UI\ValueChange\ValueChangeUI.h" />
+    <ClInclude Include="src\Game\UI\ScoreChange\ScoreChangeUI.h" />
+    <ClInclude Include="src\Game\UI\Indicator\BombTrackerUI.h" />
     <ClInclude Include="src\Game\UI\StartContdown\StartCountdownUI.h" />
   </ItemGroup>
   <ItemGroup>
