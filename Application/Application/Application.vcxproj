@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\UI\Finish\FinishUI.cpp" />
     <ClCompile Include="src\Game\UI\Explain\ExplainUI.cpp" />
     <ClCompile Include="src\Game\UI\Player\DangerWarningUI.cpp" />
     <ClCompile Include="src\Game\UI\PartsUI\ItemPopupUI.cpp" />
@@ -63,6 +64,7 @@
     <ClCompile Include="src\Game\UI\StartContdown\StartCountdownUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\UI\Finish\FinishUI.h" />
     <ClInclude Include="src\Game\UI\Explain\ExplainUI.h" />
     <ClInclude Include="src\Game\UI\Player\DangerWarningUI.h" />
     <ClInclude Include="src\Game\UI\PartsUI\ItemPopupUI.h" />

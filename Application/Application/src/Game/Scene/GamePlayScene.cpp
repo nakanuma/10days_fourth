@@ -15,9 +15,9 @@
 #include <random>
 
 // Engine
-#include <Engine/Scene/SceneManager.h>
 #include <CommandManager.h>
 #include <Collider/CollisionManager.h>
+#include <Engine/Scene/SceneManager.h>
 
 // Application
 #include <src/Game/Util/GameResult/GameResultManager.h>
@@ -106,6 +106,9 @@ void GamePlayScene::Initialize() {
 	startCountdownUI_->Initialize(spriteCommon_.get());
 	startCountdownUI_->StartCountdown();
 
+	finishUI_ = std::make_unique<FinishUI>();
+	finishUI_->Initialize(spriteCommon_.get());
+
 	//インスタンスのセット
 	player_->SetGameHUD(gameHUD_.get());
 	spaceship_->SetGameHUD(gameHUD_.get());
@@ -149,6 +152,13 @@ void GamePlayScene::Update() {
 		return;
 	}
 
+	//終了時UI更新
+	finishUI_->Update();
+	//終了中は更新スキップ
+	if (finishUI_->IsFinished()) {
+		return;
+	}
+
 	///
 	/// シーン遷移条件
 	/// 
@@ -156,30 +166,23 @@ void GamePlayScene::Update() {
 	if (!isTransitionStarted_ && FadeTransition::GetInstance()->IsFinished()) {
 		/* ゲームクリア: 宇宙船の耐久度が完全回復した場合 */
 		if (spaceship_->IsFullyRepaired()) {
-			GameResultManager::SetResult(GameResult::Clear);
+			finishUI_->Finish(TransitionDest::GameClear);
 			isTransitionStarted_ = true;
 		}
 		/* ゲームオーバー: プレイヤーのHPが0 */
 		else if (player_->IsDead()) {
-			GameResultManager::SetResult(GameResult::GameOver);
+			finishUI_->Finish(TransitionDest::GameOver);
 			isTransitionStarted_ = true;
 		}
 		/* ゲームオーバー: 制限時間の経過 */
 		else if (gameTimer_ >= kMaxGameTime) {
-			GameResultManager::SetResult(GameResult::GameOver);
+			finishUI_->Finish(TransitionDest::GameOver);
 			isTransitionStarted_ = true;
 		}
 
 		// 遷移条件を満たした場合にフェードアウト開始
 		if (isTransitionStarted_) {
-			FadeTransition::GetInstance()->StartFadeOut(
-				1.0f,
-				[]() {
-					Cygnus::SceneManager::GetInstance()->ChangeScene("RESULT");
-					Cygnus::CollisionManager::GetInstance()->Clear();
-				},
-				0.5f
-			);
+			finishUI_->StartFadeOut();
 		}
 	}
 
@@ -361,6 +364,8 @@ void GamePlayScene::Draw() {
 	pauseMenu_->Draw();
 	//カウントダウン描画
 	startCountdownUI_->Draw();
+	//終了時UI描画
+	finishUI_->Draw();
 
 	// フェードトランジション描画
 	FadeTransition::GetInstance()->Draw();
