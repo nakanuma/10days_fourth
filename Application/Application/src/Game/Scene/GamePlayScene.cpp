@@ -102,6 +102,9 @@ void GamePlayScene::Initialize() {
 		}
 	});
 
+	startCountdownUI_ = std::make_unique<StartCountdownUI>();
+	startCountdownUI_->Initialize(spriteCommon_.get());
+
 	//インスタンスのセット
 	player_->SetGameHUD(gameHUD_.get());
 	spaceship_->SetGameHUD(gameHUD_.get());
@@ -129,6 +132,13 @@ void GamePlayScene::Update() {
 	pauseMenu_->Update();
 	// ポーズ中なら以降の更新をスキップ
 	if (pauseMenu_->IsPaused() || pauseMenu_->IsJustUnpaused()) { // ポーズ中のボタン押下による誤発火のため、解除された直後1フレームもゲームの更新をスキップ
+		return;
+	}
+
+	//スタートカウントダウン更新
+	startCountdownUI_->Update();
+	//カウントダウン中は更新スキップ
+	if (!startCountdownUI_->IsStarted()) {
 		return;
 	}
 
@@ -342,6 +352,8 @@ void GamePlayScene::Draw() {
 	gameHUD_->Draw();
 	// ポーズメニュー描画
 	pauseMenu_->Draw();
+	//カウントダウン描画
+	startCountdownUI_->Draw();
 
 	// フェードトランジション描画
 	FadeTransition::GetInstance()->Draw();

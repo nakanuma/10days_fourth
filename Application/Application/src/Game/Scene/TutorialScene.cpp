@@ -87,6 +87,10 @@ void TutorialScene::Initialize() {
 		}
 	});
 
+	//インスタンスのセット
+	player_->SetGameHUD(gameHUD_.get());
+	spaceship_->SetGameHUD(gameHUD_.get());
+
 	explainUI_ = std::make_unique<ExplainUI>();
 	explainUI_->Initialize(spriteCommon_.get(),player_.get());
 }

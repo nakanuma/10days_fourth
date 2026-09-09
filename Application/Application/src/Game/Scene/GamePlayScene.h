@@ -25,6 +25,7 @@
 #include <src/Game/Util/Transition/FadeTransition.h>
 #include <src/Game/Scene/PauseMenu.h>
 #include <src/Game/UI/GameHUD.h>
+#include <src/Game/UI/StartContdown/StartCountdownUI.h>
 
 // =========================================================
 // ゲームプレイシーンクラス
@@ -102,6 +103,8 @@ private:
 	std::unique_ptr<PauseMenu> pauseMenu_ = nullptr;
 	// ゲームUI
 	std::unique_ptr<GameHUD> gameHUD_ = nullptr;
+	//スタートカウントダウンUI
+	std::unique_ptr<StartCountdownUI> startCountdownUI_ = nullptr;
 
 	// ゲーム進行用
 	float gameTimer_ = 0.0f; // ゲーム経過時間タイマー
