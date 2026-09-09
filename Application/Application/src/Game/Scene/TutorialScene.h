@@ -58,6 +58,8 @@ private:
 	void StartCameraShake(float intensity = 1.0f, float duration = 0.3f);
 
 
+	void AddFlyObject();
+
 private:
 
 	const float kMaxGameTime = 100.0f; // ƒQ[ƒ€§ŒÀŠÔi•bj
@@ -106,5 +108,9 @@ private:
 	std::unique_ptr<GameHUD> gameHUD_ = nullptr;
 	std::unique_ptr<ExplainUI> explainUI_;
 
+	// à–¾‚²‚Æ‚É•‚—V•¨‚ğ“±“ü
+
+	static constexpr float kSpawnMaxTime_ = 5.0f;
+	float spawnTime_ = 0.0f;
 };
 

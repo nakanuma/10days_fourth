@@ -52,10 +52,13 @@ private:
 	bool isMovingTimeMax(bool isMove);
 
 	static constexpr Cygnus::Float2 kDescriptionTextureSize_ = { 960.0f, 48.0f };
-	static constexpr float kMaxMoveTime_ = 4.0f;
-	static constexpr float kO2TimeExplainTime_ = 5.0f;
-	static constexpr float kMeteorExplainTime_ = 10.0f;
-	static constexpr float kExplainFinishTime_ = 15.0f;
+
+	static constexpr float kMaxMoveTime_ = 1.5f;//移動するまでの時間
+	static constexpr float kO2TimeExplainTime_ = 5.0f;//酸素ゲージの説明時間
+	static constexpr float kMeteorExplainTime_ = kO2TimeExplainTime_ + 5.0f;//隕石の説明時間
+	static constexpr float kItemExplainTime_ = kMeteorExplainTime_ + 4.5f;//アイテムの説明時間
+	static constexpr float kPurposeExplainTime_ = kItemExplainTime_ + 4.5f;//ゲーム目的の説明時間
+	static constexpr float kExplainFinishTime_ = kPurposeExplainTime_ + 0.5f;//good luck
 
 	static constexpr Cygnus::Float2 kSkipPosition_ = { 20.0f,668.0f };
 	static constexpr Cygnus::Float2 kSkipSize_ = { 240.0f,32.0f };
@@ -98,6 +101,14 @@ public:
 		numbers_++;
 
 		actionFlags_.push_back(isFlag);
+	}
+
+	/// <summary>
+	/// 進捗
+	/// </summary>
+	/// <returns>現在の進捗</returns>
+	int32_t NowExplain() {
+		return progress_ + 1;
 	}
 
 	/// <summary>

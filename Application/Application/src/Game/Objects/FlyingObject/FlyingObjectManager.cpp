@@ -23,11 +23,15 @@ void FlyingObjectManager::Initialize() {
 	destroyTimer_ = 0.0f;
 }
 
-void FlyingObjectManager::Update() {
+void FlyingObjectManager::Update(bool isAutoSpawn) {
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
+	rng = Cygnus::RandomGenerator::GetInstance();
 
 	// 自動スポーン処理
-	AutoSpawn();
+	// チュートリアルの時はなしに
+	if (isAutoSpawn) {
+		AutoSpawn();
+	}
 
 	/* 隕石の連続破壊処理 */
 	if (!destroyQueue_.empty()) {
@@ -116,76 +120,110 @@ void FlyingObjectManager::DestroyAllMeteorsSequential() {
 
 void FlyingObjectManager::AutoSpawn() {
 	float dt = Cygnus::TimeManager::GetInstance()->GetDeltaTime();
-	auto rng = Cygnus::RandomGenerator::GetInstance();
-
-	// スポーン方向と初期位置を決定するラムダ関数
-	auto GetRandomSpawnPos = [&](float spawnY, bool& outIsRightToLeft) -> Cygnus::Float3 {
-		// 50％の確率で右スポーンか左スポーンかを決定
-		outIsRightToLeft = rng->RandomValueBool(0.5f);
-		float spawnX = outIsRightToLeft ? kSpawnX : -kSpawnX;
-		return Cygnus::Float3{ spawnX, spawnY, 0.0f };
-	};
 
 	// 隕石（小）
 	timerMeteorSmall_ += dt;
 	if (timerMeteorSmall_ >= kIntervalMeteorSmall) {
 		timerMeteorSmall_ = 0.0f;
-		bool isRightToLeft = true;
-		auto pos = GetRandomSpawnPos(rng->RandomValue(kSpawnMinY, kSpawnMaxY), isRightToLeft);
-		Spawn<MeteorSmall>(pos, isRightToLeft);
+		SpawnMeteorSmall();
 	}
 
 	// 隕石（大）
 	timerMeteorLarge_ += dt;
 	if (timerMeteorLarge_ >= kIntervalMeteorLarge) {
 		timerMeteorLarge_ = 0.0f;
-		bool isRightToLeft = true;
-		auto pos = GetRandomSpawnPos(rng->RandomValue(kSpawnMinY, kSpawnMaxY), isRightToLeft);
-		Spawn<MeteorLarge>(pos, isRightToLeft);
+		SpawnMeteorLarge();
 	}
 
 	// 修理パーツ（低品質）
 	timerRepairLow_ += dt;
 	if (timerRepairLow_ >= kIntervalRepairLow) {
 		timerRepairLow_ = 0.0f;
-		bool isRightToLeft = true;
-		auto pos = GetRandomSpawnPos(rng->RandomValue(kUpperLimitY, kSpawnMaxY), isRightToLeft);
-		Spawn<RepairPartLow>(pos, isRightToLeft);
+		SpawnRepairPartLow();
 	}
 
 	// 修理パーツ（中品質）
 	timerRepairMid_ += dt;
 	if (timerRepairMid_ >= kIntervalRepairMid) {
 		timerRepairMid_ = 0.0f;
-		bool isRightToLeft = true;
-		auto pos = GetRandomSpawnPos(rng->RandomValue(kMiddleLimitY, kUpperLimitY), isRightToLeft);
-		Spawn<RepairPartMedium>(pos, isRightToLeft);
+		SpawnRepairPartMedium();
 	}
 
 	// 修理パーツ（高品質）
 	timerRepairHigh_ += dt;
 	if (timerRepairHigh_ >= kIntervalRepairHigh) {
 		timerRepairHigh_ = 0.0f;
-		bool isRightToLeft = true;
-		auto pos = GetRandomSpawnPos(rng->RandomValue(kSpawnMinY, kMiddleLimitY), isRightToLeft);
-		Spawn<RepairPartHigh>(pos, isRightToLeft);
+		SpawnRepairPartHigh();
 	}
 
 	// ハート（回復）
 	timerHeartItem_ += dt;
 	if (timerHeartItem_ >= kIntervalHeartItem) {
 		timerHeartItem_ = 0.0f;
-		bool isRightToLeft = true;
-		auto pos = GetRandomSpawnPos(rng->RandomValue(kMiddleLimitY, kUpperLimitY), isRightToLeft); // 中品質パーツと同じ高さ
-		Spawn<HeartItem>(pos, isRightToLeft);
+		SpawnHeartItem();
 	}
 
 	// 爆弾（隕石全破壊）
 	timerBombItem_ += dt;
 	if (timerBombItem_ >= kIntervalBombItem) {
 		timerBombItem_ = 0.0f;
-		bool isRightToLeft = true;
-		auto pos = GetRandomSpawnPos(rng->RandomValue(kSpawnMinY, kMiddleLimitY), isRightToLeft); // 高品質パーツと同じ高さ
-		Spawn<BombItem>(pos, isRightToLeft);
+		SpawnBombItem();
 	}
+}
+
+// スポーン方向と初期位置を決定するラムダ関数
+const Cygnus::Float3 FlyingObjectManager::GetRandomSpawnPos(float spawnY, bool& outIsRightToLeft) {
+	// 50％の確率で右スポーンか左スポーンかを決定
+	outIsRightToLeft = rng->RandomValueBool(0.5f);
+	float spawnX = outIsRightToLeft ? kSpawnX : -kSpawnX;
+	return Cygnus::Float3{ spawnX, spawnY, 0.0f };
+};
+
+void FlyingObjectManager::SpawnMeteorSmall() {
+	//隕石(小)生成
+	bool isRightToLeft = true;
+	auto pos = GetRandomSpawnPos(rng->RandomValue(kSpawnMinY, kSpawnMaxY), isRightToLeft);
+	Spawn<MeteorSmall>(pos, isRightToLeft);
+}
+
+void FlyingObjectManager::SpawnMeteorLarge() {
+	//隕石(大)生成
+	bool isRightToLeft = true;
+	auto pos = GetRandomSpawnPos(rng->RandomValue(kSpawnMinY, kSpawnMaxY), isRightToLeft);
+	Spawn<MeteorLarge>(pos, isRightToLeft);
+}
+
+void FlyingObjectManager::SpawnRepairPartLow() {
+	//パーツ(低)生成
+	bool isRightToLeft = true;
+	auto pos = GetRandomSpawnPos(rng->RandomValue(kUpperLimitY, kSpawnMaxY), isRightToLeft);
+	Spawn<RepairPartLow>(pos, isRightToLeft);
+}
+
+void FlyingObjectManager::SpawnRepairPartMedium() {
+	//パーツ(中)生成
+	bool isRightToLeft = true;
+	auto pos = GetRandomSpawnPos(rng->RandomValue(kMiddleLimitY, kUpperLimitY), isRightToLeft);
+	Spawn<RepairPartMedium>(pos, isRightToLeft);
+}
+
+void FlyingObjectManager::SpawnRepairPartHigh() {
+	//パーツ(高)生成
+	bool isRightToLeft = true;
+	auto pos = GetRandomSpawnPos(rng->RandomValue(kSpawnMinY, kMiddleLimitY), isRightToLeft);
+	Spawn<RepairPartHigh>(pos, isRightToLeft);
+}
+
+void FlyingObjectManager::SpawnHeartItem() {
+	//アイテム(ハート)生成
+	bool isRightToLeft = true;
+	auto pos = GetRandomSpawnPos(rng->RandomValue(kMiddleLimitY, kUpperLimitY), isRightToLeft); // 中品質パーツと同じ高さ
+	Spawn<HeartItem>(pos, isRightToLeft);
+}
+
+void FlyingObjectManager::SpawnBombItem() {
+	//アイテム(爆弾)生成
+	bool isRightToLeft = true;
+	auto pos = GetRandomSpawnPos(rng->RandomValue(kSpawnMinY, kMiddleLimitY), isRightToLeft); // 高品質パーツと同じ高さ
+	Spawn<BombItem>(pos, isRightToLeft);
 }

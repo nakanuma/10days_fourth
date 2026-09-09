@@ -20,16 +20,22 @@ void ExplainUI::Initialize(Cygnus::SpriteCommon* spriteCommon, Player* player) {
 }
 
 void ExplainUI::Update(Player* player) {
-	if (textureLT_.y >= kDescriptionTextureSize_.y * 4.0f) {
+	if (ActionJudgment::GetInstance()->NowExplain() == 3 || ActionJudgment::GetInstance()->NowExplain() >= 6) {
 		// Ž©“®‚Å“Ç‚Ýi‚ß‚éƒ^ƒCƒ}[
 		autoReadTime_ += Cygnus::TimeManager::GetInstance()->GetDeltaTime();
 	}
 
 	ActionJudgment::GetInstance()->IsAction(isMovingTimeMax(player->IsMoving()), 1);//à–¾ “®‚­
-	ActionJudgment::GetInstance()->IsAction(player->IsRewinding(), 4);//à–¾ –½j‚ðŠª‚«A‰F’ˆ‘D‚É‹AŠÒ‚·‚é
-
-	ActionJudgment::GetInstance()->IsAction(autoReadTime_ >= kO2TimeExplainTime_, 5);//à–¾ Ž©“®‚ÅŽ_‘f‚ª‚È‚­‚È‚é
+	
+	ActionJudgment::GetInstance()->IsAction(autoReadTime_ >= kO2TimeExplainTime_, 3);//à–¾ Ž©“®‚ÅŽ_‘f‚ª‚È‚­‚È‚é
+	
+	auto input = Cygnus::Input::GetInstance();
+	ActionJudgment::GetInstance()->IsAction(input->TriggerKey(DIK_SPACE) || 
+		input->IsTriggerButton(0, XINPUT_GAMEPAD_A) || input->IsTriggerButton(0, XINPUT_GAMEPAD_RIGHT_THUMB), 5);//à–¾ –½j‚ðŠª‚«A‰F’ˆ‘D‚É‹AŠÒ‚·‚é
+	
 	ActionJudgment::GetInstance()->IsAction(autoReadTime_ >= kMeteorExplainTime_, 6);//à–¾ è¦Î’ˆÓ
+	ActionJudgment::GetInstance()->IsAction(autoReadTime_ >= kItemExplainTime_, 7);//à–¾ ƒAƒCƒeƒ€
+	ActionJudgment::GetInstance()->IsAction(autoReadTime_ >= kPurposeExplainTime_, 8);//à–¾ ƒQ[ƒ€‚Ì–Ú“I
 
 	//ŠeUI‚ÌXV
 	descriptionUI_->Update();
