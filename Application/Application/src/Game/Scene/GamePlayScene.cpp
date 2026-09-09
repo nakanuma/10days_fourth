@@ -359,7 +359,7 @@ void GamePlayScene::Draw() {
 	player_->DrawUI();
 
 	// ゲームUI描画
-	gameHUD_->Draw();
+	gameHUD_->Draw(false);
 	// ポーズメニュー描画
 	pauseMenu_->Draw();
 	//カウントダウン描画

@@ -91,14 +91,16 @@ void GameHUD::Update(float remainingTime, Tether* tether, FlyingObjectManager* f
 	bombTrackerUI_->Update(flyingObjectManager);
 }
 
-void GameHUD::Draw() {
+void GameHUD::Draw(bool isTutorial) {
 	/* 各UI更新 */
 	partsInventoryUI_->Draw();
 	playerHPUI_->Draw();
 	playerOxygenUI_->Draw();
 	spaceshipDurabilityUI_->Draw();
 	controlGuideUI_->Draw();
-	gameTimerUI_->Draw();
+	if (!isTutorial) { // チュートリアル中は非表示
+		gameTimerUI_->Draw();
+	}
 	dangerWarningUI_->Draw();
 	valueChangeUI_->Draw();
 	bombTrackerUI_->Draw();
