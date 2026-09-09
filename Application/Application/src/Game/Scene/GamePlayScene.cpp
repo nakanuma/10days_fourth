@@ -417,6 +417,10 @@ void GamePlayScene::Debug() {
 		Cygnus::CollisionManager::GetInstance()->Clear(); // シーン変更時にはコライダーのクリアが必須
 	}
 
+	if (ImGui::Button("ScoreMax")) {
+		spaceship_->Repair(50, 50, 50);
+	}
+
 	ImGui::Separator();
 	ImGui::Text("GameTimer: %.2f / %.2f", gameTimer_, kMaxGameTime);
 

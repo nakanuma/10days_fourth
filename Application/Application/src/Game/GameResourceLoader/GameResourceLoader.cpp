@@ -155,7 +155,8 @@ void GameResourceLoader::RegisterAllParticleEffect() {
 	RegisterParticle("hit_repair", "Cube");
 	//酸素ゲージ減少時の冷や汗パーティクル
 	RegisterParticle("low_oxy", "Cube");
-
+	//クリアしたときのロケット噴射パーティクル
+	RegisterParticle("clear_rocket", "Cube");
 
 }
 

@@ -571,6 +571,11 @@ void ResultScene::UpdateGameClear() {
 	objectPlayer_->UpdateMatrix();
 	// 宇宙船更新
 	objectSpaceship_->UpdateMatrix();
+
+	//宇宙船の位置を参照してエンジン噴射パーティクルを描画
+	Cygnus::Float3 emitPos = objectSpaceship_->transform_.translate_ + Cygnus::Float3( - 7.0f, 1.0f, 0.0f );
+	Cygnus::ParticleEffectManager::GetInstance()->Emit("clear_rocket", emitPos, 1, { 0,0,0 }, 0.0f);
+
 }
 
 void ResultScene::UpdateGameOver() {
