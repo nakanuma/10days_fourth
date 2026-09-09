@@ -298,7 +298,7 @@ void TutorialScene::Draw() {
 	// プレイヤーUI描画
 	player_->DrawUI();
 
-	gameHUD_->Draw();
+	gameHUD_->Draw(true);
 	explainUI_->Draw();
 
 	// フェードトランジション描画
