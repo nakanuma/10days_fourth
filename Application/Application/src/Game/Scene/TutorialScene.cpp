@@ -53,8 +53,6 @@ void TutorialScene::Initialize() {
 	
 	Cygnus::ParticleEffectManager::GetInstance()->Clear();
 
-	Cygnus::ParticleEffectManager::GetInstance()->Clear();
-
 	//スペースシップ
 	spaceship_ = std::make_unique<Spaceship>();
 	spaceship_->Initialize();
@@ -105,6 +103,7 @@ void TutorialScene::Initialize() {
 
 void TutorialScene::Finalize() {
 	Cygnus::SoundManager::GetInstance()->Stop("bgm_tutorial");
+	Cygnus::ParticleEffectManager::GetInstance()->Clear();
 }
 
 void TutorialScene::Update() {
